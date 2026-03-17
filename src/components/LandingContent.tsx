@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowRight, Beaker, ClipboardCheck, LineChart, ShieldCheck, ChevronDown } from "lucide-react";
+import { ArrowRight, Beaker, ClipboardCheck, LineChart, ShieldCheck } from "lucide-react";
 import { Lang, t } from "@/lib/i18n";
-import { usePartnerRef } from "@/hooks/use-partner-ref";
+import { usePartnerRef, getPartnerIdFromRef } from "@/hooks/use-partner-ref";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import {
   Accordion,
   AccordionContent,
@@ -25,13 +26,31 @@ const fadeUp = {
 export default function LandingContent({ lang }: LandingContentProps) {
   const tr = t(lang);
   const partnerRef = usePartnerRef();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Lead submitted:", { ...formData, partnerRef, lang });
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      const partnerId = await getPartnerIdFromRef(partnerRef);
+      const { error } = await supabase.from("leads").insert({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || null,
+        source_partner_id: partnerId,
+        lang,
+        country: lang === "fi" ? "FI" : lang === "da" ? "DK" : lang === "no" ? "NO" : lang === "sv" ? "SE" : "EN",
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const steps = [
@@ -59,11 +78,7 @@ export default function LandingContent({ lang }: LandingContentProps) {
       {/* Hero */}
       <section className="relative overflow-hidden py-20 md:py-32" style={{ background: "var(--hero-gradient)" }}>
         <div className="container relative z-10">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            className="mx-auto max-w-3xl text-center"
-          >
+          <motion.div initial="hidden" animate="visible" className="mx-auto max-w-3xl text-center">
             <motion.h1 variants={fadeUp} custom={0} className="text-4xl font-bold leading-tight tracking-tight md:text-6xl text-foreground">
               {tr.hero.headline}
             </motion.h1>
@@ -83,7 +98,6 @@ export default function LandingContent({ lang }: LandingContentProps) {
             </motion.div>
           </motion.div>
         </div>
-        {/* Decorative circles */}
         <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
       </section>
@@ -152,31 +166,12 @@ export default function LandingContent({ lang }: LandingContentProps) {
               </motion.div>
             ) : (
               <motion.form variants={fadeUp} custom={2} onSubmit={handleSubmit} className="mt-8 space-y-4">
-                <Input
-                  placeholder={tr.lead.name}
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="h-12"
-                />
-                <Input
-                  type="email"
-                  placeholder={tr.lead.email}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="h-12"
-                />
-                <Input
-                  type="tel"
-                  placeholder={tr.lead.phone}
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="h-12"
-                />
-                <Button variant="hero" size="lg" type="submit" className="w-full">
-                  {tr.cta.button}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Input placeholder={tr.lead.name} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="h-12" />
+                <Input type="email" placeholder={tr.lead.email} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="h-12" />
+                <Input type="tel" placeholder={tr.lead.phone} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="h-12" />
+                <Button variant="hero" size="lg" type="submit" className="w-full" disabled={loading}>
+                  {loading ? "..." : tr.cta.button}
+                  {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
                 </Button>
               </motion.form>
             )}
@@ -194,12 +189,8 @@ export default function LandingContent({ lang }: LandingContentProps) {
             <Accordion type="single" collapsible className="space-y-3">
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="rounded-lg border border-border bg-card px-6">
-                  <AccordionTrigger className="text-left font-medium text-foreground hover:no-underline">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.a}
-                  </AccordionContent>
+                  <AccordionTrigger className="text-left font-medium text-foreground hover:no-underline">{faq.q}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

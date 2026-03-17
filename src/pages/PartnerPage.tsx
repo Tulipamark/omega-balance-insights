@@ -2,8 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Link2, BarChart3, GraduationCap } from "lucide-react";
 import { Lang, t } from "@/lib/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -16,15 +18,38 @@ interface PartnerPageProps {
   lang: Lang;
 }
 
+function generateReferralCode(name: string): string {
+  const base = name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8);
+  const rand = Math.random().toString(36).slice(2, 6);
+  return `${base}${rand}`;
+}
+
 export default function PartnerPage({ lang }: PartnerPageProps) {
   const tr = t(lang);
+  const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Partner signup:", { ...form, lang });
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("partners").insert({
+        name: form.name,
+        email: form.email,
+        phone: form.phone || null,
+        company: form.company || null,
+        referral_code: generateReferralCode(form.name),
+        country: lang === "fi" ? "FI" : lang === "da" ? "DK" : lang === "no" ? "NO" : lang === "sv" ? "SE" : "EN",
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const benefits = [
@@ -37,7 +62,6 @@ export default function PartnerPage({ lang }: PartnerPageProps) {
     <div className="min-h-screen flex flex-col">
       <Header lang={lang} />
       <main className="flex-1">
-        {/* Hero */}
         <section className="py-20 md:py-28" style={{ background: "var(--hero-gradient)" }}>
           <div className="container">
             <motion.div initial="hidden" animate="visible" className="mx-auto max-w-3xl text-center">
@@ -47,7 +71,6 @@ export default function PartnerPage({ lang }: PartnerPageProps) {
           </div>
         </section>
 
-        {/* Benefits */}
         <section className="py-20">
           <div className="container">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid gap-8 md:grid-cols-3">
@@ -64,7 +87,6 @@ export default function PartnerPage({ lang }: PartnerPageProps) {
           </div>
         </section>
 
-        {/* Signup Form */}
         <section className="bg-secondary/30 py-20">
           <div className="container">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto max-w-md">
@@ -79,9 +101,9 @@ export default function PartnerPage({ lang }: PartnerPageProps) {
                   <Input type="email" placeholder={tr.partner.email} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required className="h-12" />
                   <Input type="tel" placeholder={tr.partner.phone} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="h-12" />
                   <Input placeholder={tr.partner.company} value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} className="h-12" />
-                  <Button variant="hero" size="lg" type="submit" className="w-full">
-                    {tr.partner.submit}
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button variant="hero" size="lg" type="submit" className="w-full" disabled={loading}>
+                    {loading ? "..." : tr.partner.submit}
+                    {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
                   </Button>
                 </motion.form>
               )}
