@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Users, UserPlus, CalendarCheck, UserCheck } from "lucide-react";
 import { Lang, t } from "@/lib/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -25,34 +27,54 @@ interface DashboardPageProps {
   lang: Lang;
 }
 
-// Mock data
-const mockStats = { visitors: 1247, leads: 89, bookings: 34, customers: 12 };
-const mockChart = [
-  { name: "Jan", leads: 12 }, { name: "Feb", leads: 19 }, { name: "Mar", leads: 25 },
-  { name: "Apr", leads: 22 }, { name: "May", leads: 31 }, { name: "Jun", leads: 89 },
-];
-const mockLeads = [
-  { name: "Anna Svensson", email: "anna@test.se", status: "New", date: "2026-03-15" },
-  { name: "Erik Johansen", email: "erik@test.no", status: "Contacted", date: "2026-03-14" },
-  { name: "Mika Virtanen", email: "mika@test.fi", status: "Booked", date: "2026-03-13" },
-  { name: "Lars Nielsen", email: "lars@test.dk", status: "Customer", date: "2026-03-12" },
-];
-
 const statusColor: Record<string, string> = {
-  New: "bg-primary/10 text-primary",
-  Contacted: "bg-accent text-accent-foreground",
-  Booked: "bg-primary/20 text-primary",
-  Customer: "bg-primary text-primary-foreground",
+  new: "bg-primary/10 text-primary",
+  contacted: "bg-accent text-accent-foreground",
+  booked: "bg-primary/20 text-primary",
+  test_ordered: "bg-primary/30 text-primary",
+  customer: "bg-primary text-primary-foreground",
+  partner: "bg-accent text-accent-foreground",
 };
 
 export default function DashboardPage({ lang }: DashboardPageProps) {
   const tr = t(lang);
+  const [stats, setStats] = useState({ visitors: 0, leads: 0, bookings: 0, customers: 0 });
+  const [leads, setLeads] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const [leadsRes, visitsRes] = await Promise.all([
+        supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(10),
+        supabase.from("partner_visits").select("id"),
+      ]);
+
+      const allLeads = leadsRes.data || [];
+      setLeads(allLeads.slice(0, 5));
+
+      setStats({
+        visitors: visitsRes.data?.length || 0,
+        leads: allLeads.length,
+        bookings: allLeads.filter(l => l.status === "booked").length,
+        customers: allLeads.filter(l => l.status === "customer").length,
+      });
+
+      // Group leads by month for chart
+      const months: Record<string, number> = {};
+      allLeads.forEach(l => {
+        const m = new Date(l.created_at).toLocaleString("default", { month: "short" });
+        months[m] = (months[m] || 0) + 1;
+      });
+      setChartData(Object.entries(months).map(([name, leads]) => ({ name, leads })));
+    }
+    load();
+  }, []);
 
   const statCards = [
-    { icon: Users, label: tr.dashboard.visitors, value: mockStats.visitors },
-    { icon: UserPlus, label: tr.dashboard.leads, value: mockStats.leads },
-    { icon: CalendarCheck, label: tr.dashboard.bookings, value: mockStats.bookings },
-    { icon: UserCheck, label: tr.dashboard.customers, value: mockStats.customers },
+    { icon: Users, label: tr.dashboard.visitors, value: stats.visitors },
+    { icon: UserPlus, label: tr.dashboard.leads, value: stats.leads },
+    { icon: CalendarCheck, label: tr.dashboard.bookings, value: stats.bookings },
+    { icon: UserCheck, label: tr.dashboard.customers, value: stats.customers },
   ];
 
   return (
@@ -62,7 +84,6 @@ export default function DashboardPage({ lang }: DashboardPageProps) {
         <div className="container">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="text-3xl font-bold text-foreground">{tr.dashboard.title}</motion.h1>
 
-          {/* Stats */}
           <motion.div initial="hidden" animate="visible" className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {statCards.map((s, i) => (
               <motion.div key={i} variants={fadeUp} custom={i + 1}>
@@ -79,7 +100,6 @@ export default function DashboardPage({ lang }: DashboardPageProps) {
             ))}
           </motion.div>
 
-          {/* Chart + Table */}
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
               <Card className="shadow-sm">
@@ -88,10 +108,10 @@ export default function DashboardPage({ lang }: DashboardPageProps) {
                 </CardHeader>
                 <CardContent className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mockChart}>
+                    <BarChart data={chartData.length ? chartData : [{ name: "-", leads: 0 }]}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="name" className="text-muted-foreground" tick={{ fontSize: 12 }} />
-                      <YAxis className="text-muted-foreground" tick={{ fontSize: 12 }} />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip />
                       <Bar dataKey="leads" fill="hsl(172, 50%, 36%)" radius={[4, 4, 0, 0]} />
                     </BarChart>
@@ -106,26 +126,30 @@ export default function DashboardPage({ lang }: DashboardPageProps) {
                   <CardTitle className="text-lg text-foreground">{tr.dashboard.recent}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-muted-foreground">{tr.lead.name}</TableHead>
-                        <TableHead className="text-muted-foreground">Status</TableHead>
-                        <TableHead className="text-muted-foreground hidden sm:table-cell">{tr.lead.email}</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockLeads.map((lead, i) => (
-                        <TableRow key={i}>
-                          <TableCell className="font-medium text-foreground">{lead.name}</TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className={statusColor[lead.status]}>{lead.status}</Badge>
-                          </TableCell>
-                          <TableCell className="text-muted-foreground hidden sm:table-cell">{lead.email}</TableCell>
+                  {leads.length === 0 ? (
+                    <p className="text-sm text-muted-foreground py-4 text-center">No leads yet</p>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-muted-foreground">{tr.lead.name}</TableHead>
+                          <TableHead className="text-muted-foreground">Status</TableHead>
+                          <TableHead className="text-muted-foreground hidden sm:table-cell">{tr.lead.email}</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {leads.map((lead) => (
+                          <TableRow key={lead.id}>
+                            <TableCell className="font-medium text-foreground">{lead.name}</TableCell>
+                            <TableCell>
+                              <Badge variant="secondary" className={statusColor[lead.status] || ""}>{lead.status}</Badge>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground hidden sm:table-cell">{lead.email}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
