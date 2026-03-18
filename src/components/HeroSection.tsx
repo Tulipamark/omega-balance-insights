@@ -75,7 +75,9 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="relative"
           >
-            <img src={heroVisual} alt={copy.imageAlt} className="rounded-2xl shadow-elevated w-full" />
+            <div className="relative overflow-hidden rounded-2xl shadow-elevated">
+              <img src={heroVisual} alt={copy.imageAlt} className="w-full" />
+            </div>
           </motion.div>
         </div>
       </div>

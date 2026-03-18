@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 
 interface FooterSectionProps {
@@ -12,21 +13,19 @@ const FooterSection = ({ lang }: FooterSectionProps) => {
       <div className="container-wide flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="font-serif text-lg font-semibold tracking-tight">OmegaBalance</p>
         <div className="text-center md:text-left">
-          <p className="text-xs text-subtle">
-            © {new Date().getFullYear()} OmegaBalance. {copy.tagline} {copy.rights}
-          </p>
+          <p className="text-xs text-subtle">© OmegaBalance 2026 • Mätbar hälsa, tydliga beslut</p>
           <p className="mt-1 text-[11px] text-subtle">Oberoende Zinzino-partner</p>
         </div>
         <div className="flex gap-6 text-xs text-subtle">
-          <a href="#" className="transition-colors hover:text-foreground">
+          <Link to="/integritet" className="transition-colors hover:text-foreground">
             {copy.privacy}
-          </a>
-          <a href="#" className="transition-colors hover:text-foreground">
+          </Link>
+          <Link to="/villkor" className="transition-colors hover:text-foreground">
             {copy.terms}
-          </a>
-          <a href="#" className="transition-colors hover:text-foreground">
+          </Link>
+          <Link to="/kontakt" className="transition-colors hover:text-foreground">
             {copy.contact}
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

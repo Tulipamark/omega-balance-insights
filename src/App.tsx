@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import PartnerPage from "./pages/PartnerPage.tsx";
+import PrivacyPage from "./pages/PrivacyPage.tsx";
+import TermsPage from "./pages/TermsPage.tsx";
+import ContactPage from "./pages/ContactPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 
@@ -18,6 +21,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to={`/${defaultLang}`} replace />} />
+          <Route path="/integritet" element={<PrivacyPage />} />
+          <Route path="/villkor" element={<TermsPage />} />
+          <Route path="/kontakt" element={<ContactPage />} />
           <Route path="/:lang" element={<Index />} />
           <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
           <Route path="*" element={<NotFound />} />

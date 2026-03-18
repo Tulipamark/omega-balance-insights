@@ -7,51 +7,35 @@ interface ABTestingSectionProps {
 
 const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
   const copy = t(lang).abTesting;
+  const headline = copy.headlines[0] ?? "";
+  const cta = copy.ctas[0] ?? "";
 
   return (
     <section className="section-padding bg-section-alt">
-      <div className="container-narrow max-w-3xl">
+      <div className="container-narrow max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
         >
-          <div className="text-center mb-12">
-            <span className="badge-accent inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-              {copy.badge}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{copy.title}</h2>
-            <p className="text-subtle text-lg">{copy.body}</p>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="mb-4 text-3xl font-semibold tracking-tight md:text-4xl">{copy.title}</h2>
+            <p className="text-lg text-subtle">{copy.body}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card rounded-2xl p-8 shadow-card">
-              <h3 className="font-sans text-sm font-semibold text-subtle mb-4 uppercase tracking-widest">
-                {copy.headlinesLabel}
-              </h3>
-              <ol className="space-y-4">
-                {copy.headlines.map((headline, i) => (
-                  <li key={i} className="flex gap-3 items-start">
-                    <span className="text-primary font-sans font-semibold text-sm mt-0.5">{i + 1}.</span>
-                    <p className="font-serif text-lg font-medium leading-snug">{headline}</p>
-                  </li>
-                ))}
-              </ol>
+          <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-8 text-center shadow-card md:p-10">
+            <p className="font-serif text-2xl font-medium leading-tight text-foreground md:text-3xl">
+              {headline}
+            </p>
+            <div className="mt-8 flex justify-center">
+              <a href="#lead-capture" className="btn-primary min-w-[240px] text-center">
+                {cta}
+              </a>
             </div>
-
-            <div className="bg-card rounded-2xl p-8 shadow-card">
-              <h3 className="font-sans text-sm font-semibold text-subtle mb-4 uppercase tracking-widest">
-                {copy.ctasLabel}
-              </h3>
-              <div className="space-y-3">
-                {copy.ctas.map((cta, i) => (
-                  <div key={i} className="btn-primary text-center text-sm py-3">
-                    {cta}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-subtle">
+              {copy.ctasLabel}
+            </p>
           </div>
         </motion.div>
       </div>
