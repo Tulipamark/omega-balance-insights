@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const fr: Copy = {
+  hero: {
+    badge: "Analyse scientifique des acides gras",
+    titleStart: "Connaissez-vous votre",
+    titleAccent: "équilibre oméga ?",
+    body: "La plupart des gens présentent un déséquilibre entre les oméga-6 et les oméga-3. Un simple test sanguin à domicile peut révéler votre ratio exact.",
+    primaryCta: "Tester mon équilibre oméga",
+    secondaryCta: "Comment fonctionne le test",
+    statLab: "Analyse en laboratoire certifié",
+    statTiming: "Résultats après environ 3 semaines",
+    imageAlt: "Vue d'ensemble d'une analyse oméga avec des données d'acides gras",
+  },
+  problem: {
+    title: "Le problème que la plupart ne voient pas",
+    body: "L'équilibre en acides gras de votre corps joue un rôle essentiel dans votre énergie, votre récupération et votre vieillissement. Sans données, il reste invisible.",
+    cards: [
+      { title: "Excès d'oméga-6", description: "L'alimentation moderne contient beaucoup d'aliments transformés et d'huiles végétales, ce qui entraîne souvent des niveaux d'oméga-6 bien supérieurs aux besoins du corps." },
+      { title: "Déséquilibre caché", description: "Ce déséquilibre entre oméga-6 et oméga-3 peut influencer les voies inflammatoires et la santé à long terme." },
+      { title: "Des suppositions au lieu des faits", description: "Beaucoup de personnes pensent que leurs niveaux sont corrects jusqu'au jour où elles les mesurent avec un test sanguin validé." },
+    ],
+  },
+  howItWorks: {
+    title: "Comment fonctionne le test",
+    body: "Trois étapes simples pour comprendre votre équilibre oméga.",
+    steps: [
+      { numberLabel: "ÉTAPE 01", title: "Prélevez votre échantillon", description: "Réalisez à domicile un petit prélèvement sanguin avec le kit de piqûre au doigt fourni. Rapide, sûr et simple." },
+      { numberLabel: "ÉTAPE 02", title: "Envoyez-le au laboratoire", description: "Envoyez votre échantillon à un laboratoire certifié grâce à l'enveloppe retour prépayée." },
+      { numberLabel: "ÉTAPE 03", title: "Recevez vos résultats", description: "Recevez une analyse numérique détaillée de votre équilibre en acides gras après environ 3 semaines." },
+    ],
+  },
+  analysis: {
+    title: "Ce que révèle l'analyse",
+    body: "Votre sang raconte une histoire. Le test la traduit en informations claires et exploitables.",
+    items: [
+      { title: "Ratio oméga-6 / oméga-3", description: "Votre équilibre exact entre les acides gras pro-inflammatoires et anti-inflammatoires. Un ratio optimal est souvent proche de 3:1." },
+      { title: "Composition en acides gras", description: "Une analyse détaillée du profil en acides gras de vos membranes cellulaires, reflet de plusieurs mois d'alimentation." },
+      { title: "Informations personnalisées", description: "Des recommandations concrètes adaptées à vos résultats pour vous aider à comprendre ce que vos chiffres signifient pour votre santé." },
+    ],
+  },
+  results: {
+    title: "Vos résultats,",
+    titleAccent: "clairement expliqués",
+    body: "Sans jargon. Sans suppositions. Vous recevez un rapport numérique complet qui vous aide à prendre des décisions éclairées pour votre santé.",
+    bullets: [
+      "Un rapport numérique détaillé envoyé dans votre boîte mail",
+      "Votre ratio exact oméga-6 / oméga-3 clairement visualisé",
+      "Des recommandations fondées sur des preuves",
+    ],
+    ratioLabel: "Votre ratio oméga",
+    ratioTarget: "Objectif optimal : environ 3:1",
+    omega6: "Oméga-6",
+    omega3: "Oméga-3",
+    recommendationTitle: "Recommandation",
+    recommendationBody: "Votre ratio montre une marge d'amélioration. Envisagez d'augmenter les sources marines d'oméga-3 et de réduire les huiles de graines transformées.",
+  },
+  video: {
+    title: "Voyez comment cela fonctionne en 2 minutes",
+    body: "Une courte présentation du processus de test et de la signification de vos résultats.",
+    placeholder: "Espace vidéo - ajoutez ici votre vidéo explicative",
+  },
+  lead: {
+    title: "Prêt à le découvrir ?",
+    body: "Laissez vos coordonnées pour commander le test ou réserver une consultation gratuite de 10 minutes.",
+    successTitle: "Merci !",
+    successBody: "Nous vous contacterons bientôt pour la suite.",
+    nameLabel: "Nom",
+    namePlaceholder: "Votre nom complet",
+    emailLabel: "E-mail",
+    emailPlaceholder: "vous@exemple.fr",
+    phoneLabel: "Téléphone",
+    phonePlaceholder: "+33 6 00 00 00 00",
+    orderCta: "Commander le test",
+    consultationCta: "Réserver une consultation",
+    successIconLabel: "Terminé",
+  },
+  testimonials: {
+    title: "Ce que les gens découvrent",
+    items: [
+      { quote: "Je n'avais aucune idée que mon ratio était de 12:1. Ce test a été une vraie prise de conscience. J'ai changé mon alimentation et je suis descendue à 4:1 en six mois.", name: "Maria K.", role: "Professionnelle soucieuse de sa santé, 42 ans" },
+      { quote: "Comme quelqu'un qui mesure tout, cela a comblé un angle mort important. Le rapport était clair, scientifique et vraiment utile.", name: "Thomas R.", role: "Biohacker et athlète d'endurance, 38 ans" },
+      { quote: "Je recommande ce test à tous mes clients. C'est la manière la plus simple de voir ce qui se passe sous la surface.", name: "Dr. Anna L.", role: "Praticienne en médecine fonctionnelle" },
+    ],
+  },
+  faq: {
+    title: "Questions fréquentes",
+    items: [
+      { q: "Comment le test est-il réalisé ?", a: "Vous prélevez un petit échantillon sanguin à domicile avec un kit simple de piqûre au doigt. Le processus prend moins de 5 minutes et ne demande aucune compétence médicale." },
+      { q: "Combien de temps dure l'analyse ?", a: "Une fois votre échantillon arrivé au laboratoire, les résultats sont généralement disponibles après environ 3 semaines. Vous recevrez une notification lorsque votre rapport sera prêt." },
+      { q: "Le test est-il sûr ?", a: "Oui. La méthode par piqûre au doigt est largement utilisée en diagnostic médical et reste peu invasive. Le kit contient des instructions claires et tout le matériel nécessaire." },
+      { q: "Que se passe-t-il après réception des résultats ?", a: "Vous recevez un rapport numérique complet avec votre profil en acides gras, votre ratio oméga-6/oméga-3 et des recommandations personnalisées. Vous pouvez aussi réserver une consultation de suivi." },
+      { q: "Ai-je besoin d'une ordonnance médicale ?", a: "Non. Le test est conçu pour un usage direct par les consommateurs. Nous recommandons toutefois de partager les résultats avec votre professionnel de santé." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus : test A/B",
+    title: "Variantes de texte à tester",
+    body: "Trois variations de titre et de CTA pour optimiser la conversion.",
+    headlinesLabel: "Titres",
+    ctasLabel: "Boutons d'appel à l'action",
+    headlines: ["Connaissez-vous votre équilibre oméga ?", "Le chiffre qui pourrait changer votre façon de manger.", "Mesurez ce qui compte. Commencez par votre ratio oméga."],
+    ctas: ["Tester mon équilibre oméga", "Découvrir mon ratio", "Recevoir mon analyse personnalisée"],
+  },
+  sticky: {
+    text: "Découvrez votre ratio oméga-6 / oméga-3 dès aujourd'hui",
+    cta: "Tester mon équilibre oméga",
+  },
+  footer: {
+    tagline: "Analyse scientifique des acides gras.",
+    rights: "Tous droits réservés.",
+    privacy: "Confidentialité",
+    terms: "Conditions",
+    contact: "Contact",
+  },
+};

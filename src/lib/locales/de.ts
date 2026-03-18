@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const de: Copy = {
+  hero: {
+    badge: "Wissenschaftliche Fettsäureanalyse",
+    titleStart: "Kennst du deine",
+    titleAccent: "Omega-Balance?",
+    body: "Die meisten Menschen haben ein Ungleichgewicht zwischen Omega-6 und Omega-3. Ein einfacher Bluttest für zu Hause kann dein genaues Verhältnis zeigen.",
+    primaryCta: "Teste deine Omega-Balance",
+    secondaryCta: "So funktioniert der Test",
+    statLab: "Zertifizierte Laboranalyse",
+    statTiming: "Ergebnisse nach etwa 3 Wochen",
+    imageAlt: "Übersicht einer Omega-Analyse mit Fettsäuredaten",
+  },
+  problem: {
+    title: "Das Problem, das die meisten nicht sehen",
+    body: "Das Fettsäuregleichgewicht deines Körpers beeinflusst, wie du dich fühlst, wie du dich erholst und wie du alterst. Ohne Daten bleibt es unsichtbar.",
+    cards: [
+      { title: "Zu viel Omega-6", description: "Die moderne Ernährung enthält viele verarbeitete Lebensmittel und Pflanzenöle, was Omega-6-Werte oft weit über den Bedarf des Körpers steigen lässt." },
+      { title: "Verstecktes Ungleichgewicht", description: "Das Ungleichgewicht zwischen Omega-6 und Omega-3 kann Entzündungswege und die langfristige Gesundheit beeinflussen." },
+      { title: "Annahmen statt Fakten", description: "Viele Menschen gehen davon aus, dass ihre Fettsäurewerte in Ordnung sind, bis sie sie mit einem validierten Bluttest messen." },
+    ],
+  },
+  howItWorks: {
+    title: "So funktioniert der Test",
+    body: "Drei einfache Schritte, um deine Omega-Balance zu verstehen.",
+    steps: [
+      { numberLabel: "SCHRITT 01", title: "Probe entnehmen", description: "Nimm zu Hause mit dem beiliegenden Fingerpik-Set eine kleine Blutprobe. Schnell, sicher und unkompliziert." },
+      { numberLabel: "SCHRITT 02", title: "Ins Labor senden", description: "Sende deine Probe mit dem frankierten Rückumschlag an ein zertifiziertes Labor." },
+      { numberLabel: "SCHRITT 03", title: "Ergebnisse erhalten", description: "Erhalte nach etwa 3 Wochen eine detaillierte digitale Analyse deiner Fettsäurebalance." },
+    ],
+  },
+  analysis: {
+    title: "Was die Analyse zeigt",
+    body: "Dein Blut erzählt eine Geschichte. Der Test übersetzt sie in klare und umsetzbare Erkenntnisse.",
+    items: [
+      { title: "Omega-6 / Omega-3-Verhältnis", description: "Dein genaues Gleichgewicht zwischen proinflammatorischen und antiinflammatorischen Fettsäuren. Ein optimales Verhältnis liegt oft nahe bei 3:1." },
+      { title: "Fettsäurezusammensetzung", description: "Eine detaillierte Aufschlüsselung des Fettsäureprofils deiner Zellmembranen, das mehrere Monate deiner Ernährung widerspiegelt." },
+      { title: "Personalisierte Erkenntnisse", description: "Konkrete Empfehlungen auf Basis deiner Ergebnisse, damit du verstehst, was deine Werte für deine Gesundheit bedeuten." },
+    ],
+  },
+  results: {
+    title: "Deine Ergebnisse,",
+    titleAccent: "klar erklärt",
+    body: "Kein Fachjargon. Kein Rätselraten. Du erhältst einen umfassenden digitalen Bericht, der dir Klarheit für fundierte Gesundheitsentscheidungen gibt.",
+    bullets: [
+      "Ein detaillierter digitaler Bericht direkt in dein Postfach",
+      "Dein genaues Omega-6 / Omega-3-Verhältnis klar visualisiert",
+      "Evidenzbasierte Hinweise zur Verbesserung",
+    ],
+    ratioLabel: "Dein Omega-Verhältnis",
+    ratioTarget: "Optimales Ziel: etwa 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Empfehlung",
+    recommendationBody: "Dein Verhältnis zeigt Verbesserungspotenzial. Erwäge mehr marine Omega-3-Quellen und weniger verarbeitete Samenöle.",
+  },
+  video: {
+    title: "Sieh in 2 Minuten, wie es funktioniert",
+    body: "Ein kurzer Überblick über den Testablauf und die Bedeutung deiner Ergebnisse.",
+    placeholder: "Video-Platzhalter - füge hier dein Erklärvideo ein",
+  },
+  lead: {
+    title: "Bereit, es herauszufinden?",
+    body: "Trage deine Daten ein, um den Test zu bestellen oder ein kostenloses 10-Minuten-Beratungsgespräch zu buchen.",
+    successTitle: "Danke!",
+    successBody: "Wir melden uns in Kürze mit den nächsten Schritten.",
+    nameLabel: "Name",
+    namePlaceholder: "Dein vollständiger Name",
+    emailLabel: "E-Mail",
+    emailPlaceholder: "du@beispiel.de",
+    phoneLabel: "Telefon",
+    phonePlaceholder: "+49 170 0000000",
+    orderCta: "Test bestellen",
+    consultationCta: "Beratung buchen",
+    successIconLabel: "Erledigt",
+  },
+  testimonials: {
+    title: "Was Menschen entdecken",
+    items: [
+      { quote: "Ich hatte keine Ahnung, dass mein Verhältnis 12:1 war. Dieser Test war ein echter Augenöffner. Ich habe meine Ernährung verändert und war nach sechs Monaten bei 4:1.", name: "Maria K.", role: "Gesundheitsbewusste Berufstätige, 42" },
+      { quote: "Als jemand, der alles trackt, hat das hier eine große Lücke geschlossen. Der Bericht war klar, wissenschaftlich und wirklich nützlich.", name: "Thomas R.", role: "Biohacker und Ausdauersportler, 38" },
+      { quote: "Ich empfehle das allen meinen Klienten. Es ist der einfachste Weg zu sehen, was unter der Oberfläche passiert.", name: "Dr. Anna L.", role: "Fachkraft für funktionelle Medizin" },
+    ],
+  },
+  faq: {
+    title: "Häufig gestellte Fragen",
+    items: [
+      { q: "Wie wird der Test durchgeführt?", a: "Du entnimmst zu Hause mit einem einfachen Fingerpik-Set eine kleine Blutprobe. Der Vorgang dauert weniger als 5 Minuten und erfordert keine medizinische Erfahrung." },
+      { q: "Wie lange dauert die Analyse?", a: "Sobald deine Probe das Labor erreicht hat, liegen die Ergebnisse normalerweise nach etwa 3 Wochen vor. Du wirst benachrichtigt, sobald dein Bericht bereit ist." },
+      { q: "Ist der Test sicher?", a: "Ja. Die Fingerpik-Methode wird in der medizinischen Diagnostik häufig eingesetzt und ist minimalinvasiv. Das Set enthält klare Anweisungen und alle notwendigen Materialien." },
+      { q: "Was passiert, nachdem ich meine Ergebnisse erhalten habe?", a: "Du erhältst einen digitalen Bericht mit deinem Fettsäureprofil, deinem Omega-6/Omega-3-Verhältnis und personalisierten Empfehlungen. Außerdem kannst du ein Anschlussgespräch buchen." },
+      { q: "Brauche ich eine Überweisung vom Arzt?", a: "Nein. Der Test ist für die direkte Nutzung durch Verbraucher konzipiert. Dennoch empfehlen wir, die Ergebnisse mit deiner medizinischen Fachperson zu teilen." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: A/B-Tests",
+    title: "Alternative Texte zum Testen",
+    body: "Drei Varianten für Überschrift und CTA zur Optimierung der Conversion.",
+    headlinesLabel: "Überschriften",
+    ctasLabel: "Call-to-Action-Buttons",
+    headlines: ["Kennst du deine Omega-Balance?", "Die eine Zahl, die dein Essverhalten verändern könnte.", "Miss, was zählt. Starte mit deinem Omega-Verhältnis."],
+    ctas: ["Teste deine Omega-Balance", "Entdecke dein Verhältnis", "Erhalte deine persönliche Analyse"],
+  },
+  sticky: {
+    text: "Entdecke noch heute dein Omega-6 / Omega-3-Verhältnis",
+    cta: "Teste deine Omega-Balance",
+  },
+  footer: {
+    tagline: "Wissenschaftliche Fettsäureanalyse.",
+    rights: "Alle Rechte vorbehalten.",
+    privacy: "Datenschutz",
+    terms: "Bedingungen",
+    contact: "Kontakt",
+  },
+};

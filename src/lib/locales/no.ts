@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const no: Copy = {
+  hero: {
+    badge: "Vitenskapelig fettsyreanalysering",
+    titleStart: "Kjenner du din",
+    titleAccent: "Omega-balanse?",
+    body: "De fleste har en ubalanse mellom Omega-6 og Omega-3. En enkel blodprøve hjemme kan vise ditt eksakte forhold.",
+    primaryCta: "Test din Omega-balanse",
+    secondaryCta: "Slik fungerer testen",
+    statLab: "Sertifisert laboratorieanalyse",
+    statTiming: "Resultater etter cirka 3 uker",
+    imageAlt: "Oversikt over omegaanalyse og fettsyredata",
+  },
+  problem: {
+    title: "Problemet de fleste ikke ser",
+    body: "Kroppens fettsyrebalanse påvirker hvordan du føler deg, restituerer og eldes. Uten data er den usynlig.",
+    cards: [
+      { title: "For mye Omega-6", description: "Moderne kosthold inneholder mye prosessert mat og planteoljer, noe som ofte gir Omega-6-nivåer langt over kroppens behov." },
+      { title: "Skjult ubalanse", description: "Ubalansen mellom Omega-6 og Omega-3 kan påvirke betennelsesprosesser og helsen på sikt." },
+      { title: "Antakelser i stedet for fakta", description: "Mange tror at fettsyrenivåene deres er fine, helt til de faktisk måler dem med en validert blodprøve." },
+    ],
+  },
+  howItWorks: {
+    title: "Slik fungerer testen",
+    body: "Tre enkle steg for å forstå din Omega-balanse.",
+    steps: [
+      { numberLabel: "STEG 01", title: "Ta prøven", description: "Ta en liten blodprøve hjemme med det medfølgende fingerstikksettet. Raskt, trygt og enkelt." },
+      { numberLabel: "STEG 02", title: "Send til laboratoriet", description: "Send prøven til et sertifisert laboratorium i den forhåndsbetalte returkonvolutten." },
+      { numberLabel: "STEG 03", title: "Få resultatene", description: "Motta en detaljert digital analyse av fettsyrebalansen din etter cirka 3 uker." },
+    ],
+  },
+  analysis: {
+    title: "Hva analysen viser",
+    body: "Blodet ditt forteller en historie. Testen oversetter den til tydelig og nyttig informasjon.",
+    items: [
+      { title: "Omega-6 / Omega-3-forhold", description: "Din eksakte balanse mellom proinflammatoriske og antiinflammatoriske fettsyrer. Et optimalt forhold ligger ofte nær 3:1." },
+      { title: "Fettsyresammensetning", description: "En detaljert oversikt over fettsyreprofilen i cellemembranene dine, som gjenspeiler flere måneders kostholdsmønstre." },
+      { title: "Personlige innsikter", description: "Konkrete råd basert på resultatene dine, slik at du forstår hva tallene betyr for helsen din." },
+    ],
+  },
+  results: {
+    title: "Resultatene dine,",
+    titleAccent: "tydelig forklart",
+    body: "Ingen fagjargon. Ingen gjetting. Du får en omfattende digital rapport som gjør det lettere å ta gode valg for helsen din.",
+    bullets: [
+      "En detaljert digital rapport sendt rett til innboksen din",
+      "Ditt eksakte Omega-6 / Omega-3-forhold visualisert",
+      "Evidensbasert veiledning for forbedring",
+    ],
+    ratioLabel: "Ditt Omega-forhold",
+    ratioTarget: "Optimalt mål: cirka 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Anbefaling",
+    recommendationBody: "Forholdet ditt viser at det er rom for forbedring. Vurder å øke inntaket av marine Omega-3-kilder og redusere prosesserte frøoljer.",
+  },
+  video: {
+    title: "Se hvordan det fungerer på 2 minutter",
+    body: "En kort oversikt over testprosessen og hva resultatene dine betyr.",
+    placeholder: "Videoplassholder - legg til forklaringsvideoen din her",
+  },
+  lead: {
+    title: "Klar til å finne svaret?",
+    body: "Fyll inn opplysningene dine for å bestille testen eller booke en gratis konsultasjon på 10 minutter.",
+    successTitle: "Takk!",
+    successBody: "Vi tar snart kontakt med neste steg.",
+    nameLabel: "Navn",
+    namePlaceholder: "Ditt fulle navn",
+    emailLabel: "E-post",
+    emailPlaceholder: "du@eksempel.no",
+    phoneLabel: "Telefon",
+    phonePlaceholder: "+47 400 00 000",
+    orderCta: "Bestill testen",
+    consultationCta: "Book konsultasjon",
+    successIconLabel: "Ferdig",
+  },
+  testimonials: {
+    title: "Hva folk oppdager",
+    items: [
+      { quote: "Jeg hadde ingen anelse om at forholdet mitt var 12:1. Denne testen ble en vekker. Jeg endret kostholdet og kom ned til 4:1 etter seks måneder.", name: "Maria K.", role: "Helsebevisst fagperson, 42" },
+      { quote: "Som en som måler alt, fylte dette et stort blindfelt. Rapporten var tydelig, vitenskapelig og faktisk nyttig.", name: "Thomas R.", role: "Biohacker og utholdenhetsutøver, 38" },
+      { quote: "Jeg anbefaler dette til alle klientene mine. Det er den enkleste måten å se hva som skjer under overflaten.", name: "Dr. Anna L.", role: "Behandler innen funksjonell medisin" },
+    ],
+  },
+  faq: {
+    title: "Vanlige spørsmål",
+    items: [
+      { q: "Hvordan gjennomføres testen?", a: "Du tar en liten blodprøve hjemme med et enkelt fingerstikksett. Prosessen tar mindre enn 5 minutter og krever ingen medisinsk erfaring." },
+      { q: "Hvor lang tid tar analysen?", a: "Når prøven har kommet frem til laboratoriet, er resultatene vanligvis klare etter cirka 3 uker. Du får beskjed når rapporten er klar." },
+      { q: "Er testen trygg?", a: "Ja. Fingerstikkmetoden brukes bredt i diagnostikk og er minimalt invasiv. Settet inneholder tydelige instruksjoner og alt nødvendig materiale." },
+      { q: "Hva skjer etter at jeg har fått resultatene?", a: "Du får en digital rapport med fettsyreprofilen din, Omega-6/Omega-3-forholdet og personlige anbefalinger. Du kan også booke en oppfølgingssamtale." },
+      { q: "Trenger jeg henvisning fra lege?", a: "Nei, ingen henvisning er nødvendig. Testen er laget for direkte bruk av forbrukere. Vi anbefaler likevel at du deler resultatene med helsepersonell." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: A/B-testing",
+    title: "Alternativ tekst for testing",
+    body: "Tre varianter av overskrift og CTA for å optimalisere konverteringen.",
+    headlinesLabel: "Overskrifter",
+    ctasLabel: "Call to action-knapper",
+    headlines: ["Kjenner du din Omega-balanse?", "Tallet som kan endre hvordan du spiser.", "Mål det som betyr noe. Start med Omega-forholdet ditt."],
+    ctas: ["Test din Omega-balanse", "Oppdag forholdet ditt", "Få din personlige analyse"],
+  },
+  sticky: {
+    text: "Oppdag ditt Omega-6 / Omega-3-forhold i dag",
+    cta: "Test din Omega-balanse",
+  },
+  footer: {
+    tagline: "Vitenskapelig fettsyreanalysering.",
+    rights: "Alle rettigheter forbeholdt.",
+    privacy: "Personvern",
+    terms: "Vilkår",
+    contact: "Kontakt",
+  },
+};

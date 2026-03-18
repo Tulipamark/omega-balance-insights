@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const it: Copy = {
+  hero: {
+    badge: "Analisi scientifica degli acidi grassi",
+    titleStart: "Conosci il tuo",
+    titleAccent: "equilibrio Omega?",
+    body: "La maggior parte delle persone ha uno squilibrio tra Omega-6 e Omega-3. Un semplice test del sangue da fare a casa può rivelare il tuo rapporto esatto.",
+    primaryCta: "Testa il tuo equilibrio Omega",
+    secondaryCta: "Come funziona il test",
+    statLab: "Analisi di laboratorio certificata",
+    statTiming: "Risultati dopo circa 3 settimane",
+    imageAlt: "Panoramica di un'analisi Omega con dati sugli acidi grassi",
+  },
+  problem: {
+    title: "Il problema che la maggior parte delle persone non vede",
+    body: "L'equilibrio degli acidi grassi del tuo corpo influisce su come ti senti, su come recuperi e su come invecchi. Senza dati, resta invisibile.",
+    cards: [
+      { title: "Eccesso di Omega-6", description: "Le diete moderne sono ricche di cibi processati e oli vegetali, spesso con livelli di Omega-6 ben superiori a ciò di cui il corpo ha bisogno." },
+      { title: "Squilibrio nascosto", description: "Questo squilibrio tra Omega-6 e Omega-3 può influenzare i processi infiammatori e la salute nel lungo periodo." },
+      { title: "Supposizioni invece di fatti", description: "Molte persone pensano che i loro livelli siano buoni finché non li misurano davvero con un test del sangue validato." },
+    ],
+  },
+  howItWorks: {
+    title: "Come funziona il test",
+    body: "Tre semplici passaggi per capire il tuo equilibrio Omega.",
+    steps: [
+      { numberLabel: "FASE 01", title: "Raccogli il campione", description: "Preleva a casa un piccolo campione di sangue con il kit pungidito incluso. Rapido, sicuro e semplice." },
+      { numberLabel: "FASE 02", title: "Invialo al laboratorio", description: "Spedisci il campione a un laboratorio certificato usando la busta di ritorno prepagata." },
+      { numberLabel: "FASE 03", title: "Ricevi i risultati", description: "Ricevi un'analisi digitale dettagliata del tuo equilibrio degli acidi grassi dopo circa 3 settimane." },
+    ],
+  },
+  analysis: {
+    title: "Cosa rivela l'analisi",
+    body: "Il tuo sangue racconta una storia. Il test la traduce in informazioni chiare e utili.",
+    items: [
+      { title: "Rapporto Omega-6 / Omega-3", description: "Il tuo equilibrio preciso tra acidi grassi pro-infiammatori e anti-infiammatori. Un rapporto ottimale è spesso vicino a 3:1." },
+      { title: "Composizione degli acidi grassi", description: "Un'analisi dettagliata del profilo degli acidi grassi delle membrane cellulari, che riflette mesi di abitudini alimentari." },
+      { title: "Indicazioni personalizzate", description: "Consigli pratici basati sui tuoi risultati, per aiutarti a capire cosa significano i numeri per la tua salute." },
+    ],
+  },
+  results: {
+    title: "I tuoi risultati,",
+    titleAccent: "spiegati chiaramente",
+    body: "Niente gergo. Niente supposizioni. Ricevi un report digitale completo che ti aiuta a prendere decisioni consapevoli per la tua salute.",
+    bullets: [
+      "Un report digitale dettagliato consegnato nella tua casella email",
+      "Il tuo rapporto esatto Omega-6 / Omega-3 chiaramente visualizzato",
+      "Indicazioni basate su evidenze per migliorare",
+    ],
+    ratioLabel: "Il tuo rapporto Omega",
+    ratioTarget: "Obiettivo ottimale: circa 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Raccomandazione",
+    recommendationBody: "Il tuo rapporto suggerisce margine di miglioramento. Valuta di aumentare le fonti marine di Omega-3 e di ridurre gli oli di semi processati.",
+  },
+  video: {
+    title: "Guarda come funziona in 2 minuti",
+    body: "Una breve panoramica del processo di test e del significato dei tuoi risultati.",
+    placeholder: "Segnaposto video - aggiungi qui il tuo video esplicativo",
+  },
+  lead: {
+    title: "Pronto a scoprirlo?",
+    body: "Inserisci i tuoi dati per ordinare il test o prenotare una consulenza gratuita di 10 minuti.",
+    successTitle: "Grazie!",
+    successBody: "Ti contatteremo a breve con i prossimi passaggi.",
+    nameLabel: "Nome",
+    namePlaceholder: "Il tuo nome completo",
+    emailLabel: "Email",
+    emailPlaceholder: "tu@esempio.it",
+    phoneLabel: "Telefono",
+    phonePlaceholder: "+39 333 000 0000",
+    orderCta: "Ordina il test",
+    consultationCta: "Prenota una consulenza",
+    successIconLabel: "Fatto",
+  },
+  testimonials: {
+    title: "Cosa stanno scoprendo le persone",
+    items: [
+      { quote: "Non avevo idea che il mio rapporto fosse 12:1. Questo test mi ha aperto gli occhi. Ho cambiato alimentazione e in sei mesi sono scesa a 4:1.", name: "Maria K.", role: "Professionista attenta alla salute, 42 anni" },
+      { quote: "Per una persona che monitora tutto, questo ha colmato un grande punto cieco. Il report era chiaro, scientifico e davvero utile.", name: "Thomas R.", role: "Biohacker e atleta di endurance, 38 anni" },
+      { quote: "Lo consiglio a tutti i miei clienti. È il modo più semplice per capire cosa succede sotto la superficie.", name: "Dr. Anna L.", role: "Professionista di medicina funzionale" },
+    ],
+  },
+  faq: {
+    title: "Domande frequenti",
+    items: [
+      { q: "Come viene eseguito il test?", a: "Raccogli a casa un piccolo campione di sangue usando un semplice kit pungidito. Il processo richiede meno di 5 minuti e non richiede competenze mediche." },
+      { q: "Quanto dura l'analisi?", a: "Una volta che il campione arriva in laboratorio, i risultati sono normalmente disponibili dopo circa 3 settimane. Riceverai una notifica quando il report sarà pronto." },
+      { q: "Il test è sicuro?", a: "Sì. Il metodo pungidito è ampiamente usato nella diagnostica medica ed è minimamente invasivo. Il kit include istruzioni chiare e tutto il materiale necessario." },
+      { q: "Cosa succede dopo aver ricevuto i risultati?", a: "Riceverai un report digitale completo con il tuo profilo di acidi grassi, il rapporto Omega-6/Omega-3 e raccomandazioni personalizzate. Puoi anche prenotare una consulenza di follow-up." },
+      { q: "Serve la prescrizione di un medico?", a: "No. Il test è pensato per l'uso diretto da parte dei consumatori. Consigliamo comunque di condividere i risultati con il tuo professionista sanitario." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: test A/B",
+    title: "Copy alternative da testare",
+    body: "Tre varianti di headline e CTA per ottimizzare la conversione.",
+    headlinesLabel: "Headline",
+    ctasLabel: "Pulsanti call to action",
+    headlines: ["Conosci il tuo equilibrio Omega?", "L'unico numero che potrebbe cambiare il tuo modo di mangiare.", "Misura ciò che conta. Parti dal tuo rapporto Omega."],
+    ctas: ["Testa il tuo equilibrio Omega", "Scopri il tuo rapporto", "Ricevi la tua analisi personalizzata"],
+  },
+  sticky: {
+    text: "Scopri oggi il tuo rapporto Omega-6 / Omega-3",
+    cta: "Testa il tuo equilibrio Omega",
+  },
+  footer: {
+    tagline: "Analisi scientifica degli acidi grassi.",
+    rights: "Tutti i diritti riservati.",
+    privacy: "Privacy",
+    terms: "Termini",
+    contact: "Contatti",
+  },
+};

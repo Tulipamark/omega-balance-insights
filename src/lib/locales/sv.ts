@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const sv: Copy = {
+  hero: {
+    badge: "Vetenskaplig fettsyreanalys",
+    titleStart: "Känner du till din",
+    titleAccent: "Omega-balans?",
+    body: "De flesta har en obalans mellan Omega-6 och Omega-3. Ett enkelt blodprov hemma kan visa din exakta kvot.",
+    primaryCta: "Testa din Omega-balans",
+    secondaryCta: "Så fungerar testet",
+    statLab: "Certifierad laboratorieanalys",
+    statTiming: "Resultat efter cirka 3 veckor",
+    imageAlt: "Översikt över omegaanalys och fettsyredata",
+  },
+  problem: {
+    title: "Problemet de flesta inte ser",
+    body: "Kroppens fettsyrebalans påverkar hur du mår, återhämtar dig och åldras. Men utan data är den osynlig.",
+    cards: [
+      { title: "För mycket Omega-6", description: "Modern kost innehåller mycket processad mat och vegetabiliska oljor, vilket ofta driver upp Omega-6-nivåerna långt över kroppens behov." },
+      { title: "Dold obalans", description: "Obalansen mellan Omega-6 och Omega-3 kan påverka inflammationsprocesser och hälsan på sikt." },
+      { title: "Antaganden i stället för fakta", description: "Många tror att deras fettsyrenivåer är bra, tills de faktiskt mäter dem med ett validerat blodtest." },
+    ],
+  },
+  howItWorks: {
+    title: "Så fungerar testet",
+    body: "Tre enkla steg för att förstå din Omega-balans.",
+    steps: [
+      { numberLabel: "STEG 01", title: "Ta provet", description: "Ta ett litet blodprov hemma med det medföljande fingerstickskitet. Snabbt, säkert och enkelt." },
+      { numberLabel: "STEG 02", title: "Skicka till laboratoriet", description: "Skicka provet till ett certifierat laboratorium i det förbetalda returkuvertet." },
+      { numberLabel: "STEG 03", title: "Få dina resultat", description: "Få en detaljerad digital analys av din fettsyrebalans efter cirka 3 veckor." },
+    ],
+  },
+  analysis: {
+    title: "Vad analysen visar",
+    body: "Ditt blod berättar en historia. Testet översätter den till tydlig och användbar information.",
+    items: [
+      { title: "Omega-6 / Omega-3-kvot", description: "Din exakta balans mellan proinflammatoriska och antiinflammatoriska fettsyror. En optimal kvot ligger ofta nära 3:1." },
+      { title: "Fettsyrasammansättning", description: "En detaljerad bild av fettsyraprofilen i dina cellmembran, som speglar flera månaders kostmönster." },
+      { title: "Personliga insikter", description: "Konkreta rekommendationer baserade på dina resultat, så att du förstår vad siffrorna betyder för din hälsa." },
+    ],
+  },
+  results: {
+    title: "Dina resultat,",
+    titleAccent: "tydligt förklarade",
+    body: "Ingen jargong. Inget gissande. Du får en omfattande digital rapport som ger dig underlag för att fatta välgrundade beslut om din hälsa.",
+    bullets: [
+      "En detaljerad digital rapport direkt till din inkorg",
+      "Din exakta Omega-6 / Omega-3-kvot visualiserad",
+      "Evidensbaserad vägledning för förbättring",
+    ],
+    ratioLabel: "Din Omega-kvot",
+    ratioTarget: "Optimalt mål: cirka 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Rekommendation",
+    recommendationBody: "Din kvot visar att det finns utrymme för förbättring. Överväg att öka intaget av marina Omega-3-källor och minska processade fröoljor.",
+  },
+  video: {
+    title: "Se hur det fungerar på 2 minuter",
+    body: "En kort genomgång av testprocessen och vad dina resultat betyder.",
+    placeholder: "Videoplatshållare - lägg till din förklaringsvideo här",
+  },
+  lead: {
+    title: "Redo att få svar?",
+    body: "Fyll i dina uppgifter för att beställa testet eller boka en kostnadsfri konsultation på 10 minuter.",
+    successTitle: "Tack!",
+    successBody: "Vi hör av oss snart med nästa steg.",
+    nameLabel: "Namn",
+    namePlaceholder: "Ditt fullständiga namn",
+    emailLabel: "E-post",
+    emailPlaceholder: "du@exempel.se",
+    phoneLabel: "Telefon",
+    phonePlaceholder: "+46 70 000 00 00",
+    orderCta: "Beställ testet",
+    consultationCta: "Boka konsultation",
+    successIconLabel: "Klart",
+  },
+  testimonials: {
+    title: "Vad människor upptäcker",
+    items: [
+      { quote: "Jag hade ingen aning om att min kvot var 12:1. Testet blev en väckarklocka. Jag ändrade kosten och kom ner till 4:1 efter sex månader.", name: "Maria K.", role: "Hälsomedveten yrkesperson, 42" },
+      { quote: "Som någon som mäter allt fyllde det här en stor blind fläck. Rapporten var tydlig, vetenskaplig och faktiskt användbar.", name: "Thomas R.", role: "Biohacker och uthållighetsidrottare, 38" },
+      { quote: "Jag rekommenderar det här till alla mina klienter. Det är det enklaste sättet att se vad som pågår under ytan.", name: "Dr. Anna L.", role: "Funktionsmedicinsk behandlare" },
+    ],
+  },
+  faq: {
+    title: "Vanliga frågor",
+    items: [
+      { q: "Hur går testet till?", a: "Du tar ett litet blodprov hemma med ett enkelt fingerstickskit. Processen tar mindre än 5 minuter och kräver ingen medicinsk erfarenhet." },
+      { q: "Hur lång tid tar analysen?", a: "När provet har kommit fram till laboratoriet är resultaten vanligtvis klara efter cirka 3 veckor. Du får ett meddelande när rapporten är färdig." },
+      { q: "Är testet säkert?", a: "Ja. Fingerstickmetoden används brett inom diagnostik och är minimalt invasiv. Kitet innehåller tydliga instruktioner och allt material som behövs." },
+      { q: "Vad händer efter att jag fått resultaten?", a: "Du får en digital rapport med din fettsyraprofil, din Omega-6/Omega-3-kvot och personliga rekommendationer. Du kan också boka en uppföljande konsultation." },
+      { q: "Behöver jag remiss från läkare?", a: "Nej, ingen remiss behövs. Testet är utformat för direkt användning av konsumenter. Vi rekommenderar ändå att du delar resultaten med din vårdgivare." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: A/B-testning",
+    title: "Alternativ copy för testning",
+    body: "Tre variationer av rubrik och CTA för att optimera konverteringen.",
+    headlinesLabel: "Rubriker",
+    ctasLabel: "Call to action-knappar",
+    headlines: ["Känner du till din Omega-balans?", "Siffran som kan förändra hur du äter.", "Mät det som betyder något. Börja med din Omega-kvot."],
+    ctas: ["Testa din Omega-balans", "Upptäck din kvot", "Få din personliga analys"],
+  },
+  sticky: {
+    text: "Upptäck din Omega-6 / Omega-3-kvot idag",
+    cta: "Testa din Omega-balans",
+  },
+  footer: {
+    tagline: "Vetenskaplig fettsyreanalys.",
+    rights: "Alla rättigheter förbehållna.",
+    privacy: "Integritet",
+    terms: "Villkor",
+    contact: "Kontakt",
+  },
+};

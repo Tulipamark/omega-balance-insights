@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const en: Copy = {
+  hero: {
+    badge: "Scientific Fatty Acid Analysis",
+    titleStart: "Do you know your",
+    titleAccent: "Omega balance?",
+    body: "Most people have an imbalance between Omega-6 and Omega-3. A simple home blood test can reveal your exact ratio.",
+    primaryCta: "Test your Omega balance",
+    secondaryCta: "How the test works",
+    statLab: "Certified lab analysis",
+    statTiming: "Results after around 3 weeks",
+    imageAlt: "Omega balance analysis dashboard showing fatty acid ratio data",
+  },
+  problem: {
+    title: "The problem most people don't see",
+    body: "Your body's fatty acid balance plays a critical role in how you feel, recover, and age. But without data, it remains invisible.",
+    cards: [
+      { title: "Excessive Omega-6", description: "Modern diets are rich in processed foods and vegetable oils, often resulting in Omega-6 levels far above what the body needs." },
+      { title: "Hidden imbalance", description: "This imbalance between Omega-6 and Omega-3 can influence inflammatory pathways and long-term health outcomes." },
+      { title: "Assumptions instead of data", description: "Many people assume their fatty acid levels are fine until they measure them with a validated blood test." },
+    ],
+  },
+  howItWorks: {
+    title: "How the test works",
+    body: "Three simple steps to understand your Omega balance.",
+    steps: [
+      { numberLabel: "STEP 01", title: "Collect your sample", description: "Take a small blood sample at home using the included finger-prick kit. Quick, safe, and simple." },
+      { numberLabel: "STEP 02", title: "Send it to the lab", description: "Mail your sample to a certified laboratory using the prepaid return envelope." },
+      { numberLabel: "STEP 03", title: "Receive your results", description: "Receive a detailed digital analysis of your fatty acid balance after around 3 weeks." },
+    ],
+  },
+  analysis: {
+    title: "What the analysis reveals",
+    body: "Your blood tells a story. The test translates it into clear, actionable insight.",
+    items: [
+      { title: "Omega-6 / Omega-3 ratio", description: "Your exact balance between pro-inflammatory and anti-inflammatory fatty acids. An optimal ratio is often close to 3:1." },
+      { title: "Fatty acid composition", description: "A detailed breakdown of your cell membrane fatty acid profile, reflecting months of dietary patterns." },
+      { title: "Personalized insights", description: "Practical guidance tailored to your results, helping you understand what your numbers mean for your health." },
+    ],
+  },
+  results: {
+    title: "Your results,",
+    titleAccent: "clearly explained",
+    body: "No jargon. No guesswork. You receive a comprehensive digital report that gives you the clarity to make informed decisions about your health.",
+    bullets: [
+      "A detailed digital report delivered to your inbox",
+      "Your exact Omega-6 / Omega-3 ratio clearly visualized",
+      "Evidence-based guidance for improvement",
+    ],
+    ratioLabel: "Your Omega ratio",
+    ratioTarget: "Optimal target: around 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Recommendation",
+    recommendationBody: "Your ratio suggests room for improvement. Consider increasing marine-based Omega-3 intake and reducing processed seed oils.",
+  },
+  video: {
+    title: "See how it works in 2 minutes",
+    body: "A short overview of the testing process and what your results mean.",
+    placeholder: "Video placeholder - add your explainer video here",
+  },
+  lead: {
+    title: "Ready to find out?",
+    body: "Enter your details to order the test or book a free 10-minute consultation.",
+    successTitle: "Thank you!",
+    successBody: "We'll be in touch shortly with your next steps.",
+    nameLabel: "Name",
+    namePlaceholder: "Your full name",
+    emailLabel: "Email",
+    emailPlaceholder: "you@example.com",
+    phoneLabel: "Phone",
+    phonePlaceholder: "+1 (555) 000-0000",
+    orderCta: "Order the test",
+    consultationCta: "Book a consultation",
+    successIconLabel: "Done",
+  },
+  testimonials: {
+    title: "What people are discovering",
+    items: [
+      { quote: "I had no idea my ratio was 12:1. This test was an eye-opener. I changed my diet and retested, and within six months I was down to 4:1.", name: "Maria K.", role: "Health-conscious professional, 42" },
+      { quote: "As someone who tracks everything, this filled a major blind spot. The report was clear, scientific, and genuinely useful.", name: "Thomas R.", role: "Biohacker and endurance athlete, 38" },
+      { quote: "I recommend this to all my clients. It's the simplest way to see what's happening beneath the surface.", name: "Dr. Anna L.", role: "Functional medicine practitioner" },
+    ],
+  },
+  faq: {
+    title: "Frequently asked questions",
+    items: [
+      { q: "How is the test performed?", a: "You collect a small blood sample at home using a simple finger-prick kit. The process takes less than 5 minutes and requires no medical expertise." },
+      { q: "How long does the analysis take?", a: "Once your sample reaches the laboratory, results are typically available after around 3 weeks. You'll receive a notification when your report is ready." },
+      { q: "Is the test safe?", a: "Yes. The finger-prick method is widely used in medical diagnostics and is minimally invasive. The kit includes clear instructions and all necessary materials." },
+      { q: "What happens after I receive my results?", a: "You'll get a comprehensive digital report with your fatty acid profile, your Omega-6/Omega-3 ratio, and personalized recommendations. You can also book a follow-up consultation to discuss your results." },
+      { q: "Do I need a doctor's referral?", a: "No referral is needed. The test is designed for direct-to-consumer use. However, we do recommend sharing your results with your healthcare provider for a more complete picture." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: A/B testing",
+    title: "Alternative copy for testing",
+    body: "Three headline and CTA variations to optimize conversion.",
+    headlinesLabel: "Headlines",
+    ctasLabel: "Call-to-action buttons",
+    headlines: ["Do you know your Omega balance?", "The one number that could change how you eat.", "Measure what matters. Start with your Omega ratio."],
+    ctas: ["Test your Omega balance", "Discover your ratio", "Get your personalized analysis"],
+  },
+  sticky: {
+    text: "Discover your Omega-6 / Omega-3 ratio today",
+    cta: "Test your Omega balance",
+  },
+  footer: {
+    tagline: "Scientific fatty acid analysis.",
+    rights: "All rights reserved.",
+    privacy: "Privacy",
+    terms: "Terms",
+    contact: "Contact",
+  },
+};

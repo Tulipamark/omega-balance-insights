@@ -1,0 +1,116 @@
+import { Copy } from "../i18n-types";
+
+export const fi: Copy = {
+  hero: {
+    badge: "Tieteellinen rasvahappoanalyysi",
+    titleStart: "Tiedätkö oman",
+    titleAccent: "Omega-tasapainosi?",
+    body: "Useimmilla on epätasapaino Omega-6:n ja Omega-3:n välillä. Yksinkertainen kotona tehtävä veritesti voi näyttää tarkan suhteesi.",
+    primaryCta: "Testaa Omega-tasapainosi",
+    secondaryCta: "Näin testi toimii",
+    statLab: "Sertifioitu laboratorioanalyysi",
+    statTiming: "Tulokset noin 3 viikossa",
+    imageAlt: "Yleiskuva omega-analyysistä ja rasvahappodatasta",
+  },
+  problem: {
+    title: "Ongelma, jota useimmat eivät näe",
+    body: "Kehosi rasvahappotasapaino vaikuttaa siihen, miltä sinusta tuntuu, miten palaudut ja miten ikäännyt. Ilman dataa se jää näkymättömäksi.",
+    cards: [
+      { title: "Liikaa Omega-6:ta", description: "Nykyaikainen ruokavalio sisältää paljon prosessoitua ruokaa ja kasviöljyjä, mikä nostaa Omega-6-tasoja usein paljon yli kehon tarpeen." },
+      { title: "Piilevä epätasapaino", description: "Omega-6:n ja Omega-3:n välinen epätasapaino voi vaikuttaa tulehdusreitteihin ja pitkän aikavälin terveyteen." },
+      { title: "Oletuksia datan sijaan", description: "Moni olettaa rasvahappotasojensa olevan kunnossa, kunnes ne todella mitataan validoidulla veritestillä." },
+    ],
+  },
+  howItWorks: {
+    title: "Näin testi toimii",
+    body: "Kolme helppoa vaihetta Omega-tasapainosi ymmärtämiseen.",
+    steps: [
+      { numberLabel: "VAIHE 01", title: "Ota näyte", description: "Ota pieni verinäyte kotona mukana tulevalla sormenpääpistopakkauksella. Nopea, turvallinen ja helppo." },
+      { numberLabel: "VAIHE 02", title: "Lähetä laboratorioon", description: "Lähetä näyte sertifioituun laboratorioon valmiiksi maksetussa palautuskuoressa." },
+      { numberLabel: "VAIHE 03", title: "Saat tulokset", description: "Saat yksityiskohtaisen digitaalisen analyysin rasvahappotasapainostasi noin 3 viikon kuluttua." },
+    ],
+  },
+  analysis: {
+    title: "Mitä analyysi paljastaa",
+    body: "Veresi kertoo tarinan. Testi muuntaa sen selkeäksi ja hyödylliseksi tiedoksi.",
+    items: [
+      { title: "Omega-6 / Omega-3-suhde", description: "Tarkka tasapainosi tulehdusta edistävien ja hillitsevien rasvahappojen välillä. Optimaalinen suhde on usein lähellä 3:1:tä." },
+      { title: "Rasvahappokoostumus", description: "Yksityiskohtainen erittely solukalvojesi rasvahappoprofiilista, joka heijastaa useiden kuukausien ruokailutottumuksia." },
+      { title: "Henkilökohtaiset oivallukset", description: "Tuloksiisi perustuvat käytännölliset suositukset, joiden avulla ymmärrät, mitä lukusi kertovat terveydestäsi." },
+    ],
+  },
+  results: {
+    title: "Tuloksesi,",
+    titleAccent: "selkeästi selitettynä",
+    body: "Ei jargonia. Ei arvailua. Saat kattavan digitaalisen raportin, joka auttaa sinua tekemään perusteltuja päätöksiä terveydestäsi.",
+    bullets: [
+      "Yksityiskohtainen digitaalinen raportti suoraan sähköpostiisi",
+      "Tarkka Omega-6 / Omega-3-suhteesi visualisoituna",
+      "Näyttöön perustuvaa ohjausta parantamiseen",
+    ],
+    ratioLabel: "Omega-suhteesi",
+    ratioTarget: "Optimaalinen tavoite: noin 3:1",
+    omega6: "Omega-6",
+    omega3: "Omega-3",
+    recommendationTitle: "Suositus",
+    recommendationBody: "Suhteesi osoittaa, että parannettavaa on. Harkitse merellisten Omega-3-lähteiden lisäämistä ja prosessoitujen siemenöljyjen vähentämistä.",
+  },
+  video: {
+    title: "Katso, miten se toimii 2 minuutissa",
+    body: "Lyhyt katsaus testiprosessiin ja siihen, mitä tuloksesi tarkoittavat.",
+    placeholder: "Videopaikanvaraaja - lisää esittelyvideosi tähän",
+  },
+  lead: {
+    title: "Valmis saamaan vastaukset?",
+    body: "Jätä yhteystietosi tilataksesi testin tai varataksesi maksuttoman 10 minuutin konsultaation.",
+    successTitle: "Kiitos!",
+    successBody: "Otamme pian yhteyttä seuraavista vaiheista.",
+    nameLabel: "Nimi",
+    namePlaceholder: "Koko nimesi",
+    emailLabel: "Sähköposti",
+    emailPlaceholder: "sinä@esimerkki.fi",
+    phoneLabel: "Puhelin",
+    phonePlaceholder: "+358 40 000 0000",
+    orderCta: "Tilaa testi",
+    consultationCta: "Varaa konsultaatio",
+    successIconLabel: "Valmis",
+  },
+  testimonials: {
+    title: "Mitä ihmiset oivaltavat",
+    items: [
+      { quote: "Minulla ei ollut aavistustakaan, että suhteeni oli 12:1. Tämä testi oli silmiä avaava. Muutin ruokavaliotani ja pääsin kuudessa kuukaudessa tasolle 4:1.", name: "Maria K.", role: "Terveystietoinen ammattilainen, 42" },
+      { quote: "Ihmisenä, joka mittaa kaiken, tämä täytti suuren sokean pisteen. Raportti oli selkeä, tieteellinen ja oikeasti hyödyllinen.", name: "Thomas R.", role: "Biohakkeri ja kestävyysurheilija, 38" },
+      { quote: "Suosittelen tätä kaikille asiakkailleni. Se on yksinkertaisin tapa nähdä, mitä pinnan alla tapahtuu.", name: "Dr. Anna L.", role: "Funktionaalisen lääketieteen ammattilainen" },
+    ],
+  },
+  faq: {
+    title: "Usein kysytyt kysymykset",
+    items: [
+      { q: "Miten testi tehdään?", a: "Otat pienen verinäytteen kotona yksinkertaisella sormenpääpistopakkauksella. Prosessi kestää alle 5 minuuttia eikä vaadi lääketieteellistä osaamista." },
+      { q: "Kuinka kauan analyysi kestää?", a: "Kun näyte on saapunut laboratorioon, tulokset ovat yleensä valmiit noin 3 viikon kuluttua. Saat ilmoituksen, kun raportti on valmis." },
+      { q: "Onko testi turvallinen?", a: "Kyllä. Sormenpääpistomenetelmä on laajalti käytössä diagnostiikassa ja on vain vähän invasiivinen. Pakkaus sisältää selkeät ohjeet ja kaikki tarvittavat materiaalit." },
+      { q: "Mitä tapahtuu, kun saan tulokseni?", a: "Saat digitaalisen raportin rasvahappoprofiilistasi, Omega-6/Omega-3-suhteestasi ja henkilökohtaisista suosituksista. Voit myös varata jatkokonsultaation." },
+      { q: "Tarvitsenko lääkärin lähetteen?", a: "Et tarvitse. Testi on suunniteltu suoraan kuluttajille. Silti suosittelemme jakamaan tulokset terveydenhuollon ammattilaiselle kokonaiskuvan saamiseksi." },
+    ],
+  },
+  abTesting: {
+    badge: "Bonus: A/B-testaus",
+    title: "Vaihtoehtoinen teksti testaukseen",
+    body: "Kolme otsikko- ja CTA-vaihtoehtoa konversion optimointiin.",
+    headlinesLabel: "Otsikot",
+    ctasLabel: "Call to action -painikkeet",
+    headlines: ["Tiedätkö oman Omega-tasapainosi?", "Numero, joka voi muuttaa tapaasi syödä.", "Mittaa se, mikä merkitsee. Aloita Omega-suhteestasi."],
+    ctas: ["Testaa Omega-tasapainosi", "Selvitä suhteesi", "Saat henkilökohtaisen analyysisi"],
+  },
+  sticky: {
+    text: "Selvitä Omega-6 / Omega-3-suhteesi tänään",
+    cta: "Testaa Omega-tasapainosi",
+  },
+  footer: {
+    tagline: "Tieteellinen rasvahappoanalyysi.",
+    rights: "Kaikki oikeudet pidätetään.",
+    privacy: "Tietosuoja",
+    terms: "Ehdot",
+    contact: "Yhteystiedot",
+  },
+};
