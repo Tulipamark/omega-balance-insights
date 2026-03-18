@@ -41,7 +41,7 @@ export const sv: TranslationKeys = {
   faq: {
     title: "Vanliga frågor",
     q1: "Hur fungerar testet?",
-    a1: "Du tar ett enkelt blodprov hemma genom ett stick i fingret. Provet skickas till vårt labb i ett förfrankerat kuvert.",
+    a1: "Du tar ett enkelt blodprov hemma genom ett stick i fingret. Provet skickas sedan till vårt labb med porto som kunden själv betalar.",
     q2: "Är detta ett kosttillskott?",
     a2: "Nej. Detta är ett vetenskapligt test som mäter dina fettsyranivåer. Vi säljer inte kosttillskott.",
     q3: "Hur lång tid tar det att få resultat?",

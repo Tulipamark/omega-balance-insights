@@ -41,7 +41,7 @@ export const it: TranslationKeys = {
   faq: {
     title: "Domande frequenti",
     q1: "Come funziona il test?",
-    a1: "Prelevi un semplice campione di sangue a casa con una puntura sul dito. Il campione viene inviato al nostro laboratorio in una busta preaffrancata.",
+    a1: "Prelevi un semplice campione di sangue a casa con una puntura sul dito. Il campione viene poi inviato al nostro laboratorio e le spese di spedizione sono a carico del cliente.",
     q2: "Si tratta di un integratore?",
     a2: "No. È un test scientifico che misura i tuoi livelli di acidi grassi. Non vendiamo integratori.",
     q3: "Quanto tempo serve per ricevere i risultati?",

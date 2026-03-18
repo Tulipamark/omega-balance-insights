@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Lang, languages, supportedLangs, t } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +14,90 @@ interface HeaderProps {
   lang: Lang;
 }
 
+function FlagIcon({ lang, className = "h-4 w-6" }: { lang: Lang; className?: string }) {
+  const classes = `${className} overflow-hidden rounded-sm border border-slate-200 shadow-sm`;
+
+  switch (lang) {
+    case "sv":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="16" fill="#006AA7" />
+          <rect x="7" width="3" height="16" fill="#FECC00" />
+          <rect y="6.5" width="24" height="3" fill="#FECC00" />
+        </svg>
+      );
+    case "no":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="16" fill="#BA0C2F" />
+          <rect x="6" width="4" height="16" fill="#FFFFFF" />
+          <rect y="6" width="24" height="4" fill="#FFFFFF" />
+          <rect x="7" width="2" height="16" fill="#00205B" />
+          <rect y="7" width="24" height="2" fill="#00205B" />
+        </svg>
+      );
+    case "da":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="16" fill="#C60C30" />
+          <rect x="7" width="3" height="16" fill="#FFFFFF" />
+          <rect y="6.5" width="24" height="3" fill="#FFFFFF" />
+        </svg>
+      );
+    case "fi":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="16" fill="#FFFFFF" />
+          <rect x="7" width="4" height="16" fill="#003580" />
+          <rect y="6" width="24" height="4" fill="#003580" />
+        </svg>
+      );
+    case "en":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="16" fill="#012169" />
+          <path d="M0 0l24 16M24 0L0 16" stroke="#FFFFFF" strokeWidth="3" />
+          <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" strokeWidth="1.5" />
+          <rect x="10" width="4" height="16" fill="#FFFFFF" />
+          <rect y="6" width="24" height="4" fill="#FFFFFF" />
+          <rect x="10.5" width="3" height="16" fill="#C8102E" />
+          <rect y="6.5" width="24" height="3" fill="#C8102E" />
+        </svg>
+      );
+    case "de":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="24" height="5.34" y="0" fill="#000000" />
+          <rect width="24" height="5.33" y="5.34" fill="#DD0000" />
+          <rect width="24" height="5.33" y="10.67" fill="#FFCE00" />
+        </svg>
+      );
+    case "fr":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="8" height="16" x="0" fill="#0055A4" />
+          <rect width="8" height="16" x="8" fill="#FFFFFF" />
+          <rect width="8" height="16" x="16" fill="#EF4135" />
+        </svg>
+      );
+    case "it":
+      return (
+        <svg viewBox="0 0 24 16" className={classes} aria-hidden="true">
+          <rect width="8" height="16" x="0" fill="#009246" />
+          <rect width="8" height="16" x="8" fill="#FFFFFF" />
+          <rect width="8" height="16" x="16" fill="#CE2B37" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
 export default function Header({ lang }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const tr = t(lang);
+  const currentLanguage = languages.find((l) => l.code === lang);
 
   const switchLang = (code: Lang) => {
     const path = window.location.pathname;
@@ -45,15 +125,14 @@ export default function Header({ lang }: HeaderProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1.5">
-                <Globe className="h-4 w-4" />
-                <span className="text-sm">{languages.find(l => l.code === lang)?.flag}</span>
-                <span className="hidden sm:inline">{languages.find(l => l.code === lang)?.label}</span>
+                <FlagIcon lang={lang} />
+                <span className="hidden sm:inline">{currentLanguage?.label}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {languages.map((l) => (
                 <DropdownMenuItem key={l.code} onClick={() => switchLang(l.code)} className="gap-2 cursor-pointer">
-                  <span>{l.flag}</span>
+                  <FlagIcon lang={l.code} />
                   <span>{l.label}</span>
                 </DropdownMenuItem>
               ))}

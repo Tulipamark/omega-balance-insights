@@ -41,7 +41,7 @@ export const de: TranslationKeys = {
   faq: {
     title: "Häufig gestellte Fragen",
     q1: "Wie funktioniert der Test?",
-    a1: "Du nimmst zu Hause mit einem Fingerstich eine einfache Blutprobe. Die Probe wird in einem frankierten Umschlag an unser Labor geschickt.",
+    a1: "Du nimmst zu Hause mit einem Fingerstich eine einfache Blutprobe. Die Probe wird anschließend an unser Labor geschickt, und das Porto wird vom Kunden selbst bezahlt.",
     q2: "Ist das ein Nahrungsergänzungsmittel?",
     a2: "Nein. Das ist ein wissenschaftlicher Test, der deine Fettsäurewerte misst. Wir verkaufen keine Nahrungsergänzungsmittel.",
     q3: "Wie lange dauert es, bis ich Ergebnisse bekomme?",

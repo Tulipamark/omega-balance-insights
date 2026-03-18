@@ -41,7 +41,7 @@ export const fr: TranslationKeys = {
   faq: {
     title: "Questions fréquentes",
     q1: "Comment fonctionne le test ?",
-    a1: "Vous réalisez un simple prélèvement sanguin à domicile avec une piqûre au doigt. L'échantillon est envoyé à notre laboratoire dans une enveloppe préaffranchie.",
+    a1: "Vous réalisez un simple prélèvement sanguin à domicile avec une piqûre au doigt. L'échantillon est ensuite envoyé à notre laboratoire, et les frais de port sont à la charge du client.",
     q2: "S'agit-il d'un complément alimentaire ?",
     a2: "Non. Il s'agit d'un test scientifique qui mesure vos niveaux d'acides gras. Nous ne vendons pas de compléments alimentaires.",
     q3: "Combien de temps faut-il pour obtenir les résultats ?",

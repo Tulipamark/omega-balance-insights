@@ -41,7 +41,7 @@ export const en: TranslationKeys = {
   faq: {
     title: "Frequently asked questions",
     q1: "How does the test work?",
-    a1: "You take a simple blood sample at home with a finger prick. The sample is sent to our lab in a prepaid envelope.",
+    a1: "You take a simple blood sample at home with a finger prick. The sample is then sent to our lab, with postage paid by the customer.",
     q2: "Is this a supplement?",
     a2: "No. This is a scientific test that measures your fatty acid levels. We do not sell supplements.",
     q3: "How long does it take to get results?",

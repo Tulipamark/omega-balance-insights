@@ -41,7 +41,7 @@ export const fi: TranslationKeys = {
   faq: {
     title: "Usein kysytyt kysymykset",
     q1: "Miten testi toimii?",
-    a1: "Otat yksinkertaisen verinäytteen kotona sormenpäästä. Näyte lähetetään laboratorioomme valmiiksi maksetussa kirjekuoressa.",
+    a1: "Otat yksinkertaisen verinäytteen kotona sormenpäästä. Näyte lähetetään sen jälkeen laboratorioomme, ja asiakas maksaa postimaksun itse.",
     q2: "Onko tämä ravintolisä?",
     a2: "Ei. Tämä on tieteellinen testi, joka mittaa rasvahappotasojasi. Emme myy ravintolisiä.",
     q3: "Kuinka kauan tulosten saaminen kestää?",

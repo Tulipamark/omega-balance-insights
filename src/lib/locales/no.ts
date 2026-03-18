@@ -41,7 +41,7 @@ export const no: TranslationKeys = {
   faq: {
     title: "Vanlige spørsmål",
     q1: "Hvordan fungerer testen?",
-    a1: "Du tar en enkel blodprøve hjemme med et stikk i fingeren. Prøven sendes til vårt laboratorium i en ferdigfrankert konvolutt.",
+    a1: "Du tar en enkel blodprøve hjemme med et stikk i fingeren. Prøven sendes deretter til vårt laboratorium, og kunden betaler portoen selv.",
     q2: "Er dette et kosttilskudd?",
     a2: "Nei. Dette er en vitenskapelig test som måler fettsyrenivåene dine. Vi selger ikke kosttilskudd.",
     q3: "Hvor lang tid tar det å få resultater?",
