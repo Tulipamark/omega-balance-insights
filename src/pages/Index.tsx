@@ -9,7 +9,6 @@ import LeadCaptureSection from "@/components/LeadCaptureSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import ABTestingSection from "@/components/ABTestingSection";
-import StickyCtaBar from "@/components/StickyCtaBar";
 import FooterSection from "@/components/FooterSection";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 
@@ -30,7 +29,6 @@ const Index = () => {
       <FAQSection lang={currentLang} />
       <ABTestingSection lang={currentLang} />
       <FooterSection lang={currentLang} />
-      <StickyCtaBar lang={currentLang} />
     </div>
   );
 };
