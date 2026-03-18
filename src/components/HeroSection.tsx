@@ -10,6 +10,7 @@ interface HeroSectionProps {
 
 const HeroSection = ({ lang }: HeroSectionProps) => {
   const copy = t(lang).hero;
+  const loginLabel = lang === "sv" ? "Logga in" : "Sign in";
 
   return (
     <section className="bg-hero section-padding min-h-[90vh] flex items-center">
@@ -19,6 +20,12 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             OmegaBalance
           </a>
           <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard/login"
+              className="hidden text-sm font-medium text-subtle transition-colors hover:text-foreground md:inline-flex"
+            >
+              {loginLabel}
+            </Link>
             <Link
               to={`/${lang}/partners`}
               className="hidden rounded-full border border-border bg-card/90 px-4 py-2 text-sm font-medium text-foreground shadow-card transition-colors hover:bg-card md:inline-flex"

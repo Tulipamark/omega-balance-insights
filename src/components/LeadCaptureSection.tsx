@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
+import { submitLead } from "@/lib/omega-data";
+import { getReferralAttribution } from "@/lib/referral";
 
 interface LeadCaptureSectionProps {
   lang: Lang;
@@ -8,13 +11,38 @@ interface LeadCaptureSectionProps {
 
 const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
   const copy = t(lang).lead;
+  const location = useLocation();
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent, action: string) => {
+  const handleSubmit = async (e: React.FormEvent, action: string) => {
     e.preventDefault();
-    console.log(`${action}:`, formData);
-    setSubmitted(true);
+    setSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const attribution = await getReferralAttribution(location.pathname);
+      await submitLead({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        type: "customer_lead",
+        sourcePage: location.pathname,
+        referralCode: attribution.referralCode,
+        referredByUserId: attribution.referredByUserId,
+        details: {
+          intent: action,
+          landingPage: attribution.landingPage,
+        },
+      });
+      setSubmitted(true);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Kunde inte skicka formuläret just nu.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -82,13 +110,24 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-3 pt-3">
-                <button type="submit" onClick={(e) => handleSubmit(e, "order")} className="btn-primary flex-1 text-center">
-                  {copy.orderCta}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  onClick={(e) => void handleSubmit(e, "order")}
+                  className="btn-primary flex-1 text-center disabled:opacity-70"
+                >
+                  {submitting ? "Skickar..." : copy.orderCta}
                 </button>
-                <button type="submit" onClick={(e) => handleSubmit(e, "consultation")} className="btn-secondary flex-1 text-center">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  onClick={(e) => void handleSubmit(e, "consultation")}
+                  className="btn-secondary flex-1 text-center disabled:opacity-70"
+                >
                   {copy.consultationCta}
                 </button>
               </div>
+              {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
             </form>
           )}
         </motion.div>

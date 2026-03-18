@@ -7,6 +7,7 @@ interface FooterSectionProps {
 
 const FooterSection = ({ lang }: FooterSectionProps) => {
   const copy = t(lang).footer;
+  const backofficeLabel = lang === "sv" ? "Backoffice" : "Backoffice";
 
   return (
     <footer className="border-t border-border px-6 py-12 md:px-12">
@@ -17,6 +18,9 @@ const FooterSection = ({ lang }: FooterSectionProps) => {
           <p className="mt-1 text-[11px] text-subtle">Oberoende Zinzino-partner</p>
         </div>
         <div className="flex gap-6 text-xs text-subtle">
+          <Link to="/dashboard/login" className="transition-colors hover:text-foreground">
+            {backofficeLabel}
+          </Link>
           <Link to="/integritet" className="transition-colors hover:text-foreground">
             {copy.privacy}
           </Link>

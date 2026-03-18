@@ -1,13 +1,15 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, BadgeCheck, BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FooterSection from "@/components/FooterSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Lang } from "@/lib/i18n";
+import { submitLead } from "@/lib/omega-data";
+import { getReferralAttribution } from "@/lib/referral";
 
 interface PartnerPageProps {
   lang: Lang;
@@ -60,7 +62,6 @@ type PartnerPageContent = {
     interestOptions: string[];
     readinessOptions: string[];
     submit: string;
-    trust: string;
     successTitle: string;
     successBody: string;
   };
@@ -196,7 +197,6 @@ const content: Record<"sv" | "en", PartnerPageContent> = {
       ],
       readinessOptions: ["Utforskar", "Vill testa", "Redo att köra"],
       submit: "Skicka partneransökan",
-      trust: "Vi återkopplar endast om vi ser en rimlig match.",
       successTitle: "Tack, din ansökan är mottagen.",
       successBody: "Vi går igenom dina svar och hör av oss om nästa steg om det finns en rimlig match.",
     },
@@ -274,7 +274,6 @@ const content: Record<"sv" | "en", PartnerPageContent> = {
       interestOptions: ["Extra income", "Build a business", "Just curious"],
       readinessOptions: ["Exploring", "Want to test", "Ready to start"],
       submit: "Send partner application",
-      trust: "We only get back to you if we see a reasonable fit.",
       successTitle: "Thank you, your application has been received.",
       successBody: "We will review your answers and reach out if there seems to be a reasonable match.",
     },
@@ -294,7 +293,10 @@ const sectionMotion = {
 
 const PartnerPage = ({ lang }: PartnerPageProps) => {
   const page = useMemo(() => (lang === "sv" ? content.sv : content.en), [lang]);
+  const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -309,10 +311,35 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Partner application:", formData);
-    setSubmitted(true);
+    setSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const attribution = await getReferralAttribution(location.pathname);
+      await submitLead({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        type: "partner_lead",
+        sourcePage: location.pathname,
+        referralCode: attribution.referralCode,
+        referredByUserId: attribution.referredByUserId,
+        details: {
+          company: formData.company,
+          interest: formData.interest,
+          readiness: formData.readiness,
+          background: formData.background,
+          landingPage: attribution.landingPage,
+        },
+      });
+      setSubmitted(true);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Could not submit the partner application.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -492,10 +519,12 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 </Field>
               </div>
 
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-md text-sm leading-6 text-subtle">{page.form.trust}</p>
-                <button type="submit" className="btn-primary min-w-[220px] text-center">{page.form.submit}</button>
+              <div className="mt-8 flex justify-end">
+                <button type="submit" disabled={submitting} className="btn-primary min-w-[220px] text-center disabled:opacity-70">
+                  {submitting ? "Submitting..." : page.form.submit}
+                </button>
               </div>
+              {errorMessage ? <p className="mt-4 text-sm text-destructive">{errorMessage}</p> : null}
             </form>
           )}
         </motion.div>
