@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import heroVisual from "@/assets/hero-visual.jpg";
+import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -17,7 +18,15 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
           <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
             OmegaBalance
           </a>
-          <LanguageSwitcher lang={lang} />
+          <div className="flex items-center gap-3">
+            <Link
+              to={`/${lang}/partners`}
+              className="hidden rounded-full border border-border bg-card/90 px-4 py-2 text-sm font-medium text-foreground shadow-card transition-colors hover:bg-card md:inline-flex"
+            >
+              {copy.partnerCta}
+            </Link>
+            <LanguageSwitcher lang={lang} />
+          </div>
         </div>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <motion.div
@@ -41,6 +50,11 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
               <a href="#how-it-works" className="btn-secondary text-center">
                 {copy.secondaryCta}
               </a>
+            </div>
+            <div className="mt-4">
+              <Link to={`/${lang}/partners`} className="text-sm font-medium text-primary transition-colors hover:text-foreground">
+                {copy.partnerCta}
+              </Link>
             </div>
 
             <div className="mt-10 flex items-center gap-6 text-subtle text-sm">

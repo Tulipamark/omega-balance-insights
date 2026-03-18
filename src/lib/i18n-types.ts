@@ -8,6 +8,7 @@ export type Copy = {
     body: string;
     primaryCta: string;
     secondaryCta: string;
+    partnerCta: string;
     statLab: string;
     statTiming: string;
     imageAlt: string;
@@ -79,6 +80,33 @@ export type Copy = {
   sticky: {
     text: string;
     cta: string;
+  };
+  partner: {
+    navLabel: string;
+    heroBadge: string;
+    heroTitle: string;
+    heroBody: string;
+    heroPrimaryCta: string;
+    heroSecondaryCta: string;
+    highlights: { title: string; description: string }[];
+    economicsTitle: string;
+    economicsBody: string;
+    economicsSteps: { label: string; value: string }[];
+    economicsCalloutTitle: string;
+    economicsCalloutBody: string;
+    reasonsTitle: string;
+    reasonsBody: string;
+    reasons: { title: string; description: string }[];
+    formTitle: string;
+    formBody: string;
+    formName: string;
+    formEmail: string;
+    formPhone: string;
+    formCompany: string;
+    formMessage: string;
+    formSubmit: string;
+    formSuccessTitle: string;
+    formSuccessBody: string;
   };
   footer: {
     tagline: string;
