@@ -1,7 +1,14 @@
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
+import { Lang, t } from "@/lib/i18n";
 
-const VideoSection = () => {
+interface VideoSectionProps {
+  lang: Lang;
+}
+
+const VideoSection = ({ lang }: VideoSectionProps) => {
+  const copy = t(lang).video;
+
   return (
     <section className="section-padding">
       <div className="container-narrow">
@@ -12,12 +19,8 @@ const VideoSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-            See how it works in 2 minutes
-          </h2>
-          <p className="text-subtle text-lg max-w-xl mx-auto">
-            A short overview of the testing process and what your results mean.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{copy.title}</h2>
+          <p className="text-subtle text-lg max-w-xl mx-auto">{copy.body}</p>
         </motion.div>
 
         <motion.div
@@ -30,7 +33,7 @@ const VideoSection = () => {
           <div className="badge-accent w-20 h-20 rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
             <Play className="w-8 h-8 ml-1" />
           </div>
-          <p className="absolute bottom-6 text-sm text-subtle">Video placeholder — add your explainer video here</p>
+          <p className="absolute bottom-6 text-sm text-subtle">{copy.placeholder}</p>
         </motion.div>
       </div>
     </section>

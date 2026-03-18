@@ -1,7 +1,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Lang, t } from "@/lib/i18n";
 
-const LeadCaptureSection = () => {
+interface LeadCaptureSectionProps {
+  lang: Lang;
+}
+
+const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
+  const copy = t(lang).lead;
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [submitted, setSubmitted] = useState(false);
 
@@ -22,12 +28,8 @@ const LeadCaptureSection = () => {
           className="max-w-xl mx-auto"
         >
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-              Ready to find out?
-            </h2>
-            <p className="text-subtle text-lg">
-              Enter your details to order the test or book a free 10-minute consultation.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{copy.title}</h2>
+            <p className="text-subtle text-lg">{copy.body}</p>
           </div>
 
           {submitted ? (
@@ -37,15 +39,15 @@ const LeadCaptureSection = () => {
               className="bg-card rounded-2xl shadow-elevated p-10 text-center"
             >
               <div className="badge-accent w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">✓</span>
+                <span className="text-2xl" aria-label={copy.successIconLabel}>✓</span>
               </div>
-              <h3 className="font-sans text-xl font-semibold mb-2">Thank you!</h3>
-              <p className="text-subtle">We'll be in touch shortly with your next steps.</p>
+              <h3 className="font-sans text-xl font-semibold mb-2">{copy.successTitle}</h3>
+              <p className="text-subtle">{copy.successBody}</p>
             </motion.div>
           ) : (
             <form className="bg-card rounded-2xl shadow-elevated p-8 md:p-10 space-y-5">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">Name</label>
+                <label htmlFor="name" className="block text-sm font-medium mb-2">{copy.nameLabel}</label>
                 <input
                   id="name"
                   type="text"
@@ -53,11 +55,11 @@ const LeadCaptureSection = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-                  placeholder="Your full name"
+                  placeholder={copy.namePlaceholder}
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">Email</label>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">{copy.emailLabel}</label>
                 <input
                   id="email"
                   type="email"
@@ -65,34 +67,26 @@ const LeadCaptureSection = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-                  placeholder="you@example.com"
+                  placeholder={copy.emailPlaceholder}
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone</label>
+                <label htmlFor="phone" className="block text-sm font-medium mb-2">{copy.phoneLabel}</label>
                 <input
                   id="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder={copy.phonePlaceholder}
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-3 pt-3">
-                <button
-                  type="submit"
-                  onClick={(e) => handleSubmit(e, "order")}
-                  className="btn-primary flex-1 text-center"
-                >
-                  Order the test
+                <button type="submit" onClick={(e) => handleSubmit(e, "order")} className="btn-primary flex-1 text-center">
+                  {copy.orderCta}
                 </button>
-                <button
-                  type="submit"
-                  onClick={(e) => handleSubmit(e, "consultation")}
-                  className="btn-secondary flex-1 text-center"
-                >
-                  Book a consultation
+                <button type="submit" onClick={(e) => handleSubmit(e, "consultation")} className="btn-secondary flex-1 text-center">
+                  {copy.consultationCta}
                 </button>
               </div>
             </form>

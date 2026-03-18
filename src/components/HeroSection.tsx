@@ -1,10 +1,24 @@
 import { motion } from "framer-motion";
 import heroVisual from "@/assets/hero-visual.jpg";
+import { Lang, t } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  lang: Lang;
+}
+
+const HeroSection = ({ lang }: HeroSectionProps) => {
+  const copy = t(lang).hero;
+
   return (
     <section className="bg-hero section-padding min-h-[90vh] flex items-center">
       <div className="container-wide w-full">
+        <div className="mb-10 flex items-center justify-between gap-4">
+          <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            OmegaBalance
+          </a>
+          <LanguageSwitcher lang={lang} />
+        </div>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -12,33 +26,31 @@ const HeroSection = () => {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <span className="badge-accent inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6 tracking-wide">
-              Scientific Fatty Acid Analysis
+              {copy.badge}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6">
-              Do you know your
+              {copy.titleStart}
               <br />
-              <span className="text-primary">Omega balance?</span>
+              <span className="text-primary">{copy.titleAccent}</span>
             </h1>
-            <p className="text-lg md:text-xl text-subtle leading-relaxed max-w-lg mb-10">
-              Most people have an imbalance between Omega-6 and Omega-3. A simple home blood test can reveal your exact ratio.
-            </p>
+            <p className="text-lg md:text-xl text-subtle leading-relaxed max-w-lg mb-10">{copy.body}</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#lead-capture" className="btn-primary text-center">
-                Test your Omega balance
+                {copy.primaryCta}
               </a>
               <a href="#how-it-works" className="btn-secondary text-center">
-                How the test works
+                {copy.secondaryCta}
               </a>
             </div>
 
             <div className="mt-10 flex items-center gap-6 text-subtle text-sm">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary inline-block" />
-                Certified lab analysis
+                {copy.statLab}
               </span>
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary inline-block" />
-                Results in 10–14 days
+                {copy.statTiming}
               </span>
             </div>
           </motion.div>
@@ -49,11 +61,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="relative"
           >
-            <img
-              src={heroVisual}
-              alt="Omega balance analysis dashboard showing fatty acid ratio data"
-              className="rounded-2xl shadow-elevated w-full"
-            />
+            <img src={heroVisual} alt={copy.imageAlt} className="rounded-2xl shadow-elevated w-full" />
           </motion.div>
         </div>
       </div>

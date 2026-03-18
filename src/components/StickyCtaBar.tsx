@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Lang, t } from "@/lib/i18n";
 
-const StickyCtaBar = () => {
+interface StickyCtaBarProps {
+  lang: Lang;
+}
+
+const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
+  const copy = t(lang).sticky;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -21,11 +27,9 @@ const StickyCtaBar = () => {
           className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-lg border-t border-border py-3 px-6"
         >
           <div className="container-wide flex items-center justify-between gap-4">
-            <p className="text-sm font-medium hidden sm:block">
-              Discover your Omega-6 / Omega-3 ratio today
-            </p>
+            <p className="text-sm font-medium hidden sm:block">{copy.text}</p>
             <a href="#lead-capture" className="btn-primary text-sm py-3 px-6 whitespace-nowrap">
-              Test your Omega balance
+              {copy.cta}
             </a>
           </div>
         </motion.div>
