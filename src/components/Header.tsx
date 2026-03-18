@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Globe } from "lucide-react";
-import { Lang, languages, t } from "@/lib/i18n";
+import { Lang, languages, supportedLangs, t } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,7 +21,9 @@ export default function Header({ lang }: HeaderProps) {
 
   const switchLang = (code: Lang) => {
     const path = window.location.pathname;
-    const newPath = path.replace(/^\/(sv|no|da|fi|en)/, `/${code}`);
+    const newPath = supportedLangs.some((supported) => path === `/${supported}` || path.startsWith(`/${supported}/`))
+      ? path.replace(/^\/[a-z]{2}(?=\/|$)/, `/${code}`)
+      : `/${code}`;
     navigate(newPath);
   };
 
@@ -45,6 +47,7 @@ export default function Header({ lang }: HeaderProps) {
               <Button variant="ghost" size="sm" className="gap-1.5">
                 <Globe className="h-4 w-4" />
                 <span className="text-sm">{languages.find(l => l.code === lang)?.flag}</span>
+                <span className="hidden sm:inline">{languages.find(l => l.code === lang)?.label}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

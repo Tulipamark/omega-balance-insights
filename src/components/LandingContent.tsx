@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Beaker, ClipboardCheck, LineChart, ShieldCheck } from "lucide-react";
-import { Lang, t } from "@/lib/i18n";
+import { countryCodeFromLang, Lang, t } from "@/lib/i18n";
 import { usePartnerRef, getPartnerIdFromRef } from "@/hooks/use-partner-ref";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export default function LandingContent({ lang }: LandingContentProps) {
         phone: formData.phone || null,
         source_partner_id: partnerId,
         lang,
-        country: lang === "fi" ? "FI" : lang === "da" ? "DK" : lang === "no" ? "NO" : lang === "sv" ? "SE" : "EN",
+        country: countryCodeFromLang(lang),
       });
       if (error) throw error;
       setSubmitted(true);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Link2, BarChart3, GraduationCap } from "lucide-react";
-import { Lang, t } from "@/lib/i18n";
+import { countryCodeFromLang, Lang, t } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +41,7 @@ export default function PartnerPage({ lang }: PartnerPageProps) {
         phone: form.phone || null,
         company: form.company || null,
         referral_code: generateReferralCode(form.name),
-        country: lang === "fi" ? "FI" : lang === "da" ? "DK" : lang === "no" ? "NO" : lang === "sv" ? "SE" : "EN",
+        country: countryCodeFromLang(lang),
       });
       if (error) throw error;
       setSubmitted(true);

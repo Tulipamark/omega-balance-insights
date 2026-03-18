@@ -127,13 +127,13 @@ export default function DashboardPage({ lang }: DashboardPageProps) {
                 </CardHeader>
                 <CardContent>
                   {leads.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-4 text-center">No leads yet</p>
+                    <p className="text-sm text-muted-foreground py-4 text-center">{tr.dashboard.noLeads}</p>
                   ) : (
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead className="text-muted-foreground">{tr.lead.name}</TableHead>
-                          <TableHead className="text-muted-foreground">Status</TableHead>
+                          <TableHead className="text-muted-foreground">{tr.dashboard.status}</TableHead>
                           <TableHead className="text-muted-foreground hidden sm:table-cell">{tr.lead.email}</TableHead>
                         </TableRow>
                       </TableHeader>

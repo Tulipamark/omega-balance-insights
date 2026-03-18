@@ -8,19 +8,19 @@ import PartnerPage from "./pages/PartnerPage";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 import { useParams } from "react-router-dom";
-import { Lang, defaultLang } from "./lib/i18n";
+import { Lang, defaultLang, isSupportedLang } from "./lib/i18n";
 
 const queryClient = new QueryClient();
 
 function LangPartnerPage() {
   const { lang } = useParams<{ lang: string }>();
-  const l = (["sv", "no", "da", "fi", "en"].includes(lang || "") ? lang : defaultLang) as Lang;
+  const l = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   return <PartnerPage lang={l} />;
 }
 
 function LangDashboardPage() {
   const { lang } = useParams<{ lang: string }>();
-  const l = (["sv", "no", "da", "fi", "en"].includes(lang || "") ? lang : defaultLang) as Lang;
+  const l = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   return <DashboardPage lang={l} />;
 }
 
