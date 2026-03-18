@@ -68,7 +68,7 @@ export default function ValueFlowSection({ partner }: ValueFlowSectionProps) {
               <motion.h2 variants={fadeUp} custom={1} className="max-w-3xl text-3xl font-bold tracking-tight text-slate-950 md:text-5xl">
                 {partner.marginTitle}
               </motion.h2>
-              <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+              <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-3xl text-base leading-7 text-slate-600 md:text-[1.0625rem]">
                 {partner.marginText}
               </motion.p>
 
@@ -98,11 +98,11 @@ export default function ValueFlowSection({ partner }: ValueFlowSectionProps) {
 
               <motion.div variants={fadeUp} custom={4} className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
                 <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                  <div className="flex items-center gap-3 text-slate-700">
+                  <div className="flex items-start gap-3 text-slate-700">
                     <Footprints className="h-5 w-5" />
-                    <p className="text-sm font-medium">{partner.marginVisualTitle}</p>
+                    <p className="text-base font-semibold leading-7 text-slate-900">{partner.marginVisualTitle}</p>
                   </div>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                  <p className="mt-3 text-base leading-7 text-slate-600">
                     {partner.marginVisualText}
                   </p>
                 </div>
@@ -116,12 +116,12 @@ export default function ValueFlowSection({ partner }: ValueFlowSectionProps) {
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
                         {partner.valueModelLabel}
                       </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-950">
+                      <p className="mt-1 text-base font-semibold leading-7 text-slate-900 md:text-lg">
                         {partner.valueModelTitle}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-7 text-slate-700 md:text-base">
+                  <p className="mt-4 text-base leading-7 text-slate-700">
                     {partner.valueModelText}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function ValueFlowSection({ partner }: ValueFlowSectionProps) {
               </div>
 
               <div className="rounded-[2rem] border border-slate-200 bg-white p-6">
-                <p className="text-base leading-8 text-slate-700">
+                <p className="text-base leading-7 text-slate-700">
                   {partner.valueBody}
                 </p>
               </div>
