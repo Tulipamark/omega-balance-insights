@@ -65,6 +65,15 @@ export type TranslationKeys = {
     chainWholesale: string;
     chainStore: string;
     chainYou: string;
+    valueTraditionalBadge: string;
+    valueSimplifiedBadge: string;
+    valueModelLabel: string;
+    valueModelTitle: string;
+    valueModelText: string;
+    valueBody: string;
+    valueHighlight: string;
+    valueExampleBadge: string;
+    valueExampleProduct: string;
     submit: string;
     success: string;
   };
