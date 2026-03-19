@@ -46,7 +46,7 @@ const App = () => (
 );
 
 function HomePageWrapper() {
-  return <Index lang={defaultLang} />;
+  return <PartnerPage lang={defaultLang} />;
 }
 
 function PartnerPageWrapper() {
