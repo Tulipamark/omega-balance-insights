@@ -27,7 +27,7 @@ const App = () => (
       <BrowserRouter>
         <ReferralTrackingBoundary />
         <Routes>
-          <Route path="/" element={<Navigate to={`/${defaultLang}`} replace />} />
+          <Route path="/" element={<HomePageWrapper />} />
           <Route path="/integritet" element={<PrivacyPage />} />
           <Route path="/villkor" element={<TermsPage />} />
           <Route path="/kontakt" element={<ContactPage />} />
@@ -36,6 +36,7 @@ const App = () => (
           <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/:lang" element={<Index />} />
+          <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
           <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -43,6 +44,10 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+
+function HomePageWrapper() {
+  return <Index lang={defaultLang} />;
+}
 
 function PartnerPageWrapper() {
   const { lang } = useParams<{ lang: string }>();

@@ -12,9 +12,13 @@ import ABTestingSection from "@/components/ABTestingSection";
 import FooterSection from "@/components/FooterSection";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 
-const Index = () => {
+type IndexProps = {
+  lang?: Lang;
+};
+
+const Index = ({ lang: explicitLang }: IndexProps) => {
   const { lang } = useParams<{ lang: string }>();
-  const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
+  const currentLang = explicitLang ?? ((isSupportedLang(lang) ? lang : defaultLang) as Lang);
 
   return (
     <div className="min-h-screen bg-background">
