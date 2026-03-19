@@ -1,92 +1,118 @@
 export type Lang = "sv" | "no" | "da" | "fi" | "en" | "de" | "fr" | "it";
 
-export type TranslationKeys = {
-  nav: { home: string; howItWorks: string; partners: string; dashboard: string };
+export type Copy = {
   hero: {
-    headline: string;
-    headlineAlt1: string;
-    headlineAlt2: string;
-    sub: string;
-    cta: string;
-    ctaAlt1: string;
-    ctaAlt2: string;
-    ctaSecondary: string;
+    badge: string;
+    titleStart: string;
+    titleAccent: string;
+    body: string;
+    primaryCta: string;
+    secondaryCta: string;
+    partnerCta: string;
+    statLab: string;
+    statTiming: string;
+    imageAlt: string;
   };
   problem: {
     title: string;
-    text: string;
-    stat1: string;
-    stat1label: string;
-    stat2: string;
-    stat2label: string;
-    stat3: string;
-    stat3label: string;
+    body: string;
+    cards: { title: string; description: string }[];
   };
   howItWorks: {
     title: string;
-    step1: string;
-    step1desc: string;
-    step2: string;
-    step2desc: string;
-    step3: string;
-    step3desc: string;
-    step4: string;
-    step4desc: string;
+    body: string;
+    steps: { numberLabel: string; title: string; description: string }[];
   };
-  results: { title: string; text: string };
-  cta: { title: string; text: string; button: string };
-  faq: { title: string; q1: string; a1: string; q2: string; a2: string; q3: string; a3: string; q4: string; a4: string };
-  lead: { title: string; name: string; email: string; phone: string; submit: string; success: string };
-  partner: {
-    pageTitle: string;
-    headline: string;
-    sub: string;
-    benefit1: string;
-    benefit1desc: string;
-    benefit2: string;
-    benefit2desc: string;
-    benefit3: string;
-    benefit3desc: string;
-    signupTitle: string;
-    name: string;
-    email: string;
-    phone: string;
-    company: string;
-    marginTitle: string;
-    marginText: string;
-    marginPoint1: string;
-    marginPoint2: string;
-    marginPoint3: string;
-    marginVisualTitle: string;
-    marginVisualText: string;
-    chainFactory: string;
-    chainExport: string;
-    chainImport: string;
-    chainWholesale: string;
-    chainStore: string;
-    chainYou: string;
-    valueTraditionalBadge: string;
-    valueSimplifiedBadge: string;
-    valueModelLabel: string;
-    valueModelTitle: string;
-    valueModelText: string;
-    valueBody: string;
-    valueHighlight: string;
-    valueExampleBadge: string;
-    valueExampleProduct: string;
-    submit: string;
-    success: string;
-  };
-  dashboard: {
+  analysis: {
     title: string;
-    visitors: string;
-    leads: string;
-    bookings: string;
-    customers: string;
-    recent: string;
-    performance: string;
-    noLeads: string;
-    status: string;
+    body: string;
+    items: { title: string; description: string }[];
   };
-  footer: { rights: string; privacy: string; terms: string };
+  results: {
+    title: string;
+    titleAccent: string;
+    body: string;
+    bullets: string[];
+    ratioLabel: string;
+    ratioTarget: string;
+    omega6: string;
+    omega3: string;
+    recommendationTitle: string;
+    recommendationBody: string;
+  };
+  video: {
+    title: string;
+    body: string;
+    placeholder: string;
+  };
+  lead: {
+    title: string;
+    body: string;
+    successTitle: string;
+    successBody: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    phoneLabel: string;
+    phonePlaceholder: string;
+    orderCta: string;
+    consultationCta: string;
+    successIconLabel: string;
+  };
+  testimonials: {
+    title: string;
+    items: { quote: string; name: string; role: string }[];
+  };
+  faq: {
+    title: string;
+    items: { q: string; a: string }[];
+  };
+  abTesting: {
+    badge: string;
+    title: string;
+    body: string;
+    headlinesLabel: string;
+    ctasLabel: string;
+    headlines: string[];
+    ctas: string[];
+  };
+  sticky: {
+    text: string;
+    cta: string;
+  };
+  partner: {
+    navLabel: string;
+    heroBadge: string;
+    heroTitle: string;
+    heroBody: string;
+    heroPrimaryCta: string;
+    heroSecondaryCta: string;
+    highlights: { title: string; description: string }[];
+    economicsTitle: string;
+    economicsBody: string;
+    economicsSteps: { label: string; value: string }[];
+    economicsCalloutTitle: string;
+    economicsCalloutBody: string;
+    reasonsTitle: string;
+    reasonsBody: string;
+    reasons: { title: string; description: string }[];
+    formTitle: string;
+    formBody: string;
+    formName: string;
+    formEmail: string;
+    formPhone: string;
+    formCompany: string;
+    formMessage: string;
+    formSubmit: string;
+    formSuccessTitle: string;
+    formSuccessBody: string;
+  };
+  footer: {
+    tagline: string;
+    rights: string;
+    privacy: string;
+    terms: string;
+    contact: string;
+  };
 };

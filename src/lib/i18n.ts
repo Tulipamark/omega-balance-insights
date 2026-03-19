@@ -1,4 +1,4 @@
-import { Lang, TranslationKeys } from "./i18n-types";
+import { Copy, Lang } from "./i18n-types";
 import { da } from "./locales/da";
 import { de } from "./locales/de";
 import { en } from "./locales/en";
@@ -8,7 +8,7 @@ import { it } from "./locales/it";
 import { no } from "./locales/no";
 import { sv } from "./locales/sv";
 
-export type { Lang, TranslationKeys } from "./i18n-types";
+export type { Copy, Lang } from "./i18n-types";
 
 export const defaultLang: Lang = "sv";
 
@@ -25,31 +25,10 @@ export const languages: { code: Lang; label: string; flag: string }[] = [
   { code: "it", label: "Italiano", flag: "🇮🇹" },
 ];
 
-const translations: Record<Lang, TranslationKeys> = { sv, no, da, fi, en, de, fr, it };
+const translations: Record<Lang, Copy> = { sv, no, da, fi, en, de, fr, it };
 
 export function isSupportedLang(value?: string): value is Lang {
   return supportedLangs.includes((value || "") as Lang);
-}
-
-export function countryCodeFromLang(lang: Lang) {
-  switch (lang) {
-    case "sv":
-      return "SE";
-    case "no":
-      return "NO";
-    case "da":
-      return "DK";
-    case "fi":
-      return "FI";
-    case "de":
-      return "DE";
-    case "fr":
-      return "FR";
-    case "it":
-      return "IT";
-    default:
-      return "EN";
-  }
 }
 
 export function t(lang: Lang) {
