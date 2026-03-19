@@ -19,6 +19,7 @@ import { useReferralTracking } from "./hooks/use-referral-tracking";
 
 const queryClient = new QueryClient();
 
+// Trigger rebuild for GitHub-linked preview environments.
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
