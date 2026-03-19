@@ -27,7 +27,7 @@ export const da: Copy = {
     body: "Tre enkle trin til at forstå din Omega-balance.",
     steps: [
       { numberLabel: "TRIN 01", title: "Tag prøven", description: "Tag en lille blodprøve derhjemme med det medfølgende fingerprik-kit. Hurtigt, sikkert og enkelt." },
-      { numberLabel: "TRIN 02", title: "Send til laboratoriet", description: "Send prøven til et certificeret laboratorium i den forudbetalte returkuvert." },
+      { numberLabel: "TRIN 02", title: "Send til laboratoriet", description: "Send prøven til et certificeret laboratorium i den medfølgende foradresserede kuvert." },
       { numberLabel: "TRIN 03", title: "Få dine resultater", description: "Modtag en detaljeret digital analyse af din fedtsyrebalance efter cirka 3 uger." },
     ],
   },

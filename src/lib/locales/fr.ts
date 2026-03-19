@@ -27,7 +27,7 @@ export const fr: Copy = {
     body: "Trois étapes simples pour comprendre votre équilibre oméga.",
     steps: [
       { numberLabel: "ÉTAPE 01", title: "Prélevez votre échantillon", description: "Réalisez à domicile un petit prélèvement sanguin avec le kit de piqûre au doigt fourni. Rapide, sûr et simple." },
-      { numberLabel: "ÉTAPE 02", title: "Envoyez-le au laboratoire", description: "Envoyez votre échantillon à un laboratoire certifié grâce à l'enveloppe retour prépayée." },
+      { numberLabel: "ÉTAPE 02", title: "Envoyez-le au laboratoire", description: "Envoyez votre échantillon à un laboratoire certifié dans l'enveloppe préadressée fournie." },
       { numberLabel: "ÉTAPE 03", title: "Recevez vos résultats", description: "Recevez une analyse numérique détaillée de votre équilibre en acides gras après environ 3 semaines." },
     ],
   },

@@ -27,7 +27,7 @@ export const fi: Copy = {
     body: "Kolme helppoa vaihetta Omega-tasapainosi ymmärtämiseen.",
     steps: [
       { numberLabel: "VAIHE 01", title: "Ota näyte", description: "Ota pieni verinäyte kotona mukana tulevalla sormenpääpistopakkauksella. Nopea, turvallinen ja helppo." },
-      { numberLabel: "VAIHE 02", title: "Lähetä laboratorioon", description: "Lähetä näyte sertifioituun laboratorioon valmiiksi maksetussa palautuskuoressa." },
+      { numberLabel: "VAIHE 02", title: "Lähetä laboratorioon", description: "Lähetä näyte sertifioituun laboratorioon mukana tulevassa valmiiksi osoitetussa kuoressa." },
       { numberLabel: "VAIHE 03", title: "Saat tulokset", description: "Saat yksityiskohtaisen digitaalisen analyysin rasvahappotasapainostasi noin 3 viikon kuluttua." },
     ],
   },

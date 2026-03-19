@@ -27,7 +27,7 @@ export const de: Copy = {
     body: "Drei einfache Schritte, um deine Omega-Balance zu verstehen.",
     steps: [
       { numberLabel: "SCHRITT 01", title: "Probe entnehmen", description: "Nimm zu Hause mit dem beiliegenden Fingerpik-Set eine kleine Blutprobe. Schnell, sicher und unkompliziert." },
-      { numberLabel: "SCHRITT 02", title: "Ins Labor senden", description: "Sende deine Probe mit dem frankierten Rückumschlag an ein zertifiziertes Labor." },
+      { numberLabel: "SCHRITT 02", title: "Ins Labor senden", description: "Sende deine Probe in dem beiliegenden voradressierten Umschlag an ein zertifiziertes Labor." },
       { numberLabel: "SCHRITT 03", title: "Ergebnisse erhalten", description: "Erhalte nach etwa 3 Wochen eine detaillierte digitale Analyse deiner Fettsäurebalance." },
     ],
   },

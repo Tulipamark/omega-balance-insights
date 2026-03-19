@@ -27,7 +27,7 @@ export const en: Copy = {
     body: "Three simple steps to understand your Omega balance.",
     steps: [
       { numberLabel: "STEP 01", title: "Collect your sample", description: "Take a small blood sample at home using the included finger-prick kit. Quick, safe, and simple." },
-      { numberLabel: "STEP 02", title: "Send it to the lab", description: "Mail your sample to a certified laboratory using the prepaid return envelope." },
+      { numberLabel: "STEP 02", title: "Send it to the lab", description: "Mail your sample to a certified laboratory in the enclosed pre-addressed envelope." },
       { numberLabel: "STEP 03", title: "Receive your results", description: "Receive a detailed digital analysis of your fatty acid balance after around 3 weeks." },
     ],
   },

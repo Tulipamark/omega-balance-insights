@@ -27,7 +27,7 @@ export const no: Copy = {
     body: "Tre enkle steg for å forstå din Omega-balanse.",
     steps: [
       { numberLabel: "STEG 01", title: "Ta prøven", description: "Ta en liten blodprøve hjemme med det medfølgende fingerstikksettet. Raskt, trygt og enkelt." },
-      { numberLabel: "STEG 02", title: "Send til laboratoriet", description: "Send prøven til et sertifisert laboratorium i den forhåndsbetalte returkonvolutten." },
+      { numberLabel: "STEG 02", title: "Send til laboratoriet", description: "Send prøven til et sertifisert laboratorium i den medfølgende forhåndsadresserte konvolutten." },
       { numberLabel: "STEG 03", title: "Få resultatene", description: "Motta en detaljert digital analyse av fettsyrebalansen din etter cirka 3 uker." },
     ],
   },

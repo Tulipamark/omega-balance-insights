@@ -27,7 +27,7 @@ export const it: Copy = {
     body: "Tre semplici passaggi per capire il tuo equilibrio Omega.",
     steps: [
       { numberLabel: "FASE 01", title: "Raccogli il campione", description: "Preleva a casa un piccolo campione di sangue con il kit pungidito incluso. Rapido, sicuro e semplice." },
-      { numberLabel: "FASE 02", title: "Invialo al laboratorio", description: "Spedisci il campione a un laboratorio certificato usando la busta di ritorno prepagata." },
+      { numberLabel: "FASE 02", title: "Invialo al laboratorio", description: "Spedisci il campione a un laboratorio certificato nella busta preindirizzata inclusa." },
       { numberLabel: "FASE 03", title: "Ricevi i risultati", description: "Ricevi un'analisi digitale dettagliata del tuo equilibrio degli acidi grassi dopo circa 3 settimane." },
     ],
   },

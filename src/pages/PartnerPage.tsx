@@ -7,7 +7,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Lang } from "@/lib/i18n";
+import { Lang, t } from "@/lib/i18n";
 import { submitLead } from "@/lib/omega-data";
 import { getReferralAttribution } from "@/lib/referral";
 
@@ -71,7 +71,7 @@ type PartnerPageContent = {
   };
 };
 
-const content: Record<"sv" | "en", PartnerPageContent> = {
+const baseContent: Pick<Record<Lang, PartnerPageContent>, "sv" | "en"> = {
   sv: {
     hero: {
       badge: "Partnermöjlighet",
@@ -284,6 +284,69 @@ const content: Record<"sv" | "en", PartnerPageContent> = {
   },
 };
 
+function buildLocalizedPartnerContent(lang: Exclude<Lang, "sv" | "en">): PartnerPageContent {
+  const partner = t(lang).partner;
+
+  return {
+    hero: {
+      badge: partner.heroBadge,
+      title: partner.heroTitle,
+      body: partner.heroBody,
+      primaryCta: partner.heroPrimaryCta,
+      secondaryCta: partner.heroSecondaryCta,
+      cards: partner.highlights.map((item, index) => ({
+        title: item.title,
+        text: item.description,
+        icon: [FlaskConical, CircleDollarSign, BarChart3][index] || BarChart3,
+      })),
+    },
+    economics: {
+      title: partner.economicsTitle,
+      body: partner.economicsBody,
+      steps: partner.economicsSteps,
+      modelLabel: baseContent.en.economics.modelLabel,
+      modelBody: baseContent.en.economics.modelBody,
+      calloutTitle: partner.economicsCalloutTitle,
+      calloutBody: partner.economicsCalloutBody,
+      note: baseContent.en.economics.note,
+    },
+    reasons: {
+      title: partner.reasonsTitle,
+      body: partner.reasonsBody,
+      cards: partner.reasons.map((item) => ({
+        title: item.title,
+        text: item.description,
+      })),
+    },
+    fit: baseContent.en.fit,
+    steps: baseContent.en.steps,
+    form: {
+      ...baseContent.en.form,
+      title: partner.formTitle,
+      body: partner.formBody,
+      name: partner.formName,
+      email: partner.formEmail,
+      phone: partner.formPhone,
+      company: partner.formCompany,
+      background: partner.formMessage,
+      submit: partner.formSubmit,
+      successTitle: partner.formSuccessTitle,
+      successBody: partner.formSuccessBody,
+    },
+    sticky: baseContent.en.sticky,
+  };
+}
+
+const content: Record<Lang, PartnerPageContent> = {
+  ...baseContent,
+  no: buildLocalizedPartnerContent("no"),
+  da: buildLocalizedPartnerContent("da"),
+  fi: buildLocalizedPartnerContent("fi"),
+  de: buildLocalizedPartnerContent("de"),
+  fr: buildLocalizedPartnerContent("fr"),
+  it: buildLocalizedPartnerContent("it"),
+};
+
 const sectionMotion = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -292,7 +355,7 @@ const sectionMotion = {
 };
 
 const PartnerPage = ({ lang }: PartnerPageProps) => {
-  const page = useMemo(() => (lang === "sv" ? content.sv : content.en), [lang]);
+  const page = useMemo(() => content[lang] ?? content.en, [lang]);
   const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
