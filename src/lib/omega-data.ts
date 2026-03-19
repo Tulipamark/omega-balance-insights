@@ -202,7 +202,9 @@ const mockVisits: ReferralVisit[] = [
 
 function requireSupabase() {
   if (!supabase) {
-    throw new Error("Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.");
+    throw new Error(
+      "Supabase is not configured. Add VITE_SUPABASE_URL and either VITE_SUPABASE_ANON_KEY or VITE_SUPABASE_PUBLISHABLE_KEY."
+    );
   }
 
   return supabase;
