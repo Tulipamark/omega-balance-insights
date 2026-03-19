@@ -31,7 +31,7 @@ const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
         >
           <Globe className="h-4 w-4 text-primary" />
           <span>{current.flag}</span>
-          <span>{current.label}</span>
+          <span className="hidden sm:inline">{current.label}</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[12rem]">

@@ -19,16 +19,16 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
           <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
             OmegaBalance
           </a>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/dashboard/login"
-              className="hidden text-sm font-medium text-subtle transition-colors hover:text-foreground md:inline-flex"
+              className="inline-flex whitespace-nowrap text-xs font-medium text-subtle transition-colors hover:text-foreground sm:text-sm"
             >
               {loginLabel}
             </Link>
             <Link
               to={`/${lang}/partners`}
-              className="hidden rounded-full border border-border bg-card/90 px-4 py-2 text-sm font-medium text-foreground shadow-card transition-colors hover:bg-card md:inline-flex"
+              className="inline-flex whitespace-nowrap rounded-full border border-border bg-card/90 px-3 py-2 text-xs font-medium text-foreground shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
             >
               {copy.partnerCta}
             </Link>
