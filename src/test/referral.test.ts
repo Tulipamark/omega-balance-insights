@@ -1,16 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  captureReferralVisit,
   getReferralCandidate,
   getOrCreateSessionId,
   getStoredReferral,
   getStoredSessionId,
   normalizeReferralCode,
+  persistSessionId,
   persistReferralCode,
   shouldTrackReferralLanding,
 } from "@/lib/referral";
 
+const trackVisitMock = vi.fn();
+
+vi.mock("@/lib/api", () => ({
+  trackVisit: (...args: unknown[]) => trackVisitMock(...args),
+}));
+
 describe("referral utilities", () => {
   beforeEach(() => {
+    trackVisitMock.mockReset();
     window.localStorage.clear();
     window.sessionStorage.clear();
     document.cookie = "omega_referral_code=; path=/; max-age=0";
@@ -67,5 +76,34 @@ describe("referral utilities", () => {
     expect(shouldTrackReferralLanding("/partners")).toBe(true);
     expect(shouldTrackReferralLanding("/dashboard/login")).toBe(false);
     expect(shouldTrackReferralLanding("/kontakt")).toBe(false);
+  });
+
+  it("sends the full visit payload when tracking a referral landing", async () => {
+    persistSessionId("session-123");
+    persistReferralCode("ELIN2026", "/sv");
+
+    Object.defineProperty(document, "referrer", {
+      configurable: true,
+      value: "https://referrer.example/path",
+    });
+
+    Object.defineProperty(window.navigator, "userAgent", {
+      configurable: true,
+      value: "OmegaTestAgent/1.0",
+    });
+
+    await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram&utm_medium=social&utm_campaign=spring");
+
+    expect(trackVisitMock).toHaveBeenCalledTimes(1);
+    expect(trackVisitMock).toHaveBeenCalledWith({
+      ref: "ELIN2026",
+      session_id: "session-123",
+      landing_page: "/sv",
+      referrer: "https://referrer.example/path",
+      utm_source: "instagram",
+      utm_medium: "social",
+      utm_campaign: "spring",
+      user_agent: "OmegaTestAgent/1.0",
+    });
   });
 });

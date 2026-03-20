@@ -104,12 +104,15 @@ create index if not exists idx_outbound_clicks_partner_id on public.outbound_cli
 create index if not exists idx_outbound_clicks_referral_code on public.outbound_clicks(referral_code);
 create index if not exists idx_outbound_clicks_session_id on public.outbound_clicks(session_id);
 create index if not exists idx_outbound_clicks_created_at on public.outbound_clicks(created_at desc);
+create index if not exists idx_outbound_clicks_partner_id_created_at on public.outbound_clicks(partner_id, created_at desc);
+create index if not exists idx_outbound_clicks_referral_code_created_at on public.outbound_clicks(referral_code, created_at desc);
 
 -- Bring referral_visits up to the shape expected by the referral tracking MVP.
 alter table public.referral_visits
   add column if not exists partner_id uuid references public.partners(id) on delete cascade,
   add column if not exists session_id text,
   add column if not exists referrer text,
+  add column if not exists visitor_id text,
   add column if not exists utm_medium text,
   add column if not exists user_agent text,
   add column if not exists ip_hash text;
@@ -117,9 +120,20 @@ alter table public.referral_visits
 create index if not exists idx_referral_visits_partner_id on public.referral_visits(partner_id);
 create index if not exists idx_referral_visits_session_id on public.referral_visits(session_id);
 create index if not exists idx_referral_visits_created_at on public.referral_visits(created_at desc);
+create index if not exists idx_referral_visits_partner_id_created_at on public.referral_visits(partner_id, created_at desc);
+create index if not exists idx_referral_visits_referral_code_created_at on public.referral_visits(referral_code, created_at desc);
 
--- Bring leads closer to the new attribution model while preserving legacy fields.
+-- Bring leads closer to the newer attribution model while preserving legacy fields.
+-- The source columns differ depending on whether 20260318 or 20260319 landed
+-- first, so the backfill below only references legacy columns when they exist.
+-- `partner_id` and `referral_code` stay nullable because lead capture can run
+-- without attribution and the edge function already sends null in that case.
 alter table public.leads
+  add column if not exists name text,
+  add column if not exists type text,
+  add column if not exists referred_by_user_id uuid references public.users(id) on delete set null,
+  add column if not exists source_page text,
+  add column if not exists details jsonb not null default '{}'::jsonb,
   add column if not exists partner_id uuid references public.partners(id) on delete cascade,
   add column if not exists session_id text,
   add column if not exists full_name text,
@@ -127,27 +141,108 @@ alter table public.leads
   add column if not exists lead_source text,
   add column if not exists updated_at timestamptz not null default now();
 
-update public.leads
-set full_name = coalesce(full_name, name)
-where full_name is null;
+alter table public.leads
+  alter column partner_id drop not null,
+  alter column referral_code drop not null;
 
-update public.leads
-set lead_type = case
-  when type = 'customer_lead' then 'customer'
-  when type = 'partner_lead' then 'partner'
-  else lead_type
-end
-where lead_type is null;
+do $$
+declare
+  has_name_column boolean;
+  has_type_column boolean;
+begin
+  select exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'leads'
+      and column_name = 'name'
+  ) into has_name_column;
 
-update public.leads
-set lead_source = case
-  when type = 'customer_lead' then 'customer_form'
-  when type = 'partner_lead' then 'partner_form'
-  else lead_source
-end
-where lead_source is null;
+  select exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'leads'
+      and column_name = 'type'
+  ) into has_type_column;
+
+  if has_name_column then
+    update public.leads
+    set full_name = coalesce(full_name, name)
+    where full_name is null;
+  end if;
+
+  update public.leads
+  set name = coalesce(name, full_name, email)
+  where name is null;
+
+  if has_type_column then
+    update public.leads
+    set lead_type = case
+      when type = 'customer_lead' then 'customer'
+      when type = 'partner_lead' then 'partner'
+      else lead_type
+    end
+    where lead_type is null;
+
+    update public.leads
+    set lead_source = case
+      when type = 'customer_lead' then 'customer_form'
+      when type = 'partner_lead' then 'partner_form'
+      else lead_source
+    end
+    where lead_source is null;
+  end if;
+
+  update public.leads
+  set type = coalesce(
+    type,
+    case
+      when lead_type = 'partner' or lead_source = 'partner_form' then 'partner_lead'
+      when source_page is not null and source_page like '%partners%' then 'partner_lead'
+      else 'customer_lead'
+    end
+  )
+  where type is null;
+
+  update public.leads
+  set lead_type = coalesce(
+    lead_type,
+    case
+      when type = 'partner_lead' then 'partner'
+      when lead_source = 'partner_form' then 'partner'
+      when source_page is not null and source_page like '%partners%' then 'partner'
+      else 'customer'
+    end
+  )
+  where lead_type is null;
+
+  update public.leads
+  set lead_source = coalesce(
+    lead_source,
+    case
+      when lead_type = 'partner' or type = 'partner_lead' then 'partner_form'
+      when source_page is not null and source_page like '%partners%' then 'partner_form'
+      else 'customer_form'
+    end
+  )
+  where lead_source is null;
+
+  update public.leads l
+  set partner_id = coalesce(l.partner_id, p.id),
+      referred_by_user_id = coalesce(l.referred_by_user_id, p.user_id)
+  from public.partners p
+  where l.referral_code = p.referral_code
+    and (l.partner_id is null or l.referred_by_user_id is null);
+
+  update public.leads
+  set details = coalesce(details, '{}'::jsonb)
+  where details is null;
+end $$;
 
 alter table public.leads
+  alter column name set not null,
+  alter column type set not null,
   alter column full_name set not null,
   alter column lead_type set not null,
   alter column lead_source set not null;
@@ -175,7 +270,7 @@ begin
   ) then
     alter table public.leads
       add constraint leads_status_check
-      check (status in ('new', 'contacted', 'qualified', 'closed'));
+      check (status in ('new', 'contacted', 'qualified', 'closed', 'active', 'inactive', 'won', 'lost'));
   end if;
 end $$;
 
@@ -183,6 +278,13 @@ create index if not exists idx_leads_partner_id on public.leads(partner_id);
 create index if not exists idx_leads_email on public.leads(email);
 create index if not exists idx_leads_referral_code on public.leads(referral_code);
 create index if not exists idx_leads_created_at on public.leads(created_at desc);
+create index if not exists idx_leads_referred_by_created_at on public.leads(referred_by_user_id, created_at desc);
+create index if not exists idx_leads_email_updated_at on public.leads(email, updated_at desc);
+create index if not exists idx_leads_lead_type_created_at on public.leads(lead_type, created_at desc);
+
+-- Recent sponsor/member lookups are common in the partner dashboard, so keep
+-- the relationship table sortable by creation time too.
+create index if not exists idx_partner_relationships_sponsor_created_at on public.partner_relationships(sponsor_user_id, created_at desc);
 
 create or replace function public.touch_leads_updated_at()
 returns trigger

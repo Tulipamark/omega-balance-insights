@@ -1,7 +1,61 @@
 export type UserRole = "admin" | "partner";
 export type LeadType = "customer_lead" | "partner_lead";
+export type LeadSubmissionType = "customer" | "partner";
+export type LeadSource = "email_gate" | "customer_form" | "partner_form";
 export type EntityStatus = "new" | "qualified" | "active" | "inactive" | "won" | "lost";
 export type OrderStatus = "pending" | "paid" | "cancelled" | "refunded";
+export type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner_not_verified";
+export type RedirectType = "test" | "shop" | "partner";
+export type RedirectFailureReason = "partner_not_found" | "partner_not_verified" | "destination_missing" | "invalid_type";
+export type LeadSubmitMode = "created" | "updated" | "ignored";
+
+export interface TrackClickRequest {
+  ref: string;
+  type: RedirectType;
+  session_id: string;
+}
+
+export interface TrackClickResponse {
+  ok: boolean;
+  destination_url?: string;
+  reason?: RedirectFailureReason;
+}
+
+export interface TrackVisitRequest {
+  ref: string;
+  session_id: string;
+  landing_page: string;
+  referrer: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  user_agent: string | null;
+}
+
+export interface TrackVisitResponse {
+  ok: boolean;
+  partnerFound: boolean;
+  verified: boolean;
+}
+
+export interface UpsertLeadRequest {
+  email: string;
+  full_name: string;
+  phone?: string | null;
+  ref?: string | null;
+  session_id?: string | null;
+  lead_type: LeadSubmissionType;
+  lead_source: LeadSource;
+  source_page?: string | null;
+  details?: Record<string, unknown>;
+}
+
+export interface UpsertLeadResponse {
+  ok: boolean;
+  mode?: LeadSubmitMode;
+  lead_id?: string;
+  reason?: LeadFailureReason;
+}
 
 export interface AppUser {
   id: string;
@@ -17,15 +71,21 @@ export interface AppUser {
 export interface Lead {
   id: string;
   name: string;
+  full_name?: string | null;
   email: string;
   phone?: string | null;
   type: LeadType;
+  lead_type?: LeadSubmissionType | null;
+  lead_source?: LeadSource | null;
   source_page?: string | null;
   referral_code?: string | null;
   referred_by_user_id?: string | null;
+  partner_id?: string | null;
+  session_id?: string | null;
   status: EntityStatus;
   details?: Record<string, unknown>;
   created_at: string;
+  updated_at?: string | null;
 }
 
 export interface Customer {

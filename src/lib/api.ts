@@ -1,57 +1,12 @@
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
-
-type RedirectType = "test" | "shop" | "partner";
-type FailureReason = "partner_not_found" | "partner_not_verified" | "destination_missing" | "invalid_type";
-
-type TrackClickRequest = {
-  ref: string;
-  type: RedirectType;
-  session_id: string;
-};
-
-type TrackClickResponse = {
-  ok: boolean;
-  destination_url?: string;
-  reason?: FailureReason;
-};
-
-type TrackVisitRequest = {
-  ref: string;
-  session_id: string;
-  landing_page: string;
-  referrer: string | null;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  user_agent: string | null;
-};
-
-type TrackVisitResponse = {
-  ok: boolean;
-  partnerFound: boolean;
-  verified: boolean;
-};
-
-type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner_not_verified";
-
-type UpsertLeadRequest = {
-  email: string;
-  full_name: string;
-  phone?: string | null;
-  ref?: string | null;
-  session_id?: string | null;
-  lead_type: "customer" | "partner";
-  lead_source: "email_gate" | "customer_form" | "partner_form";
-  source_page?: string | null;
-  details?: Record<string, unknown>;
-};
-
-type UpsertLeadResponse = {
-  ok: boolean;
-  mode?: "created" | "updated" | "ignored";
-  lead_id?: string;
-  reason?: LeadFailureReason;
-};
+import type {
+  TrackClickRequest,
+  TrackClickResponse,
+  TrackVisitRequest,
+  TrackVisitResponse,
+  UpsertLeadRequest,
+  UpsertLeadResponse,
+} from "@/lib/omega-types";
 
 function getSupabaseFunctionHeaders() {
   if (!isSupabaseConfigured) {

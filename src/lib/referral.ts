@@ -1,7 +1,7 @@
 import { defaultLang, isSupportedLang } from "@/lib/i18n";
 import { resolveUserByReferralCode } from "@/lib/omega-data";
 import { trackVisit } from "@/lib/api";
-import { ReferralAttribution } from "@/lib/omega-types";
+import type { ReferralAttribution, TrackVisitRequest } from "@/lib/omega-types";
 
 const REFERRAL_STORAGE_KEY = "omega:referral-context";
 const REFERRAL_COOKIE_KEY = "omega_referral_code";
@@ -212,7 +212,7 @@ export async function captureReferralVisit(pathname: string, search: string) {
   }
 
   const params = new URLSearchParams(search);
-  await trackVisit({
+  const payload: TrackVisitRequest = {
     ref: referralCode,
     session_id: sessionId,
     landing_page: pathname,
@@ -221,7 +221,9 @@ export async function captureReferralVisit(pathname: string, search: string) {
     utm_medium: params.get("utm_medium"),
     utm_campaign: params.get("utm_campaign"),
     user_agent: navigator.userAgent || null,
-  });
+  };
+
+  await trackVisit(payload);
 
   window.sessionStorage.setItem(VISIT_CACHE_KEY, cacheKey);
 }

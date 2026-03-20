@@ -32,9 +32,28 @@ type PartnerRow = {
 type ExistingLeadRow = {
   id: string;
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
   status: string;
 };
+
+type LeadInsertPayload = {
+  name: string;
+  email: string;
+  phone: string | null;
+  type: "customer_lead" | "partner_lead";
+  source_page: string | null;
+  referral_code: string | null;
+  referred_by_user_id: string | null;
+  status: string;
+  details: Record<string, unknown>;
+  full_name?: string;
+  lead_type?: LeadType;
+  lead_source?: LeadSource;
+  partner_id?: string | null;
+  session_id?: string | null;
+};
+
+type LeadUpdatePayload = LeadInsertPayload;
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -60,6 +79,70 @@ function isValidEmail(value: string) {
 
 function isWithinThirtyDays(timestamp: string, now: Date) {
   return now.getTime() - new Date(timestamp).getTime() <= 30 * 24 * 60 * 60 * 1000;
+}
+
+function isSchemaMismatchError(error: unknown) {
+  const candidate = error as { code?: string; message?: string; details?: string };
+  const message = `${candidate?.code ?? ""} ${candidate?.message ?? ""} ${candidate?.details ?? ""}`.toLowerCase();
+
+  return (
+    message.includes("42703") ||
+    message.includes("42p01") ||
+    (message.includes("column") && message.includes("does not exist")) ||
+    (message.includes("relation") && message.includes("does not exist")) ||
+    message.includes("could not find the table")
+  );
+}
+
+async function fetchExistingLeadByEmail(supabase: ReturnType<typeof createClient>, email: string) {
+  const modernQuery = await supabase
+    .from("leads")
+    .select("id, created_at, updated_at, status")
+    .eq("email", email)
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<ExistingLeadRow>();
+
+  if (!modernQuery.error || !isSchemaMismatchError(modernQuery.error)) {
+    return modernQuery;
+  }
+
+  return supabase
+    .from("leads")
+    .select("id, created_at, status")
+    .eq("email", email)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<ExistingLeadRow>();
+}
+
+async function insertLeadRow(
+  supabase: ReturnType<typeof createClient>,
+  modernPayload: LeadInsertPayload,
+  legacyPayload: Record<string, unknown>,
+) {
+  const modernInsert = await supabase.from("leads").insert(modernPayload).select("id").single<{ id: string }>();
+
+  if (!modernInsert.error || !isSchemaMismatchError(modernInsert.error)) {
+    return modernInsert;
+  }
+
+  return supabase.from("leads").insert(legacyPayload).select("id").single<{ id: string }>();
+}
+
+async function updateLeadRow(
+  supabase: ReturnType<typeof createClient>,
+  leadId: string,
+  modernPayload: LeadUpdatePayload,
+  legacyPayload: Record<string, unknown>,
+) {
+  const modernUpdate = await supabase.from("leads").update(modernPayload).eq("id", leadId);
+
+  if (!modernUpdate.error || !isSchemaMismatchError(modernUpdate.error)) {
+    return modernUpdate;
+  }
+
+  return supabase.from("leads").update(legacyPayload).eq("id", leadId);
 }
 
 Deno.serve(async (request) => {
@@ -115,35 +198,31 @@ Deno.serve(async (request) => {
 
     if (partnerError) {
       console.error("Failed to resolve partner for lead", partnerError);
-      return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason }, 500);
+      if (!isSchemaMismatchError(partnerError)) {
+        return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
+      }
     }
 
-    if (!partnerRow) {
+    if (partnerRow) {
+      if (partnerRow.status !== "verified") {
+        return jsonResponse({ ok: false, reason: "partner_not_verified" satisfies FailureReason });
+      }
+
+      partner = partnerRow;
+    } else if (!partnerError) {
       return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
     }
-
-    if (partnerRow.status !== "verified") {
-      return jsonResponse({ ok: false, reason: "partner_not_verified" satisfies FailureReason });
-    }
-
-    partner = partnerRow;
   }
 
   const now = new Date();
-  const { data: existingLead, error: lookupError } = await supabase
-    .from("leads")
-    .select("id, created_at, updated_at, status")
-    .eq("email", email)
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle<ExistingLeadRow>();
+  const { data: existingLead, error: lookupError } = await fetchExistingLeadByEmail(supabase, email);
 
   if (lookupError) {
     console.error("Failed to look up lead", lookupError);
-    return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason }, 500);
+    return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason });
   }
 
-  const insertPayload = {
+  const modernInsertPayload: LeadInsertPayload = {
     name: fullName,
     full_name: fullName,
     email,
@@ -160,16 +239,24 @@ Deno.serve(async (request) => {
     details,
   };
 
+  const legacyInsertPayload = {
+    name: fullName,
+    email,
+    phone,
+    type: leadType === "customer" ? "customer_lead" : "partner_lead",
+    source_page: sourcePage,
+    referral_code: partner?.referral_code || null,
+    referred_by_user_id: partner?.user_id || null,
+    status: "new",
+    details,
+  };
+
   if (!existingLead) {
-    const { data: createdLead, error: insertError } = await supabase
-      .from("leads")
-      .insert(insertPayload)
-      .select("id")
-      .single<{ id: string }>();
+    const { data: createdLead, error: insertError } = await insertLeadRow(supabase, modernInsertPayload, legacyInsertPayload);
 
     if (insertError) {
       console.error("Failed to insert lead", insertError);
-      return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason }, 500);
+      return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason });
     }
 
     return jsonResponse({ ok: true, mode: "created", lead_id: createdLead.id });
@@ -180,7 +267,7 @@ Deno.serve(async (request) => {
     return jsonResponse({ ok: true, mode: "ignored", lead_id: existingLead.id });
   }
 
-  const updatePayload = {
+  const modernUpdatePayload: LeadUpdatePayload = {
     name: fullName,
     full_name: fullName,
     email,
@@ -201,14 +288,23 @@ Deno.serve(async (request) => {
       : {}),
   };
 
-  const { error: updateError } = await supabase
-    .from("leads")
-    .update(updatePayload)
-    .eq("id", existingLead.id);
+  const legacyUpdatePayload = {
+    name: fullName,
+    email,
+    phone,
+    type: leadType === "customer" ? "customer_lead" : "partner_lead",
+    source_page: sourcePage,
+    referral_code: partner?.referral_code || null,
+    referred_by_user_id: partner?.user_id || null,
+    status: existingLead.status,
+    details,
+  };
+
+  const { error: updateError } = await updateLeadRow(supabase, existingLead.id, modernUpdatePayload, legacyUpdatePayload);
 
   if (updateError) {
     console.error("Failed to update lead", updateError);
-    return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason }, 500);
+    return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason });
   }
 
   return jsonResponse({ ok: true, mode: "updated", lead_id: existingLead.id });

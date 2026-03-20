@@ -24,6 +24,14 @@ type PartnerRow = {
   status: "pending" | "verified" | "rejected";
 };
 
+type OutboundClickInsertPayload = {
+  partner_id: string;
+  referral_code: string;
+  session_id: string;
+  destination_type: DestinationType;
+  destination_url: string;
+};
+
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -36,6 +44,25 @@ function jsonResponse(body: unknown, status = 200) {
 
 function normalizeReferralCode(value?: string | null) {
   return value?.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "") || null;
+}
+
+function isSchemaMismatchError(error: unknown) {
+  const candidate = error as { code?: string; message?: string; details?: string };
+  const message = `${candidate?.code ?? ""} ${candidate?.message ?? ""} ${candidate?.details ?? ""}`.toLowerCase();
+
+  return (
+    message.includes("42703") ||
+    message.includes("42p01") ||
+    (message.includes("column") && message.includes("does not exist")) ||
+    (message.includes("relation") && message.includes("does not exist")) ||
+    message.includes("could not find the table")
+  );
+}
+
+async function logOutboundClick(supabase: ReturnType<typeof createClient>, payload: OutboundClickInsertPayload) {
+  const insert = await supabase.from("outbound_clicks").insert(payload);
+
+  return insert;
 }
 
 function getDestinationUrl(partner: PartnerRow, type: DestinationType) {
@@ -102,7 +129,7 @@ Deno.serve(async (request) => {
 
   if (partnerError) {
     console.error("Failed to resolve partner", partnerError);
-    return failure("partner_not_found", 500);
+    return failure("partner_not_found");
   }
 
   if (!partner) {
@@ -118,7 +145,7 @@ Deno.serve(async (request) => {
     return failure("destination_missing");
   }
 
-  const { error: clickError } = await supabase.from("outbound_clicks").insert({
+  const { error: clickError } = await logOutboundClick(supabase, {
     partner_id: partner.id,
     referral_code: partner.referral_code,
     session_id: sessionId,
@@ -127,8 +154,9 @@ Deno.serve(async (request) => {
   });
 
   if (clickError) {
-    console.error("Failed to log outbound click", clickError);
-    return jsonResponse({ ok: false, reason: "destination_missing" satisfies FailureReason }, 500);
+    if (!isSchemaMismatchError(clickError)) {
+      console.warn("Outbound click logging failed, continuing with redirect", clickError);
+    }
   }
 
   return jsonResponse({
