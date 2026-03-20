@@ -14,10 +14,16 @@ create table if not exists public.partners (
   zinzino_test_url text,
   zinzino_shop_url text,
   zinzino_partner_url text,
+  consultation_url text,
+  market_code text,
   status text not null default 'pending',
   created_at timestamptz not null default now(),
   verified_at timestamptz
 );
+
+alter table public.partners
+  add column if not exists consultation_url text,
+  add column if not exists market_code text;
 
 create table if not exists public.outbound_clicks (
   id uuid primary key default gen_random_uuid(),
@@ -72,6 +78,22 @@ begin
   end if;
 
   if not exists (
+    select 1 from pg_constraint where conname = 'partners_consultation_url_https'
+  ) then
+    alter table public.partners
+      add constraint partners_consultation_url_https
+      check (consultation_url is null or consultation_url ~ '^https://');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'partners_market_code_format'
+  ) then
+    alter table public.partners
+      add constraint partners_market_code_format
+      check (market_code is null or (market_code = upper(market_code) and market_code ~ '^[A-Z]{2}$'));
+  end if;
+
+  if not exists (
     select 1 from pg_constraint where conname = 'partners_verified_requires_urls'
   ) then
     alter table public.partners
@@ -92,13 +114,15 @@ begin
   ) then
     alter table public.outbound_clicks
       add constraint outbound_clicks_destination_type_check
-      check (destination_type in ('test', 'shop', 'partner'));
+      check (destination_type in ('test', 'shop', 'partner', 'consultation'));
   end if;
 end $$;
 
 create index if not exists idx_partners_user_id on public.partners(user_id);
 create index if not exists idx_partners_referral_code on public.partners(referral_code);
 create index if not exists idx_partners_status on public.partners(status);
+create index if not exists idx_partners_market_code on public.partners(market_code);
+create index if not exists idx_partners_status_market_code on public.partners(status, market_code);
 
 create index if not exists idx_outbound_clicks_partner_id on public.outbound_clicks(partner_id);
 create index if not exists idx_outbound_clicks_referral_code on public.outbound_clicks(referral_code);
@@ -106,6 +130,7 @@ create index if not exists idx_outbound_clicks_session_id on public.outbound_cli
 create index if not exists idx_outbound_clicks_created_at on public.outbound_clicks(created_at desc);
 create index if not exists idx_outbound_clicks_partner_id_created_at on public.outbound_clicks(partner_id, created_at desc);
 create index if not exists idx_outbound_clicks_referral_code_created_at on public.outbound_clicks(referral_code, created_at desc);
+create index if not exists idx_outbound_clicks_destination_type_created_at on public.outbound_clicks(destination_type, created_at desc);
 
 -- Bring referral_visits up to the shape expected by the referral tracking MVP.
 alter table public.referral_visits

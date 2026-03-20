@@ -6,7 +6,7 @@ export const fr: Copy = {
     titleStart: "Connaissez-vous votre",
     titleAccent: "équilibre oméga ?",
     body: "La plupart des gens présentent un déséquilibre entre les oméga-6 et les oméga-3. Un simple test sanguin à domicile peut révéler votre ratio exact.",
-    primaryCta: "Tester mon équilibre oméga",
+    primaryCta: "Commandez votre balance test ici",
     secondaryCta: "Comment fonctionne le test",
     partnerCta: "Pour les partenaires",
     statLab: "Analyse en laboratoire certifié",
@@ -101,11 +101,11 @@ export const fr: Copy = {
     headlinesLabel: "Titres",
     ctasLabel: "Boutons d'appel à l'action",
     headlines: ["Connaissez-vous votre équilibre oméga ?", "Le chiffre qui pourrait changer votre façon de manger.", "Mesurez ce qui compte. Commencez par votre ratio oméga."],
-    ctas: ["Tester mon équilibre oméga", "Découvrir mon ratio", "Recevoir mon analyse personnalisée"],
+    ctas: ["Commandez votre balance test ici", "Découvrir mon ratio", "Recevoir mon analyse personnalisée"],
   },
   sticky: {
     text: "Découvrez votre ratio oméga-6 / oméga-3 dès aujourd'hui",
-    cta: "Tester mon équilibre oméga",
+    cta: "Commandez votre balance test ici",
   },
   partner: {
     navLabel: "Partenaires",

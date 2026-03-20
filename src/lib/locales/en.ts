@@ -6,7 +6,7 @@ export const en: Copy = {
     titleStart: "Do you know your",
     titleAccent: "Omega balance?",
     body: "Most people have an imbalance between Omega-6 and Omega-3. A simple home blood test can reveal your exact ratio.",
-    primaryCta: "Test your Omega balance",
+    primaryCta: "Order your balance test here",
     secondaryCta: "How the test works",
     partnerCta: "For partners",
     statLab: "Certified lab analysis",
@@ -101,11 +101,11 @@ export const en: Copy = {
     headlinesLabel: "Headlines",
     ctasLabel: "Call-to-action buttons",
     headlines: ["Do you know your Omega balance?", "The one number that could change how you eat.", "Measure what matters. Start with your Omega ratio."],
-    ctas: ["Test your Omega balance", "Discover your ratio", "Get your personalized analysis"],
+    ctas: ["Order your balance test here", "Discover your ratio", "Get your personalized analysis"],
   },
   sticky: {
     text: "Discover your Omega-6 / Omega-3 ratio today",
-    cta: "Test your Omega balance",
+    cta: "Order your balance test here",
   },
   partner: {
     navLabel: "Partners",

@@ -6,7 +6,7 @@ export const da: Copy = {
     titleStart: "Kender du din",
     titleAccent: "Omega-balance?",
     body: "De fleste har en ubalance mellem Omega-6 og Omega-3. En enkel blodprøve derhjemme kan vise dit præcise forhold.",
-    primaryCta: "Test din Omega-balance",
+    primaryCta: "Bestil jeres balance test her",
     secondaryCta: "Sådan fungerer testen",
     partnerCta: "For partnere",
     statLab: "Certificeret laboratorieanalyse",
@@ -101,11 +101,11 @@ export const da: Copy = {
     headlinesLabel: "Overskrifter",
     ctasLabel: "Call to action-knapper",
     headlines: ["Kender du din Omega-balance?", "Tallet, der kan ændre, hvordan du spiser.", "Mål det, der betyder noget. Start med dit Omega-forhold."],
-    ctas: ["Test din Omega-balance", "Opdag dit forhold", "Få din personlige analyse"],
+    ctas: ["Bestil jeres balance test her", "Opdag dit forhold", "Få din personlige analyse"],
   },
   sticky: {
     text: "Opdag dit Omega-6 / Omega-3-forhold i dag",
-    cta: "Test din Omega-balance",
+    cta: "Bestil jeres balance test her",
   },
   partner: {
     navLabel: "Partnere",

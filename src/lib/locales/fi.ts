@@ -6,7 +6,7 @@ export const fi: Copy = {
     titleStart: "Tiedätkö oman",
     titleAccent: "Omega-tasapainosi?",
     body: "Useimmilla on epätasapaino Omega-6:n ja Omega-3:n välillä. Yksinkertainen kotona tehtävä veritesti voi näyttää tarkan suhteesi.",
-    primaryCta: "Testaa Omega-tasapainosi",
+    primaryCta: "Tilaa balance test täältä",
     secondaryCta: "Näin testi toimii",
     partnerCta: "Partnereille",
     statLab: "Sertifioitu laboratorioanalyysi",
@@ -101,11 +101,11 @@ export const fi: Copy = {
     headlinesLabel: "Otsikot",
     ctasLabel: "Call to action -painikkeet",
     headlines: ["Tiedätkö oman Omega-tasapainosi?", "Numero, joka voi muuttaa tapaasi syödä.", "Mittaa se, mikä merkitsee. Aloita Omega-suhteestasi."],
-    ctas: ["Testaa Omega-tasapainosi", "Selvitä suhteesi", "Saat henkilökohtaisen analyysisi"],
+    ctas: ["Tilaa balance test täältä", "Selvitä suhteesi", "Saat henkilökohtaisen analyysisi"],
   },
   sticky: {
     text: "Selvitä Omega-6 / Omega-3-suhteesi tänään",
-    cta: "Testaa Omega-tasapainosi",
+    cta: "Tilaa balance test täältä",
   },
   partner: {
     navLabel: "Partnerit",

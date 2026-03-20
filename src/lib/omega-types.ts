@@ -5,9 +5,13 @@ export type LeadSource = "email_gate" | "customer_form" | "partner_form";
 export type EntityStatus = "new" | "qualified" | "active" | "inactive" | "won" | "lost";
 export type OrderStatus = "pending" | "paid" | "cancelled" | "refunded";
 export type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner_not_verified";
-export type RedirectType = "test" | "shop" | "partner";
-export type RedirectFailureReason = "partner_not_found" | "partner_not_verified" | "destination_missing" | "invalid_type";
+export type RedirectType = "test" | "shop" | "partner" | "consultation";
 export type LeadSubmitMode = "created" | "updated" | "ignored";
+
+export interface TrackClickError {
+  code: string;
+  message: string;
+}
 
 export interface TrackClickRequest {
   ref: string;
@@ -15,10 +19,22 @@ export interface TrackClickRequest {
   session_id: string;
 }
 
-export interface TrackClickResponse {
+export type TrackClickResponse =
+  | {
+      ok: true;
+      destination_url: string;
+    }
+  | {
+      ok: false;
+      error: TrackClickError;
+      destination_url?: string;
+      reason?: string;
+    };
+
+export interface TrackVisitResponse {
   ok: boolean;
-  destination_url?: string;
-  reason?: RedirectFailureReason;
+  partnerFound: boolean;
+  verified: boolean;
 }
 
 export interface TrackVisitRequest {
@@ -30,12 +46,6 @@ export interface TrackVisitRequest {
   utm_medium: string | null;
   utm_campaign: string | null;
   user_agent: string | null;
-}
-
-export interface TrackVisitResponse {
-  ok: boolean;
-  partnerFound: boolean;
-  verified: boolean;
 }
 
 export interface UpsertLeadRequest {

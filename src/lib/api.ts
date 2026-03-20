@@ -37,7 +37,7 @@ export async function trackClickAndGetRedirect(payload: TrackClickRequest): Prom
 
   const data = (await response.json().catch(() => null)) as TrackClickResponse | null;
 
-  if (!response.ok || !data) {
+  if (!data) {
     throw new Error("Could not resolve redirect right now.");
   }
 

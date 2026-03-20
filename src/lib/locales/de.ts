@@ -6,7 +6,7 @@ export const de: Copy = {
     titleStart: "Kennst du deine",
     titleAccent: "Omega-Balance?",
     body: "Die meisten Menschen haben ein Ungleichgewicht zwischen Omega-6 und Omega-3. Ein einfacher Bluttest für zu Hause kann dein genaues Verhältnis zeigen.",
-    primaryCta: "Teste deine Omega-Balance",
+    primaryCta: "Bestelle euren Balance-Test hier",
     secondaryCta: "So funktioniert der Test",
     partnerCta: "Für Partner",
     statLab: "Zertifizierte Laboranalyse",
@@ -101,11 +101,11 @@ export const de: Copy = {
     headlinesLabel: "Überschriften",
     ctasLabel: "Call-to-Action-Buttons",
     headlines: ["Kennst du deine Omega-Balance?", "Die eine Zahl, die dein Essverhalten verändern könnte.", "Miss, was zählt. Starte mit deinem Omega-Verhältnis."],
-    ctas: ["Teste deine Omega-Balance", "Entdecke dein Verhältnis", "Erhalte deine persönliche Analyse"],
+    ctas: ["Bestelle euren Balance-Test hier", "Entdecke dein Verhältnis", "Erhalte deine persönliche Analyse"],
   },
   sticky: {
     text: "Entdecke noch heute dein Omega-6 / Omega-3-Verhältnis",
-    cta: "Teste deine Omega-Balance",
+    cta: "Bestelle euren Balance-Test hier",
   },
   partner: {
     navLabel: "Partner",

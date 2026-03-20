@@ -6,7 +6,7 @@ export const sv: Copy = {
     titleStart: "Känner du till din",
     titleAccent: "Omega-balans?",
     body: "De flesta har en obalans mellan Omega-6 och Omega-3. Ett enkelt blodprov hemma kan visa din exakta kvot.",
-    primaryCta: "Testa din Omega-balans",
+    primaryCta: "Beställ ert balance test här",
     secondaryCta: "Så fungerar testet",
     partnerCta: "För partners",
     statLab: "Certifierad laboratorieanalys",
@@ -101,11 +101,11 @@ export const sv: Copy = {
     headlinesLabel: "Vald rubrik",
     ctasLabel: "Du får en tydlig analys och en digital rapport som hjälper dig att förstå resultatet.",
     headlines: ["Känner du till din Omega-balans?"],
-    ctas: ["Testa din Omega-balans"],
+    ctas: ["Beställ ert balance test här"],
   },
   sticky: {
     text: "Upptäck din Omega-6 / Omega-3-kvot idag",
-    cta: "Testa din Omega-balans",
+    cta: "Beställ ert balance test här",
   },
   partner: {
     navLabel: "Partners",

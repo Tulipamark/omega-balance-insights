@@ -6,8 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-type DestinationType = "test" | "shop" | "partner";
-type FailureReason = "partner_not_found" | "partner_not_verified" | "destination_missing" | "invalid_type";
+type DestinationType = "test" | "shop" | "partner" | "consultation";
+type ErrorCode = "missing_referral" | "partner_not_found" | "partner_not_verified" | "destination_missing" | "consultation_url_missing" | "invalid_type";
 
 type RequestBody = {
   ref?: string;
@@ -18,9 +18,11 @@ type RequestBody = {
 type PartnerRow = {
   id: string;
   referral_code: string;
-  zinzino_test_url: string | null;
-  zinzino_shop_url: string | null;
-  zinzino_partner_url: string | null;
+  consultation_url?: string | null;
+  zinzino_test_url?: string | null;
+  zinzino_shop_url?: string | null;
+  zinzino_partner_url?: string | null;
+  zinzino_consultation_url?: string | null;
   status: "pending" | "verified" | "rejected";
 };
 
@@ -78,11 +80,60 @@ function getDestinationUrl(partner: PartnerRow, type: DestinationType) {
     return partner.zinzino_partner_url;
   }
 
+  if (type === "consultation") {
+    return partner.consultation_url || partner.zinzino_consultation_url;
+  }
+
   return null;
 }
 
-function failure(reason: FailureReason, status = 200) {
-  return jsonResponse({ ok: false, reason }, status);
+function errorResponse(code: ErrorCode, message: string, status = 400) {
+  return jsonResponse({ ok: false, error: { code, message } }, status);
+}
+
+function successResponse(destinationUrl: string) {
+  return jsonResponse({
+    ok: true,
+    destination_url: destinationUrl,
+  });
+}
+
+async function fetchPartnerByReferralCode(supabase: ReturnType<typeof createClient>, referralCode: string) {
+  const modernQuery = await supabase
+    .from("partners")
+    .select("id, referral_code, consultation_url, status")
+    .eq("referral_code", referralCode)
+    .maybeSingle<PartnerRow>();
+
+  if (!modernQuery.error || !isSchemaMismatchError(modernQuery.error)) {
+    return modernQuery;
+  }
+
+  return supabase
+    .from("partners")
+    .select("id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, zinzino_consultation_url, status")
+    .eq("referral_code", referralCode)
+    .maybeSingle<PartnerRow>();
+}
+
+function parseRequest(request: Request) {
+  const url = new URL(request.url);
+
+  return request
+    .json()
+    .catch(() => null)
+    .then((body) => {
+      const payload = (body ?? {}) as RequestBody;
+
+      return {
+        ref: normalizeReferralCode(payload.ref ?? url.searchParams.get("ref")),
+        type: (payload.type ?? (url.searchParams.get("type") as DestinationType | null) ?? "consultation") as DestinationType,
+        sessionId:
+          payload.session_id?.trim() ||
+          url.searchParams.get("session_id")?.trim() ||
+          crypto.randomUUID(),
+      };
+    });
 }
 
 Deno.serve(async (request) => {
@@ -91,27 +142,24 @@ Deno.serve(async (request) => {
   }
 
   if (request.method !== "POST") {
-    return jsonResponse({ ok: false, reason: "invalid_type" satisfies FailureReason }, 405);
+    return errorResponse("invalid_type", "Only POST is supported.", 405);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!supabaseUrl || !supabaseServiceRoleKey) {
-    return jsonResponse({ ok: false, reason: "destination_missing" satisfies FailureReason }, 500);
+    return errorResponse("consultation_url_missing", "Supabase environment is not configured.", 500);
   }
 
-  const body = (await request.json().catch(() => null)) as RequestBody | null;
-  const referralCode = normalizeReferralCode(body?.ref);
-  const destinationType = body?.type;
-  const sessionId = body?.session_id?.trim();
+  const { ref: referralCode, type: destinationType, sessionId } = await parseRequest(request);
 
-  if (!destinationType || !["test", "shop", "partner"].includes(destinationType)) {
-    return failure("invalid_type");
+  if (!destinationType || !["test", "shop", "partner", "consultation"].includes(destinationType)) {
+    return errorResponse("invalid_type", "Unsupported destination type.", 400);
   }
 
   if (!referralCode || !sessionId) {
-    return failure("partner_not_found");
+    return errorResponse("missing_referral", "A referral code is required for routing.", 400);
   }
 
   const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
@@ -121,28 +169,38 @@ Deno.serve(async (request) => {
     },
   });
 
-  const { data: partner, error: partnerError } = await supabase
-    .from("partners")
-    .select("id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, status")
-    .eq("referral_code", referralCode)
-    .maybeSingle<PartnerRow>();
+  const { data: partner, error: partnerError } = await fetchPartnerByReferralCode(supabase, referralCode);
 
   if (partnerError) {
     console.error("Failed to resolve partner", partnerError);
-    return failure("partner_not_found");
+    return errorResponse("partner_not_found", "No partner was found for this referral code.", 404);
   }
 
   if (!partner) {
-    return failure("partner_not_found");
+    return errorResponse("partner_not_found", "No partner was found for this referral code.", 404);
   }
 
   if (partner.status !== "verified") {
-    return failure("partner_not_verified");
+    return errorResponse("partner_not_verified", "This partner is not verified for routing.", 422);
   }
 
   const destinationUrl = getDestinationUrl(partner, destinationType);
-  if (!destinationUrl || !destinationUrl.startsWith("https://")) {
-    return failure("destination_missing");
+  if (!destinationUrl) {
+    return errorResponse(
+      destinationType === "consultation" ? "consultation_url_missing" : "destination_missing",
+      destinationType === "consultation"
+        ? "This partner does not have a consultation destination configured."
+        : "This destination is not configured for the partner.",
+      422,
+    );
+  }
+
+  if (!destinationUrl.startsWith("https://")) {
+    return errorResponse(
+      destinationType === "consultation" ? "consultation_url_missing" : "destination_missing",
+      "The destination URL must use https.",
+      422,
+    );
   }
 
   const { error: clickError } = await logOutboundClick(supabase, {
@@ -159,8 +217,5 @@ Deno.serve(async (request) => {
     }
   }
 
-  return jsonResponse({
-    ok: true,
-    destination_url: destinationUrl,
-  });
+  return successResponse(destinationUrl);
 });
