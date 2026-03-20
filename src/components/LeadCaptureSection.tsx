@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { upsertLead } from "@/lib/api";
 import { Lang, t } from "@/lib/i18n";
-import { submitLead } from "@/lib/omega-data";
-import { getReferralAttribution } from "@/lib/referral";
+import { getOrCreateSessionId, getReferralAttribution } from "@/lib/referral";
 
 interface LeadCaptureSectionProps {
   lang: Lang;
@@ -24,19 +24,25 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
 
     try {
       const attribution = await getReferralAttribution(location.pathname);
-      await submitLead({
-        name: formData.name,
+      const response = await upsertLead({
+        full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        type: "customer_lead",
-        sourcePage: location.pathname,
-        referralCode: attribution.referralCode,
-        referredByUserId: attribution.referredByUserId,
+        ref: attribution.referralCode,
+        session_id: getOrCreateSessionId(),
+        lead_type: "customer",
+        lead_source: "customer_form",
+        source_page: location.pathname,
         details: {
           intent: action,
           landingPage: attribution.landingPage,
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Kunde inte skicka formuläret just nu.");
+      }
+
       setSubmitted(true);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Kunde inte skicka formuläret just nu.");

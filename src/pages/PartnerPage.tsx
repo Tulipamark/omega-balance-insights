@@ -7,9 +7,9 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { upsertLead } from "@/lib/api";
 import { Lang, t } from "@/lib/i18n";
-import { submitLead } from "@/lib/omega-data";
-import { getReferralAttribution } from "@/lib/referral";
+import { getOrCreateSessionId, getReferralAttribution } from "@/lib/referral";
 
 interface PartnerPageProps {
   lang: Lang;
@@ -381,14 +381,15 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
     try {
       const attribution = await getReferralAttribution(location.pathname);
-      await submitLead({
-        name: formData.name,
+      const response = await upsertLead({
+        full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        type: "partner_lead",
-        sourcePage: location.pathname,
-        referralCode: attribution.referralCode,
-        referredByUserId: attribution.referredByUserId,
+        ref: attribution.referralCode,
+        session_id: getOrCreateSessionId(),
+        lead_type: "partner",
+        lead_source: "partner_form",
+        source_page: location.pathname,
         details: {
           company: formData.company,
           interest: formData.interest,
@@ -397,6 +398,11 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           landingPage: attribution.landingPage,
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Could not submit the partner application.");
+      }
+
       setSubmitted(true);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Could not submit the partner application.");

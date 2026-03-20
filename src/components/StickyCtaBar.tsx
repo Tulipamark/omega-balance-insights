@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lang, t } from "@/lib/i18n";
+import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface StickyCtaBarProps {
   lang: Lang;
@@ -9,6 +10,8 @@ interface StickyCtaBarProps {
 const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
   const copy = t(lang).sticky;
   const [visible, setVisible] = useState(false);
+  const pendingLabel = lang === "sv" ? "Öppnar..." : "Opening...";
+  const genericError = lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now.";
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 600);
@@ -28,9 +31,15 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
         >
           <div className="container-wide flex items-center justify-between gap-4">
             <p className="text-sm font-medium hidden sm:block">{copy.text}</p>
-            <a href="#lead-capture" className="btn-primary text-sm py-3 px-6 whitespace-nowrap">
+            <TrackedOutboundButton
+              destinationType="test"
+              fallbackHref="#lead-capture"
+              className="btn-primary text-sm py-3 px-6 whitespace-nowrap"
+              pendingLabel={pendingLabel}
+              errorMessages={{ generic: genericError }}
+            >
               {copy.cta}
-            </a>
+            </TrackedOutboundButton>
           </div>
         </motion.div>
       )}

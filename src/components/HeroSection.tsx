@@ -3,6 +3,7 @@ import heroVisual from "@/assets/hero-visual.jpg";
 import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface HeroSectionProps {
   lang: Lang;
@@ -11,6 +12,8 @@ interface HeroSectionProps {
 const HeroSection = ({ lang }: HeroSectionProps) => {
   const copy = t(lang).hero;
   const loginLabel = lang === "sv" ? "Logga in" : "Sign in";
+  const pendingLabel = lang === "sv" ? "Öppnar..." : "Opening...";
+  const genericError = lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now.";
 
   return (
     <section className="bg-hero section-padding min-h-[90vh] flex items-center">
@@ -51,9 +54,15 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             </h1>
             <p className="text-lg md:text-xl text-subtle leading-relaxed max-w-lg mb-10">{copy.body}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#lead-capture" className="btn-primary text-center">
+              <TrackedOutboundButton
+                destinationType="test"
+                fallbackHref="#lead-capture"
+                className="btn-primary text-center"
+                pendingLabel={pendingLabel}
+                errorMessages={{ generic: genericError }}
+              >
                 {copy.primaryCta}
-              </a>
+              </TrackedOutboundButton>
               <a href="#how-it-works" className="btn-secondary text-center">
                 {copy.secondaryCta}
               </a>

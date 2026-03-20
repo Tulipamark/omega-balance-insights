@@ -1,12 +1,14 @@
 import { defaultLang, isSupportedLang } from "@/lib/i18n";
-import { createReferralVisit, resolveUserByReferralCode } from "@/lib/omega-data";
+import { resolveUserByReferralCode } from "@/lib/omega-data";
+import { trackVisit } from "@/lib/api";
 import { ReferralAttribution } from "@/lib/omega-types";
 
 const REFERRAL_STORAGE_KEY = "omega:referral-context";
 const REFERRAL_COOKIE_KEY = "omega_referral_code";
-const VISITOR_STORAGE_KEY = "omega:visitor-id";
+const SESSION_STORAGE_KEY = "omega:session-id";
+const SESSION_COOKIE_KEY = "omega_session_id";
 const VISIT_CACHE_KEY = "omega:last-visit";
-const RESERVED_SEGMENTS = new Set(["integritet", "villkor", "kontakt", "dashboard"]);
+const RESERVED_SEGMENTS = new Set(["integritet", "villkor", "kontakt", "dashboard", "partners"]);
 
 type StoredReferral = {
   referralCode: string;
@@ -95,18 +97,49 @@ export function getStoredReferral() {
   };
 }
 
-export function getOrCreateVisitorId() {
+export function getActiveReferralCode(pathname: string, search: string) {
+  return getReferralCandidate(pathname, search) || getStoredReferral()?.referralCode || null;
+}
+
+export function persistSessionId(sessionId: string) {
   if (typeof window === "undefined") {
-    return "server";
+    return;
   }
 
-  const existing = window.localStorage.getItem(VISITOR_STORAGE_KEY);
+  window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+  document.cookie = `${SESSION_COOKIE_KEY}=${sessionId}; path=/; max-age=${60 * 60 * 24 * 30}`;
+}
+
+export function getStoredSessionId() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const stored = window.localStorage.getItem(SESSION_STORAGE_KEY);
+  if (stored) {
+    return stored;
+  }
+
+  return (
+    document.cookie
+      .split("; ")
+      .find((item) => item.startsWith(`${SESSION_COOKIE_KEY}=`))
+      ?.split("=")[1] || null
+  );
+}
+
+export function getOrCreateSessionId() {
+  if (typeof window === "undefined") {
+    return "server-session";
+  }
+
+  const existing = getStoredSessionId();
   if (existing) {
     return existing;
   }
 
-  const next = window.crypto?.randomUUID?.() || `visitor-${Date.now()}`;
-  window.localStorage.setItem(VISITOR_STORAGE_KEY, next);
+  const next = window.crypto?.randomUUID?.() || `session-${Date.now()}`;
+  persistSessionId(next);
   return next;
 }
 
@@ -130,8 +163,38 @@ export async function getReferralAttribution(pathname: string): Promise<Referral
   };
 }
 
+export function shouldTrackReferralLanding(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
+
+  if (segments.length === 0) {
+    return true;
+  }
+
+  if (segments.length === 1 && isSupportedLang(segments[0])) {
+    return true;
+  }
+
+  if (
+    segments.length === 2 &&
+    isSupportedLang(segments[0]) &&
+    segments[1] === "partners"
+  ) {
+    return true;
+  }
+
+  if (segments.length === 1 && segments[0] === "partners") {
+    return true;
+  }
+
+  return false;
+}
+
 export async function captureReferralVisit(pathname: string, search: string) {
   if (typeof window === "undefined") {
+    return;
+  }
+
+  if (!shouldTrackReferralLanding(pathname)) {
     return;
   }
 
@@ -141,6 +204,7 @@ export async function captureReferralVisit(pathname: string, search: string) {
   }
 
   persistReferralCode(referralCode, pathname);
+  const sessionId = getOrCreateSessionId();
 
   const cacheKey = `${referralCode}:${pathname}:${search}`;
   if (window.sessionStorage.getItem(VISIT_CACHE_KEY) === cacheKey) {
@@ -148,12 +212,15 @@ export async function captureReferralVisit(pathname: string, search: string) {
   }
 
   const params = new URLSearchParams(search);
-  await createReferralVisit({
-    referral_code: referralCode,
+  await trackVisit({
+    ref: referralCode,
+    session_id: sessionId,
     landing_page: pathname,
-    visitor_id: getOrCreateVisitorId(),
+    referrer: document.referrer || null,
     utm_source: params.get("utm_source"),
+    utm_medium: params.get("utm_medium"),
     utm_campaign: params.get("utm_campaign"),
+    user_agent: navigator.userAgent || null,
   });
 
   window.sessionStorage.setItem(VISIT_CACHE_KEY, cacheKey);

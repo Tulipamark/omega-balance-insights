@@ -57,11 +57,17 @@ export interface PartnerRelationship {
 
 export interface ReferralVisit {
   id: string;
+  partner_id?: string | null;
   referral_code?: string | null;
+  session_id?: string | null;
   landing_page?: string | null;
+  referrer?: string | null;
   visitor_id?: string | null;
   utm_source?: string | null;
+  utm_medium?: string | null;
   utm_campaign?: string | null;
+  user_agent?: string | null;
+  ip_hash?: string | null;
   created_at: string;
 }
 

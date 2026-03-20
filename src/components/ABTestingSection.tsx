@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Lang, t } from "@/lib/i18n";
+import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface ABTestingSectionProps {
   lang: Lang;
@@ -9,6 +10,8 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
   const copy = t(lang).abTesting;
   const headline = copy.headlines[0] ?? "";
   const cta = copy.ctas[0] ?? "";
+  const pendingLabel = lang === "sv" ? "Öppnar..." : "Opening...";
+  const genericError = lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now.";
 
   return (
     <section className="section-padding bg-section-alt">
@@ -29,9 +32,15 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
               {headline}
             </p>
             <div className="mt-8 flex justify-center">
-              <a href="#lead-capture" className="btn-primary min-w-[240px] text-center">
+              <TrackedOutboundButton
+                destinationType="test"
+                fallbackHref="#lead-capture"
+                className="btn-primary min-w-[240px] text-center"
+                pendingLabel={pendingLabel}
+                errorMessages={{ generic: genericError }}
+              >
                 {cta}
-              </a>
+              </TrackedOutboundButton>
             </div>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-subtle">
               {copy.ctasLabel}
