@@ -101,7 +101,7 @@ function successResponse(destinationUrl: string) {
 async function fetchPartnerByReferralCode(supabase: ReturnType<typeof createClient>, referralCode: string) {
   const modernQuery = await supabase
     .from("partners")
-    .select("id, referral_code, consultation_url, status")
+    .select("id, referral_code, consultation_url, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, status")
     .eq("referral_code", referralCode)
     .maybeSingle<PartnerRow>();
 

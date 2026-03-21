@@ -6,6 +6,8 @@ interface ABTestingSectionProps {
   lang: Lang;
 }
 
+const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
+
 const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
   const copy = t(lang).abTesting;
   const headline = copy.headlines[0] ?? "";
@@ -34,7 +36,7 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
             <div className="mt-8 flex justify-center">
               <TrackedOutboundButton
                 destinationType="test"
-                fallbackHref="#lead-capture"
+                fallbackHref={DEFAULT_ZINZINO_TEST_URL}
                 className="btn-primary min-w-[240px] text-center"
                 pendingLabel={pendingLabel}
                 errorMessages={{ generic: genericError }}

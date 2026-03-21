@@ -9,6 +9,8 @@ interface HeroSectionProps {
   lang: Lang;
 }
 
+const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
+
 const HeroSection = ({ lang }: HeroSectionProps) => {
   const copy = t(lang).hero;
   const loginLabel = lang === "sv" ? "Logga in" : "Sign in";
@@ -56,7 +58,7 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             <div className="flex flex-col sm:flex-row gap-4">
               <TrackedOutboundButton
                 destinationType="test"
-                fallbackHref="#lead-capture"
+                fallbackHref={DEFAULT_ZINZINO_TEST_URL}
                 className="btn-primary text-center"
                 pendingLabel={pendingLabel}
                 errorMessages={{ generic: genericError }}

@@ -47,7 +47,9 @@ const App = () => (
 );
 
 function HomePageWrapper() {
-  return <PartnerPage lang={defaultLang} />;
+  const location = useLocation();
+
+  return <Navigate to={`/${defaultLang}${location.search}${location.hash}`} replace />;
 }
 
 function PartnerPageWrapper() {

@@ -7,6 +7,8 @@ interface StickyCtaBarProps {
   lang: Lang;
 }
 
+const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
+
 const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
   const copy = t(lang).sticky;
   const [visible, setVisible] = useState(false);
@@ -33,7 +35,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
             <p className="text-sm font-medium hidden sm:block">{copy.text}</p>
             <TrackedOutboundButton
               destinationType="test"
-              fallbackHref="#lead-capture"
+              fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary text-sm py-3 px-6 whitespace-nowrap"
               pendingLabel={pendingLabel}
               errorMessages={{ generic: genericError }}
