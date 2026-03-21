@@ -13,18 +13,26 @@ type TrackedOutboundButtonProps = {
 };
 
 const reasonCopy: Record<string, string> = {
-  partner_not_found: "Ingen giltig partnerlänk hittades för den här hänvisningen.",
-  partner_not_verified: "Partnern är inte verifierad ännu.",
-  destination_missing: "Målet för den här länken är inte klart ännu.",
-  invalid_type: "Länken kunde inte tolkas korrekt.",
+  partner_not_found: "Ingen giltig partnerlank hittades for den har hanvisningen.",
+  partner_not_verified: "Partnern ar inte verifierad annu.",
+  destination_missing: "Malet for den har lanken ar inte klart annu.",
+  invalid_type: "Lanken kunde inte tolkas korrekt.",
 };
+
+const fallbackEligibleErrors = new Set([
+  "partner_not_found",
+  "partner_not_verified",
+  "destination_missing",
+]);
+
+const genericErrorCopy = "Lanken kunde inte oppnas just nu.";
 
 const TrackedOutboundButton = ({
   destinationType,
   fallbackHref,
   className,
   children,
-  pendingLabel = "Öppnar...",
+  pendingLabel = "Oppnar...",
   errorMessages,
 }: TrackedOutboundButtonProps) => {
   const location = useLocation();
@@ -55,15 +63,21 @@ const TrackedOutboundButton = ({
       });
 
       if (!result.ok || !result.destination_url) {
-        const reason = result.reason || "destination_missing";
-        setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || "Länken kunde inte öppnas just nu.");
+        const reason = result.error?.code || result.reason || "destination_missing";
+
+        if (fallbackEligibleErrors.has(reason)) {
+          window.location.assign(fallbackHref);
+          return;
+        }
+
+        setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || genericErrorCopy);
         return;
       }
 
       window.location.assign(result.destination_url);
     } catch (error) {
       console.error("Outbound redirect failed", error);
-      setErrorMessage(errorMessages?.generic || "Länken kunde inte öppnas just nu.");
+      setErrorMessage(errorMessages?.generic || genericErrorCopy);
     } finally {
       setPending(false);
     }
