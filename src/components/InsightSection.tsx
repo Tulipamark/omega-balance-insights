@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
+import type { Lang } from "@/lib/i18n";
+import { insightCopyByLang } from "@/lib/funnel-copy";
 
-const points = [
-  "Inflammation",
-  "Energi",
-  "Allmän hälsa",
-];
+interface InsightSectionProps {
+  lang: Lang;
+}
 
-const InsightSection = () => {
+const InsightSection = ({ lang }: InsightSectionProps) => {
+  const copy = insightCopyByLang[lang];
+
   return (
     <section className="px-4 py-12 md:px-6">
       <div className="container-narrow mx-auto max-w-3xl text-center">
@@ -17,7 +19,7 @@ const InsightSection = () => {
           transition={{ duration: 0.5 }}
           className="text-3xl font-semibold tracking-tight md:text-4xl"
         >
-          De flesta har en obalans mellan Omega-6 och Omega-3 - utan att veta om det.
+          {copy.title}
         </motion.h2>
 
         <motion.p
@@ -27,7 +29,7 @@ const InsightSection = () => {
           transition={{ duration: 0.5, delay: 0.08 }}
           className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-subtle"
         >
-          Det kan påverka hur du mår i vardagen och göra det svårare att förstå vad kroppen faktiskt behöver.
+          {copy.body}
         </motion.p>
 
         <motion.ul
@@ -37,7 +39,7 @@ const InsightSection = () => {
           transition={{ duration: 0.5, delay: 0.16 }}
           className="mx-auto mt-8 grid max-w-xl gap-3 text-left md:grid-cols-3 md:text-center"
         >
-          {points.map((point) => (
+          {copy.points.map((point) => (
             <li key={point} className="rounded-2xl border border-border/70 bg-card px-5 py-4 text-base font-medium text-foreground shadow-card">
               • {point}
             </li>

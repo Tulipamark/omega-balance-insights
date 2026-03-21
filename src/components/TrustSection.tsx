@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
+import type { Lang } from "@/lib/i18n";
+import { trustItemsByLang } from "@/lib/funnel-copy";
 
-const trustItems = [
-  "Blodbaserat test",
-  "Enkelt att göra hemma",
-  "Personliga resultat",
-];
+interface TrustSectionProps {
+  lang: Lang;
+}
 
-const TrustSection = () => {
+const TrustSection = ({ lang }: TrustSectionProps) => {
+  const trustItems = trustItemsByLang[lang];
+
   return (
     <section className="bg-section-alt px-4 py-10 md:px-6">
       <div className="container-narrow mx-auto">

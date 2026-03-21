@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import type { Lang } from "@/lib/i18n";
+import { t, type Lang } from "@/lib/i18n";
+import { funnelHeroCopy } from "@/lib/funnel-copy";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import VideoSection from "@/components/VideoSection";
@@ -12,6 +13,9 @@ interface SwedishFunnelHeroSectionProps {
 const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
+  const copy = t(lang);
+  const heroCopy = funnelHeroCopy[lang];
+
   return (
     <section className="bg-hero px-4 pb-12 pt-8 md:px-6 md:pb-14 md:pt-10">
       <div className="container-wide mx-auto">
@@ -24,13 +28,13 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               to="/dashboard/login"
               className="inline-flex whitespace-nowrap text-xs font-medium text-subtle transition-colors hover:text-foreground sm:text-sm"
             >
-              Logga in
+              {lang === "sv" ? "Logga in" : "Sign in"}
             </Link>
             <Link
               to={`/${lang}/partners`}
               className="inline-flex whitespace-nowrap rounded-full border border-border bg-card/90 px-3 py-2 text-xs font-medium text-foreground shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
             >
-              För partners
+              {copy.hero.partnerCta}
             </Link>
             <LanguageSwitcher lang={lang} />
           </div>
@@ -43,15 +47,15 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
           className="mx-auto max-w-5xl text-center"
         >
           <span className="badge-accent inline-block rounded-full px-4 py-1.5 text-sm font-medium tracking-wide">
-            Vetenskaplig fettsyreanalys
+            {copy.hero.badge}
           </span>
 
           <h1 className="mx-auto mt-5 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
-            Testa din Omega-balans på 2 minuter
+            {heroCopy.headline}
           </h1>
 
           <p className="mx-auto mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">
-            De flesta vet inte hur deras omega-6/omega-3-balans faktiskt ser ut. Det här enkla hemmatestet ger dig svart på vitt.
+            {heroCopy.supporting}
           </p>
 
           <div className="mt-7">
@@ -63,18 +67,18 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full text-center"
-              pendingLabel="Öppnar..."
-              errorMessages={{ generic: "Länken kunde inte öppnas just nu." }}
+              pendingLabel={lang === "sv" ? "Öppnar..." : "Opening..."}
+              errorMessages={{ generic: lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now." }}
             >
-              Gör testet nu
+              {lang === "sv" ? "Gör testet nu" : copy.hero.primaryCta}
             </TrackedOutboundButton>
             <a href="#how-it-works" className="btn-secondary text-center">
-              Se hur testet fungerar
+              {lang === "sv" ? "Se hur testet fungerar" : copy.hero.secondaryCta}
             </a>
           </div>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm font-medium tracking-wide text-subtle">
-            Enkelt hemmatest • Tydligt resultat • Tar bara några minuter
+            {heroCopy.trust}
           </p>
         </motion.div>
       </div>
