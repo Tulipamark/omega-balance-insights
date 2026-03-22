@@ -85,7 +85,7 @@ Få in en ny affiliate utan att upprepa felen vi såg innan `PER8421` blev verif
 - alla aktiva destinationslänkar fungerar
 - live smoke test är godkänt
 - eventdata skrivs korrekt i databasen
-- affiliate är införd i [live-referral-registry.md](/c:/Users/Heléne/omegabalance-lovable/docs/live-referral-registry.md)
+- affiliate är införd i [live-referral-registry.md](./live-referral-registry.md)
 
 ## Stoppskyltar
 

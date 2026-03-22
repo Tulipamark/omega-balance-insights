@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { ReactNode } from "react";
 import { BarChart3, LayoutDashboard, LogOut, Network, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
