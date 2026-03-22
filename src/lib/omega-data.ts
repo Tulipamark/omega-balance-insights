@@ -475,6 +475,18 @@ export async function sendMagicLink(email: string) {
   }
 }
 
+export async function signInWithPassword(email: string, password: string) {
+  const client = requireSupabase();
+  const { error } = await client.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
 export async function signOutPortalUser() {
   if (!supabase) {
     return;

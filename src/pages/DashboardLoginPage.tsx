@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
-import { getDemoPartnerOptions, getPortalAccessState, sendMagicLink } from "@/lib/omega-data";
+import { getDemoPartnerOptions, getPortalAccessState, signInWithPassword } from "@/lib/omega-data";
 
 const demoPartners = getDemoPartnerOptions();
 
@@ -13,6 +13,7 @@ const DashboardLoginPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const accessQuery = useQuery({
@@ -44,10 +45,10 @@ const DashboardLoginPage = () => {
     setStatus(null);
 
     try {
-      await sendMagicLink(email);
-      setStatus("Magic link sent. Open the email and you will land directly in the dashboard.");
+      await signInWithPassword(email, password);
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not send the login link.");
+      setStatus(error instanceof Error ? error.message : "Could not sign in.");
     } finally {
       setSubmitting(false);
     }
@@ -102,7 +103,7 @@ const DashboardLoginPage = () => {
                 </div>
               ) : null}
               <label className="block">
-                <span className="mb-2 block text-sm font-medium text-foreground">Email</span>
+                <span className="mb-2 block text-sm font-medium text-foreground">User ID / email</span>
                 <Input
                   required
                   type="email"
@@ -112,8 +113,19 @@ const DashboardLoginPage = () => {
                   placeholder="partner@omegabalance.se"
                 />
               </label>
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-foreground">Password</span>
+                <Input
+                  required
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  className="h-12 rounded-xl"
+                  placeholder="••••••••"
+                />
+              </label>
               <Button type="submit" disabled={submitting} className="h-12 w-full rounded-xl">
-                {submitting ? "Sending..." : "Send magic link"}
+                {submitting ? "Signing in..." : "Sign in"}
               </Button>
               {status ? <p className="text-sm leading-6 text-subtle">{status}</p> : null}
               {accessQuery.data?.authUser && !accessQuery.data.portalUser ? (
@@ -122,6 +134,9 @@ const DashboardLoginPage = () => {
                   but the dashboard profile is still missing.
                 </p>
               ) : null}
+              <p className="text-sm leading-6 text-subtle">
+                Use the email/user ID and password that have been created for your backoffice account in Supabase Auth.
+              </p>
             </form>
           ) : (
             <div className="mt-8 rounded-2xl border border-dashed border-primary/35 bg-accent/50 p-5">

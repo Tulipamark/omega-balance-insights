@@ -55,6 +55,20 @@ type LeadInsertPayload = {
 
 type LeadUpdatePayload = LeadInsertPayload;
 
+type NotificationPayload = {
+  mode: "created" | "updated";
+  email: string;
+  fullName: string;
+  phone: string | null;
+  leadType: LeadType;
+  leadSource: LeadSource;
+  sourcePage: string | null;
+  sessionId: string | null;
+  referralCode: string | null;
+  partnerStatus: PartnerRow["status"] | null;
+  details: Record<string, unknown>;
+};
+
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -92,6 +106,56 @@ function isSchemaMismatchError(error: unknown) {
     (message.includes("relation") && message.includes("does not exist")) ||
     message.includes("could not find the table")
   );
+}
+
+async function sendLeadNotification(payload: NotificationPayload) {
+  const resendApiKey = Deno.env.get("RESEND_API_KEY");
+  const notificationTo = Deno.env.get("LEAD_NOTIFICATION_TO");
+  const notificationFrom = Deno.env.get("LEAD_NOTIFICATION_FROM") || "OmegaBalance <onboarding@resend.dev>";
+
+  if (!resendApiKey || !notificationTo) {
+    console.info("Lead notification skipped because RESEND_API_KEY or LEAD_NOTIFICATION_TO is missing.");
+    return;
+  }
+
+  const intent = typeof payload.details.intent === "string" ? payload.details.intent : "lead";
+  const detailEntries = Object.entries(payload.details || {})
+    .map(([key, value]) => `<li><strong>${key}</strong>: ${String(value)}</li>`)
+    .join("");
+
+  const html = `
+    <h2>New OmegaBalance ${payload.leadType} ${intent}</h2>
+    <p><strong>Mode:</strong> ${payload.mode}</p>
+    <p><strong>Name:</strong> ${payload.fullName}</p>
+    <p><strong>Email:</strong> ${payload.email}</p>
+    <p><strong>Phone:</strong> ${payload.phone || "-"}</p>
+    <p><strong>Lead type:</strong> ${payload.leadType}</p>
+    <p><strong>Lead source:</strong> ${payload.leadSource}</p>
+    <p><strong>Source page:</strong> ${payload.sourcePage || "-"}</p>
+    <p><strong>Referral code:</strong> ${payload.referralCode || "-"}</p>
+    <p><strong>Partner status:</strong> ${payload.partnerStatus || "-"}</p>
+    <p><strong>Session ID:</strong> ${payload.sessionId || "-"}</p>
+    ${detailEntries ? `<h3>Details</h3><ul>${detailEntries}</ul>` : ""}
+  `;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: notificationFrom,
+      to: [notificationTo],
+      subject: `OmegaBalance ${payload.leadType} ${intent}: ${payload.fullName}`,
+      html,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+    console.error("Failed to send lead notification", response.status, errorText);
+  }
 }
 
 async function fetchExistingLeadByEmail(supabase: ReturnType<typeof createClient>, email: string) {
@@ -259,6 +323,20 @@ Deno.serve(async (request) => {
       return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason });
     }
 
+    await sendLeadNotification({
+      mode: "created",
+      email,
+      fullName,
+      phone,
+      leadType,
+      leadSource,
+      sourcePage,
+      sessionId,
+      referralCode: partner?.referral_code || null,
+      partnerStatus: partner?.status || null,
+      details,
+    });
+
     return jsonResponse({ ok: true, mode: "created", lead_id: createdLead.id });
   }
 
@@ -306,6 +384,20 @@ Deno.serve(async (request) => {
     console.error("Failed to update lead", updateError);
     return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason });
   }
+
+  await sendLeadNotification({
+    mode: "updated",
+    email,
+    fullName,
+    phone,
+    leadType,
+    leadSource,
+    sourcePage,
+    sessionId,
+    referralCode: partner?.referral_code || null,
+    partnerStatus: partner?.status || null,
+    details,
+  });
 
   return jsonResponse({ ok: true, mode: "updated", lead_id: existingLead.id });
 });
