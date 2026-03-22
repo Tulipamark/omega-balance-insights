@@ -1,5 +1,5 @@
 import { type FormEvent, useMemo, useState } from "react";
-import { ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -12,12 +12,19 @@ const DashboardLoginPage = () => {
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const accessQuery = useQuery({
     queryKey: ["portal-access"],
     queryFn: getPortalAccessState,
     enabled: isSupabaseConfigured,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => {
+      const accessState = query.state.data;
+      return accessState?.authUser && !accessState.portalUser ? 3000 : false;
+    },
   });
 
   const reasonMessage = useMemo(() => {
@@ -44,6 +51,7 @@ const DashboardLoginPage = () => {
 
     try {
       await signInWithPassword(email, password);
+      await accessQuery.refetch();
       navigate("/dashboard", { replace: true });
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not sign in.");
@@ -62,17 +70,17 @@ const DashboardLoginPage = () => {
         <section className="rounded-[2rem] border border-border/70 bg-white/90 p-8 shadow-elevated md:p-10">
           <p className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">OmegaBalance Backoffice</p>
           <h1 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-            Inloggning för admin och partners
+            Inloggning for admin och partners
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-8 text-subtle">
-            Här loggar du in för att få tillgång till din vy i OmegaBalance och följa upp leads, kunder och partnerutveckling.
+            Har loggar du in for att fa tillgang till din vy i OmegaBalance och folja upp leads, kunder och partnerutveckling.
           </p>
 
           <div className="mt-8 space-y-4">
             {[
-              "Admin får en samlad överblick över leads, kunder, partneransökningar och nätverk.",
-              "Partners ser bara det som hör till deras egen länk, deras leads och deras team.",
-              "Allt är byggt för tydlig uppföljning utan onödig komplexitet.",
+              "Admin far en samlad oversikt over leads, kunder, partneransokningar och natverk.",
+              "Partners ser bara det som hor till deras egen lank, deras leads och deras team.",
+              "Allt ar byggt for tydlig uppfoljning utan onodig komplexitet.",
             ].map((item) => (
               <div key={item} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
                 <ShieldCheck className="mt-1 h-5 w-5 text-primary" />
@@ -113,14 +121,25 @@ const DashboardLoginPage = () => {
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-foreground">Password</span>
-                <Input
-                  required
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  className="h-12 rounded-xl"
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <Input
+                    required
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="h-12 rounded-xl pr-12"
+                    placeholder="********"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </label>
               <Button type="submit" disabled={submitting} className="h-12 w-full rounded-xl">
                 {submitting ? "Signing in..." : "Sign in"}

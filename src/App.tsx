@@ -94,6 +94,8 @@ function DashboardIndexPage() {
     queryKey: ["portal-access"],
     queryFn: getPortalAccessState,
     enabled: isSupabaseConfigured && !isDemoRoute,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   if (!isSupabaseConfigured || isDemoRoute) {
@@ -133,6 +135,8 @@ function ProtectedDashboardRoute({
     queryKey: ["portal-access"],
     queryFn: getPortalAccessState,
     enabled: isSupabaseConfigured && !isDemoRoute,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   if (!isSupabaseConfigured || isDemoRoute) {
