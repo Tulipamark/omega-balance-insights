@@ -1,5 +1,6 @@
+import * as React from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +10,7 @@ import PrivacyPage from "./pages/PrivacyPage.tsx";
 import TermsPage from "./pages/TermsPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import DashboardLoginPage from "./pages/DashboardLoginPage.tsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
@@ -26,9 +28,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <RecoveryRedirectBoundary />
         <ReferralTrackingBoundary />
         <Routes>
           <Route path="/" element={<HomePageWrapper />} />
+          <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route path="/integritet" element={<PrivacyPage />} />
           <Route path="/villkor" element={<TermsPage />} />
           <Route path="/kontakt" element={<ContactPage />} />
@@ -60,6 +64,26 @@ function PartnerPageWrapper() {
 
 function ReferralTrackingBoundary() {
   useReferralTracking();
+  return null;
+}
+
+function RecoveryRedirectBoundary() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+    if (hashParams.get("type") !== "recovery") {
+      return;
+    }
+
+    if (location.pathname === "/auth/reset-password") {
+      return;
+    }
+
+    navigate(`/auth/reset-password${location.hash}`, { replace: true });
+  }, [location.hash, location.pathname, navigate]);
+
   return null;
 }
 
