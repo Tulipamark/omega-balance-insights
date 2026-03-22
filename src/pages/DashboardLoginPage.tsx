@@ -15,6 +15,7 @@ const DashboardLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
   const accessQuery = useQuery({
     queryKey: ["portal-access"],
     queryFn: getPortalAccessState,
@@ -61,19 +62,27 @@ const DashboardLoginPage = () => {
   };
 
   if (isSupabaseConfigured && accessQuery.data?.portalUser) {
-    return <Navigate to={accessQuery.data.portalUser.role === "admin" ? "/dashboard/admin" : "/dashboard/partner"} replace />;
+    return (
+      <Navigate
+        to={accessQuery.data.portalUser.role === "admin" ? "/dashboard/admin" : "/dashboard/partner"}
+        replace
+      />
+    );
   }
 
   return (
     <div className="min-h-screen bg-hero px-6 py-10 md:px-10 md:py-14">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <section className="rounded-[2rem] border border-border/70 bg-white/90 p-8 shadow-elevated md:p-10">
-          <p className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">OmegaBalance Backoffice</p>
+          <p className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">
+            OmegaBalance Backoffice
+          </p>
           <h1 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
             Inloggning för admin och partners
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-8 text-subtle">
-            Här loggar du in för att få tillgång till din vy i OmegaBalance och följa upp leads, kunder och partnerutveckling.
+            Här loggar du in för att få tillgång till din vy i OmegaBalance och följa upp leads, kunder och
+            partnerutveckling.
           </p>
 
           <div className="mt-8 space-y-4">
@@ -147,19 +156,20 @@ const DashboardLoginPage = () => {
               {status ? <p className="text-sm leading-6 text-subtle">{status}</p> : null}
               {accessQuery.data?.authUser && !accessQuery.data.portalUser ? (
                 <p className="text-sm leading-6 text-subtle">
-                  Auth session found for <span className="font-medium text-foreground">{accessQuery.data.authUser.email || "this account"}</span>,
+                  Auth session found for{" "}
+                  <span className="font-medium text-foreground">{accessQuery.data.authUser.email || "this account"}</span>,
                   but the dashboard profile is still missing.
                 </p>
               ) : null}
               <p className="text-sm leading-6 text-subtle">
-                Use the email/user ID and password that have been created for your backoffice account in Supabase Auth.
+                Logga in med de uppgifter du har fått för ditt backoffice-konto.
               </p>
             </form>
           ) : (
             <div className="mt-8 rounded-2xl border border-dashed border-primary/35 bg-accent/50 p-5">
               <p className="text-sm leading-6 text-foreground/85">
-                Supabase environment variables are not configured yet. Demo shortcuts below let you review the dashboard structure
-                before wiring up the live project.
+                Supabase environment variables are not configured yet. Demo shortcuts below let you review the
+                dashboard structure before wiring up the live project.
               </p>
             </div>
           )}
