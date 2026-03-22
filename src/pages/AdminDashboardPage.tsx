@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Activity, ArrowRightLeft, BadgeCheck, Network, Users } from "lucide-react";
+import { Activity, ArrowRightLeft, BadgeCheck, Copy, Network, Users } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { onboardPartnerFromLead } from "@/lib/api";
@@ -31,6 +31,7 @@ const AdminDashboardPage = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [provisionedPartner, setProvisionedPartner] = useState<OnboardPartnerFromLeadResponse | null>(null);
   const [provisionError, setProvisionError] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const dashboardQuery = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: getAdminDashboardData,
@@ -41,6 +42,7 @@ const AdminDashboardPage = () => {
     onSuccess: async (result) => {
       setProvisionedPartner(result);
       setProvisionError(null);
+      setCopyStatus(null);
       await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: (error) => {
@@ -68,6 +70,27 @@ const AdminDashboardPage = () => {
     setSelectedLead(null);
     setProvisionedPartner(null);
     setProvisionError(null);
+    setCopyStatus(null);
+  };
+
+  const copyProvisioningDetails = async () => {
+    if (!provisionedPartner?.email) {
+      return;
+    }
+
+    const lines = [
+      `Email: ${provisionedPartner.email}`,
+      `Referral code: ${provisionedPartner.referral_code || "-"}`,
+      `Temporary password: ${provisionedPartner.temporary_password || "Existing auth account reused"}`,
+      "Login URL: /dashboard/login",
+    ];
+
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      setCopyStatus("Copied account details.");
+    } catch {
+      setCopyStatus("Could not copy automatically. Copy the details manually.");
+    }
   };
 
   return (
@@ -244,6 +267,17 @@ const AdminDashboardPage = () => {
                   <p><span className="font-medium">Referral code:</span> {provisionedPartner.referral_code}</p>
                   <p><span className="font-medium">Temporary password:</span> {provisionedPartner.temporary_password || "Existing auth account reused"}</p>
                   <p className="mt-2 text-xs">Share the temporary password securely. We can later replace this with a branded password setup email.</p>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <Button type="button" variant="outline" className="rounded-xl bg-white" onClick={() => void copyProvisioningDetails()}>
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy account details
+                    </Button>
+                    {copyStatus ? <p className="text-xs">{copyStatus}</p> : null}
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-emerald-300/70 bg-white/80 p-4 text-xs leading-6">
+                    <p className="font-medium text-foreground">Next step</p>
+                    <p>Ask the partner to sign in at <span className="font-medium">/dashboard/login</span> with the temporary password and then change it.</p>
+                  </div>
                 </div>
               ) : null}
 
