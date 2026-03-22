@@ -27,7 +27,7 @@ const InsightSection = ({ lang }: InsightSectionProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, delay: 0.08 }}
-          className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-subtle"
+          className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-lg leading-8 text-subtle"
         >
           {copy.body}
         </motion.p>

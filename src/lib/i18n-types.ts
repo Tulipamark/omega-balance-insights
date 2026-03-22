@@ -79,7 +79,6 @@ export type Copy = {
   };
   sticky: {
     text: string;
-    cta: string;
   };
   partner: {
     navLabel: string;

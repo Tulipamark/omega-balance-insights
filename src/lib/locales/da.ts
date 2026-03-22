@@ -105,7 +105,6 @@ export const da: Copy = {
   },
   sticky: {
     text: "Opdag dit Omega-6 / Omega-3-forhold i dag",
-    cta: "Bestil jeres balance test her",
   },
   partner: {
     navLabel: "Partnere",

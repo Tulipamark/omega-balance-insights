@@ -70,17 +70,17 @@ const DashboardLoginPage = () => {
         <section className="rounded-[2rem] border border-border/70 bg-white/90 p-8 shadow-elevated md:p-10">
           <p className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">OmegaBalance Backoffice</p>
           <h1 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-            Inloggning for admin och partners
+            Inloggning för admin och partners
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-8 text-subtle">
-            Har loggar du in for att fa tillgang till din vy i OmegaBalance och folja upp leads, kunder och partnerutveckling.
+            Här loggar du in för att få tillgång till din vy i OmegaBalance och följa upp leads, kunder och partnerutveckling.
           </p>
 
           <div className="mt-8 space-y-4">
             {[
-              "Admin far en samlad oversikt over leads, kunder, partneransokningar och natverk.",
-              "Partners ser bara det som hor till deras egen lank, deras leads och deras team.",
-              "Allt ar byggt for tydlig uppfoljning utan onodig komplexitet.",
+              "Admin får en samlad översikt över leads, kunder, partneransökningar och nätverk.",
+              "Partners ser bara det som hör till deras egen länk, deras leads och deras team.",
+              "Allt är byggt för tydlig uppföljning utan onödig komplexitet.",
             ].map((item) => (
               <div key={item} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
                 <ShieldCheck className="mt-1 h-5 w-5 text-primary" />

@@ -105,7 +105,6 @@ export const sv: Copy = {
   },
   sticky: {
     text: "Upptäck din Omega-6 / Omega-3-kvot idag",
-    cta: "Beställ ert balance test här",
   },
   partner: {
     navLabel: "Partners",

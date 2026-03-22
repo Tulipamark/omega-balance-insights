@@ -105,7 +105,6 @@ export const en: Copy = {
   },
   sticky: {
     text: "Discover your Omega-6 / Omega-3 ratio today",
-    cta: "Order your balance test here",
   },
   partner: {
     navLabel: "Partners",

@@ -105,7 +105,6 @@ export const fi: Copy = {
   },
   sticky: {
     text: "Selvitä Omega-6 / Omega-3-suhteesi tänään",
-    cta: "Tilaa balance test täältä",
   },
   partner: {
     navLabel: "Partnerit",
