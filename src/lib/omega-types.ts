@@ -67,6 +67,20 @@ export interface UpsertLeadResponse {
   reason?: LeadFailureReason;
 }
 
+export interface OnboardPartnerFromLeadRequest {
+  lead_id: string;
+}
+
+export interface OnboardPartnerFromLeadResponse {
+  ok: boolean;
+  partner_id?: string;
+  auth_user_id?: string;
+  email?: string;
+  temporary_password?: string;
+  referral_code?: string;
+  error?: string;
+}
+
 export interface AppUser {
   id: string;
   auth_user_id?: string | null;

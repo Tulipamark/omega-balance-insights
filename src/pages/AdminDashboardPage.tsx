@@ -1,13 +1,24 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Activity, ArrowRightLeft, BadgeCheck, Network, Users } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Navigate, useSearchParams } from "react-router-dom";
+import { onboardPartnerFromLead } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DashboardSection, DashboardShell, dashboardIcons } from "@/components/dashboard/DashboardShell";
 import { DataTable } from "@/components/dashboard/DataTable";
 import { MetricCard } from "@/components/dashboard/MetricCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { getAdminDashboardData, signOutPortalUser } from "@/lib/omega-data";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
+import type { Lead, OnboardPartnerFromLeadResponse } from "@/lib/omega-types";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
@@ -15,10 +26,27 @@ function formatDate(value: string) {
 
 const AdminDashboardPage = () => {
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
   const isDemo = searchParams.get("demo") === "admin" || !isSupabaseConfigured;
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [provisionedPartner, setProvisionedPartner] = useState<OnboardPartnerFromLeadResponse | null>(null);
+  const [provisionError, setProvisionError] = useState<string | null>(null);
   const dashboardQuery = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: getAdminDashboardData,
+  });
+
+  const onboardMutation = useMutation({
+    mutationFn: (leadId: string) => onboardPartnerFromLead({ lead_id: leadId }),
+    onSuccess: async (result) => {
+      setProvisionedPartner(result);
+      setProvisionError(null);
+      await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+    },
+    onError: (error) => {
+      setProvisionError(error instanceof Error ? error.message : "Could not provision the partner account.");
+      setProvisionedPartner(null);
+    },
   });
 
   const navigation = useMemo(
@@ -36,10 +64,16 @@ const AdminDashboardPage = () => {
 
   const data = dashboardQuery.data;
 
+  const closeDialog = () => {
+    setSelectedLead(null);
+    setProvisionedPartner(null);
+    setProvisionError(null);
+  };
+
   return (
     <DashboardShell
       title="Admin dashboard"
-      subtitle="Överblick över hela pipen: klick, leads, kunder, partneransökningar och enkel nätverksstruktur utan att gå in i provision eller ranker ännu."
+      subtitle="Overview of the full pipe: clicks, leads, customers, partner applications and a simple network structure without adding commission logic yet."
       roleLabel={isDemo ? "Admin demo" : "Admin"}
       navigation={navigation}
       onSignOut={isDemo ? undefined : () => void signOutPortalUser()}
@@ -49,14 +83,14 @@ const AdminDashboardPage = () => {
       ) : (
         <div className="space-y-8">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <MetricCard label="Total leads" value={data.metrics.totalLeads} helper="Alla kund- och partnerleads i systemet." icon={<Activity className="h-5 w-5" />} />
-            <MetricCard label="Total customers" value={data.metrics.totalCustomers} helper="Kunder som blivit attribuerade till någon partner." icon={<BadgeCheck className="h-5 w-5" />} />
-            <MetricCard label="Partner leads" value={data.metrics.totalPartnerLeads} helper="Ansökningar och intresseanmälningar för partnerskap." icon={<ArrowRightLeft className="h-5 w-5" />} />
-            <MetricCard label="Active partners" value={data.metrics.totalActivePartners} helper="Partners med egen referral code och dashboardåtkomst." icon={<Users className="h-5 w-5" />} />
+            <MetricCard label="Total leads" value={data.metrics.totalLeads} helper="All customer and partner leads in the system." icon={<Activity className="h-5 w-5" />} />
+            <MetricCard label="Total customers" value={data.metrics.totalCustomers} helper="Customers attributed to a partner." icon={<BadgeCheck className="h-5 w-5" />} />
+            <MetricCard label="Partner leads" value={data.metrics.totalPartnerLeads} helper="Applications and expressions of interest for partnership." icon={<ArrowRightLeft className="h-5 w-5" />} />
+            <MetricCard label="Active partners" value={data.metrics.totalActivePartners} helper="Partners with a referral code and dashboard access." icon={<Users className="h-5 w-5" />} />
           </div>
 
           <div className="grid gap-8 xl:grid-cols-2">
-            <DashboardSection title="Leads per partner" description="Snabb bild av vem som driver inflöde just nu.">
+            <DashboardSection title="Leads per partner" description="Quick snapshot of who is driving inflow right now.">
               <DataTable
                 columns={["Partner", "Code", "Clicks", "Leads", "Customers"]}
                 rows={data.leadsPerPartner.map((row) => [
@@ -74,7 +108,7 @@ const AdminDashboardPage = () => {
               />
             </DashboardSection>
 
-            <DashboardSection title="Customers per partner" description="MVP-vyn fokuserar på attribution och relationer, inte utbetalning.">
+            <DashboardSection title="Customers per partner" description="The MVP view focuses on attribution and relationships, not payouts.">
               <DataTable
                 columns={["Partner", "Customers", "Leads", "Clicks"]}
                 rows={data.customersPerPartner.map((row) => [
@@ -89,7 +123,7 @@ const AdminDashboardPage = () => {
           </div>
 
           <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
-            <DashboardSection title="Simple network overview" description="Direkta sponsorrelationer sparas separat så att nivåer och teamvy kan byggas ut senare.">
+            <DashboardSection title="Simple network overview" description="Direct sponsor relationships are stored separately so levels and network views can grow later.">
               <div className="space-y-3">
                 {data.networkOverview.length ? (
                   data.networkOverview.map((member) => (
@@ -110,7 +144,7 @@ const AdminDashboardPage = () => {
               </div>
             </DashboardSection>
 
-            <DashboardSection title="Latest leads" description="Senaste inkomna leads från hela sajten.">
+            <DashboardSection title="Latest leads" description="Latest captured leads from the whole site.">
               <DataTable
                 columns={["Name", "Type", "Referral", "Status", "Created"]}
                 rows={data.recentLeads.map((lead) => [
@@ -130,9 +164,9 @@ const AdminDashboardPage = () => {
             </DashboardSection>
           </div>
 
-          <DashboardSection title="Latest partner applications" description="Partneransökningar separeras via lead type så att onboarding kan börja enkelt men tydligt.">
+          <DashboardSection title="Latest partner applications" description="Partner applications stay separate via lead type so onboarding can begin clearly.">
             <DataTable
-              columns={["Applicant", "Source page", "Referral", "Status", "Received"]}
+              columns={["Applicant", "Source page", "Referral", "Status", "Received", "Action"]}
               rows={data.recentPartnerApplications.map((lead) => [
                 <div key={`${lead.id}-applicant`}>
                   <p className="font-medium text-foreground">{lead.name}</p>
@@ -144,12 +178,26 @@ const AdminDashboardPage = () => {
                 </Badge>,
                 <span key={`${lead.id}-status`} className="capitalize">{lead.status}</span>,
                 <span key={`${lead.id}-date`}>{formatDate(lead.created_at)}</span>,
+                <Button
+                  key={`${lead.id}-action`}
+                  type="button"
+                  variant="outline"
+                  className="rounded-xl"
+                  disabled={isDemo || lead.status === "qualified" || lead.status === "active"}
+                  onClick={() => {
+                    setSelectedLead(lead);
+                    setProvisionedPartner(null);
+                    setProvisionError(null);
+                  }}
+                >
+                  Provision access
+                </Button>,
               ])}
               emptyState="No partner applications yet."
             />
           </DashboardSection>
 
-          <DashboardSection title="Partners" description="Active partners with referral code, sponsor and a quick view of their pipeline.">
+          <DashboardSection title="Partners" description="Active partners with referral code, sponsor and a quick pipeline view.">
             <DataTable
               columns={["Partner", "Code", "Sponsor", "Direct partners", "Leads", "Customers", "Joined"]}
               rows={data.partners.map((partner) => [
@@ -171,6 +219,56 @@ const AdminDashboardPage = () => {
           </DashboardSection>
         </div>
       )}
+
+      <Dialog open={Boolean(selectedLead)} onOpenChange={(open) => !open && closeDialog()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Provision partner access</DialogTitle>
+            <DialogDescription>
+              Create the auth account, connect the portal user, and provision a pending partner profile for the selected application.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedLead ? (
+            <div className="space-y-4 text-sm">
+              <div className="rounded-2xl border border-border/70 bg-secondary/40 p-4">
+                <p><span className="font-medium text-foreground">Applicant:</span> {selectedLead.name}</p>
+                <p><span className="font-medium text-foreground">Email:</span> {selectedLead.email}</p>
+                <p><span className="font-medium text-foreground">Referral:</span> {selectedLead.referral_code || "Direct"}</p>
+              </div>
+
+              {provisionedPartner ? (
+                <div className="rounded-2xl border border-emerald-300/70 bg-emerald-50 p-4 text-emerald-950">
+                  <p className="font-medium">Partner account is ready.</p>
+                  <p className="mt-2"><span className="font-medium">Email:</span> {provisionedPartner.email}</p>
+                  <p><span className="font-medium">Referral code:</span> {provisionedPartner.referral_code}</p>
+                  <p><span className="font-medium">Temporary password:</span> {provisionedPartner.temporary_password || "Existing auth account reused"}</p>
+                  <p className="mt-2 text-xs">Share the temporary password securely. We can later replace this with a branded password setup email.</p>
+                </div>
+              ) : null}
+
+              {provisionError ? (
+                <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-destructive">
+                  {provisionError}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={closeDialog}>
+              Close
+            </Button>
+            <Button
+              type="button"
+              disabled={!selectedLead || onboardMutation.isPending || Boolean(provisionedPartner)}
+              onClick={() => selectedLead && onboardMutation.mutate(selectedLead.id)}
+            >
+              {onboardMutation.isPending ? "Provisioning..." : provisionedPartner ? "Provisioned" : "Create account"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardShell>
   );
 };
