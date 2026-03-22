@@ -58,6 +58,7 @@ const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeade
       className="overflow-hidden rounded-[1.75rem] border border-border/70 bg-card shadow-elevated"
     >
       <video
+        key={lang}
         className="aspect-video w-full bg-black"
         controls
         preload="metadata"
