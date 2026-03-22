@@ -1,3 +1,4 @@
+import * as React from "react";
 import { motion } from "framer-motion";
 import { Lang, defaultLang, t } from "@/lib/i18n";
 
@@ -23,14 +24,43 @@ const transcriptLabelByLang: Record<Lang, string> = {
   it: "Trascrizione video",
 };
 
-function getVideoSources(lang: Lang) {
-  return [`/videos/avatar-video-${lang}.mp4`, "/avatar-video.mp4"];
+const DEFAULT_VIDEO_SRC = "/avatar-video.mp4";
+
+function getLocalizedVideoSrc(lang: Lang) {
+  return `/videos/avatar-video-${lang}.mp4`;
 }
 
 const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeader = true }: VideoSectionProps) => {
   const copy = t(lang).video;
   const transcript = transcriptByLang[lang] || transcriptByLang[defaultLang];
-  const videoSources = getVideoSources(lang);
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+  const [videoSrc, setVideoSrc] = React.useState(() => getLocalizedVideoSrc(lang));
+
+  React.useEffect(() => {
+    setVideoSrc(getLocalizedVideoSrc(lang));
+  }, [lang]);
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    const shouldResume = !video.paused && !video.ended;
+    video.pause();
+    video.currentTime = 0;
+    video.load();
+
+    if (shouldResume) {
+      void video.play().catch(() => {
+        // Ignore autoplay rejections after source swaps.
+      });
+    }
+  }, [lang, videoSrc]);
+
+  const handleVideoError = React.useCallback(() => {
+    setVideoSrc((current) => (current === DEFAULT_VIDEO_SRC ? current : DEFAULT_VIDEO_SRC));
+  }, []);
 
   const header = showHeader ? (
     <motion.div
@@ -58,16 +88,15 @@ const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeade
       className="overflow-hidden rounded-[1.75rem] border border-border/70 bg-card shadow-elevated"
     >
       <video
-        key={lang}
+        ref={videoRef}
         className="aspect-video w-full bg-black"
         controls
         preload="metadata"
         playsInline
         aria-label={copy.title}
+        onError={handleVideoError}
+        src={videoSrc}
       >
-        {videoSources.map((src) => (
-          <source key={src} src={src} type="video/mp4" />
-        ))}
         {copy.placeholder}
       </video>
 
