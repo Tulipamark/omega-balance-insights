@@ -43,7 +43,21 @@ export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string
   },
 };
 
-export const insightCopyByLang: Record<Lang, { title: string; body: string; points: string[]; closingTitle: string; closingBody: string }> = {
+export const trustItemsByLang: Record<Lang, string[]> = {
+  sv: ["Blodbaserat test", "Enkelt att göra hemma", "Personligt mätresultat"],
+  en: ["Blood-based test", "Easy to do at home", "Personal measurement result"],
+  no: ["Blodbasert test", "Enkelt å gjøre hjemme", "Personlig måleresultat"],
+  da: ["Blodbaseret test", "Let at lave derhjemme", "Personligt måleresultat"],
+  fi: ["Veripohjainen testi", "Helppo tehdä kotona", "Henkilökohtainen mittaustulos"],
+  de: ["Blutbasierter Test", "Einfach zu Hause", "Persönliches Messergebnis"],
+  fr: ["Test sanguin", "Simple à faire chez soi", "Résultat de mesure personnel"],
+  it: ["Test basato sul sangue", "Facile da fare a casa", "Risultato di misurazione personale"],
+};
+
+export const insightCopyByLang: Record<
+  Lang,
+  { title: string; body: string; points: string[]; closingTitle: string; closingBody: string }
+> = {
   sv: {
     title: "Många har aldrig mätt sin omega-balans",
     body: "Det är vanligt att utgå från kost eller känsla, men utan ett mätresultat är det svårt att veta hur balansen faktiskt ser ut.",
