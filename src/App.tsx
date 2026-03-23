@@ -40,6 +40,7 @@ const App = () => (
           <Route path="/kontakt" element={<ContactPage />} />
           <Route path="/dashboard" element={<DashboardIndexPage />} />
           <Route path="/dashboard/login" element={<DashboardLoginPage />} />
+          <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
           <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/:lang" element={<Index />} />

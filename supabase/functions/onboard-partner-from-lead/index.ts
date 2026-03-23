@@ -79,8 +79,12 @@ Deno.serve(async (request) => {
   const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const authHeader = request.headers.get("Authorization");
 
-  if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey || !authHeader) {
+  if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceRoleKey) {
     return jsonResponse({ ok: false, error: "Missing configuration" }, 500);
+  }
+
+  if (!authHeader) {
+    return jsonResponse({ ok: false, error: "Missing authorization header" }, 401);
   }
 
   const body = (await request.json().catch(() => null)) as RequestBody | null;

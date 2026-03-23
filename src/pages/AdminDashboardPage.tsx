@@ -32,6 +32,7 @@ const AdminDashboardPage = () => {
   const [provisionedPartner, setProvisionedPartner] = useState<OnboardPartnerFromLeadResponse | null>(null);
   const [provisionError, setProvisionError] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
+  const [zinzinoVerified, setZinzinoVerified] = useState(false);
   const dashboardQuery = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: getAdminDashboardData,
@@ -71,6 +72,7 @@ const AdminDashboardPage = () => {
     setProvisionedPartner(null);
     setProvisionError(null);
     setCopyStatus(null);
+    setZinzinoVerified(false);
   };
 
   const copyProvisioningDetails = async () => {
@@ -187,7 +189,7 @@ const AdminDashboardPage = () => {
             </DashboardSection>
           </div>
 
-          <DashboardSection title="Latest partner applications" description="Partner applications stay separate via lead type so onboarding can begin clearly.">
+          <DashboardSection title="Latest partner applications" description="Review interest first. Create an account only after the person is verified as a partner with Zinzino.">
             <DataTable
               columns={["Applicant", "Source page", "Referral", "Status", "Received", "Action"]}
               rows={data.recentPartnerApplications.map((lead) => [
@@ -211,9 +213,10 @@ const AdminDashboardPage = () => {
                     setSelectedLead(lead);
                     setProvisionedPartner(null);
                     setProvisionError(null);
+                    setZinzinoVerified(false);
                   }}
                 >
-                  Provision access
+                  Review application
                 </Button>,
               ])}
               emptyState="No partner applications yet."
@@ -246,9 +249,9 @@ const AdminDashboardPage = () => {
       <Dialog open={Boolean(selectedLead)} onOpenChange={(open) => !open && closeDialog()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create partner account</DialogTitle>
+            <DialogTitle>Create verified partner account</DialogTitle>
             <DialogDescription>
-              The partner logs in with their email address. Send them the login details below securely.
+              Use this only after you have confirmed that the person is already verified as a partner with Zinzino.
             </DialogDescription>
           </DialogHeader>
 
@@ -259,6 +262,18 @@ const AdminDashboardPage = () => {
                 <p><span className="font-medium text-foreground">Email:</span> {selectedLead.email}</p>
                 <p><span className="font-medium text-foreground">Referral:</span> {selectedLead.referral_code || "Direct"}</p>
               </div>
+
+              {!provisionedPartner ? (
+                <label className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/30 p-4 text-sm leading-6 text-foreground/85">
+                  <input
+                    type="checkbox"
+                    checked={zinzinoVerified}
+                    onChange={(event) => setZinzinoVerified(event.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-border"
+                  />
+                  <span>Jag har verifierat att personen redan är partner hos Zinzino.</span>
+                </label>
+              ) : null}
 
               {provisionedPartner ? (
                 <div className="rounded-2xl border border-emerald-300/70 bg-emerald-50 p-4 text-emerald-950">
@@ -295,10 +310,10 @@ const AdminDashboardPage = () => {
             </Button>
             <Button
               type="button"
-              disabled={!selectedLead || onboardMutation.isPending || Boolean(provisionedPartner)}
+              disabled={!selectedLead || onboardMutation.isPending || Boolean(provisionedPartner) || !zinzinoVerified}
               onClick={() => selectedLead && onboardMutation.mutate(selectedLead.id)}
             >
-              {onboardMutation.isPending ? "Provisioning..." : provisionedPartner ? "Provisioned" : "Create account"}
+              {onboardMutation.isPending ? "Creating..." : provisionedPartner ? "Created" : "Create verified account"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -5,9 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
-import { getPortalAccessState, signInWithPassword } from "@/lib/omega-data";
+import { getPortalAccessState, signInWithPassword, signOutPortalUser } from "@/lib/omega-data";
 
-const DashboardLoginPage = () => {
+type DashboardLoginPageProps = {
+  variant?: "partner" | "admin";
+};
+
+const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
@@ -45,6 +49,29 @@ const DashboardLoginPage = () => {
     return null;
   }, [searchParams]);
 
+  const isAdminVariant = variant === "admin";
+  const hasWrongRole =
+    isAdminVariant &&
+    accessQuery.isFetched &&
+    !accessQuery.isFetching &&
+    Boolean(accessQuery.data?.authUser) &&
+    accessQuery.data?.portalUser?.role === "partner";
+  const introTitle = isAdminVariant ? "Admininloggning" : "Partnerinloggning";
+  const introText = isAdminVariant
+    ? "Här loggar du in för att arbeta vidare i OmegaBalance som administratör."
+    : "Här loggar du in för att följa din länk, dina leads och din utveckling i OmegaBalance.";
+  const featureList = isAdminVariant
+    ? [
+        "Följ upp leads, kunder och partneransökningar.",
+        "Granska ansökningar och skapa verifierade partnerkonton.",
+        "Allt är samlat på ett ställe.",
+      ]
+    : [
+        "Se vad som kommer in via din länk.",
+        "Följ leads och utveckling över tid.",
+        "Allt är samlat på ett ställe.",
+      ];
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
@@ -52,16 +79,29 @@ const DashboardLoginPage = () => {
 
     try {
       await signInWithPassword(email, password);
-      await accessQuery.refetch();
-      navigate("/dashboard", { replace: true });
+      const result = await accessQuery.refetch();
+      const role = result.data?.portalUser?.role;
+
+      if (isAdminVariant && role !== "admin") {
+        setStatus("Det här kontot har inte adminåtkomst.");
+        return;
+      }
+
+      navigate(isAdminVariant ? "/dashboard/admin" : "/dashboard", { replace: true });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not sign in.");
+      setStatus(error instanceof Error ? error.message : "Det gick inte att logga in.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (isSupabaseConfigured && accessQuery.data?.portalUser) {
+  if (
+    isSupabaseConfigured &&
+    accessQuery.isFetched &&
+    !accessQuery.isFetching &&
+    accessQuery.data?.portalUser &&
+    (!isAdminVariant || accessQuery.data.portalUser.role === "admin")
+  ) {
     return (
       <Navigate
         to={accessQuery.data.portalUser.role === "admin" ? "/dashboard/admin" : "/dashboard/partner"}
@@ -78,19 +118,14 @@ const DashboardLoginPage = () => {
             OmegaBalance Backoffice
           </p>
           <h1 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-            Inloggning för admin och partners
+            {introTitle}
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-8 text-subtle">
-            Här loggar du in för att få tillgång till din vy i OmegaBalance och följa upp leads, kunder och
-            partnerutveckling.
+            {introText}
           </p>
 
           <div className="mt-8 space-y-4">
-            {[
-              "Admin får en samlad översikt över leads, kunder, partneransökningar och nätverk.",
-              "Partners ser bara det som hör till deras egen länk, deras leads och deras team.",
-              "Allt är byggt för tydlig uppföljning utan onödig komplexitet.",
-            ].map((item) => (
+            {featureList.map((item) => (
               <div key={item} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
                 <ShieldCheck className="mt-1 h-5 w-5 text-primary" />
                 <p className="text-sm leading-6 text-foreground/85">{item}</p>
@@ -100,21 +135,28 @@ const DashboardLoginPage = () => {
         </section>
 
         <section className="rounded-[2rem] border border-border/70 bg-card p-8 shadow-elevated md:p-10">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
-              <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">Logga in</h2>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
+                <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">
+                  {isAdminVariant ? "Adminåtkomst" : "Logga in"}
+                </h2>
+              </div>
+              <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
+                Till sajten
+              </Link>
             </div>
-            <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
-              Till sajten
-            </Link>
-          </div>
 
           {isSupabaseConfigured ? (
             <form onSubmit={handleSubmit} className="mt-8 space-y-4">
               {reasonMessage ? (
                 <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
                   {reasonMessage}
+                </div>
+              ) : null}
+              {hasWrongRole ? (
+                <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                  Du är redan inloggad med ett partnerkonto. Logga ut först om du vill byta till ett adminkonto.
                 </div>
               ) : null}
               <label className="block">
@@ -155,7 +197,9 @@ const DashboardLoginPage = () => {
               </Button>
               {status ? <p className="text-sm leading-6 text-subtle">{status}</p> : null}
               <p className="text-sm leading-6 text-subtle">
-                Logga in med din e-postadress och lösenordet för ditt backoffice-konto.
+                {isAdminVariant
+                  ? "Logga in med din e-postadress och lösenordet för ditt adminkonto."
+                  : "Logga in med din e-postadress och lösenordet för ditt backoffice-konto."}
               </p>
               {accessQuery.data?.authUser && !accessQuery.data.portalUser ? (
                 <p className="text-sm leading-6 text-subtle">
@@ -163,6 +207,11 @@ const DashboardLoginPage = () => {
                   <span className="font-medium text-foreground">{accessQuery.data.authUser.email || "ditt konto"}</span>
                   , men du har ännu inte åtkomst till instrumentpanelen. Kontakta en admin.
                 </p>
+              ) : null}
+              {hasWrongRole ? (
+                <Button type="button" variant="outline" className="h-12 w-full rounded-xl" onClick={() => void signOutPortalUser()}>
+                  Logga ut och byt konto
+                </Button>
               ) : null}
               <div className="flex items-center justify-between">
                 <Link to="/auth/forgot-password" className="text-sm text-primary transition-colors hover:text-primary/80">

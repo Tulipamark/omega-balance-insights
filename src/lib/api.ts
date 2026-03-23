@@ -1,6 +1,6 @@
-import { isSupabaseConfigured } from "@/integrations/supabase/client";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type {
+  LeadFailureReason,
   OnboardPartnerFromLeadRequest,
   OnboardPartnerFromLeadResponse,
   TrackClickRequest,
@@ -11,7 +11,40 @@ import type {
   UpsertLeadResponse,
 } from "@/lib/omega-types";
 
-async function getSupabaseFunctionHeaders() {
+function getLeadErrorMessage(reason?: LeadFailureReason) {
+  switch (reason) {
+    case "partner_not_found":
+      return "Referral-koden kunde inte kopplas till någon partner.";
+    case "partner_not_verified":
+      return "Den här partnern är ännu inte verifierad för detta flödet.";
+    case "invalid_email":
+      return "Vi kunde inte spara uppgifterna. Kontrollera e-postadressen och försök igen.";
+    default:
+      return "Could not save lead right now.";
+  }
+}
+
+function getFallbackLeadErrorMessage(response: Response, payload: unknown) {
+  if (payload && typeof payload === "object") {
+    const candidate = payload as { error?: unknown; message?: unknown; code?: unknown };
+
+    if (typeof candidate.error === "string" && candidate.error.trim()) {
+      return candidate.error;
+    }
+
+    if (typeof candidate.message === "string" && candidate.message.trim()) {
+      return candidate.message;
+    }
+
+    if (typeof candidate.code === "string" && candidate.code.trim()) {
+      return `Lead-save misslyckades: ${candidate.code}`;
+    }
+  }
+
+  return `Lead-save misslyckades (${response.status}).`;
+}
+
+function getBaseFunctionConfig() {
   if (!isSupabaseConfigured) {
     throw new Error("Supabase is not configured.");
   }
@@ -19,21 +52,43 @@ async function getSupabaseFunctionHeaders() {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey =
     import.meta.env.VITE_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
-  const accessToken = session.data.session?.access_token;
+
+  return { supabaseUrl, supabaseAnonKey };
+}
+
+async function getPublicFunctionHeaders() {
+  const { supabaseUrl, supabaseAnonKey } = getBaseFunctionConfig();
 
   return {
     supabaseUrl,
     headers: {
       "Content-Type": "application/json",
       apikey: supabaseAnonKey,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+  };
+}
+
+async function getProtectedFunctionHeaders() {
+  const { supabaseUrl, supabaseAnonKey } = getBaseFunctionConfig();
+  const session = supabase ? await supabase.auth.getSession() : { data: { session: null } };
+  const accessToken = session.data.session?.access_token;
+
+  if (!accessToken) {
+    throw new Error("Du måste vara inloggad för att göra detta.");
+  }
+
+  return {
+    supabaseUrl,
+    headers: {
+      "Content-Type": "application/json",
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${accessToken}`,
     },
   };
 }
 
 export async function trackClickAndGetRedirect(payload: TrackClickRequest): Promise<TrackClickResponse> {
-  const { supabaseUrl, headers } = await getSupabaseFunctionHeaders();
+  const { supabaseUrl, headers } = await getPublicFunctionHeaders();
 
   const response = await fetch(`${supabaseUrl}/functions/v1/track-click-and-redirect`, {
     method: "POST",
@@ -51,7 +106,7 @@ export async function trackClickAndGetRedirect(payload: TrackClickRequest): Prom
 }
 
 export async function trackVisit(payload: TrackVisitRequest): Promise<TrackVisitResponse> {
-  const { supabaseUrl, headers } = await getSupabaseFunctionHeaders();
+  const { supabaseUrl, headers } = await getPublicFunctionHeaders();
 
   const response = await fetch(`${supabaseUrl}/functions/v1/track-visit`, {
     method: "POST",
@@ -69,7 +124,7 @@ export async function trackVisit(payload: TrackVisitRequest): Promise<TrackVisit
 }
 
 export async function upsertLead(payload: UpsertLeadRequest): Promise<UpsertLeadResponse> {
-  const { supabaseUrl, headers } = await getSupabaseFunctionHeaders();
+  const { supabaseUrl, headers } = await getPublicFunctionHeaders();
 
   const response = await fetch(`${supabaseUrl}/functions/v1/upsert-lead`, {
     method: "POST",
@@ -77,28 +132,100 @@ export async function upsertLead(payload: UpsertLeadRequest): Promise<UpsertLead
     body: JSON.stringify(payload),
   });
 
-  const data = (await response.json().catch(() => null)) as UpsertLeadResponse | null;
+  const rawText = await response.text().catch(() => "");
+  let data: UpsertLeadResponse | null = null;
 
-  if (!response.ok || !data) {
-    throw new Error("Could not save lead right now.");
+  try {
+    data = rawText ? (JSON.parse(rawText) as UpsertLeadResponse) : null;
+  } catch {
+    data = null;
+  }
+
+  if (!data) {
+    throw new Error(
+      response.ok
+        ? "Vi fick inget giltigt svar när vi försökte spara uppgifterna."
+        : `Lead-save misslyckades (${response.status}).`,
+    );
+  }
+
+  if (!response.ok || !data.ok) {
+    throw new Error(data.reason ? getLeadErrorMessage(data.reason) : getFallbackLeadErrorMessage(response, data));
   }
 
   return data;
 }
 
-export async function onboardPartnerFromLead(payload: OnboardPartnerFromLeadRequest): Promise<OnboardPartnerFromLeadResponse> {
-  const { supabaseUrl, headers } = await getSupabaseFunctionHeaders();
+export async function onboardPartnerFromLead(
+  payload: OnboardPartnerFromLeadRequest,
+): Promise<OnboardPartnerFromLeadResponse> {
+  if (!supabase) {
+    throw new Error("Supabase is not configured.");
+  }
 
-  const response = await fetch(`${supabaseUrl}/functions/v1/onboard-partner-from-lead`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload),
+  const {
+    data: sessionData,
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    throw new Error(sessionError.message);
+  }
+
+  let accessToken = sessionData.session?.access_token;
+
+  if (!accessToken) {
+    const {
+      data: refreshedSessionData,
+      error: refreshError,
+    } = await supabase.auth.refreshSession();
+
+    if (refreshError) {
+      throw new Error(refreshError.message);
+    }
+
+    accessToken = refreshedSessionData.session?.access_token;
+  }
+
+  if (!accessToken) {
+    throw new Error("Du måste vara inloggad för att skapa partnerkonto.");
+  }
+
+  const {
+    data,
+    error,
+  } = await supabase.functions.invoke<OnboardPartnerFromLeadResponse>("onboard-partner-from-lead", {
+    body: payload,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
 
-  const data = (await response.json().catch(() => null)) as OnboardPartnerFromLeadResponse | null;
+  if (error) {
+    const context = (error as { context?: Response | null }).context;
 
-  if (!response.ok || !data) {
-    throw new Error("Could not onboard partner right now.");
+    if (context) {
+      const raw = await context.text().catch(() => "");
+
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw) as { error?: string; message?: string };
+          const detailedMessage = parsed.error?.trim() || parsed.message?.trim();
+
+          if (detailedMessage) {
+            throw new Error(detailedMessage);
+          }
+        } catch {
+          throw new Error(raw.trim());
+        }
+      }
+    }
+
+    throw new Error(error.message || "Could not onboard partner right now.");
+  }
+
+  if (!data?.ok) {
+    throw new Error(data?.error?.trim() || "Could not onboard partner right now.");
   }
 
   return data;

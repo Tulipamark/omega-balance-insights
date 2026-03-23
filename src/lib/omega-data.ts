@@ -492,7 +492,9 @@ export async function signOutPortalUser() {
     return;
   }
 
-  await requireSupabase().auth.signOut();
+  const client = requireSupabase();
+  await client.auth.signOut({ scope: "global" });
+  window.location.assign("/dashboard/login");
 }
 
 export async function getAdminDashboardData(): Promise<AdminDashboardData> {
