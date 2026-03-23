@@ -11,6 +11,7 @@ import TermsPage from "./pages/TermsPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import DashboardLoginPage from "./pages/DashboardLoginPage.tsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
@@ -32,6 +33,7 @@ const App = () => (
         <ReferralTrackingBoundary />
         <Routes>
           <Route path="/" element={<HomePageWrapper />} />
+          <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route path="/integritet" element={<PrivacyPage />} />
           <Route path="/villkor" element={<TermsPage />} />

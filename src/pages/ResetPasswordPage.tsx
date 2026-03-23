@@ -20,17 +20,17 @@ const ResetPasswordPage = () => {
     event.preventDefault();
 
     if (!supabase) {
-      setStatus("Supabase is not configured.");
+      setStatus("Systemet är inte konfigurerat ännu.");
       return;
     }
 
     if (password.length < 8) {
-      setStatus("Password must be at least 8 characters.");
+      setStatus("Lösenordet måste vara minst 8 tecken långt.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setStatus("Passwords do not match.");
+      setStatus("Lösenorden matchar inte. Kontrollera att du skrev samma lösenord två gånger.");
       return;
     }
 
@@ -43,11 +43,15 @@ const ResetPasswordPage = () => {
         throw error;
       }
 
-      setStatus("Password updated. Redirecting to login...");
+      setStatus("success");
       window.history.replaceState({}, document.title, "/auth/reset-password");
-      setTimeout(() => navigate("/dashboard/login", { replace: true }), 1200);
+      setTimeout(() => navigate("/dashboard/login", { replace: true }), 2000);
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not update password.");
+      setStatus(
+        error instanceof Error
+          ? error.message
+          : "Det gick inte att uppdatera lösenordet. Försök igen eller begär en ny länk.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -62,8 +66,8 @@ const ResetPasswordPage = () => {
       <div className="mx-auto max-w-xl rounded-[2rem] border border-border/70 bg-card p-8 shadow-elevated md:p-10">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Backoffice access</p>
-            <h1 className="mt-2 font-serif text-3xl font-semibold tracking-tight">Set new password</h1>
+            <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
+            <h1 className="mt-2 font-serif text-3xl font-semibold tracking-tight">Nytt lösenord</h1>
           </div>
           <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
             Till sajten
@@ -71,37 +75,61 @@ const ResetPasswordPage = () => {
         </div>
 
         {!isRecoveryLink ? (
-          <div className="mt-8 rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-            No active recovery session was found. Open the password recovery link from your email again.
+          <div className="mt-8 space-y-4">
+            <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+              <p className="font-medium">Länken är inte giltig</p>
+              <p className="mt-2">
+                Det ser ut som att du har kommit hit utan en återställningslänk. Gå tillbaka till inloggningen och
+                klicka på &quot;Glömt lösenordet?&quot; för att begära en ny länk.
+              </p>
+            </div>
+            <Link
+              to="/dashboard/login"
+              className="block text-center text-sm text-primary transition-colors hover:text-primary/80"
+            >
+              Tillbaka till inloggning
+            </Link>
+          </div>
+        ) : status === "success" ? (
+          <div className="mt-8 space-y-4">
+            <div className="rounded-2xl border border-green-300/70 bg-green-50 px-4 py-4 text-sm leading-6 text-green-900">
+              <p className="font-medium">Lösenordet uppdaterat!</p>
+              <p className="mt-2">Ditt nya lösenord är sparat. Du omdirigeras till inloggningen...</p>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <p className="text-sm leading-6 text-subtle">Ange ett nytt lösenord för ditt OmegaBalance-konto.</p>
             <label className="block">
-              <span className="mb-2 block text-sm font-medium text-foreground">New password</span>
+              <span className="mb-2 block text-sm font-medium text-foreground">Nytt lösenord</span>
               <Input
                 required
                 type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 className="h-12 rounded-xl"
-                placeholder="At least 8 characters"
+                placeholder="Minst 8 tecken"
               />
             </label>
             <label className="block">
-              <span className="mb-2 block text-sm font-medium text-foreground">Confirm password</span>
+              <span className="mb-2 block text-sm font-medium text-foreground">Bekräfta lösenord</span>
               <Input
                 required
                 type="password"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 className="h-12 rounded-xl"
-                placeholder="Repeat the new password"
+                placeholder="Upprepa lösenordet"
               />
             </label>
             <Button type="submit" disabled={submitting} className="h-12 w-full rounded-xl">
-              {submitting ? "Saving..." : "Save new password"}
+              {submitting ? "Sparar..." : "Spara nytt lösenord"}
             </Button>
-            {status ? <p className="text-sm leading-6 text-subtle">{status}</p> : null}
+            {status && status !== "success" ? (
+              <div className="rounded-2xl border border-red-300/70 bg-red-50 px-4 py-3 text-sm leading-6 text-red-900">
+                {status}
+              </div>
+            ) : null}
           </form>
         )}
       </div>

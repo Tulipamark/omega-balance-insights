@@ -34,12 +34,12 @@ const DashboardLoginPage = () => {
 
     if (reason === "profile-missing") {
       return activeEmail
-        ? `You are signed in as ${activeEmail}, but no dashboard profile exists in OmegaBalance users yet. Ask an admin to create or connect your profile first.`
-        : "You are signed in, but no dashboard profile exists in OmegaBalance users yet. Ask an admin to create or connect your profile first.";
+        ? `Du är inloggad som ${activeEmail}, men du har ännu inte tillgång till instrumentpanelen. Kontakta en admin för att få åtkomst.`
+        : "Du är inloggad, men du har ännu inte tillgång till instrumentpanelen. Kontakta en admin för att få åtkomst.";
     }
 
     if (reason === "auth-required") {
-      return "Sign in to continue to the dashboard.";
+      return "Logga in för att få tillgång till instrumentpanelen.";
     }
 
     return null;
@@ -102,8 +102,8 @@ const DashboardLoginPage = () => {
         <section className="rounded-[2rem] border border-border/70 bg-card p-8 shadow-elevated md:p-10">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Access</p>
-              <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">Sign in</h2>
+              <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">Logga in</h2>
             </div>
             <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
               Till sajten
@@ -118,7 +118,7 @@ const DashboardLoginPage = () => {
                 </div>
               ) : null}
               <label className="block">
-                <span className="mb-2 block text-sm font-medium text-foreground">User ID / email</span>
+                <span className="mb-2 block text-sm font-medium text-foreground">E-post</span>
                 <Input
                   required
                   type="email"
@@ -129,7 +129,7 @@ const DashboardLoginPage = () => {
                 />
               </label>
               <label className="block">
-                <span className="mb-2 block text-sm font-medium text-foreground">Password</span>
+                <span className="mb-2 block text-sm font-medium text-foreground">Lösenord</span>
                 <div className="relative">
                   <Input
                     required
@@ -143,7 +143,7 @@ const DashboardLoginPage = () => {
                     type="button"
                     onClick={() => setShowPassword((current) => !current)}
                     className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? "Dölj lösenord" : "Visa lösenord"}
                     aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -151,25 +151,29 @@ const DashboardLoginPage = () => {
                 </div>
               </label>
               <Button type="submit" disabled={submitting} className="h-12 w-full rounded-xl">
-                {submitting ? "Signing in..." : "Sign in"}
+                {submitting ? "Loggar in..." : "Logga in"}
               </Button>
               {status ? <p className="text-sm leading-6 text-subtle">{status}</p> : null}
+              <p className="text-sm leading-6 text-subtle">
+                Logga in med din e-postadress och lösenordet för ditt backoffice-konto.
+              </p>
               {accessQuery.data?.authUser && !accessQuery.data.portalUser ? (
                 <p className="text-sm leading-6 text-subtle">
-                  Auth session found for{" "}
-                  <span className="font-medium text-foreground">{accessQuery.data.authUser.email || "this account"}</span>,
-                  but the dashboard profile is still missing.
+                  Vi hittade din inloggning för{" "}
+                  <span className="font-medium text-foreground">{accessQuery.data.authUser.email || "ditt konto"}</span>
+                  , men du har ännu inte åtkomst till instrumentpanelen. Kontakta en admin.
                 </p>
               ) : null}
-              <p className="text-sm leading-6 text-subtle">
-                Logga in med de uppgifter du har fått för ditt backoffice-konto.
-              </p>
+              <div className="flex items-center justify-between">
+                <Link to="/auth/forgot-password" className="text-sm text-primary transition-colors hover:text-primary/80">
+                  Glömt lösenordet?
+                </Link>
+              </div>
             </form>
           ) : (
             <div className="mt-8 rounded-2xl border border-dashed border-primary/35 bg-accent/50 p-5">
               <p className="text-sm leading-6 text-foreground/85">
-                Supabase environment variables are not configured yet. Demo shortcuts below let you review the
-                dashboard structure before wiring up the live project.
+                Instrumentpanelen är inte helt konfigurerad ännu. Du kan utforska strukturen i demolägena nedan innan systemet är helt etablerat.
               </p>
             </div>
           )}

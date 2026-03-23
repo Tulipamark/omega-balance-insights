@@ -81,7 +81,7 @@ const AdminDashboardPage = () => {
     const lines = [
       `Email: ${provisionedPartner.email}`,
       `Referral code: ${provisionedPartner.referral_code || "-"}`,
-      `Temporary password: ${provisionedPartner.temporary_password || "Existing auth account reused"}`,
+      `Password: ${provisionedPartner.temporary_password || "Existing auth account reused"}`,
       "Login URL: /dashboard/login",
     ];
 
@@ -246,9 +246,9 @@ const AdminDashboardPage = () => {
       <Dialog open={Boolean(selectedLead)} onOpenChange={(open) => !open && closeDialog()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Provision partner access</DialogTitle>
+            <DialogTitle>Create partner account</DialogTitle>
             <DialogDescription>
-              Create the auth account, connect the portal user, and provision a pending partner profile for the selected application.
+              The partner logs in with their email address. Send them the login details below securely.
             </DialogDescription>
           </DialogHeader>
 
@@ -262,21 +262,21 @@ const AdminDashboardPage = () => {
 
               {provisionedPartner ? (
                 <div className="rounded-2xl border border-emerald-300/70 bg-emerald-50 p-4 text-emerald-950">
-                  <p className="font-medium">Partner account is ready.</p>
+                  <p className="font-medium">Partner account created.</p>
                   <p className="mt-2"><span className="font-medium">Email:</span> {provisionedPartner.email}</p>
                   <p><span className="font-medium">Referral code:</span> {provisionedPartner.referral_code}</p>
-                  <p><span className="font-medium">Temporary password:</span> {provisionedPartner.temporary_password || "Existing auth account reused"}</p>
-                  <p className="mt-2 text-xs">Share the temporary password securely. We can later replace this with a branded password setup email.</p>
+                  <p><span className="font-medium">Password:</span> {provisionedPartner.temporary_password || "Existing auth account reused"}</p>
+                  <p className="mt-2 text-xs">Share these login details securely with the partner.</p>
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     <Button type="button" variant="outline" className="rounded-xl bg-white" onClick={() => void copyProvisioningDetails()}>
                       <Copy className="mr-2 h-4 w-4" />
-                      Copy account details
+                      Copy login details
                     </Button>
                     {copyStatus ? <p className="text-xs">{copyStatus}</p> : null}
                   </div>
                   <div className="mt-4 rounded-2xl border border-emerald-300/70 bg-white/80 p-4 text-xs leading-6">
-                    <p className="font-medium text-foreground">Next step</p>
-                    <p>Ask the partner to sign in at <span className="font-medium">/dashboard/login</span> with the temporary password and then change it.</p>
+                    <p className="font-medium text-foreground">What happens next</p>
+                    <p>The partner logs in at <span className="font-medium">/dashboard/login</span> with their email address and the password above.</p>
                   </div>
                 </div>
               ) : null}
