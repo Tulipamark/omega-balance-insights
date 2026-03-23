@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.onboard-partner-from-lead]
 verify_jwt = false
+
+[functions.update-partner-lead-review]
+verify_jwt = false

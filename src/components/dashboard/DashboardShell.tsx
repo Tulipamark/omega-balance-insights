@@ -51,7 +51,7 @@ export function DashboardShell({ title, subtitle, roleLabel, navigation, childre
 
         <SidebarContent className="px-2">
           <SidebarGroup>
-            <SidebarGroupLabel>Overview</SidebarGroupLabel>
+            <SidebarGroupLabel>Meny</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {navigation.map((item) => {
@@ -74,14 +74,14 @@ export function DashboardShell({ title, subtitle, roleLabel, navigation, childre
 
         <SidebarFooter className="p-3">
           <div className="rounded-2xl border border-border/80 bg-white/90 p-3 shadow-card">
-            <p className="text-sm font-medium text-foreground">MVP mode</p>
+            <p className="text-sm font-medium text-foreground">MVP-läge</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Tracking, attribution and partner insight are enabled. Provision logic stays outside this version.
+              Tracking, attribution och partnerinsikter är aktiva. Kontoaktivering ligger fortfarande utanför den här versionen.
             </p>
             {onSignOut ? (
               <Button variant="outline" className="mt-3 w-full justify-start rounded-xl" onClick={onSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign out
+                Logga ut
               </Button>
             ) : null}
           </div>

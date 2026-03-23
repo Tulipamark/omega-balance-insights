@@ -42,6 +42,7 @@ const App = () => (
           <Route path="/dashboard/login" element={<DashboardLoginPage />} />
           <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
           <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/admin/:section" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/:lang" element={<Index />} />
           <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />

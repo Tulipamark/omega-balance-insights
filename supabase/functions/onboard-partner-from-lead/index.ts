@@ -261,7 +261,7 @@ Deno.serve(async (request) => {
   const { error: leadUpdateError } = await serviceClient
     .from("leads")
     .update({
-      status: "qualified",
+      status: "active",
       referred_by_user_id: lead.referred_by_user_id,
       referral_code: lead.referral_code,
       partner_id: partner.id,

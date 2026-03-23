@@ -5,6 +5,11 @@ import {
   AppUser,
   CreatePartnerInput,
   Customer,
+  GrowthCompassRow,
+  KpiDuplicationRow,
+  KpiFunnelDay,
+  KpiPartnerPipeline,
+  KpiSourceMixRow,
   Lead,
   LeadSubmissionInput,
   Order,
@@ -14,6 +19,8 @@ import {
   ReferralVisit,
   TeamRow,
 } from "@/lib/omega-types";
+import { evaluateGrowthCompass } from "@/lib/growth-compass";
+import { mapPartnerDataToGrowthCompassInput, type OutboundClickSignal } from "@/lib/map-partner-data-to-growth-compass";
 
 const now = new Date();
 
@@ -170,6 +177,18 @@ const mockRelationships: PartnerRelationship[] = [
   },
 ];
 
+const mockPartnerRecords = mockUsers
+  .filter((user) => user.role === "partner")
+  .map((user) => ({
+    id: `partner-record-${user.id}`,
+    user_id: user.id,
+    referral_code: user.referral_code,
+    status: "verified",
+    created_at: user.created_at,
+  }));
+
+const mockOutboundClicks: OutboundClickSignal[] = [];
+
 const mockVisits: ReferralVisit[] = [
   {
     id: "visit-1",
@@ -212,6 +231,161 @@ function requireSupabase() {
 
 function sortNewest<T extends { created_at: string }>(rows: T[]) {
   return [...rows].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+}
+
+function toDayKey(value: string) {
+  return new Date(value).toISOString().slice(0, 10);
+}
+
+function roundPercent(numerator: number, denominator: number) {
+  if (!denominator) {
+    return 0;
+  }
+
+  return Math.round((numerator / denominator) * 10000) / 100;
+}
+
+function buildMockKpiFunnelDaily(
+  visits: ReferralVisit[],
+  leads: Lead[],
+  customers: Customer[],
+  orders: Order[],
+): KpiFunnelDay[] {
+  const clicksByDay = new Map<string, number>();
+  const visitDays = new Set<string>();
+
+  visits.forEach((visit) => {
+    visitDays.add(toDayKey(visit.created_at));
+  });
+
+  const customerLeads = leads.filter((lead) => lead.lead_type === "customer" || lead.type === "customer_lead");
+  const days = new Set<string>([
+    ...visitDays,
+    ...customerLeads.map((lead) => toDayKey(lead.created_at)),
+    ...customers.map((customer) => toDayKey(customer.created_at)),
+    ...orders.filter((order) => order.status === "paid").map((order) => toDayKey(order.created_at)),
+  ]);
+
+  return [...days]
+    .sort((a, b) => (a < b ? 1 : -1))
+    .map((day) => {
+      const dayVisits = visits.filter((visit) => toDayKey(visit.created_at) === day).length;
+      const dayClicks = clicksByDay.get(day) || 0;
+      const dayCustomerLeads = customerLeads.filter((lead) => toDayKey(lead.created_at) === day).length;
+      const dayCustomers = customers.filter((customer) => toDayKey(customer.created_at) === day).length;
+      const dayPaidOrders = orders.filter((order) => order.status === "paid" && toDayKey(order.created_at) === day);
+      const paidRevenue = dayPaidOrders.reduce((sum, order) => sum + order.amount, 0);
+
+      return {
+        day: `${day}T00:00:00.000Z`,
+        visits: dayVisits,
+        outbound_clicks: dayClicks,
+        customer_leads: dayCustomerLeads,
+        customers: dayCustomers,
+        paid_orders: dayPaidOrders.length,
+        paid_revenue: paidRevenue,
+        visit_to_click_pct: roundPercent(dayClicks, dayVisits),
+        click_to_lead_pct: roundPercent(dayCustomerLeads, dayClicks),
+        lead_to_customer_pct: roundPercent(dayCustomers, dayCustomerLeads),
+        customer_to_paid_order_pct: roundPercent(dayPaidOrders.length, dayCustomers),
+        visit_to_paid_order_pct: roundPercent(dayPaidOrders.length, dayVisits),
+      };
+    });
+}
+
+function buildMockKpiPartnerPipeline(leads: Lead[], users: AppUser[]): KpiPartnerPipeline {
+  const partnerApplications = leads.filter((lead) => lead.lead_type === "partner" || lead.type === "partner_lead");
+
+  return {
+    applications: partnerApplications.length,
+    new_candidates: partnerApplications.filter((lead) => lead.status === "new").length,
+    verified_candidates: partnerApplications.filter((lead) => lead.status === "qualified").length,
+    active_partner_accounts: partnerApplications.filter((lead) => lead.status === "active").length,
+    inactive_or_lost: partnerApplications.filter((lead) => lead.status === "inactive" || lead.status === "lost").length,
+    partner_records: users.filter((user) => user.role === "partner").length,
+    portal_partner_users: users.filter((user) => user.role === "partner").length,
+    application_to_verified_pct: roundPercent(
+      partnerApplications.filter((lead) => lead.status === "qualified").length,
+      partnerApplications.length,
+    ),
+    verified_to_active_pct: roundPercent(
+      partnerApplications.filter((lead) => lead.status === "active").length,
+      partnerApplications.filter((lead) => lead.status === "qualified").length,
+    ),
+  };
+}
+
+function buildMockKpiDuplication(
+  users: AppUser[],
+  leads: Lead[],
+  customers: Customer[],
+  orders: Order[],
+  visits: ReferralVisit[],
+): KpiDuplicationRow[] {
+  return users
+    .filter((user) => user.role === "partner")
+    .map((partner) => {
+      const partnerVisits = visits.filter((visit) => visit.referral_code === partner.referral_code);
+      const partnerLeads = leads.filter((lead) => lead.referred_by_user_id === partner.id);
+      const partnerCustomers = customers.filter((customer) => customer.referred_by_user_id === partner.id);
+      const partnerOrders = orders.filter((order) => order.referred_by_user_id === partner.id && order.status === "paid");
+
+      return {
+        partner_id: partner.id,
+        user_id: partner.id,
+        partner_name: partner.name,
+        email: partner.email,
+        referral_code: partner.referral_code,
+        portal_role: partner.role,
+        partner_record_status: "verified",
+        market_code: null,
+        created_at: partner.created_at,
+        verified_at: null,
+        visits: partnerVisits.length,
+        outbound_clicks: 0,
+        total_leads: partnerLeads.length,
+        customer_leads: partnerLeads.filter((lead) => lead.type === "customer_lead").length,
+        partner_leads: partnerLeads.filter((lead) => lead.type === "partner_lead").length,
+        customers: partnerCustomers.length,
+        paid_orders: partnerOrders.length,
+        paid_revenue: partnerOrders.reduce((sum, order) => sum + order.amount, 0),
+        has_generated_leads: partnerLeads.length > 0,
+        has_generated_customers: partnerCustomers.length > 0,
+        has_generated_paid_orders: partnerOrders.length > 0,
+      };
+    })
+    .sort((a, b) => b.paid_orders - a.paid_orders || b.customers - a.customers || b.total_leads - a.total_leads);
+}
+
+function buildMockKpiSourceMixDaily(visits: ReferralVisit[]): KpiSourceMixRow[] {
+  const buckets = new Map<string, KpiSourceMixRow>();
+
+  visits.forEach((visit) => {
+    const day = `${toDayKey(visit.created_at)}T00:00:00.000Z`;
+    const source = visit.utm_source || "unknown";
+    const medium = visit.utm_medium || "unknown";
+    const campaign = visit.utm_campaign || "unknown";
+    const landingPage = visit.landing_page || "unknown";
+    const key = [day, source, medium, campaign, landingPage].join("|");
+
+    const existing = buckets.get(key);
+    if (existing) {
+      existing.visits += 1;
+      return;
+    }
+
+    buckets.set(key, {
+      day,
+      source,
+      medium,
+      campaign,
+      landing_page: landingPage,
+      market_code: "unknown",
+      visits: 1,
+    });
+  });
+
+  return [...buckets.values()].sort((a, b) => (a.day < b.day ? 1 : b.visits - a.visits));
 }
 
 function buildTeamRows(users: AppUser[], relationships: PartnerRelationship[]): TeamRow[] {
@@ -271,6 +445,50 @@ function buildAdminPartnerRows(
       };
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+function buildGrowthCompassRows(
+  users: AppUser[],
+  leads: Lead[],
+  customers: Customer[],
+  relationships: PartnerRelationship[],
+  partnerRecords: Array<{ id: string; user_id: string; referral_code?: string | null; status?: string | null; created_at: string }>,
+  visits: ReferralVisit[],
+  outboundClicks: OutboundClickSignal[],
+): GrowthCompassRow[] {
+  const partnerUsers = users.filter((user) => user.role === "partner");
+
+  return partnerUsers
+    .map((partner) => {
+      const mapped = mapPartnerDataToGrowthCompassInput({
+        partnerId: partner.id,
+        users,
+        partnerRecords,
+        leads,
+        customers,
+        partnerRelationships: relationships,
+        referralVisits: visits,
+        outboundClicks,
+      });
+      const result = evaluateGrowthCompass(mapped.input);
+
+      return {
+        partnerId: partner.id,
+        partnerName: partner.name,
+        email: partner.email,
+        referralCode: partner.referral_code,
+        status: result.status,
+        score: result.score,
+        nextMilestone: result.nextMilestone,
+        nextBestAction: result.nextBestAction,
+        explanation: result.explanation,
+        flags: result.flags,
+        missingToNext: result.missingToNext,
+        confidence: mapped.confidence,
+        inputs: mapped.input,
+      } satisfies GrowthCompassRow;
+    })
+    .sort((a, b) => b.score - a.score || a.partnerName.localeCompare(b.partnerName));
 }
 
 export async function resolveUserByReferralCode(referralCode: string) {
@@ -513,16 +731,49 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       networkOverview: buildTeamRows(mockUsers, mockRelationships),
       recentLeads: sortNewest(mockLeads).slice(0, 6),
       recentPartnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")).slice(0, 6),
+      growthCompass: buildGrowthCompassRows(
+        mockUsers,
+        mockLeads,
+        mockCustomers,
+        mockRelationships,
+        mockPartnerRecords,
+        mockVisits,
+        mockOutboundClicks,
+      ),
+      kpis: {
+        funnelDaily: buildMockKpiFunnelDaily(mockVisits, mockLeads, mockCustomers, mockOrders),
+        partnerPipeline: buildMockKpiPartnerPipeline(mockLeads, mockUsers),
+        duplication: buildMockKpiDuplication(mockUsers, mockLeads, mockCustomers, mockOrders, mockVisits),
+        sourceMixDaily: buildMockKpiSourceMixDaily(mockVisits),
+      },
     };
   }
 
   const client = requireSupabase();
-  const [{ data: users }, { data: leads }, { data: customers }, { data: relationships }, { data: visits }] = await Promise.all([
+  const [
+    { data: users },
+    { data: leads },
+    { data: customers },
+    { data: relationships },
+    { data: visits },
+    { data: partnerRecords },
+    { data: outboundClicks },
+    funnelResponse,
+    pipelineResponse,
+    duplicationResponse,
+    sourceMixResponse,
+  ] = await Promise.all([
     client.from("users").select("*"),
     client.from("leads").select("*"),
     client.from("customers").select("*"),
     client.from("partner_relationships").select("*"),
     client.from("referral_visits").select("*"),
+    client.from("partners").select("id, user_id, referral_code, status, created_at"),
+    client.from("outbound_clicks").select("id, partner_id, referral_code, session_id, destination_type, created_at"),
+    client.from("kpi_funnel_daily").select("*").limit(14),
+    client.from("kpi_partner_pipeline").select("*").maybeSingle(),
+    client.from("kpi_duplication").select("*").limit(12),
+    client.from("kpi_source_mix_daily").select("*").limit(20),
   ]);
 
   const performance = buildPartnerPerformance(users || [], leads || [], customers || [], visits || []);
@@ -540,6 +791,21 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     networkOverview: buildTeamRows(users || [], relationships || []),
     recentLeads: sortNewest(leads || []).slice(0, 6),
     recentPartnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")).slice(0, 6),
+    growthCompass: buildGrowthCompassRows(
+      users || [],
+      leads || [],
+      customers || [],
+      relationships || [],
+      ((partnerRecords as Array<{ id: string; user_id: string; referral_code?: string | null; status?: string | null; created_at: string }> | null) || []),
+      visits || [],
+      ((outboundClicks as OutboundClickSignal[] | null) || []),
+    ),
+    kpis: {
+      funnelDaily: (funnelResponse.data as KpiFunnelDay[] | null) || [],
+      partnerPipeline: (pipelineResponse.data as KpiPartnerPipeline | null) || null,
+      duplication: (duplicationResponse.data as KpiDuplicationRow[] | null) || [],
+      sourceMixDaily: (sourceMixResponse.data as KpiSourceMixRow[] | null) || [],
+    },
   };
 }
 

@@ -3,6 +3,8 @@ import type {
   LeadFailureReason,
   OnboardPartnerFromLeadRequest,
   OnboardPartnerFromLeadResponse,
+  UpdatePartnerLeadReviewRequest,
+  UpdatePartnerLeadReviewResponse,
   TrackClickRequest,
   TrackClickResponse,
   TrackVisitRequest,
@@ -226,6 +228,81 @@ export async function onboardPartnerFromLead(
 
   if (!data?.ok) {
     throw new Error(data?.error?.trim() || "Could not onboard partner right now.");
+  }
+
+  return data;
+}
+
+export async function updatePartnerLeadReview(
+  payload: UpdatePartnerLeadReviewRequest,
+): Promise<UpdatePartnerLeadReviewResponse> {
+  if (!supabase) {
+    throw new Error("Supabase is not configured.");
+  }
+
+  const {
+    data: sessionData,
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    throw new Error(sessionError.message);
+  }
+
+  let accessToken = sessionData.session?.access_token;
+
+  if (!accessToken) {
+    const {
+      data: refreshedSessionData,
+      error: refreshError,
+    } = await supabase.auth.refreshSession();
+
+    if (refreshError) {
+      throw new Error(refreshError.message);
+    }
+
+    accessToken = refreshedSessionData.session?.access_token;
+  }
+
+  if (!accessToken) {
+    throw new Error("Du måste vara inloggad för att göra detta.");
+  }
+
+  const {
+    data,
+    error,
+  } = await supabase.functions.invoke<UpdatePartnerLeadReviewResponse>("update-partner-lead-review", {
+    body: payload,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (error) {
+    const context = (error as { context?: Response | null }).context;
+
+    if (context) {
+      const raw = await context.text().catch(() => "");
+
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw) as { error?: string; message?: string };
+          const detailedMessage = parsed.error?.trim() || parsed.message?.trim();
+
+          if (detailedMessage) {
+            throw new Error(detailedMessage);
+          }
+        } catch {
+          throw new Error(raw.trim());
+        }
+      }
+    }
+
+    throw new Error(error.message || "Could not update partner review right now.");
+  }
+
+  if (!data?.ok) {
+    throw new Error(data?.error?.trim() || "Could not update partner review right now.");
   }
 
   return data;

@@ -56,6 +56,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
     !accessQuery.isFetching &&
     Boolean(accessQuery.data?.authUser) &&
     accessQuery.data?.portalUser?.role === "partner";
+  const showWrongRoleBanner = hasWrongRole && !status;
   const introTitle = isAdminVariant ? "Admininloggning" : "Partnerinloggning";
   const introText = isAdminVariant
     ? "Här loggar du in för att arbeta vidare i OmegaBalance som administratör."
@@ -154,7 +155,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
                   {reasonMessage}
                 </div>
               ) : null}
-              {hasWrongRole ? (
+              {showWrongRoleBanner ? (
                 <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
                   Du är redan inloggad med ett partnerkonto. Logga ut först om du vill byta till ett adminkonto.
                 </div>
@@ -208,7 +209,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
                   , men du har ännu inte åtkomst till instrumentpanelen. Kontakta en admin.
                 </p>
               ) : null}
-              {hasWrongRole ? (
+              {showWrongRoleBanner ? (
                 <Button type="button" variant="outline" className="h-12 w-full rounded-xl" onClick={() => void signOutPortalUser()}>
                   Logga ut och byt konto
                 </Button>

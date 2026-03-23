@@ -7,6 +7,7 @@ export type OrderStatus = "pending" | "paid" | "cancelled" | "refunded";
 export type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner_not_verified";
 export type RedirectType = "test" | "shop" | "partner" | "consultation";
 export type LeadSubmitMode = "created" | "updated" | "ignored";
+export type PartnerLeadPriority = "hot" | "follow_up" | "not_now";
 
 export interface TrackClickError {
   code: string;
@@ -78,6 +79,20 @@ export interface OnboardPartnerFromLeadResponse {
   email?: string;
   temporary_password?: string;
   referral_code?: string;
+  error?: string;
+}
+
+export interface UpdatePartnerLeadReviewRequest {
+  lead_id: string;
+  partner_priority?: PartnerLeadPriority | null;
+  admin_note?: string | null;
+}
+
+export interface UpdatePartnerLeadReviewResponse {
+  ok: boolean;
+  lead_id?: string;
+  partner_priority?: PartnerLeadPriority | null;
+  admin_note?: string | null;
   error?: string;
 }
 
@@ -207,6 +222,107 @@ export interface TeamRow {
   createdAt: string;
 }
 
+export interface KpiFunnelDay {
+  day: string;
+  visits: number;
+  outbound_clicks: number;
+  customer_leads: number;
+  customers: number;
+  paid_orders: number;
+  paid_revenue: number;
+  visit_to_click_pct: number;
+  click_to_lead_pct: number;
+  lead_to_customer_pct: number;
+  customer_to_paid_order_pct: number;
+  visit_to_paid_order_pct: number;
+}
+
+export interface KpiPartnerPipeline {
+  applications: number;
+  new_candidates: number;
+  verified_candidates: number;
+  active_partner_accounts: number;
+  inactive_or_lost: number;
+  partner_records: number;
+  portal_partner_users: number;
+  application_to_verified_pct: number;
+  verified_to_active_pct: number;
+}
+
+export interface KpiDuplicationRow {
+  partner_id: string;
+  user_id: string;
+  partner_name: string;
+  email: string;
+  referral_code: string;
+  portal_role: UserRole;
+  partner_record_status: string;
+  market_code?: string | null;
+  created_at: string;
+  verified_at?: string | null;
+  visits: number;
+  outbound_clicks: number;
+  total_leads: number;
+  customer_leads: number;
+  partner_leads: number;
+  customers: number;
+  paid_orders: number;
+  paid_revenue: number;
+  has_generated_leads: boolean;
+  has_generated_customers: boolean;
+  has_generated_paid_orders: boolean;
+}
+
+export interface KpiSourceMixRow {
+  day: string;
+  source: string;
+  medium: string;
+  campaign: string;
+  landing_page: string;
+  market_code: string;
+  visits: number;
+}
+
+export type ConfidenceLevel = "low" | "medium" | "high";
+
+export interface MetricConfidence {
+  level: ConfidenceLevel;
+  reasons: string[];
+}
+
+export interface GrowthCompassConfidence {
+  overall: ConfidenceLevel;
+  metrics: {
+    personalCustomers30d: MetricConfidence;
+    recruitedPartners30d: MetricConfidence;
+    activeFirstLinePartners30d: MetricConfidence;
+    partnerGeneratedLeads30d: MetricConfidence;
+    partnerGeneratedCustomers30d: MetricConfidence;
+  };
+}
+
+export interface GrowthCompassRow {
+  partnerId: string;
+  partnerName: string;
+  email: string;
+  referralCode: string;
+  status: "inactive" | "active" | "growing" | "duplicating" | "leader-track";
+  score: number;
+  nextMilestone: string;
+  nextBestAction: string;
+  explanation: string;
+  flags: string[];
+  missingToNext: string[];
+  confidence: GrowthCompassConfidence;
+  inputs: {
+    personalCustomers30d: number;
+    recruitedPartners30d: number;
+    activeFirstLinePartners30d: number;
+    partnerGeneratedLeads30d: number;
+    partnerGeneratedCustomers30d: number;
+  };
+}
+
 export interface AdminDashboardData {
   metrics: {
     totalLeads: number;
@@ -220,6 +336,13 @@ export interface AdminDashboardData {
   networkOverview: TeamRow[];
   recentLeads: Lead[];
   recentPartnerApplications: Lead[];
+  kpis?: {
+    funnelDaily: KpiFunnelDay[];
+    partnerPipeline: KpiPartnerPipeline | null;
+    duplication: KpiDuplicationRow[];
+    sourceMixDaily: KpiSourceMixRow[];
+  };
+  growthCompass: GrowthCompassRow[];
 }
 
 export interface PortalAccessState {
