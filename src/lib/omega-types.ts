@@ -9,6 +9,13 @@ export type RedirectType = "test" | "shop" | "partner" | "consultation";
 export type LeadSubmitMode = "created" | "updated" | "ignored";
 export type PartnerLeadPriority = "hot" | "follow_up" | "not_now";
 
+export interface PartnerZzLinks {
+  test: string | null;
+  shop: string | null;
+  partner: string | null;
+  consultation: string | null;
+}
+
 export interface TrackClickError {
   code: string;
   message: string;
@@ -211,6 +218,8 @@ export interface AdminPartnerRow {
   directPartners: number;
   leads: number;
   customers: number;
+  zzLinksReady: boolean;
+  zzLinks: PartnerZzLinks;
   createdAt: string;
 }
 
@@ -355,6 +364,7 @@ export interface PortalAccessState {
 
 export interface PartnerDashboardData {
   partner: AppUser;
+  zzLinks: PartnerZzLinks;
   metrics: {
     clicks: number;
     leads: number;

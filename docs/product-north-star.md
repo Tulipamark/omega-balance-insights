@@ -2,14 +2,14 @@
 
 ## What This Product Is
 
-Omega Balance is an attributed distribution and duplication platform built on
+Omega Balance is an attributed distribution and activation platform built on
 top of Zinzino.
 
 It is meant to help us:
 - drive customers to Zinzino through our own links
 - drive new partner candidates into our pipeline
 - help partners duplicate the same working model
-- grow their network and, through that, grow ours
+- help the right people get started and active around the Zinzino flow
 
 ## What We Are Optimizing For
 
@@ -20,7 +20,7 @@ The platform should primarily optimize for:
 - partner applications
 - partner activation
 - producing partners
-- network growth
+- more partner-led inflow
 
 ## What We Actually Own
 
@@ -30,7 +30,7 @@ We own:
 - lead capture
 - partner application intake
 - partner review and activation workflow
-- partner support and duplication structure
+- partner support and duplication guidance
 
 ## What We Do Not Fully Own Yet
 
@@ -40,6 +40,7 @@ We do not fully own:
 - order value at Zinzino
 - payout or commission truth
 - full customer lifecycle after the handoff to Zinzino
+- network placement, rank structure, and official Zinzino tree logic
 
 Because of that, the platform should not present itself as a full commerce
 system.
@@ -53,7 +54,7 @@ Success is:
 - better partner candidates entering review
 - more partners becoming active
 - more partners generating their own attributed inflow
-- stronger network growth without everything depending on us manually
+- stronger partner-led inflow without everything depending on us manually
 
 ## Current North Star
 
@@ -70,3 +71,20 @@ When deciding what to build next:
 - Prefer truthful metrics over bigger-looking metrics.
 - Do not imply revenue certainty where we only have handoff certainty.
 - Treat admin as an operational cockpit, not as a fake BI suite.
+
+## Near-Term Product Focus
+
+Current near-term focus:
+
+- [Partner First 30 Days](C:/Users/Heléne/omegabalance-lovable/docs/partner-first-30-days.md)
+- [Portal Lifecycle](C:/Users/Heléne/omegabalance-lovable/docs/portal-lifecycle.md)
+- [Growth Projection Engine](C:/Users/Heléne/omegabalance-lovable/docs/growth-projection-engine.md)
+- [First Result Engine](C:/Users/Heléne/omegabalance-lovable/docs/first-result-engine.md)
+- [First Result Engine Spec](C:/Users/Heléne/omegabalance-lovable/docs/first-result-engine-spec.md)
+
+The next meaningful product layer should help a new partner move from:
+
+- first setup
+- to first result
+- to repeated activity
+- to early first-line activation

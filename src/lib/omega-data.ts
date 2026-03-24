@@ -16,6 +16,7 @@ import {
   PartnerDashboardData,
   PartnerRelationship,
   PortalAccessState,
+  PartnerZzLinks,
   ReferralVisit,
   TeamRow,
 } from "@/lib/omega-types";
@@ -183,6 +184,10 @@ const mockPartnerRecords = mockUsers
     id: `partner-record-${user.id}`,
     user_id: user.id,
     referral_code: user.referral_code,
+    zinzino_test_url: `https://www.zinzino.com/test/${user.referral_code.toLowerCase()}`,
+    zinzino_shop_url: `https://www.zinzino.com/shop/${user.referral_code.toLowerCase()}`,
+    zinzino_partner_url: `https://www.zinzino.com/partner/${user.referral_code.toLowerCase()}`,
+    consultation_url: `https://www.zinzino.com/consultation/${user.referral_code.toLowerCase()}`,
     status: "verified",
     created_at: user.created_at,
   }));
@@ -425,12 +430,29 @@ function buildAdminPartnerRows(
   users: AppUser[],
   performance: ReturnType<typeof buildPartnerPerformance>,
   relationships: PartnerRelationship[],
+  partnerRecords: Array<{
+    id: string;
+    user_id: string;
+    referral_code?: string | null;
+    zinzino_test_url?: string | null;
+    zinzino_shop_url?: string | null;
+    zinzino_partner_url?: string | null;
+    consultation_url?: string | null;
+    status?: string | null;
+    created_at: string;
+  }>,
 ): AdminPartnerRow[] {
   return users
     .filter((user) => user.role === "partner")
     .map((partner) => {
       const sponsor = partner.parent_partner_id ? users.find((user) => user.id === partner.parent_partner_id) : null;
       const totals = performance.find((row) => row.partnerId === partner.id);
+      const partnerRecord = partnerRecords.find((record) => record.user_id === partner.id);
+      const zzLinksReady = Boolean(
+        partnerRecord?.zinzino_test_url &&
+        partnerRecord?.zinzino_shop_url &&
+        partnerRecord?.zinzino_partner_url,
+      );
 
       return {
         partnerId: partner.id,
@@ -441,6 +463,13 @@ function buildAdminPartnerRows(
         directPartners: relationships.filter((relationship) => relationship.sponsor_user_id === partner.id).length,
         leads: totals?.leads || 0,
         customers: totals?.customers || 0,
+        zzLinksReady,
+        zzLinks: {
+          test: partnerRecord?.zinzino_test_url || null,
+          shop: partnerRecord?.zinzino_shop_url || null,
+          partner: partnerRecord?.zinzino_partner_url || null,
+          consultation: partnerRecord?.consultation_url || null,
+        },
         createdAt: partner.created_at,
       };
     })
@@ -727,7 +756,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       },
       leadsPerPartner: performance,
       customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
-      partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships),
+        partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships, mockPartnerRecords),
       networkOverview: buildTeamRows(mockUsers, mockRelationships),
       recentLeads: sortNewest(mockLeads).slice(0, 6),
       recentPartnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")).slice(0, 6),
@@ -768,7 +797,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("customers").select("*"),
     client.from("partner_relationships").select("*"),
     client.from("referral_visits").select("*"),
-    client.from("partners").select("id, user_id, referral_code, status, created_at"),
+      client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at"),
     client.from("outbound_clicks").select("id, partner_id, referral_code, session_id, destination_type, created_at"),
     client.from("kpi_funnel_daily").select("*").limit(14),
     client.from("kpi_partner_pipeline").select("*").maybeSingle(),
@@ -787,7 +816,22 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     },
     leadsPerPartner: performance,
     customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
-    partners: buildAdminPartnerRows(users || [], performance, relationships || []),
+    partners: buildAdminPartnerRows(
+      users || [],
+      performance,
+      relationships || [],
+      ((partnerRecords as Array<{
+        id: string;
+        user_id: string;
+        referral_code?: string | null;
+        zinzino_test_url?: string | null;
+        zinzino_shop_url?: string | null;
+        zinzino_partner_url?: string | null;
+        consultation_url?: string | null;
+        status?: string | null;
+        created_at: string;
+      }> | null) || []),
+    ),
     networkOverview: buildTeamRows(users || [], relationships || []),
     recentLeads: sortNewest(leads || []).slice(0, 6),
     recentPartnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")).slice(0, 6),
@@ -822,6 +866,12 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
 
     return {
       partner,
+      zzLinks: {
+        test: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_test_url || null,
+        shop: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_shop_url || null,
+        partner: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_partner_url || null,
+        consultation: mockPartnerRecords.find((record) => record.user_id === partner.id)?.consultation_url || null,
+      },
       metrics: {
         clicks: mockVisits.filter((visit) => visit.referral_code === partner.referral_code).length,
         leads: leads.length,
@@ -844,11 +894,16 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
     throw new Error("No partner profile found for the current session.");
   }
 
-  const [{ data: leads }, { data: customers }, { data: relationships }, { data: visits }] = await Promise.all([
+  const [{ data: leads }, { data: customers }, { data: relationships }, { data: visits }, { data: partnerRecord }] = await Promise.all([
     client.from("leads").select("*").eq("referred_by_user_id", profile.id),
     client.from("customers").select("*").eq("referred_by_user_id", profile.id),
     client.from("partner_relationships").select("*").eq("sponsor_user_id", profile.id),
     client.from("referral_visits").select("*").eq("referral_code", profile.referral_code),
+    client
+      .from("partners")
+      .select("zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url")
+      .eq("user_id", profile.id)
+      .maybeSingle(),
   ]);
 
   const teamUserIds = (relationships || []).map((relationship) => relationship.partner_user_id);
@@ -871,6 +926,12 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
 
   return {
     partner: profile,
+    zzLinks: {
+      test: partnerRecord?.zinzino_test_url || null,
+      shop: partnerRecord?.zinzino_shop_url || null,
+      partner: partnerRecord?.zinzino_partner_url || null,
+      consultation: partnerRecord?.consultation_url || null,
+    },
     metrics: {
       clicks: (visits || []).length,
       leads: (leads || []).length,
@@ -883,6 +944,90 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
     partnerLeads: sortedLeads.filter((lead) => lead.type === "partner_lead"),
     team,
   };
+}
+
+export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZzLinks) {
+  const normalizedLinks = {
+    zinzino_test_url: zzLinks.test?.trim() || null,
+    zinzino_shop_url: zzLinks.shop?.trim() || null,
+    zinzino_partner_url: zzLinks.partner?.trim() || null,
+    consultation_url: zzLinks.consultation?.trim() || null,
+  };
+
+  if (!supabase) {
+    const existingRecord = mockPartnerRecords.find((record) => record.user_id === partnerId);
+
+    if (existingRecord) {
+      existingRecord.zinzino_test_url = normalizedLinks.zinzino_test_url;
+      existingRecord.zinzino_shop_url = normalizedLinks.zinzino_shop_url;
+      existingRecord.zinzino_partner_url = normalizedLinks.zinzino_partner_url;
+      existingRecord.consultation_url = normalizedLinks.consultation_url;
+    } else {
+      const partnerUser = mockUsers.find((user) => user.id === partnerId);
+
+      if (!partnerUser) {
+        throw new Error("Partnern kunde inte hittas.");
+      }
+
+      mockPartnerRecords.push({
+        id: `partner-record-${partnerId}`,
+        user_id: partnerId,
+        referral_code: partnerUser.referral_code,
+        status: "verified",
+        created_at: new Date().toISOString(),
+        ...normalizedLinks,
+      });
+    }
+
+    return { ok: true };
+  }
+
+  const client = requireSupabase();
+  const { data: partnerRecord, error: fetchError } = await client
+    .from("partners")
+    .select("id")
+    .eq("user_id", partnerId)
+    .maybeSingle();
+
+  if (fetchError) {
+    throw new Error(fetchError.message);
+  }
+
+  if (partnerRecord?.id) {
+    const { error: updateError } = await client
+      .from("partners")
+      .update(normalizedLinks)
+      .eq("id", partnerRecord.id);
+
+    if (updateError) {
+      throw new Error(updateError.message);
+    }
+
+    return { ok: true };
+  }
+
+  const { data: partnerUser, error: partnerUserError } = await client
+    .from("users")
+    .select("referral_code")
+    .eq("id", partnerId)
+    .maybeSingle<{ referral_code?: string | null }>();
+
+  if (partnerUserError) {
+    throw new Error(partnerUserError.message);
+  }
+
+  const { error: insertError } = await client.from("partners").insert({
+    user_id: partnerId,
+    referral_code: partnerUser?.referral_code || null,
+    status: "verified",
+    ...normalizedLinks,
+  });
+
+  if (insertError) {
+    throw new Error(insertError.message);
+  }
+
+  return { ok: true };
 }
 
 export function getDemoPartnerOptions() {

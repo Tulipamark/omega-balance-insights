@@ -44,6 +44,7 @@ const App = () => (
           <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/admin/:section" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/:lang" element={<Index />} />
           <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
           <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
@@ -162,6 +163,10 @@ function ProtectedDashboardRoute({
       params.set("email", accessQuery.data.authUser.email);
     }
     return <Navigate to={`/dashboard/login?${params.toString()}`} replace />;
+  }
+
+  if (requiredRole === "partner" && accessQuery.data.portalUser.role === "admin") {
+    return children;
   }
 
   if (accessQuery.data.portalUser.role !== requiredRole) {
