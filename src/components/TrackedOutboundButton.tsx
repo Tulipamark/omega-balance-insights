@@ -77,7 +77,7 @@ const TrackedOutboundButton = ({
       setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || genericErrorCopy);
       return;
 
-      window.location.assign(result.destination_url);
+      // handled above
     } catch (error) {
       console.error("Outbound redirect failed", error);
       setErrorMessage(errorMessages?.generic || genericErrorCopy);
