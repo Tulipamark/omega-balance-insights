@@ -13,10 +13,10 @@ type TrackedOutboundButtonProps = {
 };
 
 const reasonCopy: Record<string, string> = {
-  partner_not_found: "Ingen giltig partnerlank hittades for den har hanvisningen.",
-  partner_not_verified: "Partnern ar inte verifierad annu.",
-  destination_missing: "Malet for den har lanken ar inte klart annu.",
-  invalid_type: "Lanken kunde inte tolkas korrekt.",
+  partner_not_found: "Ingen giltig partnerlänk hittades för den här hänvisningen.",
+  partner_not_verified: "Partnern är inte verifierad ännu.",
+  destination_missing: "Målet för den här länken är inte klart ännu.",
+  invalid_type: "Länken kunde inte tolkas korrekt.",
 };
 
 const fallbackEligibleErrors = new Set([
@@ -25,14 +25,14 @@ const fallbackEligibleErrors = new Set([
   "destination_missing",
 ]);
 
-const genericErrorCopy = "Lanken kunde inte oppnas just nu.";
+const genericErrorCopy = "Länken kunde inte öppnas just nu.";
 
 const TrackedOutboundButton = ({
   destinationType,
   fallbackHref,
   className,
   children,
-  pendingLabel = "Oppnar...",
+  pendingLabel = "Öppnar...",
   errorMessages,
 }: TrackedOutboundButtonProps) => {
   const location = useLocation();

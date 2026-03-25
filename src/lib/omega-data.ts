@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import {
+  AcceptPortalLegalRequest,
   AdminDashboardData,
   AdminPartnerRow,
   AppUser,
@@ -20,6 +21,7 @@ import {
   ReferralVisit,
   TeamRow,
 } from "@/lib/omega-types";
+import { PORTAL_NOTICE_VERSION, PORTAL_PRIVACY_VERSION, PORTAL_TERMS_VERSION } from "@/lib/portal-legal";
 import { evaluateGrowthCompass } from "@/lib/growth-compass";
 import { mapPartnerDataToGrowthCompassInput, type OutboundClickSignal } from "@/lib/map-partner-data-to-growth-compass";
 
@@ -34,6 +36,12 @@ const mockUsers: AppUser[] = [
     role: "admin",
     referral_code: "OMEGAHQ",
     parent_partner_id: null,
+    accepted_terms_at: now.toISOString(),
+    accepted_privacy_at: now.toISOString(),
+    accepted_portal_notice_at: now.toISOString(),
+    terms_version: PORTAL_TERMS_VERSION,
+    privacy_version: PORTAL_PRIVACY_VERSION,
+    portal_notice_version: PORTAL_NOTICE_VERSION,
     created_at: now.toISOString(),
   },
   {
@@ -44,6 +52,12 @@ const mockUsers: AppUser[] = [
     role: "partner",
     referral_code: "ELIN2026",
     parent_partner_id: null,
+    accepted_terms_at: now.toISOString(),
+    accepted_privacy_at: now.toISOString(),
+    accepted_portal_notice_at: now.toISOString(),
+    terms_version: PORTAL_TERMS_VERSION,
+    privacy_version: PORTAL_PRIVACY_VERSION,
+    portal_notice_version: PORTAL_NOTICE_VERSION,
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 60).toISOString(),
   },
   {
@@ -54,6 +68,12 @@ const mockUsers: AppUser[] = [
     role: "partner",
     referral_code: "MIKAEL88",
     parent_partner_id: "user-elin",
+    accepted_terms_at: now.toISOString(),
+    accepted_privacy_at: now.toISOString(),
+    accepted_portal_notice_at: now.toISOString(),
+    terms_version: PORTAL_TERMS_VERSION,
+    privacy_version: PORTAL_PRIVACY_VERSION,
+    portal_notice_version: PORTAL_NOTICE_VERSION,
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 14).toISOString(),
   },
   {
@@ -64,6 +84,12 @@ const mockUsers: AppUser[] = [
     role: "partner",
     referral_code: "SAGA444",
     parent_partner_id: "user-elin",
+    accepted_terms_at: now.toISOString(),
+    accepted_privacy_at: now.toISOString(),
+    accepted_portal_notice_at: now.toISOString(),
+    terms_version: PORTAL_TERMS_VERSION,
+    privacy_version: PORTAL_PRIVACY_VERSION,
+    portal_notice_version: PORTAL_NOTICE_VERSION,
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 8).toISOString(),
   },
 ];
@@ -744,6 +770,50 @@ export async function signOutPortalUser() {
   window.location.assign("/dashboard/login");
 }
 
+export async function acceptPortalLegal(payload: AcceptPortalLegalRequest) {
+  if (!supabase) {
+    const demoPartner = mockUsers.find((user) => user.role === "partner");
+    if (demoPartner) {
+      demoPartner.accepted_terms_at = payload.accepted_terms_at;
+      demoPartner.accepted_privacy_at = payload.accepted_privacy_at;
+      demoPartner.accepted_portal_notice_at = payload.accepted_portal_notice_at;
+      demoPartner.terms_version = payload.terms_version;
+      demoPartner.privacy_version = payload.privacy_version;
+      demoPartner.portal_notice_version = payload.portal_notice_version;
+      demoPartner.legal_acceptance_user_agent = payload.legal_acceptance_user_agent || null;
+    }
+
+    return { ok: true as const };
+  }
+
+  const client = requireSupabase();
+  const { data: sessionData } = await client.auth.getSession();
+  const authUserId = sessionData.session?.user?.id;
+
+  if (!authUserId) {
+    throw new Error("Du måste vara inloggad för att godkänna villkoren.");
+  }
+
+  const { error } = await client
+    .from("users")
+    .update({
+      accepted_terms_at: payload.accepted_terms_at,
+      accepted_privacy_at: payload.accepted_privacy_at,
+      accepted_portal_notice_at: payload.accepted_portal_notice_at,
+      terms_version: payload.terms_version,
+      privacy_version: payload.privacy_version,
+      portal_notice_version: payload.portal_notice_version,
+      legal_acceptance_user_agent: payload.legal_acceptance_user_agent || null,
+    })
+    .eq("auth_user_id", authUserId);
+
+  if (error) {
+    throw error;
+  }
+
+  return { ok: true as const };
+}
+
 export async function getAdminDashboardData(): Promise<AdminDashboardData> {
   if (!supabase) {
     const performance = buildPartnerPerformance(mockUsers, mockLeads, mockCustomers, mockVisits);
@@ -856,6 +926,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
 export async function getPartnerDashboardData(partnerId?: string): Promise<PartnerDashboardData> {
   if (!supabase) {
     const partner = mockUsers.find((user) => user.id === (partnerId || "user-elin")) || mockUsers[1];
+    const sponsor = partner.parent_partner_id ? mockUsers.find((user) => user.id === partner.parent_partner_id) || null : null;
     const leads = sortNewest(mockLeads.filter((lead) => lead.referred_by_user_id === partner.id));
     const customers = sortNewest(mockCustomers.filter((customer) => customer.referred_by_user_id === partner.id));
     const partnerLeads = leads.filter((lead) => lead.type === "partner_lead");
@@ -866,6 +937,13 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
 
     return {
       partner,
+      sponsor: sponsor
+        ? {
+            id: sponsor.id,
+            name: sponsor.name,
+            email: sponsor.email,
+          }
+        : null,
       zzLinks: {
         test: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_test_url || null,
         shop: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_shop_url || null,
@@ -923,9 +1001,19 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
   });
 
   const sortedLeads = sortNewest(leads || []);
+  const sponsor = profile.parent_partner_id
+    ? ((await client.from("users").select("id, name, email").eq("id", profile.parent_partner_id).maybeSingle()).data as Pick<AppUser, "id" | "name" | "email"> | null)
+    : null;
 
   return {
     partner: profile,
+    sponsor: sponsor
+      ? {
+          id: sponsor.id,
+          name: sponsor.name,
+          email: sponsor.email,
+        }
+      : null,
     zzLinks: {
       test: partnerRecord?.zinzino_test_url || null,
       shop: partnerRecord?.zinzino_shop_url || null,
@@ -946,12 +1034,33 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
   };
 }
 
+function normalizeHttpsUrl(value: string | null | undefined, label: string) {
+  const trimmed = value?.trim() || "";
+
+  if (!trimmed) {
+    return null;
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    throw new Error(`${label} måste vara en giltig URL.`);
+  }
+
+  if (parsed.protocol !== "https:") {
+    throw new Error(`${label} måste börja med https://`);
+  }
+
+  return parsed.toString();
+}
+
 export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZzLinks) {
   const normalizedLinks = {
-    zinzino_test_url: zzLinks.test?.trim() || null,
-    zinzino_shop_url: zzLinks.shop?.trim() || null,
-    zinzino_partner_url: zzLinks.partner?.trim() || null,
-    consultation_url: zzLinks.consultation?.trim() || null,
+    zinzino_test_url: normalizeHttpsUrl(zzLinks.test, "Testlänk"),
+    zinzino_shop_url: normalizeHttpsUrl(zzLinks.shop, "Shoplänk"),
+    zinzino_partner_url: normalizeHttpsUrl(zzLinks.partner, "Partnerlänk"),
+    consultation_url: normalizeHttpsUrl(zzLinks.consultation, "Konsultationslänk"),
   };
 
   if (!supabase) {

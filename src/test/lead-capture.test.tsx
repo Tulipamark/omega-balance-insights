@@ -136,7 +136,7 @@ describe("LeadCaptureSection", () => {
     fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: "Boka konsultation" }));
 
-    expect(await screen.findByText("Bokningen kan bara fortsatta via en giltig referral-lank.")).toBeInTheDocument();
+    expect(await screen.findByText("Bokningen kan bara fortsätta via en giltig referral-länk.")).toBeInTheDocument();
   });
 
   it("shows the edge error message when routing fails", async () => {

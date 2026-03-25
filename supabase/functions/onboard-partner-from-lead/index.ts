@@ -141,6 +141,17 @@ Deno.serve(async (request) => {
     return jsonResponse({ ok: false, error: "Partner lead not found" }, 404);
   }
 
+  const zinzinoVerified = lead.details?.zinzino_verified === true;
+  const teamIntentConfirmed = lead.details?.team_intent_confirmed === true;
+
+  if (!zinzinoVerified) {
+    return jsonResponse({ ok: false, error: "Verifiera först att personen aktivt har joinat Zinzino innan teammedlem skapas." }, 400);
+  }
+
+  if (!teamIntentConfirmed) {
+    return jsonResponse({ ok: false, error: "Bekräfta först att personen vill bygga med er innan teammedlem skapas." }, 400);
+  }
+
   let portalUser: AppUserRow | null = null;
   const { data: existingPortalUser, error: existingPortalUserError } = await serviceClient
     .from("users")
@@ -247,11 +258,14 @@ Deno.serve(async (request) => {
   if (lead.referred_by_user_id) {
     const { error: relationshipError } = await serviceClient
       .from("partner_relationships")
-      .upsert({
-        sponsor_user_id: lead.referred_by_user_id,
-        partner_user_id: portalUser.id,
-        level: 1,
-      }, { onConflict: "partner_user_id" });
+      .upsert(
+        {
+          sponsor_user_id: lead.referred_by_user_id,
+          partner_user_id: portalUser.id,
+          level: 1,
+        },
+        { onConflict: "partner_user_id" },
+      );
 
     if (relationshipError) {
       return jsonResponse({ ok: false, error: "Could not create partner relationship" }, 500);

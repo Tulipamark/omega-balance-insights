@@ -112,7 +112,8 @@ Why this matters:
 
 Definition:
 
-- someone who is part of our actual working team
+- someone who has actively joined Zinzino
+- someone who wants to build with us, not just sit in the wider structure
 - someone who uses our support, guidance, links, and operating model
 
 What we store:
@@ -128,6 +129,7 @@ Portal access:
 
 Why this matters:
 
+- team membership starts after real Zinzino join, not at lead stage
 - the portal is for our team layer
 - not for every person in the wider Zinzino structure
 
@@ -156,11 +158,25 @@ Someone can:
 
 - show partner interest
 - be reviewed by us
-- even move forward in Zinzino
+- attend a Zoom call or presentation
+- even move forward toward Zinzino
 
 without becoming part of our portal team layer.
 
 Portal access should be intentional, not automatic.
+
+### Team access starts after real commitment
+
+Someone should not become a team member in our portal just because they:
+
+- filled in a partner form
+- sounded promising
+- attended a call
+
+Team membership should begin when the person:
+
+- has actively joined Zinzino
+- and wants to build with us in practice
 
 ### Our platform is for our team, not the whole network
 

@@ -16,7 +16,9 @@ import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import DashboardLoginPage from "./pages/DashboardLoginPage.tsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
 import PartnerDashboardPage from "./pages/PartnerDashboardPage.tsx";
+import PartnerLegalAcceptancePage from "./pages/PartnerLegalAcceptancePage.tsx";
 import { getPortalAccessState } from "./lib/omega-data";
+import { hasAcceptedPortalLegal } from "./lib/portal-legal";
 import { isSupabaseConfigured } from "./integrations/supabase/client";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
 
@@ -42,7 +44,9 @@ const App = () => (
           <Route path="/dashboard/login" element={<DashboardLoginPage />} />
           <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
           <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/admin/legal-preview" element={<ProtectedDashboardRoute requiredRole="admin"><PartnerLegalAcceptancePage previewMode /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/admin/:section" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/partner/legal" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerLegalAcceptancePage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
           <Route path="/:lang" element={<Index />} />
@@ -124,6 +128,10 @@ function DashboardIndexPage() {
     return <Navigate to={`/dashboard/login?${params.toString()}`} replace />;
   }
 
+  if (accessQuery.data.portalUser.role === "partner" && !hasAcceptedPortalLegal(accessQuery.data.portalUser)) {
+    return <Navigate to="/dashboard/partner/legal" replace />;
+  }
+
   return <Navigate to={accessQuery.data.portalUser.role === "admin" ? "/dashboard/admin" : "/dashboard/partner"} replace />;
 }
 
@@ -171,6 +179,19 @@ function ProtectedDashboardRoute({
 
   if (accessQuery.data.portalUser.role !== requiredRole) {
     return <Navigate to={`/dashboard/${accessQuery.data.portalUser.role}`} replace />;
+  }
+
+  if (requiredRole === "partner") {
+    const legalPath = "/dashboard/partner/legal";
+    const accepted = hasAcceptedPortalLegal(accessQuery.data.portalUser);
+
+    if (!accepted && location.pathname !== legalPath) {
+      return <Navigate to={legalPath} replace />;
+    }
+
+    if (accepted && location.pathname === legalPath) {
+      return <Navigate to="/dashboard/partner" replace />;
+    }
   }
 
   return children;

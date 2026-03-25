@@ -93,6 +93,8 @@ export interface UpdatePartnerLeadReviewRequest {
   lead_id: string;
   partner_priority?: PartnerLeadPriority | null;
   admin_note?: string | null;
+  zinzino_verified?: boolean | null;
+  team_intent_confirmed?: boolean | null;
 }
 
 export interface UpdatePartnerLeadReviewResponse {
@@ -100,6 +102,8 @@ export interface UpdatePartnerLeadReviewResponse {
   lead_id?: string;
   partner_priority?: PartnerLeadPriority | null;
   admin_note?: string | null;
+  zinzino_verified?: boolean | null;
+  team_intent_confirmed?: boolean | null;
   error?: string;
 }
 
@@ -111,6 +115,13 @@ export interface AppUser {
   role: UserRole;
   referral_code: string;
   parent_partner_id?: string | null;
+  accepted_terms_at?: string | null;
+  accepted_privacy_at?: string | null;
+  accepted_portal_notice_at?: string | null;
+  terms_version?: string | null;
+  privacy_version?: string | null;
+  portal_notice_version?: string | null;
+  legal_acceptance_user_agent?: string | null;
   created_at: string;
 }
 
@@ -362,8 +373,23 @@ export interface PortalAccessState {
   portalUser: AppUser | null;
 }
 
+export interface AcceptPortalLegalRequest {
+  accepted_terms_at: string;
+  accepted_privacy_at: string;
+  accepted_portal_notice_at: string;
+  terms_version: string;
+  privacy_version: string;
+  portal_notice_version: string;
+  legal_acceptance_user_agent?: string | null;
+}
+
 export interface PartnerDashboardData {
   partner: AppUser;
+  sponsor: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
   zzLinks: PartnerZzLinks;
   metrics: {
     clicks: number;

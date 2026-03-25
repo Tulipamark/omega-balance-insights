@@ -106,4 +106,13 @@ describe("referral utilities", () => {
       user_agent: "OmegaTestAgent/1.0",
     });
   });
+
+  it("does not track the same referral landing twice in the same session", async () => {
+    persistSessionId("session-123");
+
+    await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram");
+    await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram");
+
+    expect(trackVisitMock).toHaveBeenCalledTimes(1);
+  });
 });

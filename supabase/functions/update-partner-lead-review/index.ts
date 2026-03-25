@@ -10,6 +10,8 @@ type RequestBody = {
   lead_id?: string;
   partner_priority?: "hot" | "follow_up" | "not_now" | null;
   admin_note?: string | null;
+  zinzino_verified?: boolean | null;
+  team_intent_confirmed?: boolean | null;
 };
 
 type AuthUser = {
@@ -65,6 +67,8 @@ Deno.serve(async (request) => {
   const leadId = body?.lead_id?.trim();
   const partnerPriority = body?.partner_priority ?? null;
   const adminNote = body?.admin_note?.trim() || null;
+  const zinzinoVerified = body?.zinzino_verified ?? null;
+  const teamIntentConfirmed = body?.team_intent_confirmed ?? null;
 
   if (!leadId) {
     return jsonResponse({ ok: false, error: "Missing lead_id" }, 400);
@@ -125,6 +129,8 @@ Deno.serve(async (request) => {
     ...(lead.details || {}),
     partner_priority: partnerPriority,
     admin_note: adminNote,
+    zinzino_verified: zinzinoVerified,
+    team_intent_confirmed: teamIntentConfirmed,
     review_updated_at: new Date().toISOString(),
     review_updated_by: adminUser.id,
   };
@@ -145,5 +151,7 @@ Deno.serve(async (request) => {
     lead_id: lead.id,
     partner_priority: partnerPriority,
     admin_note: adminNote,
+    zinzino_verified: zinzinoVerified,
+    team_intent_confirmed: teamIntentConfirmed,
   });
 });

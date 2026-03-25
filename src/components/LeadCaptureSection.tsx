@@ -27,7 +27,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
     if (!referralCode) {
       setErrorMessage(
         lang === "sv"
-          ? "Bokningen kan bara fortsatta via en giltig referral-lank."
+          ? "Bokningen kan bara fortsätta via en giltig referral-länk."
           : "The booking can only continue from a valid referral link.",
       );
       return;

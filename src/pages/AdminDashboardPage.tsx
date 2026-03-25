@@ -85,13 +85,36 @@ function getPartnerApplicationStatusVariant(status: Lead["status"]): "secondary"
   }
 }
 
-function getPortalStageLabel(status: Lead["status"]) {
-  switch (status) {
-    case "new":
+function getPortalStageKey(lead: Lead) {
+  if (lead.status === "active") {
+    return "team_member" as const;
+  }
+
+  if (lead.status === "inactive") {
+    return "inactive" as const;
+  }
+
+  if (lead.status === "won") {
+    return "won" as const;
+  }
+
+  if (lead.status === "lost") {
+    return "lost" as const;
+  }
+
+  const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+  const hasProgressSignals = hasInternalReview || getLeadZinzinoVerified(lead) || getLeadTeamIntentConfirmed(lead) || lead.status === "qualified";
+
+  return hasProgressSignals ? "candidate" as const : "partner_lead" as const;
+}
+
+function getPortalStageLabel(lead: Lead) {
+  switch (getPortalStageKey(lead)) {
+    case "partner_lead":
       return "Partnerlead";
-    case "qualified":
+    case "candidate":
       return "Kandidat";
-    case "active":
+    case "team_member":
       return "Teammedlem";
     case "inactive":
       return "Vilande";
@@ -104,14 +127,14 @@ function getPortalStageLabel(status: Lead["status"]) {
   }
 }
 
-function getPortalStageDescription(status: Lead["status"]) {
-  switch (status) {
-    case "new":
-      return "Intresse är fångat, men personen är ännu inte kvalificerad för nästa steg.";
-    case "qualified":
-      return "Granskad kandidat som bör följas upp och hållas varm tills rätt läge finns.";
-    case "active":
-      return "Verifierad partner med portalåtkomst i vårt teamlager.";
+function getPortalStageDescription(lead: Lead) {
+  switch (getPortalStageKey(lead)) {
+    case "partner_lead":
+      return "Intresse är fångat, men personen är ännu i första uppföljningsläget.";
+    case "candidate":
+      return "Granskad kandidat som följs upp tills ZZ-join och tydligt build intent är bekräftade.";
+    case "team_member":
+      return "Aktiv ZZ-partner med portalåtkomst i vårt teamlager.";
     case "inactive":
       return "Har funnits i flödet, men är inte aktiv i nuläget.";
     case "won":
@@ -120,6 +143,144 @@ function getPortalStageDescription(status: Lead["status"]) {
       return "Ska inte drivas vidare just nu.";
     default:
       return "Saknar tydlig tolkning just nu.";
+  }
+}
+
+function getPortalStageVariant(lead: Lead): "secondary" | "outline" | "default" {
+  switch (getPortalStageKey(lead)) {
+    case "candidate":
+      return "secondary";
+    case "team_member":
+      return "default";
+    default:
+      return "outline";
+  }
+}
+
+function getPortalStageNextAction(lead: Lead) {
+  switch (lead.status) {
+    case "new":
+      return "Bedöm matchning, sätt prioritet och avgör om personen ska följas upp vidare som kandidat.";
+    case "qualified":
+      return "Följ upp aktivt och bekräfta både ZZ-join och vilja att bygga med er innan portalåtkomst skapas.";
+    case "active":
+      return "Fokus ligger nu på onboarding, första aktivitet och att teammedlemmen kommer igång i portalen.";
+    case "inactive":
+      return "Låt personen vila tills rätt timing finns, men behåll noteringar om varför flödet pausades.";
+    case "won":
+      return "Säkerställ att nästa steg efter positivt besked faktiskt tas och inte stannar i admin.";
+    case "lost":
+      return "Avsluta tydligt och lägg inte mer energi här just nu.";
+    default:
+      return "Avgör vad nästa tydliga steg i processen ska vara.";
+  }
+}
+
+function getPortalStageDecisionLabel(status: Lead["status"]) {
+  switch (status) {
+    case "new":
+      return "Redo att bedömas";
+    case "qualified":
+      return "Redo för verifiering";
+    case "active":
+      return "Redo för onboarding";
+    case "inactive":
+      return "Pausad";
+    case "won":
+      return "Positivt utfall";
+    case "lost":
+      return "Avslutad";
+    default:
+      return "Oklar";
+  }
+}
+
+function getLeadReadinessLabel(lead: Lead) {
+  if (lead.status === "active") {
+    return "Klar";
+  }
+
+  if (getLeadReviewReady(lead)) {
+    return "Redo";
+  }
+
+  return "Ej redo";
+}
+
+function getLeadReadinessDescription(lead: Lead) {
+  if (lead.status === "active") {
+    return "Finns redan i portalen som teammedlem.";
+  }
+
+  if (getLeadReviewReady(lead)) {
+    return "Klar att bli teammedlem när du vill öppna portalåtkomst.";
+  }
+
+  return getLeadReviewBlockers(lead).join(", ");
+}
+
+function getLeadFollowUpRecommendation(lead: Lead) {
+  if (lead.status === "active") {
+    return "Följ upp första inloggning, legal, ZZ-länkar och första aktivitet i portalen.";
+  }
+
+  const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+  const zinzinoVerified = getLeadZinzinoVerified(lead);
+  const teamIntentConfirmed = getLeadTeamIntentConfirmed(lead);
+
+  if (!hasInternalReview) {
+    return "Gör en första intern bedömning och avgör om personen ska drivas vidare som kandidat.";
+  }
+
+  if (!zinzinoVerified) {
+    return "Följ upp efter samtal eller Zoom och bekräfta om ZZ-join är genomförd eller nära nästa steg.";
+  }
+
+  if (!teamIntentConfirmed) {
+    return "Bekräfta att personen faktiskt vill bygga med er modell, inte bara undersöka möjligheten.";
+  }
+
+  return "Allt är bekräftat. Skapa teammedlem och säkra att onboarding verkligen startar direkt.";
+}
+
+function getLeadContactMethod(lead: Lead) {
+  if (lead.status === "active") {
+    return "Portalstart";
+  }
+
+  const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+  const zinzinoVerified = getLeadZinzinoVerified(lead);
+  const teamIntentConfirmed = getLeadTeamIntentConfirmed(lead);
+
+  if (!hasInternalReview) {
+    return "Kort avstämning";
+  }
+
+  if (!zinzinoVerified) {
+    return "Samtal eller Zoom";
+  }
+
+  if (!teamIntentConfirmed) {
+    return "Tydlig bekräftelse";
+  }
+
+  return "Onboarding";
+}
+
+function getLeadContactMethodDescription(lead: Lead) {
+  switch (getLeadContactMethod(lead)) {
+    case "Portalstart":
+      return "Säkra inloggning, legal och att personen kommer igång samma vecka.";
+    case "Kort avstämning":
+      return "Kort kontakt för att avgöra matchning, timing och om kandidaten ska prioriteras vidare.";
+    case "Samtal eller Zoom":
+      return "Ett riktig samtal passar bättre än lös textdialog när nästa steg mot ZZ ska klargöras.";
+    case "Tydlig bekräftelse":
+      return "Be om ett tydligt ja eller nej till om personen faktiskt vill bygga med er modell.";
+    case "Onboarding":
+      return "Allt är klart. Flytta snabbt från beslut till faktisk start i portalen.";
+    default:
+      return "Välj den kontaktform som för personen tydligast vidare.";
   }
 }
 
@@ -203,6 +364,187 @@ function getLeadAdminNote(lead: Lead) {
   return typeof value === "string" ? value : "";
 }
 
+function getLeadTeamIntentConfirmed(lead: Lead) {
+  return lead.details?.team_intent_confirmed === true;
+}
+
+function getLeadZinzinoVerified(lead: Lead) {
+  return lead.status === "active" || lead.details?.zinzino_verified === true;
+}
+
+function getLeadReviewReady(lead: Lead) {
+  const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+  const zinzinoVerified = getLeadZinzinoVerified(lead);
+  const teamIntentConfirmed = getLeadTeamIntentConfirmed(lead);
+
+  return lead.status === "active" || (hasInternalReview && zinzinoVerified && teamIntentConfirmed);
+}
+
+function getLeadReviewBlockers(lead: Lead) {
+  return [
+    ...(getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0
+      ? []
+      : ["Intern bedömning saknas"]),
+    ...(getLeadZinzinoVerified(lead) ? [] : ["ZZ-join ej verifierad"]),
+    ...(getLeadTeamIntentConfirmed(lead) ? [] : ["Build intent ej bekräftat"]),
+  ];
+}
+
+function getApplicationQueueScore(lead: Lead) {
+  const priority = getLeadPartnerPriority(lead);
+  const ready = getLeadReviewReady(lead);
+
+  if (lead.status === "active") {
+    return 0;
+  }
+
+  if (priority === "hot" && ready) {
+    return 5;
+  }
+
+  if (ready) {
+    return 4;
+  }
+
+  if (priority === "hot") {
+    return 3;
+  }
+
+  if (priority === "follow_up") {
+    return 2;
+  }
+
+  if (lead.status === "qualified") {
+    return 1;
+  }
+
+  return 0;
+}
+
+function buildCandidatePathSteps(lead: Lead) {
+  const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+  const zinzinoVerified = getLeadZinzinoVerified(lead);
+  const teamIntentConfirmed = getLeadTeamIntentConfirmed(lead);
+  const teamMember = lead.status === "active";
+
+  return [
+    {
+      label: "Intresse fångat",
+      description: "Lead finns i systemet och kan följas upp.",
+      done: true,
+      current: !hasInternalReview,
+    },
+    {
+      label: "Kandidat bedömd",
+      description: "Intern bedömning är satt och personen följs upp aktivt.",
+      done: hasInternalReview || teamMember,
+      current: hasInternalReview && !zinzinoVerified && !teamMember,
+    },
+    {
+      label: "ZZ-join verifierad",
+      description: "Personen är bekräftad som aktiv partner i Zinzino.",
+      done: zinzinoVerified || teamMember,
+      current: zinzinoVerified && !teamIntentConfirmed && !teamMember,
+    },
+    {
+      label: "Vill bygga med oss",
+      description: "Det är tydligt att personen ska in i vårt teamlager.",
+      done: teamIntentConfirmed || teamMember,
+      current: teamIntentConfirmed && !teamMember,
+    },
+    {
+      label: "Teammedlem",
+      description: "Portalåtkomst är skapad och onboarding kan börja.",
+      done: teamMember,
+      current: teamMember,
+    },
+  ];
+}
+
+function getCoreReadiness(lead: Lead) {
+  const priority = getLeadPartnerPriority(lead);
+  const readiness = typeof lead.details?.readiness === "string" ? lead.details.readiness.toLowerCase() : "";
+  const hasBuildIntent = lead.details?.team_intent_confirmed === true;
+
+  if (lead.status !== "active") {
+    return {
+      label: "Inte aktuellt ännu",
+      description: "Kärnan blir relevant först efter att personen blivit teammedlem.",
+      ready: false,
+    };
+  }
+
+  if (priority === "hot" && hasBuildIntent && (readiness.includes("nu") || readiness.includes("redo"))) {
+    return {
+      label: "Möjlig kärna",
+      description: "Personen ser ut att kunna vara aktuell för tätare rytm, calls och närmare stöd.",
+      ready: true,
+    };
+  }
+
+  return {
+    label: "Vanlig teammedlem",
+    description: "Låt personen först visa stabil aktivitet innan kärnan blir relevant.",
+    ready: false,
+  };
+}
+
+function getCoreSupportPlan(lead: Lead) {
+  const readiness = getCoreReadiness(lead);
+
+  if (lead.status !== "active") {
+    return {
+      title: "Inte aktuellt ännu",
+      items: [
+        "Fokusera först på att få personen till teammedlem.",
+        "Skapa inte tätare access innan ZZ-join och build intent är klara.",
+      ],
+    };
+  }
+
+  if (readiness.ready) {
+    return {
+      title: "Nästa steg i kärnan",
+      items: [
+        "Bjud in personen till närmare rytm med privata calls eller tätare Zoom.",
+        "Lägg till personen i kärnans närmaste kommunikation, till exempel privat grupp.",
+        "Sätt ett konkret fokus för veckan så kärnaccessen direkt leder till rörelse.",
+      ],
+    };
+  }
+
+  return {
+    title: "Nästa steg före kärnan",
+    items: [
+      "Låt personen först visa stabil aktivitet i vardagen.",
+      "Följ upp om första resultat börjar bli upprepade, inte bara enstaka.",
+      "När rytmen sitter kan kärnan bli relevant som stödlager.",
+    ],
+  };
+}
+
+function DataTruthBadges({ isDemo, interpretive = false, projected = false }: { isDemo: boolean; interpretive?: boolean; projected?: boolean }) {
+  return (
+    <div className="mb-4 flex flex-wrap items-center gap-2">
+      {isDemo ? (
+        <Badge variant="outline" className="rounded-full px-3 py-1">
+          Demo-data
+        </Badge>
+      ) : null}
+      {interpretive ? (
+        <Badge variant="secondary" className="rounded-full px-3 py-1">
+          Intern tolkning
+        </Badge>
+      ) : null}
+      {projected ? (
+        <Badge variant="secondary" className="rounded-full px-3 py-1">
+          Scenario
+        </Badge>
+      ) : null}
+    </div>
+  );
+}
+
 const adminSections = [
   {
     key: "overview",
@@ -248,6 +590,7 @@ const AdminDashboardPage = () => {
   const [zinzinoVerified, setZinzinoVerified] = useState(false);
   const [partnerPriority, setPartnerPriority] = useState<PartnerLeadPriority | "none">("none");
   const [adminNote, setAdminNote] = useState("");
+  const [teamIntentConfirmed, setTeamIntentConfirmed] = useState(false);
   const [reviewStatus, setReviewStatus] = useState<string | null>(null);
   const [selectedGrowthCompassPartnerId, setSelectedGrowthCompassPartnerId] = useState<string | null>(null);
   const [growthCompassDialogOpen, setGrowthCompassDialogOpen] = useState(false);
@@ -285,6 +628,8 @@ const AdminDashboardPage = () => {
             lead_id: selectedLead.id,
             partner_priority: partnerPriority === "none" ? null : partnerPriority,
             admin_note: adminNote.trim() || null,
+            zinzino_verified: zinzinoVerified,
+            team_intent_confirmed: teamIntentConfirmed,
           })
         : Promise.reject(new Error("No partner application selected.")),
     onSuccess: async () => {
@@ -320,8 +665,10 @@ const AdminDashboardPage = () => {
       return;
     }
 
+    setZinzinoVerified(getLeadZinzinoVerified(selectedLead));
     setPartnerPriority(getLeadPartnerPriority(selectedLead) ?? "none");
     setAdminNote(getLeadAdminNote(selectedLead));
+    setTeamIntentConfirmed(getLeadTeamIntentConfirmed(selectedLead));
     setReviewStatus(null);
   }, [selectedLead]);
 
@@ -409,6 +756,28 @@ const AdminDashboardPage = () => {
   const showPartners = currentSection === "partners";
   const showTraffic = currentSection === "traffic";
   const showGuide = currentSection === "guide";
+  const selectedLeadCoreReadiness = selectedLead ? getCoreReadiness(selectedLead) : null;
+  const selectedLeadCoreSupportPlan = selectedLead ? getCoreSupportPlan(selectedLead) : null;
+  const sortedPartnerApplications = data
+    ? [...data.recentPartnerApplications].sort((a, b) => {
+        const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
+        if (scoreDiff !== 0) {
+          return scoreDiff;
+        }
+
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      })
+    : [];
+  const selectedLeadBlockers = selectedLead
+    ? [
+        ...(partnerPriority !== "none" || adminNote.trim() ? [] : ["Sätt prioritet eller intern bedömning"]),
+        ...(zinzinoVerified || selectedLead.status === "active" ? [] : ["Verifiera aktiv Zinzino-join"]),
+        ...(teamIntentConfirmed || selectedLead.status === "active" ? [] : ["Bekräfta att personen vill bygga med er"]),
+      ]
+    : [];
+  const selectedLeadReadyForPortal =
+    selectedLead?.status === "active" ||
+    ((partnerPriority === "hot" || partnerPriority === "follow_up") && zinzinoVerified && teamIntentConfirmed);
   const closeDialog = () => {
     setSelectedLead(null);
     setProvisionedPartner(null);
@@ -417,6 +786,7 @@ const AdminDashboardPage = () => {
     setZinzinoVerified(false);
     setPartnerPriority("none");
     setAdminNote("");
+    setTeamIntentConfirmed(false);
     setReviewStatus(null);
   };
 
@@ -614,6 +984,7 @@ const AdminDashboardPage = () => {
                   title="Duplicering"
                   description="Vilka partners som faktiskt börjar skapa eget attribuerat inflöde och kända resultat."
                 >
+                  <DataTruthBadges isDemo={isDemo} />
                   <DataTable
                     columns={["Partner", "Besök", "Klick", "Leads", "Kundleads", "Partnerleads", "Kända kunder"]}
                     rows={(data.kpis.duplication || []).slice(0, 8).map((row) => [
@@ -636,6 +1007,7 @@ const AdminDashboardPage = () => {
                   title="Trafikkällor"
                   description="Senaste attribuerade besök uppdelade på källa, medium och landningssida."
                 >
+                  <DataTruthBadges isDemo={isDemo} />
                   <DataTable
                     columns={["Dag", "Källa", "Medium", "Kampanj", "Landningssida", "Besök"]}
                     rows={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => [
@@ -655,6 +1027,7 @@ const AdminDashboardPage = () => {
                 title="Tillväxtkompass"
                 description="Intern kompass för senaste tidens partnerutveckling, dupliceringssignaler och viktigaste nästa steg. Detta är vägledning, inte officiell Zinzino-status."
               >
+                <DataTruthBadges isDemo={isDemo} interpretive />
                 <DataTable
                   columns={["Partner", "Status", "Poäng", "Datatillit", "Nästa steg", "Visa"]}
                   rows={growthCompassRows.slice(0, 12).map((row) => [
@@ -706,6 +1079,7 @@ const AdminDashboardPage = () => {
                 title="Tillväxtprognos"
                 description="Intern scenarioöverblick för 12, 24, 36 och 60 månader. Modellen väger ihop systemdriven tillväxt och extern relationsdriven tillväxt. Detta är inte officiell ZZ-payout."
               >
+                <DataTruthBadges isDemo={isDemo} projected />
                 <div className="max-w-md rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Välj scenario</p>
                   <div className="mt-3 flex items-center gap-3">
@@ -745,7 +1119,7 @@ const AdminDashboardPage = () => {
             </>
           ) : null}
 
-          {showPartners ? <div className="grid gap-8 xl:grid-cols-2">
+          {showPartners ? <div className="grid gap-8">
             <DashboardSection title="Leads per partner" description="Snabb överblick över vilka som driver inflöde just nu.">
               <DataTable
                 columns={["Partner", "Kod", "Klick", "Leads", "Kunder"]}
@@ -763,22 +1137,9 @@ const AdminDashboardPage = () => {
                 emptyState="Ingen partnerdata ännu."
               />
             </DashboardSection>
-
-            <DashboardSection title="Kunder per partner" description="MVP-vyn fokuserar på attribution och relationer, inte på payout.">
-              <DataTable
-                columns={["Partner", "Kunder", "Leads", "Klick"]}
-                rows={data.customersPerPartner.map((row) => [
-                  <span key={`${row.partnerId}-name`} className="font-medium text-foreground">{row.partnerName}</span>,
-                  <span key={`${row.partnerId}-customers`}>{row.customers}</span>,
-                  <span key={`${row.partnerId}-leads`}>{row.leads}</span>,
-                  <span key={`${row.partnerId}-clicks`}>{row.clicks}</span>,
-                ])}
-                emptyState="Ingen kundattribution ännu."
-              />
-            </DashboardSection>
           </div> : null}
 
-          {showPartners || showApplications ? <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          {showPartners ? <div className="grid gap-8">
             {showPartners ? <DashboardSection title="Direkta partnerrelationer" description="Det här visar bara våra egna relationer och uppföljning runt ZZ-flödet, inte Zinzinos officiella nätverksträd.">
               <div className="space-y-3">
                 {data.networkOverview.length ? (
@@ -798,25 +1159,6 @@ const AdminDashboardPage = () => {
                   <p className="text-sm text-subtle">Inga partnerrelationer ännu.</p>
                 )}
               </div>
-            </DashboardSection> : null}
-
-            {showApplications ? <DashboardSection title="Senaste leads" description="Senast fångade leads från hela sajten.">
-              <DataTable
-                columns={["Name", "Type", "Referral", "Status", "Created"]}
-                rows={data.recentLeads.map((lead) => [
-                  <div key={`${lead.id}-name`}>
-                    <p className="font-medium text-foreground">{lead.name}</p>
-                    <p className="text-xs text-subtle">{lead.email}</p>
-                  </div>,
-                  <Badge key={`${lead.id}-type`} variant="outline" className="rounded-full capitalize">
-                    {lead.type === "partner_lead" ? "Partnerlead" : "Kundlead"}
-                  </Badge>,
-                  <span key={`${lead.id}-ref`}>{lead.referral_code || "-"}</span>,
-                  <span key={`${lead.id}-status`} className="capitalize">{lead.status}</span>,
-                  <span key={`${lead.id}-created`}>{formatDate(lead.created_at)}</span>,
-                ])}
-                emptyState="Inga leads fångade ännu."
-              />
             </DashboardSection> : null}
           </div> : null}
 
@@ -839,21 +1181,38 @@ const AdminDashboardPage = () => {
               </div>
             </div>
             <DataTable
-              columns={["Sökande", "Portalsteg", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
-              rows={data.recentPartnerApplications.map((lead) => [
+              columns={["Sökande", "Portalsteg", "Redo", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
+              rows={sortedPartnerApplications.map((lead) => [
                 <div key={`${lead.id}-applicant`}>
                   <p className="font-medium text-foreground">{lead.name}</p>
                   <p className="text-xs text-subtle">{lead.email}</p>
                 </div>,
                 <div key={`${lead.id}-portal-stage`}>
                   <Badge
-                    variant={getPartnerApplicationStatusVariant(lead.status)}
+                    variant={getPortalStageVariant(lead)}
                     className="rounded-full px-3 py-1"
                   >
-                    {getPortalStageLabel(lead.status)}
+                    {getPortalStageLabel(lead)}
                   </Badge>
                   <p className="mt-2 max-w-[220px] text-xs leading-5 text-subtle">
-                    {getPortalStageDescription(lead.status)}
+                    {getPortalStageDescription(lead)}
+                  </p>
+                </div>,
+                <div key={`${lead.id}-readiness`} className="max-w-[220px]">
+                  <Badge
+                    variant={lead.status === "active" || getLeadReviewReady(lead) ? "default" : "outline"}
+                    className="rounded-full px-3 py-1"
+                  >
+                    {getLeadReadinessLabel(lead)}
+                  </Badge>
+                  <p className="mt-2 text-xs leading-5 text-subtle">
+                    {getLeadReadinessDescription(lead)}
+                  </p>
+                  <p className="mt-2 text-xs font-medium text-foreground/85">
+                    Kontaktform: {getLeadContactMethod(lead)}
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-foreground/75">
+                    Nästa: {getLeadFollowUpRecommendation(lead)}
                   </p>
                 </div>,
                 <span key={`${lead.id}-source`}>{lead.source_page || "-"}</span>,
@@ -1006,7 +1365,7 @@ const AdminDashboardPage = () => {
           <DialogHeader>
             <DialogTitle>ZZ-länkar för partner</DialogTitle>
             <DialogDescription>
-              Här lägger du in partnerns riktiga Zinzino-länkar. De används som destinationer bakom Omega-länken.
+              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop- och partnerlänken bakom Omega-länken.
             </DialogDescription>
           </DialogHeader>
 
@@ -1053,17 +1412,6 @@ const AdminDashboardPage = () => {
                     className="rounded-xl"
                   />
                 </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="zz-consultation-url">Konsultationslänk</Label>
-                  <Input
-                    id="zz-consultation-url"
-                    value={zzConsultationUrl}
-                    onChange={(event) => setZzConsultationUrl(event.target.value)}
-                    placeholder="https://..."
-                    className="rounded-xl"
-                  />
-                </div>
               </div>
             </div>
           ) : null}
@@ -1089,7 +1437,7 @@ const AdminDashboardPage = () => {
           <DialogHeader>
             <DialogTitle>Partneransökan</DialogTitle>
             <DialogDescription>
-              Läs svaren, bedöm matchningen och skapa konto först när personen är verifierad som partner hos Zinzino och ska in i vårt teamlager.
+              Läs svaren, bedöm matchningen och skapa portalåtkomst först när personen både är aktiv partner i Zinzino och tydligt ska bygga med er.
             </DialogDescription>
           </DialogHeader>
 
@@ -1118,8 +1466,8 @@ const AdminDashboardPage = () => {
                     <p><span className="font-medium text-foreground">Källsida:</span> {selectedLead.source_page || "-"}</p>
                     <p><span className="font-medium text-foreground">Referral:</span> {selectedLead.referral_code || "Direkt"}</p>
                     <p><span className="font-medium text-foreground">Mottagen:</span> {formatDate(selectedLead.created_at)}</p>
-                    <p><span className="font-medium text-foreground">Portalsteg:</span> {getPortalStageLabel(selectedLead.status)}</p>
-                    <p className="text-xs leading-5 text-subtle">{getPortalStageDescription(selectedLead.status)}</p>
+                    <p><span className="font-medium text-foreground">Portalsteg:</span> {getPortalStageLabel(selectedLead)}</p>
+                    <p className="text-xs leading-5 text-subtle">{getPortalStageDescription(selectedLead)}</p>
                   </div>
                 </div>
               </div>
@@ -1138,6 +1486,125 @@ const AdminDashboardPage = () => {
                   <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
                     <p className="font-medium text-foreground">Bakgrund</p>
                     <p className="mt-2 text-sm leading-6 text-foreground/85">{getLeadDetailValue(selectedLead, "background")}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/70 bg-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Vägen vidare</p>
+                <div className="mt-4 rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-sm font-medium text-foreground">Från partnerlead till teammedlem</p>
+                  <div className="mt-4 space-y-3">
+                    {buildCandidatePathSteps(selectedLead).map((step) => (
+                      <div key={step.label} className="flex items-start justify-between gap-4 rounded-2xl border border-border/70 bg-white/85 px-4 py-3">
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{step.label}</p>
+                          <p className="mt-1 text-xs leading-5 text-subtle">{step.description}</p>
+                        </div>
+                        <Badge
+                          variant={step.done ? "default" : step.current ? "secondary" : "outline"}
+                          className="rounded-full px-3 py-1"
+                        >
+                          {step.done ? "Klar" : step.current ? "Nu" : "Senare"}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
+                  <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                    <p className="text-sm font-medium text-foreground">Nuvarande beslutsläge</p>
+                    <Badge
+                      variant={getPartnerApplicationStatusVariant(selectedLead.status)}
+                      className="mt-3 rounded-full px-3 py-1"
+                    >
+                      {getPortalStageDecisionLabel(selectedLead.status)}
+                    </Badge>
+                    <p className="mt-3 text-sm leading-6 text-subtle">
+                      {getPortalStageNextAction(selectedLead)}
+                    </p>
+                    <div className="mt-4 rounded-2xl border border-border/70 bg-white/80 p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Nästa kontakt</p>
+                      <p className="mt-2 text-sm leading-6 text-foreground/85">
+                        {getLeadFollowUpRecommendation(selectedLead)}
+                      </p>
+                      <div className="mt-3 rounded-2xl border border-border/70 bg-secondary/15 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Rekommenderad kontaktform</p>
+                        <p className="mt-2 text-sm font-medium text-foreground">{getLeadContactMethod(selectedLead)}</p>
+                        <p className="mt-2 text-sm leading-6 text-subtle">{getLeadContactMethodDescription(selectedLead)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                    <p className="text-sm font-medium text-foreground">Tre saker före teammedlem</p>
+                    <div className="mt-3 space-y-3 text-sm text-subtle">
+                      <div className="flex items-start justify-between gap-4">
+                        <span>Intern bedömning är satt</span>
+                        <Badge variant={partnerPriority !== "none" || adminNote.trim() ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                          {partnerPriority !== "none" || adminNote.trim() ? "Ja" : "Ej satt"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <span>Aktiv ZZ-join är verifierad</span>
+                        <Badge variant={zinzinoVerified || selectedLead.status === "active" ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                          {zinzinoVerified || selectedLead.status === "active" ? "Ja" : "Ej verifierad"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <span>Vill bygga med oss bekräftat</span>
+                        <Badge variant={teamIntentConfirmed || selectedLead.status === "active" ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                          {teamIntentConfirmed || selectedLead.status === "active" ? "Ja" : "Ej bekräftat"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <span>Redo att bli teammedlem</span>
+                        <Badge
+                          variant={selectedLeadReadyForPortal ? "default" : "outline"}
+                          className="rounded-full px-3 py-1"
+                        >
+                          {selectedLead.status === "active" ? "Klar" : selectedLeadReadyForPortal ? "Redo" : "Ej redo"}
+                        </Badge>
+                      </div>
+                    </div>
+                    {!selectedLeadReadyForPortal ? (
+                      <div className="mt-4 rounded-2xl border border-border/70 bg-white/80 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Blockerar just nu</p>
+                        <ul className="mt-3 space-y-2 text-sm leading-6 text-subtle">
+                          {selectedLeadBlockers.map((blocker) => (
+                            <li key={blocker}>{blocker}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div className="mt-4 rounded-2xl border border-emerald-300/70 bg-emerald-50/80 p-4 text-sm leading-6 text-emerald-950">
+                        Allt som behövs är bekräftat. Du kan nu skapa teammedlem och ge portalåtkomst.
+                      </div>
+                    )}
+                    {selectedLeadCoreReadiness ? (
+                      <div className="mt-4 rounded-2xl border border-border/70 bg-white/80 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Efter teammedlem</p>
+                        <div className="mt-3 flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-sm font-medium text-foreground">{selectedLeadCoreReadiness.label}</p>
+                            <p className="mt-1 text-sm leading-6 text-subtle">{selectedLeadCoreReadiness.description}</p>
+                          </div>
+                          <Badge variant={selectedLeadCoreReadiness.ready ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                            {selectedLeadCoreReadiness.ready ? "Kärna möjlig" : "Avvakta"}
+                          </Badge>
+                        </div>
+                        {selectedLeadCoreSupportPlan ? (
+                          <div className="mt-4 rounded-2xl border border-border/70 bg-secondary/15 p-4">
+                            <p className="text-sm font-medium text-foreground">{selectedLeadCoreSupportPlan.title}</p>
+                            <ul className="mt-3 space-y-2 text-sm leading-6 text-subtle">
+                              {selectedLeadCoreSupportPlan.items.map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -1169,6 +1636,15 @@ const AdminDashboardPage = () => {
                     />
                   </div>
                 </div>
+                <label className="mt-4 flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/25 p-4 text-sm leading-6 text-foreground/85">
+                  <input
+                    type="checkbox"
+                    checked={teamIntentConfirmed}
+                    onChange={(event) => setTeamIntentConfirmed(event.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-border"
+                  />
+                  <span>Jag har bekräftat att personen vill bygga med oss och ska in i vårt teamlager efter sin ZZ-join.</span>
+                </label>
                 <div className="mt-4 flex flex-wrap items-center gap-3">
                   <Button
                     type="button"
@@ -1191,7 +1667,7 @@ const AdminDashboardPage = () => {
                     onChange={(event) => setZinzinoVerified(event.target.checked)}
                     className="mt-1 h-4 w-4 rounded border-border"
                   />
-                  <span>Jag har verifierat att personen redan är partner hos Zinzino.</span>
+                  <span>Jag har verifierat att personen aktivt har joinat Zinzino och är redo att räknas som teammedlem hos oss.</span>
                 </label>
               ) : null}
 
@@ -1211,7 +1687,7 @@ const AdminDashboardPage = () => {
                   </div>
                   <div className="mt-4 rounded-2xl border border-emerald-300/70 bg-white/80 p-4 text-xs leading-6">
                     <p className="font-medium text-foreground">Nästa steg</p>
-                    <p>Partnern loggar in på <span className="font-medium">/dashboard/login</span> med sin e-postadress och lösenordet ovan.</p>
+                    <p>Teammedlemmen loggar in på <span className="font-medium">/dashboard/login</span> med sin e-postadress och lösenordet ovan.</p>
                   </div>
                 </div>
               ) : null}
@@ -1235,17 +1711,18 @@ const AdminDashboardPage = () => {
                 onboardMutation.isPending ||
                 Boolean(provisionedPartner) ||
                 selectedLead.status === "active" ||
-                !zinzinoVerified
+                !zinzinoVerified ||
+                !teamIntentConfirmed
               }
               onClick={() => selectedLead && onboardMutation.mutate(selectedLead.id)}
             >
               {onboardMutation.isPending
                 ? "Skapar..."
                 : selectedLead?.status === "active"
-                  ? "Konto finns redan"
+                  ? "Teammedlem finns redan"
                   : provisionedPartner
                     ? "Skapat"
-                    : "Skapa verifierat konto"}
+                    : "Skapa teammedlem"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OmegaBalance Projektstatus Och Strategisk Riktning</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f7f6;
+        --panel: rgba(255, 255, 255, 0.9);
+        --card: #ffffff;
+        --text: #17303a;
+        --muted: #60717b;
+        --line: #d8e1df;
+        --line-strong: #c5d2cf;
+        --accent: #1f5b4a;
+        --accent-soft: #eef5f2;
+        --shadow: 0 24px 60px rgba(20, 42, 51, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top right, rgba(79, 139, 112, 0.12), transparent 28%),
+          linear-gradient(180deg, #fbfdfc 0%, var(--bg) 100%);
+        color: var(--text);
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 15.5px;
+        line-height: 1.7;
+      }
+
+      .page {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 42px 22px 72px;
+      }
+
+      .shell {
+        background: var(--panel);
+        border: 1px solid rgba(216, 225, 223, 0.9);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .hero {
+        padding: 42px 44px 30px;
+        border-bottom: 1px solid var(--line);
+        background:
+          linear-gradient(135deg, rgba(238, 245, 242, 0.95), rgba(255, 255, 255, 0.88));
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(31, 91, 74, 0.08);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 10px;
+        line-height: 1.15;
+        color: #10262e;
+      }
+
+      h1 {
+        margin-top: 18px;
+        font-size: 2.5rem;
+        letter-spacing: -0.03em;
+      }
+
+      h2 {
+        font-size: 1.24rem;
+        margin-top: 34px;
+      }
+
+      h3 {
+        font-size: 1rem;
+        margin-top: 22px;
+        color: #1d3942;
+      }
+
+      p {
+        margin: 0 0 12px;
+      }
+
+      .meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .lead {
+        margin-top: 18px;
+        max-width: 760px;
+        font-size: 1.05rem;
+        color: #243b44;
+      }
+
+      .body {
+        padding: 34px 44px 44px;
+      }
+
+      .summary {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .summary-card {
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--accent-soft);
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--accent);
+        font-size: 0.86rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      ul,
+      ol {
+        margin: 0 0 14px 20px;
+        padding: 0;
+      }
+
+      li {
+        margin: 0 0 6px;
+      }
+
+      .section {
+        margin-top: 26px;
+        padding-top: 2px;
+      }
+
+      .note {
+        margin-top: 32px;
+        padding: 16px 18px;
+        border-radius: 16px;
+        border: 1px solid var(--line-strong);
+        background: #f9fbfa;
+        color: #4d5f68;
+      }
+
+      @media (max-width: 720px) {
+        .hero,
+        .body {
+          padding: 28px 22px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .page {
+          max-width: none;
+          padding: 0;
+        }
+
+        .shell {
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          backdrop-filter: none;
+        }
+
+        .hero {
+          background: #fff;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <article class="shell">
+        <header class="hero">
+          <div class="eyebrow">OmegaBalance • Strategisk Översikt</div>
+          <h1>Projektstatus Och Strategisk Riktning</h1>
+          <p class="meta">Datum: 2026-03-25</p>
+          <p class="lead">
+            OmegaBalance utvecklas som ett operativt tillväxtlager runt Zinzino, med fokus på trafik, partnerkonvertering, aktivering och duplicering av arbetssätt inom en hälsobaserad affärsmodell.
+          </p>
+        </header>
+
+        <section class="body">
+          <div class="summary">
+            <div class="summary-card">
+              <strong>Executive Summary</strong>
+              Plattformen är inte avsedd att återskapa Zinzinos officiella backoffice, kompensationsmodell, rankstruktur eller placeringslogik. Dess roll är att stödja de delar av verksamheten som vi själva styr direkt: trafik, attribution, lead capture, partnerintresse, onboardingstöd, uppföljning och teamaktivering.
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Nuvarande Status</h2>
+
+            <h3>1. Produktens position är definierad</h3>
+            <ul>
+              <li>Zinzino äger officiell struktur, kvalificering, rank, placering och kompensation.</li>
+              <li>OmegaBalance äger förvärv, referral-routing, leadhantering, onboardingstöd, teamstöd och aktiveringslogik.</li>
+              <li>Detta skyddar produkten från att glida över i en pseudo-backoffice-modell.</li>
+            </ul>
+
+            <h3>2. Adminflödet har strukturerats</h3>
+            <ul>
+              <li>Adminmiljön stödjer nu en tydligare intern process från partnerlead till kandidat, verifierad Zinzino-partner och teammedlem.</li>
+              <li>Readiness och portalsteg har synkats bättre.</li>
+              <li>Ansökningsflödet visar nu blockerare, nästa åtgärd och onboardingberedskap tydligare.</li>
+            </ul>
+
+            <h3>3. Partnerupplevelsen har gått bortom en statisk dashboard</h3>
+            <ul>
+              <li>Partnermiljön är nu uppdelad i Översikt, Leads, Länkar, Kunder och Kontakter.</li>
+              <li>Översikten innehåller vägledning för de första 30 dagarna, fokus just nu, omedelbar nästa åtgärd, progression mot första resultat, veckovis arbetsriktning och praktiska arbetssätt.</li>
+              <li>Det gör miljön mer beteendestyrande och mindre passiv.</li>
+            </ul>
+
+            <h3>4. Leadhanteringen är mer operativ</h3>
+            <ul>
+              <li>Leads presenteras mer handlingsorienterat, med tydligare signaler för läge, brådskande och nästa steg.</li>
+              <li>Filtrering och prioritering har förbättrats, vilket gör portalen mer användbar i faktisk uppföljning.</li>
+            </ul>
+
+            <h3>5. Referral- och ZZ-länklogiken finns på plats</h3>
+            <ul>
+              <li>Omega-länken är den primära externa länken.</li>
+              <li>Zinzino-länkarna ligger bakom flödet som destinationslänkar.</li>
+              <li>Partnern hanterar nu själv aktiva länkar för BalanceTest, shop och partner.</li>
+            </ul>
+
+            <h3>6. Legal acceptance är implementerat</h3>
+            <ul>
+              <li>Innan partnerdashboarden kan användas måste användaren godkänna portalvillkor och integritetspolicy.</li>
+              <li>Användaren måste också bekräfta förståelse för att portalen är OmegaBalances interna teamlager och inte Zinzinos officiella plattform.</li>
+              <li>Godkännandet sparas med tidsstämpel, versionsnummer och user agent.</li>
+              <li>Minimiåldern på 18 år och myndighet är nu tydligt angiven.</li>
+            </ul>
+
+            <h3>7. Dokumentation och arbetsstruktur är mer stabil</h3>
+            <ul>
+              <li>Centrala dokument finns nu för systemöversikt, first result engine, live readiness, GDPR-gap-analys och exekveringsprioriteringar.</li>
+              <li>Det har skapat en stabilare intern arbetsram.</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h2>Strategisk Målbild</h2>
+            <p>Det långsiktiga målet är att bygga en disciplinerad tillväxtmotor inom hälsa och wellness, baserad på ett mätbart och förtroendebärande erbjudande.</p>
+            <ol>
+              <li>attrahera rätt människor genom trafik och budskap</li>
+              <li>fånga och sortera intresse korrekt</li>
+              <li>omvandla kvalificerat partnerintresse till aktiva partners</li>
+              <li>aktivera dessa partners snabbt</li>
+              <li>etablera arbetssätt som är repeterbara och kan dupliceras vidare</li>
+            </ol>
+          </div>
+
+          <div class="section">
+            <h2>Målbild För Partnerresan</h2>
+            <ol>
+              <li>en person kommer in via vår sida eller vårt referral-flöde</li>
+              <li>partnerintresset fångas</li>
+              <li>uppföljning avgör om personen ska behandlas som kandidat</li>
+              <li>personen går vidare till Zinzino via den officiella vägen</li>
+              <li>Zinzino-join verifieras internt</li>
+              <li>build intent med oss bekräftas</li>
+              <li>portalåtkomst ges</li>
+              <li>legal acceptance genomförs</li>
+              <li>nödvändiga ZZ-länkar läggs in</li>
+              <li>partnern börjar arbeta med Omega-länk, leads och uppföljning</li>
+              <li>första resultat nås</li>
+              <li>arbetssättet börjar dupliceras vidare genom first line</li>
+            </ol>
+          </div>
+
+          <div class="section">
+            <h2>Operativ Modell</h2>
+            <p>
+              Portalen ska inte bara stödja aktivitet. Den ska stödja duplicering av arbetssätt. I praktiken innebär det att portalen ska hjälpa partnern att förstå vad som ska göras först, hur man börjar nära sitt eget nätverk, hur sociala medier används utan att bli generiska, när en dialog ska föras vidare till samtal eller Zoom, vem som hjälper uppåt och vem man själv ska hjälpa nedåt.
+            </p>
+            <p>
+              Ambitionen är att skapa ett operativt system för disciplinerat fältarbete inom en hälsobaserad partnermodell, inte en generell utbildningsportal.
+            </p>
+          </div>
+
+          <div class="section">
+            <h2>Aktuell Prioritet</h2>
+            <p>
+              Fronten är tillräckligt stark för nuvarande fas. Den huvudsakliga prioriteten ligger därför i motorn bakom: partnerintresse, kandidathantering, teammedlemsaktivering, första partnerupplevelse, första resultat och duplicerbart beteende.
+            </p>
+          </div>
+
+          <div class="section">
+            <h2>Nästa Fas</h2>
+            <ul>
+              <li>lägre friktion i kandidatfasen</li>
+              <li>en tydligare och mer praktisk första partnerupplevelse</li>
+              <li>starkare stöd för verkligt arbetssätt</li>
+              <li>fortsatt borttagning av UI-tyngd som inte stöder handling</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h2>Samlad Bedömning</h2>
+            <p>
+              Projektet har lämnat idéstadiet och har nu en verklig produktkärna. Det som återstår är främst exekveringsförfining: skarpare flöden, mer verklig användningstestning, mindre friktion, starkare operativ tydlighet och mer naturlig duplicering genom teamets beteenden.
+            </p>
+            <p>
+              OmegaBalance utvecklas till ett strukturerat tillväxt- och aktiveringslager för en hälsobaserad partnermodell, med tyngdpunkt på tydlighet, förtroende, operativ disciplin och repeterbar rörelse.
+            </p>
+          </div>
+
+          <div class="note">
+            Den här HTML-filen är formgiven för att kunna öppnas direkt i en webbläsare och sparas som PDF via webbläsarens utskriftsdialog.
+          </div>
+        </section>
+      </article>
+    </main>
+  </body>
+  </html>

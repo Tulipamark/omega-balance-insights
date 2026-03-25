@@ -2,7 +2,7 @@ import type { Lang } from "@/lib/i18n";
 
 export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string; trust: string }> = {
   sv: {
-    headline: "Få ett tydligt mått på din omega-balans\noch om det du gör faktiskt syns i resultatet",
+    headline: "Få ett tydligt mått på din omega-balans\noch se om det du gör faktiskt syns i resultatet",
     supporting: "Ett enkelt blodtest visar din uppmätta balans mellan omega-6 och omega-3, baserat på dina egna värden.",
     trust: "Ett enkelt sätt att få ett tydligt mätresultat.",
   },
