@@ -67,7 +67,8 @@ const TrackedOutboundButton = ({
         return;
       }
 
-      const reason = result.error?.code || result.reason || "destination_missing";
+      const failResult = result as Extract<typeof result, { ok: false }>;
+      const reason = failResult.error?.code || failResult.reason || "destination_missing";
 
       if (fallbackEligibleErrors.has(reason)) {
         window.location.assign(fallbackHref);

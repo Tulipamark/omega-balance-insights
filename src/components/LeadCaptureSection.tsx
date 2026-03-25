@@ -66,7 +66,8 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       if (response.ok) {
         window.location.assign(response.destination_url);
       } else {
-        throw new Error(response.error?.message || "Kunde inte boka konsultation.");
+        const failRes = response as Extract<typeof response, { ok: false }>;
+        throw new Error(failRes.error?.message || "Kunde inte boka konsultation.");
       }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Kunde inte skicka formuläret just nu.");
