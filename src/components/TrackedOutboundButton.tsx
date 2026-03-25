@@ -62,19 +62,23 @@ const TrackedOutboundButton = ({
         session_id: sessionId,
       });
 
-      if (!result.ok || !result.destination_url) {
-        const reason = result.error?.code || result.reason || "destination_missing";
-
-        if (fallbackEligibleErrors.has(reason)) {
-          window.location.assign(fallbackHref);
-          return;
-        }
-
-        setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || genericErrorCopy);
+      if (result.ok) {
+        window.location.assign(result.destination_url);
         return;
       }
 
-      window.location.assign(result.destination_url);
+      const failResult = result as Extract<typeof result, { ok: false }>;
+      const reason = failResult.error?.code || failResult.reason || "destination_missing";
+
+      if (fallbackEligibleErrors.has(reason)) {
+        window.location.assign(fallbackHref);
+        return;
+      }
+
+      setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || genericErrorCopy);
+      return;
+
+      // handled above
     } catch (error) {
       console.error("Outbound redirect failed", error);
       setErrorMessage(errorMessages?.generic || genericErrorCopy);

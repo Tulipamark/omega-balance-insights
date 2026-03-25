@@ -63,11 +63,12 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         session_id: sessionId,
       });
 
-      if (!response.ok) {
-        throw new Error(response.error.message);
+      if (response.ok) {
+        window.location.assign(response.destination_url);
+      } else {
+        const failRes = response as Extract<typeof response, { ok: false }>;
+        throw new Error(failRes.error?.message || "Kunde inte boka konsultation.");
       }
-
-      window.location.assign(response.destination_url);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Kunde inte skicka formuläret just nu.");
     } finally {
