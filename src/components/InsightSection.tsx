@@ -41,7 +41,7 @@ const InsightSection = ({ lang }: InsightSectionProps) => {
         >
           {copy.points.map((point) => (
             <li key={point} className="rounded-2xl border border-border/70 bg-card px-5 py-4 text-base font-medium text-foreground shadow-card">
-              • {point}
+              {point}
             </li>
           ))}
         </motion.ul>

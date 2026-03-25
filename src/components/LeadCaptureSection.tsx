@@ -9,6 +9,39 @@ interface LeadCaptureSectionProps {
   lang: Lang;
 }
 
+const referralErrorByLang: Record<Lang, string> = {
+  sv: "Bokningen kan bara fortsätta via en giltig referral-länk.",
+  no: "Bookingen kan bare fortsette via en gyldig referral-lenke.",
+  da: "Bookingen kan kun fortsætte via et gyldigt referral-link.",
+  fi: "Varaus voi jatkua vain kelvollisen referral-linkin kautta.",
+  en: "The booking can only continue from a valid referral link.",
+  de: "Die Buchung kann nur über einen gültigen Referral-Link fortgesetzt werden.",
+  fr: "La réservation ne peut se poursuivre qu'à partir d'un lien de recommandation valide.",
+  it: "La prenotazione può continuare solo tramite un link referral valido.",
+};
+
+const submitErrorByLang: Record<Lang, string> = {
+  sv: "Kunde inte skicka formuläret just nu.",
+  no: "Kunne ikke sende skjemaet akkurat nå.",
+  da: "Kunne ikke sende formularen lige nu.",
+  fi: "Lomaketta ei voitu lähettää juuri nyt.",
+  en: "The form could not be submitted right now.",
+  de: "Das Formular konnte gerade nicht gesendet werden.",
+  fr: "Le formulaire n'a pas pu être envoyé pour le moment.",
+  it: "Il modulo non può essere inviato in questo momento.",
+};
+
+const submittingLabelByLang: Record<Lang, string> = {
+  sv: "Skickar...",
+  no: "Sender...",
+  da: "Sender...",
+  fi: "Lähetetään...",
+  en: "Submitting...",
+  de: "Wird gesendet...",
+  fr: "Envoi...",
+  it: "Invio...",
+};
+
 const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
   const copy = t(lang).lead;
   const location = useLocation();
@@ -25,11 +58,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
 
     const referralCode = getActiveReferralCode(location.pathname, location.search);
     if (!referralCode) {
-      setErrorMessage(
-        lang === "sv"
-          ? "Bokningen kan bara fortsätta via en giltig referral-länk."
-          : "The booking can only continue from a valid referral link.",
-      );
+      setErrorMessage(referralErrorByLang[lang]);
       return;
     }
 
@@ -54,7 +83,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       });
 
       if (!leadResponse.ok) {
-        throw new Error("Kunde inte skicka formuläret just nu.");
+        throw new Error(submitErrorByLang[lang]);
       }
 
       const response = await trackClickAndGetRedirect({
@@ -70,7 +99,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         throw new Error(failRes.error?.message || "Kunde inte boka konsultation.");
       }
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Kunde inte skicka formuläret just nu.");
+      setErrorMessage(error instanceof Error ? error.message : submitErrorByLang[lang]);
     } finally {
       setSubmitting(false);
     }
@@ -134,7 +163,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
               />
             </div>
             <button type="submit" disabled={submitting} className="btn-primary w-full text-center disabled:opacity-70">
-              {submitting ? "Skickar..." : copy.consultationCta}
+              {submitting ? submittingLabelByLang[lang] : copy.consultationCta}
             </button>
             {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
           </form>

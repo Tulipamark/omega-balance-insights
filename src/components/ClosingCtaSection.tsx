@@ -9,6 +9,32 @@ interface ClosingCtaSectionProps {
 
 const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
+const pendingLabelByLang: Record<Lang, string> = {
+  sv: "Öppnar...",
+  no: "Åpner...",
+  da: "Åbner...",
+  fi: "Avataan...",
+  en: "Opening...",
+  de: "Wird geöffnet...",
+  fr: "Ouverture...",
+  it: "Apertura...",
+};
+
+const genericErrorByLang: Record<Lang, string> = {
+  sv: "Länken kunde inte öppnas just nu.",
+  no: "Lenken kunne ikke åpnes akkurat nå.",
+  da: "Linket kunne ikke åbnes lige nu.",
+  fi: "Linkkiä ei voitu avata juuri nyt.",
+  en: "The link could not be opened right now.",
+  de: "Der Link konnte gerade nicht geöffnet werden.",
+  fr: "Le lien n'a pas pu être ouvert pour le moment.",
+  it: "Il link non può essere aperto in questo momento.",
+};
+
+const primaryCtaByLang: Partial<Record<Lang, string>> = {
+  sv: "Gör testet nu",
+};
+
 const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
   const copy = t(lang);
   const insightCopy = insightCopyByLang[lang];
@@ -34,10 +60,10 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full text-center"
-              pendingLabel={lang === "sv" ? "Öppnar..." : "Opening..."}
-              errorMessages={{ generic: lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now." }}
+              pendingLabel={pendingLabelByLang[lang]}
+              errorMessages={{ generic: genericErrorByLang[lang] }}
             >
-              {lang === "sv" ? "Gör testet nu" : copy.hero.primaryCta}
+              {primaryCtaByLang[lang] ?? copy.hero.primaryCta}
             </TrackedOutboundButton>
           </div>
         </motion.div>

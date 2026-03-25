@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { trustItemsByLang } from "@/lib/funnel-copy";
 
@@ -22,7 +23,10 @@ const TrustSection = ({ lang }: TrustSectionProps) => {
               transition={{ duration: 0.45, delay: index * 0.08 }}
               className="rounded-2xl border border-border/70 bg-card px-6 py-5 text-center shadow-card"
             >
-              <span className="text-base font-medium text-foreground">✓ {item}</span>
+              <span className="inline-flex items-center gap-2 text-base font-medium text-foreground">
+                <Check className="h-4 w-4 text-primary" />
+                {item}
+              </span>
             </motion.div>
           ))}
         </div>

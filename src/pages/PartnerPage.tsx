@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import FooterSection from "@/components/FooterSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +15,50 @@ import { getOrCreateSessionId, getReferralAttribution } from "@/lib/referral";
 interface PartnerPageProps {
   lang: Lang;
 }
+
+const readMoreByLang: Record<Lang, { more: string; less: string }> = {
+  sv: { more: "Läs mer", less: "Visa mindre" },
+  no: { more: "Les mer", less: "Vis mindre" },
+  da: { more: "Læs mere", less: "Vis mindre" },
+  fi: { more: "Lue lisää", less: "Näytä vähemmän" },
+  en: { more: "Read more", less: "Show less" },
+  de: { more: "Mehr lesen", less: "Weniger anzeigen" },
+  fr: { more: "Lire la suite", less: "Réduire" },
+  it: { more: "Leggi di più", less: "Mostra meno" },
+};
+
+const submitErrorByLang: Record<Lang, string> = {
+  sv: "Partneransökan kunde inte skickas just nu.",
+  no: "Partnersøknaden kunne ikke sendes akkurat nå.",
+  da: "Partneransøgningen kunne ikke sendes lige nu.",
+  fi: "Partnerihakemusta ei voitu lähettää juuri nyt.",
+  en: "The partner application could not be sent right now.",
+  de: "Die Partneranfrage konnte gerade nicht gesendet werden.",
+  fr: "La demande de partenariat n'a pas pu être envoyée pour le moment.",
+  it: "La richiesta partner non può essere inviata in questo momento.",
+};
+
+const missingReferralByLang: Record<Lang, string> = {
+  sv: "Partneransökan behöver skickas via en giltig partnerlänk.",
+  no: "Partnersøknaden må sendes via en gyldig partnerlenke.",
+  da: "Partneransøgningen skal sendes via et gyldigt partnerlink.",
+  fi: "Partnerihakemus on lähetettävä voimassa olevan partnerilinkin kautta.",
+  en: "The partner application must be sent through a valid partner link.",
+  de: "Die Partneranfrage muss über einen gültigen Partnerlink gesendet werden.",
+  fr: "La demande partenaire doit être envoyée via un lien partenaire valide.",
+  it: "La richiesta partner deve essere inviata tramite un link partner valido.",
+};
+
+const submittingLabelByLang: Record<Lang, string> = {
+  sv: "Skickar...",
+  no: "Sender...",
+  da: "Sender...",
+  fi: "Lähetetään...",
+  en: "Submitting...",
+  de: "Wird gesendet...",
+  fr: "Envoi...",
+  it: "Invio...",
+};
 
 type PartnerPageContent = {
   hero: {
@@ -69,6 +114,635 @@ type PartnerPageContent = {
     text: string;
     cta: string;
   };
+};
+
+const sectionNavByLang: Record<Lang, { title: string; items: { href: string; label: string }[] }> = {
+  sv: {
+    title: "Översikt",
+    items: [
+      { href: "#partner-economics", label: "Affärslogik" },
+      { href: "#partner-reasons", label: "Varför modellen" },
+      { href: "#partner-fit", label: "Rätt profil" },
+      { href: "#partner-steps", label: "Processen" },
+      { href: "#partner-application", label: "Ansökan" },
+    ],
+  },
+  no: {
+    title: "Oversikt",
+    items: [
+      { href: "#partner-economics", label: "Forretningslogikk" },
+      { href: "#partner-reasons", label: "Hvorfor nå" },
+      { href: "#partner-fit", label: "Hvem det passer for" },
+      { href: "#partner-steps", label: "Neste steg" },
+      { href: "#partner-application", label: "Søknad" },
+    ],
+  },
+  da: {
+    title: "Overblik",
+    items: [
+      { href: "#partner-economics", label: "Forretningslogik" },
+      { href: "#partner-reasons", label: "Hvorfor nu" },
+      { href: "#partner-fit", label: "Hvem det passer til" },
+      { href: "#partner-steps", label: "Næste skridt" },
+      { href: "#partner-application", label: "Ansøgning" },
+    ],
+  },
+  fi: {
+    title: "Yleiskatsaus",
+    items: [
+      { href: "#partner-economics", label: "Liiketoimintalogiikka" },
+      { href: "#partner-reasons", label: "Miksi juuri nyt" },
+      { href: "#partner-fit", label: "Kenelle tämä sopii" },
+      { href: "#partner-steps", label: "Seuraavat vaiheet" },
+      { href: "#partner-application", label: "Hakemus" },
+    ],
+  },
+  en: {
+    title: "Overview",
+    items: [
+      { href: "#partner-economics", label: "Business logic" },
+      { href: "#partner-reasons", label: "Why now" },
+      { href: "#partner-fit", label: "Who this fits" },
+      { href: "#partner-steps", label: "Next steps" },
+      { href: "#partner-application", label: "Application" },
+    ],
+  },
+  de: {
+    title: "Überblick",
+    items: [
+      { href: "#partner-economics", label: "Geschäftslogik" },
+      { href: "#partner-reasons", label: "Warum jetzt" },
+      { href: "#partner-fit", label: "Für wen es passt" },
+      { href: "#partner-steps", label: "Nächste Schritte" },
+      { href: "#partner-application", label: "Bewerbung" },
+    ],
+  },
+  fr: {
+    title: "Vue d'ensemble",
+    items: [
+      { href: "#partner-economics", label: "Logique économique" },
+      { href: "#partner-reasons", label: "Pourquoi maintenant" },
+      { href: "#partner-fit", label: "À qui cela convient" },
+      { href: "#partner-steps", label: "Étapes suivantes" },
+      { href: "#partner-application", label: "Candidature" },
+    ],
+  },
+  it: {
+    title: "Panoramica",
+    items: [
+      { href: "#partner-economics", label: "Logica del modello" },
+      { href: "#partner-reasons", label: "Perché ora" },
+      { href: "#partner-fit", label: "A chi si adatta" },
+      { href: "#partner-steps", label: "Prossimi passi" },
+      { href: "#partner-application", label: "Candidatura" },
+    ],
+  },
+};
+
+const flowSummaryByLang: Record<Lang, { title: string; items: string[] }> = {
+  sv: {
+    title: "Partnerresan",
+    items: [
+      "Du lämnar ditt intresse via sidan.",
+      "Vi följer upp och visar modellen tydligt.",
+      "Om det känns rätt går du vidare till Zinzino.",
+      "När du är igång får du portal, länkar och nästa steg.",
+    ],
+  },
+  no: {
+    title: "Partnerreisen",
+    items: [
+      "Du legger inn interessen din via siden.",
+      "Vi følger opp og viser modellen tydelig.",
+      "Hvis dette kjennes riktig, går du videre til Zinzino.",
+      "Når du er i gang, får du portal, lenker og neste steg.",
+    ],
+  },
+  da: {
+    title: "Partnerrejsen",
+    items: [
+      "Du sender din interesse via siden.",
+      "Vi følger op og viser modellen tydeligt.",
+      "Hvis det føles rigtigt, går du videre til Zinzino.",
+      "Når du er i gang, får du portal, links og næste skridt.",
+    ],
+  },
+  fi: {
+    title: "Partneripolku",
+    items: [
+      "Jätät kiinnostuksesi sivun kautta.",
+      "Palaamme asiaan ja käymme mallin läpi selkeästi.",
+      "Jos tämä tuntuu oikealta, etenet Zinzinoon.",
+      "Kun olet käynnissä, saat portaalin, linkit ja seuraavat vaiheet.",
+    ],
+  },
+  en: {
+    title: "The partner journey",
+    items: [
+      "You register your interest through the page.",
+      "We follow up and explain the model clearly.",
+      "If it feels right, you move forward with Zinzino.",
+      "Once you are active, you get portal access, links, and next steps.",
+    ],
+  },
+  de: {
+    title: "Der Partnerweg",
+    items: [
+      "Du hinterlässt dein Interesse über die Seite.",
+      "Wir fassen nach und erklären das Modell klar.",
+      "Wenn es passt, gehst du mit Zinzino weiter.",
+      "Sobald du aktiv bist, bekommst du Portalzugang, Links und die nächsten Schritte.",
+    ],
+  },
+  fr: {
+    title: "Le parcours partenaire",
+    items: [
+      "Vous laissez votre intérêt via la page.",
+      "Nous revenons vers vous et présentons clairement le modèle.",
+      "Si cela vous correspond, vous poursuivez avec Zinzino.",
+      "Une fois lancé, vous obtenez le portail, les liens et les prochaines étapes.",
+    ],
+  },
+  it: {
+    title: "Il percorso partner",
+    items: [
+      "Lasci il tuo interesse tramite la pagina.",
+      "Ti ricontattiamo e spieghiamo il modello in modo chiaro.",
+      "Se ti sembra la strada giusta, prosegui con Zinzino.",
+      "Quando sei attivo, ricevi portale, link e prossimi passi.",
+    ],
+  },
+};
+
+const formIntroByLang: Record<Lang, { eyebrow: string; note: string }> = {
+  sv: {
+    eyebrow: "Nästa steg",
+    note: "Det här är bara ett första intresse. Vi följer upp personligt och utan press.",
+  },
+  no: {
+    eyebrow: "Neste steg",
+    note: "Dette er bare en første interesse. Vi følger opp personlig og uten press.",
+  },
+  da: {
+    eyebrow: "Næste skridt",
+    note: "Dette er blot en første interesse. Vi følger op personligt og uden pres.",
+  },
+  fi: {
+    eyebrow: "Seuraava vaihe",
+    note: "Tämä on vasta ensimmäinen kiinnostuksenosoitus. Palaamme asiaan henkilökohtaisesti ilman painetta.",
+  },
+  en: {
+    eyebrow: "Next step",
+    note: "This is only an initial expression of interest. We follow up personally and without pressure.",
+  },
+  de: {
+    eyebrow: "Nächster Schritt",
+    note: "Das ist nur ein erstes Interesse. Wir melden uns persönlich und ohne Druck zurück.",
+  },
+  fr: {
+    eyebrow: "Étape suivante",
+    note: "Il s'agit simplement d'un premier intérêt. Nous revenons vers vous personnellement et sans pression.",
+  },
+  it: {
+    eyebrow: "Prossimo passo",
+    note: "Si tratta solo di un primo interesse. Ti ricontatteremo personalmente e senza pressioni.",
+  },
+};
+
+const applicationDecisionByLang: Record<Lang, { title: string; body: string; checks: string[] }> = {
+  sv: {
+    title: "Innan du ansöker",
+    body: "Det här passar bäst för personer som vill arbeta långsiktigt, är öppna för personlig uppföljning och kan se sig själva ta några tydliga steg i taget.",
+    checks: [
+      "Du vill förstå modellen ordentligt innan du bestämmer dig.",
+      "Du är öppen för samtal, uppföljning och ett verkligt nästa steg.",
+      "Du kan börja nära ditt eget nätverk i stället för att försöka göra allt på en gång.",
+    ],
+  },
+  no: {
+    title: "Før du søker",
+    body: "Dette passer best for personer som vil jobbe langsiktig, er åpne for personlig oppfølging og kan se for seg å ta noen tydelige steg om gangen.",
+    checks: [
+      "Du vil forstå modellen ordentlig før du bestemmer deg.",
+      "Du er åpen for samtaler, oppfølging og et reelt neste steg.",
+      "Du kan begynne nær ditt eget nettverk i stedet for å prøve å gjøre alt samtidig.",
+    ],
+  },
+  da: {
+    title: "Før du ansøger",
+    body: "Dette passer bedst til personer, der vil arbejde langsigtet, er åbne for personlig opfølgning og kan se sig selv tage nogle tydelige skridt ad gangen.",
+    checks: [
+      "Du vil forstå modellen ordentligt, før du beslutter dig.",
+      "Du er åben for samtaler, opfølgning og et reelt næste skridt.",
+      "Du kan begynde tæt på dit eget netværk i stedet for at forsøge at gøre alt på én gang.",
+    ],
+  },
+  fi: {
+    title: "Ennen kuin haet",
+    body: "Tämä sopii parhaiten ihmisille, jotka haluavat rakentaa pitkäjänteisesti, ovat avoimia henkilökohtaiselle yhteydenpidolle ja pystyvät etenemään muutama selkeä askel kerrallaan.",
+    checks: [
+      "Haluat ymmärtää mallin kunnolla ennen päätöstäsi.",
+      "Olet avoin keskustelulle, seurannalle ja todelliselle seuraavalle askeleelle.",
+      "Voit aloittaa läheltä omaa verkostoasi sen sijaan, että yrittäisit tehdä kaiken kerralla.",
+    ],
+  },
+  en: {
+    title: "Before you apply",
+    body: "This is best suited for people who want to build over time, are open to personal follow-up, and can see themselves taking a few clear steps at a time.",
+    checks: [
+      "You want to understand the model properly before deciding.",
+      "You are open to conversations, follow-up, and a real next step.",
+      "You can start close to your own network instead of trying to do everything at once.",
+    ],
+  },
+  de: {
+    title: "Bevor du dich bewirbst",
+    body: "Das passt am besten zu Menschen, die langfristig aufbauen wollen, offen für persönliche Begleitung sind und sich vorstellen können, Schritt für Schritt vorzugehen.",
+    checks: [
+      "Du möchtest das Modell wirklich verstehen, bevor du entscheidest.",
+      "Du bist offen für Gespräche, Nachverfolgung und einen echten nächsten Schritt.",
+      "Du kannst in deinem eigenen Netzwerk beginnen, statt alles auf einmal zu versuchen.",
+    ],
+  },
+  fr: {
+    title: "Avant de candidater",
+    body: "Cela convient surtout aux personnes qui veulent construire dans la durée, sont ouvertes à un suivi personnel et peuvent avancer par étapes claires.",
+    checks: [
+      "Vous voulez bien comprendre le modèle avant de décider.",
+      "Vous êtes ouvert aux échanges, au suivi et à une vraie prochaine étape.",
+      "Vous pouvez commencer au sein de votre propre réseau au lieu d'essayer de tout faire d'un coup.",
+    ],
+  },
+  it: {
+    title: "Prima di candidarti",
+    body: "Questo è più adatto a persone che vogliono costruire nel tempo, sono aperte a un follow-up personale e riescono a procedere con alcuni passi chiari alla volta.",
+    checks: [
+      "Vuoi capire bene il modello prima di decidere.",
+      "Sei aperto a confronto, follow-up e a un vero passo successivo.",
+      "Puoi iniziare dal tuo network invece di cercare di fare tutto subito.",
+    ],
+  },
+};
+
+const afterApplicationByLang: Record<Lang, { title: string; items: string[] }> = {
+  sv: {
+    title: "Efter din ansökan",
+    items: [
+      "Vi läser igenom ditt intresse och återkommer personligt.",
+      "Om det känns relevant tar vi nästa steg via samtal eller Zoom.",
+      "Om det passar går du vidare i rätt ordning, utan att behöva förstå allt på egen hand direkt.",
+    ],
+  },
+  no: {
+    title: "Etter søknaden",
+    items: [
+      "Vi leser gjennom interessen din og følger opp personlig.",
+      "Hvis dette virker relevant, tar vi neste steg via samtale eller Zoom.",
+      "Hvis det passer, går du videre i riktig rekkefølge uten å måtte forstå alt alene med en gang.",
+    ],
+  },
+  da: {
+    title: "Efter ansøgningen",
+    items: [
+      "Vi læser din interesse igennem og følger personligt op.",
+      "Hvis det virker relevant, tager vi næste skridt via samtale eller Zoom.",
+      "Hvis det passer, går du videre i den rigtige rækkefølge uden at skulle forstå alt alene med det samme.",
+    ],
+  },
+  fi: {
+    title: "Hakemuksen jälkeen",
+    items: [
+      "Käymme kiinnostuksesi läpi ja palaamme asiaan henkilökohtaisesti.",
+      "Jos tämä vaikuttaa sopivalta, otamme seuraavan askeleen puhelun tai Zoomin kautta.",
+      "Jos tämä sopii, etenet oikeassa järjestyksessä ilman että sinun täytyy ymmärtää kaikkea yksin heti alussa.",
+    ],
+  },
+  en: {
+    title: "After your application",
+    items: [
+      "We review your interest and follow up personally.",
+      "If it seems relevant, we take the next step through a call or Zoom.",
+      "If it fits, you move forward in the right order without needing to figure everything out alone right away.",
+    ],
+  },
+  de: {
+    title: "Nach deiner Bewerbung",
+    items: [
+      "Wir schauen uns dein Interesse an und melden uns persönlich bei dir.",
+      "Wenn es passend wirkt, gehen wir den nächsten Schritt per Gespräch oder Zoom.",
+      "Wenn es passt, gehst du in der richtigen Reihenfolge weiter, ohne sofort alles allein verstehen zu müssen.",
+    ],
+  },
+  fr: {
+    title: "Après votre candidature",
+    items: [
+      "Nous examinons votre intérêt et revenons vers vous personnellement.",
+      "Si cela semble pertinent, nous poursuivons via un appel ou Zoom.",
+      "Si cela convient, vous avancez dans le bon ordre sans devoir tout comprendre seul immédiatement.",
+    ],
+  },
+  it: {
+    title: "Dopo la candidatura",
+    items: [
+      "Valutiamo il tuo interesse e ti ricontattiamo personalmente.",
+      "Se sembra pertinente, facciamo il passo successivo tramite chiamata o Zoom.",
+      "Se è adatto, prosegui nel giusto ordine senza dover capire tutto da solo fin da subito.",
+    ],
+  },
+};
+
+const proofLayerByLang: Record<Lang, { title: string; body: string; cards: { title: string; text: string }[] }> = {
+  sv: {
+    title: "Så blir det konkret i verkligheten",
+    body: "Det här ska inte bara låta logiskt. En ny partner behöver förstå varför modellen är intressant genom konkreta exempel som går att förklara, upprepa och bygga vidare på.",
+    cards: [
+      {
+        title: "Värdekedjan blir begriplig",
+        text: "Vi visar en enkel ekonomilogik där färre externa led gör det lättare att förstå varför mer kan stanna i modellen än i traditionell butikskedja. Det betyder inte att pengar uppstår av sig själva, utan att mindre värde försvinner i mellanled som inte tillför något i den faktiska kundrelationen. För en ny partner gör det resonemanget modellen lättare att förstå, förklara och stå för.",
+      },
+      {
+        title: "Testet gör samtalet enklare",
+        text: "En möjlig resa är: nyfiken kontakt -> genomfört test -> uppföljning -> tydligare kundvärde. I stället för att bara prata generellt om välmående kan partnern utgå från något kunden faktiskt vill förstå bättre. Det gör samtalet mer relevant, uppföljningen mer naturlig och erbjudandet lättare att arbeta vidare med över tid.",
+      },
+      {
+        title: "Trenden får verklig betydelse",
+        text: "Vi kopplar biomarkörer, mätning och personlig hälsa till varför det här är relevant nu, i stället för att bara säga att marknaden växer. Människor vill i högre grad förstå sina egna värden, följa upp vad som faktiskt händer och fatta mer informerade beslut. Det gör att kategorin känns mer modern och mer relevant än många äldre hälsoupplägg.",
+      },
+    ],
+  },
+  no: {
+    title: "Slik blir det konkret i praksis",
+    body: "Dette skal ikke bare høres logisk ut. En ny partner må forstå hvorfor modellen er interessant gjennom konkrete eksempler som kan forklares, gjentas og bygges videre på.",
+    cards: [
+      {
+        title: "Verdikjeden blir forståelig",
+        text: "Vi viser en enkel økonomisk logikk der færre eksterne ledd gjør det lettere å forstå hvorfor mer kan bli igjen i modellen enn i en tradisjonell butikkjede.",
+      },
+      {
+        title: "Testen gjør samtalen enklere",
+        text: "En mulig reise er: nysgjerrig kontakt -> gjennomført test -> oppfølging -> tydeligere kundeverdi. Det gjør argumentet lettere å bruke i praksis.",
+      },
+      {
+        title: "Trenden får reell betydning",
+        text: "Vi kobler biomarkører, måling og personlig helse til hvorfor dette er relevant nå, i stedet for bare å si at markedet vokser.",
+      },
+    ],
+  },
+  da: {
+    title: "Sådan bliver det konkret i praksis",
+    body: "Det skal ikke bare lyde logisk. En ny partner skal forstå, hvorfor modellen er interessant gennem konkrete eksempler, som kan forklares, gentages og bygges videre på.",
+    cards: [
+      {
+        title: "Værdikæden bliver forståelig",
+        text: "Vi viser en enkel økonomisk logik, hvor færre eksterne led gør det lettere at forstå, hvorfor mere kan blive i modellen end i en traditionel butikskæde.",
+      },
+      {
+        title: "Testen gør samtalen lettere",
+        text: "En mulig rejse er: nysgerrig kontakt -> gennemført test -> opfølgning -> tydeligere kundeværdi. Det gør argumentet lettere at bruge i praksis.",
+      },
+      {
+        title: "Trenden får reel betydning",
+        text: "Vi kobler biomarkører, måling og personlig sundhed til, hvorfor dette er relevant nu, i stedet for bare at sige at markedet vokser.",
+      },
+    ],
+  },
+  fi: {
+    title: "Näin tämä muuttuu konkreettiseksi",
+    body: "Tämän ei pidä vain kuulostaa loogiselta. Uuden partnerin pitää ymmärtää, miksi malli on kiinnostava konkreettisten esimerkkien kautta, joita voi selittää, toistaa ja rakentaa eteenpäin.",
+    cards: [
+      {
+        title: "Arvoketju muuttuu ymmärrettäväksi",
+        text: "Näytämme yksinkertaisen talouslogiikan, jossa vähemmät ulkoiset väliportaat helpottavat ymmärtämään, miksi malliin voi jäädä enemmän kuin perinteiseen kauppaketjuun.",
+      },
+      {
+        title: "Testi helpottaa keskustelua",
+        text: "Yksi mahdollinen polku on: kiinnostunut kontakti -> tehty testi -> seuranta -> selkeämpi asiakasarvo. Silloin argumenttia on helpompi käyttää käytännössä.",
+      },
+      {
+        title: "Trendillä on todellinen merkitys",
+        text: "Yhdistämme biomarkkerit, mittaamisen ja henkilökohtaisen terveyden siihen, miksi tämä on ajankohtaista nyt, emme vain siihen, että markkina kasvaa.",
+      },
+    ],
+  },
+  en: {
+    title: "How this becomes concrete in practice",
+    body: "This should not only sound logical. A new partner needs to understand why the model is interesting through concrete examples they can explain, repeat, and build on.",
+    cards: [
+      {
+        title: "The value chain becomes easier to grasp",
+        text: "We show a simple economic logic where fewer outside layers make it easier to understand why more can stay in the model than in a traditional retail chain.",
+      },
+      {
+        title: "The test makes the conversation easier",
+        text: "One possible path is: curious contact -> completed test -> follow-up -> clearer customer value. That makes the argument easier to use in real conversations.",
+      },
+      {
+        title: "The trend gets real meaning",
+        text: "We connect biomarkers, measurement, and personal health to why this matters now, instead of only saying the market is growing.",
+      },
+    ],
+  },
+  de: {
+    title: "So wird es in der Praxis konkret",
+    body: "Das soll nicht nur logisch klingen. Ein neuer Partner muss verstehen, warum das Modell interessant ist, und zwar anhand konkreter Beispiele, die sich erklären, wiederholen und weiterentwickeln lassen.",
+    cards: [
+      {
+        title: "Die Wertkette wird greifbar",
+        text: "Wir zeigen eine einfache wirtschaftliche Logik, bei der weniger externe Zwischenstufen verständlicher machen, warum mehr im Modell bleiben kann als in einer klassischen Handelskette.",
+      },
+      {
+        title: "Der Test erleichtert das Gespräch",
+        text: "Ein möglicher Weg ist: interessierter Kontakt -> durchgeführter Test -> Nachverfolgung -> klarerer Kundennutzen. So lässt sich das Argument leichter in der Praxis nutzen.",
+      },
+      {
+        title: "Der Trend bekommt echte Bedeutung",
+        text: "Wir verbinden Biomarker, Messung und persönliche Gesundheit mit der Frage, warum das jetzt relevant ist, statt nur zu sagen, dass der Markt wächst.",
+      },
+    ],
+  },
+  fr: {
+    title: "Comment cela devient concret en pratique",
+    body: "Cela ne doit pas seulement paraître logique. Un nouveau partenaire doit comprendre pourquoi le modèle est intéressant à travers des exemples concrets qu'il peut expliquer, répéter et développer.",
+    cards: [
+      {
+        title: "La chaîne de valeur devient plus claire",
+        text: "Nous montrons une logique économique simple où moins d'intermédiaires externes permettent de comprendre plus facilement pourquoi davantage de valeur peut rester dans le modèle que dans une chaîne de distribution classique.",
+      },
+      {
+        title: "Le test facilite la conversation",
+        text: "Un parcours possible est : contact curieux -> test réalisé -> suivi -> valeur client plus claire. L'argument devient alors plus facile à utiliser dans la pratique.",
+      },
+      {
+        title: "La tendance prend un sens réel",
+        text: "Nous relions biomarqueurs, mesure et santé personnelle à la raison pour laquelle cela compte maintenant, au lieu de simplement dire que le marché grandit.",
+      },
+    ],
+  },
+  it: {
+    title: "Come diventa concreto nella pratica",
+    body: "Non deve solo sembrare logico. Un nuovo partner deve capire perché il modello è interessante attraverso esempi concreti che può spiegare, ripetere e sviluppare.",
+    cards: [
+      {
+        title: "La catena del valore diventa più chiara",
+        text: "Mostriamo una logica economica semplice in cui meno passaggi esterni aiutano a capire perché nel modello può restare più valore rispetto a una filiera retail tradizionale.",
+      },
+      {
+        title: "Il test rende più semplice la conversazione",
+        text: "Un possibile percorso è: contatto curioso -> test completato -> follow-up -> valore cliente più chiaro. Così l'argomento è più facile da usare nella pratica.",
+      },
+      {
+        title: "Il trend assume un significato reale",
+        text: "Colleghiamo biomarcatori, misurazione e salute personale al motivo per cui tutto questo conta adesso, invece di limitarci a dire che il mercato cresce.",
+      },
+    ],
+  },
+};
+
+const whyZinzinoByLang: Record<Lang, { title: string; body: string; cards: { title: string; text: string }[] }> = {
+  sv: {
+    title: "Varför Zinzino i grunden",
+    body: "Vi lyfter inte Zinzino för att det bara finns en partnerplan, utan för att flera viktiga delar redan finns på plats. Det gör modellen lättare att bygga vidare på än om allt skulle skapas från noll.",
+    cards: [
+      {
+        title: "Etablerad internationell struktur",
+        text: "Bolaget har redan officiella marknader, logistik och ett partnerupplägg att arbeta inom. Det gör att fokus kan ligga mer på aktivitet, uppföljning och relationer än på att försöka bygga grundstrukturen själv. För den som vill bygga något seriöst är det en stor skillnad att arbeta ovanpå ett etablerat system i stället för att börja från helt tom mark.",
+      },
+      {
+        title: "Testbaserad hälsa som kärna",
+        text: "Personliga hälsotester och uppföljning gör erbjudandet mer konkret än många vaga hälsolöften. Det skapar bättre förutsättningar för relevanta samtal, tydligare kundvärde och en mer naturlig väg till uppföljning. När kunden kan utgå från något mätbart blir det också lättare att motivera varför nästa steg faktiskt spelar roll.",
+      },
+      {
+        title: "En modell som går att duplicera",
+        text: "Det finns redan arbetssätt, stöd och ett tydligare nästa steg för den som vill komma igång. Det gör det lättare att börja i liten skala, få hjälp i rätt ordning och sedan bygga vidare med mer struktur över tid. Det är också där dupliceringen börjar: inte i stora ord, utan i ett arbetssätt som fler kan förstå och upprepa.",
+      },
+    ],
+  },
+  no: {
+    title: "Hvorfor Zinzino i bunn",
+    body: "Vi løfter ikke frem Zinzino bare fordi det finnes en partnerplan, men fordi flere viktige deler allerede er på plass. Det gjør modellen lettere å bygge videre på enn om alt måtte skapes fra bunnen av.",
+    cards: [
+      {
+        title: "Etablert internasjonal struktur",
+        text: "Selskapet har allerede offisielle markeder, logistikk og et partneroppsett å arbeide innenfor. Det gjør at mer av fokuset kan ligge på aktivitet og oppfølging enn på å bygge grunnstrukturen selv.",
+      },
+      {
+        title: "Testbasert helse som kjerne",
+        text: "Personlige helsetester og oppfølging gjør tilbudet mer konkret enn mange uklare helseløfter. Det gir bedre grunnlag for relevante samtaler og tydeligere kundeverdi.",
+      },
+      {
+        title: "En modell som kan dupliceres",
+        text: "Det finnes allerede arbeidsmåter, støtte og et tydelig neste steg for den som vil komme i gang. Det gjør det lettere å starte i liten skala og bygge videre med struktur over tid.",
+      },
+    ],
+  },
+  da: {
+    title: "Hvorfor Zinzino som grundlag",
+    body: "Vi fremhæver ikke Zinzino kun fordi der findes en partnerplan, men fordi flere vigtige dele allerede er på plads. Det gør modellen lettere at bygge videre på, end hvis alt skulle skabes fra bunden.",
+    cards: [
+      {
+        title: "Etableret international struktur",
+        text: "Virksomheden har allerede officielle markeder, logistik og et partnersetup at arbejde indenfor. Det gør, at mere fokus kan ligge på aktivitet og opfølgning end på selv at bygge grundstrukturen.",
+      },
+      {
+        title: "Testbaseret sundhed som kerne",
+        text: "Personlige sundhedstests og opfølgning gør tilbuddet mere konkret end mange uklare sundhedsløfter. Det giver bedre forudsætninger for relevante samtaler og tydeligere kundeværdi.",
+      },
+      {
+        title: "En model der kan duplikeres",
+        text: "Der findes allerede arbejdsformer, støtte og et tydeligt næste skridt for den, der vil i gang. Det gør det lettere at starte i lille skala og bygge videre med struktur over tid.",
+      },
+    ],
+  },
+  fi: {
+    title: "Miksi juuri Zinzino",
+    body: "Emme nosta Zinzinoa esiin vain siksi, että sillä on partnerimalli, vaan siksi että useat tärkeät osat ovat jo olemassa. Se tekee mallista helpomman rakentaa kuin jos kaikki pitäisi luoda alusta asti itse.",
+    cards: [
+      {
+        title: "Vakiintunut kansainvälinen rakenne",
+        text: "Yhtiöllä on jo virallisia markkinoita, logistiikka ja partnerimalli, jonka sisällä voi toimia. Näin painopiste voi olla enemmän tekemisessä ja seurannassa kuin koko perustan rakentamisessa itse.",
+      },
+      {
+        title: "Testipohjainen terveys ytimessä",
+        text: "Henkilökohtaiset terveystestit ja seuranta tekevät tarjonnasta konkreettisemman kuin monet epämääräiset terveyslupaukset. Se luo paremmat edellytykset merkityksellisille keskusteluille ja selvemmälle asiakasarvolle.",
+      },
+      {
+        title: "Malli, jota voi toistaa",
+        text: "Työtapoja, tukea ja selkeä seuraava askel on jo olemassa sille, joka haluaa päästä alkuun. Se helpottaa aloittamista pienessä mittakaavassa ja rakentamista eteenpäin rakenteen kanssa.",
+      },
+    ],
+  },
+  en: {
+    title: "Why Zinzino at the core",
+    body: "We do not highlight Zinzino only because there is a partner plan, but because several important pieces are already in place. That makes the model easier to build on than if everything had to be created from scratch.",
+    cards: [
+      {
+        title: "Established international structure",
+        text: "The company already has official markets, logistics, and a partner setup to work within. That allows more focus on activity and follow-up instead of building the base structure yourself.",
+      },
+      {
+        title: "Test-based health at the core",
+        text: "Personal health tests and follow-up make the offer more concrete than many vague health promises. That creates better conditions for relevant conversations and clearer customer value.",
+      },
+      {
+        title: "A model that can be duplicated",
+        text: "There are already working methods, support, and a clearer next step for people who want to get started. That makes it easier to begin on a small scale and build with structure over time.",
+      },
+    ],
+  },
+  de: {
+    title: "Warum Zinzino als Grundlage",
+    body: "Wir heben Zinzino nicht nur hervor, weil es einen Partnerplan gibt, sondern weil mehrere wichtige Bausteine bereits vorhanden sind. Dadurch lässt sich das Modell leichter weiter aufbauen, als wenn alles von Grund auf selbst geschaffen werden müsste.",
+    cards: [
+      {
+        title: "Etablierte internationale Struktur",
+        text: "Das Unternehmen verfügt bereits über offizielle Märkte, Logistik und ein Partner-Setup, in dem gearbeitet werden kann. So kann der Fokus stärker auf Aktivität und Nachverfolgung liegen als auf dem Aufbau der gesamten Grundstruktur.",
+      },
+      {
+        title: "Testbasierte Gesundheit im Kern",
+        text: "Persönliche Gesundheitstests und Nachverfolgung machen das Angebot konkreter als viele vage Gesundheitsversprechen. Das schafft bessere Voraussetzungen für relevante Gespräche und klareren Kundennutzen.",
+      },
+      {
+        title: "Ein Modell, das sich duplizieren lässt",
+        text: "Es gibt bereits Arbeitsweisen, Unterstützung und einen klareren nächsten Schritt für Menschen, die loslegen wollen. Das macht es leichter, im kleinen Maßstab zu starten und über Zeit mit Struktur weiter aufzubauen.",
+      },
+    ],
+  },
+  fr: {
+    title: "Pourquoi Zinzino comme base",
+    body: "Nous ne mettons pas Zinzino en avant uniquement parce qu'il existe un plan partenaire, mais parce que plusieurs éléments importants sont déjà en place. Cela rend le modèle plus simple à développer que si tout devait être créé à partir de zéro.",
+    cards: [
+      {
+        title: "Une structure internationale établie",
+        text: "L'entreprise dispose déjà de marchés officiels, d'une logistique et d'un cadre partenaire existant. Cela permet de concentrer davantage l'énergie sur l'activité et le suivi que sur la construction de toute l'infrastructure de départ.",
+      },
+      {
+        title: "La santé fondée sur le test au cœur",
+        text: "Les tests de santé personnels et le suivi rendent l'offre plus concrète que beaucoup de promesses santé vagues. Cela crée de meilleures conditions pour des échanges pertinents et une valeur client plus claire.",
+      },
+      {
+        title: "Un modèle duplicable",
+        text: "Il existe déjà des méthodes de travail, du soutien et une prochaine étape plus claire pour ceux qui veulent se lancer. Cela facilite un démarrage à petite échelle et une construction plus structurée dans le temps.",
+      },
+    ],
+  },
+  it: {
+    title: "Perché Zinzino come base",
+    body: "Non mettiamo in evidenza Zinzino solo perché esiste un piano partner, ma perché diversi elementi importanti sono già presenti. Questo rende il modello più semplice da sviluppare rispetto a dover creare tutto da zero.",
+    cards: [
+      {
+        title: "Struttura internazionale già esistente",
+        text: "L'azienda dispone già di mercati ufficiali, logistica e un'impostazione partner entro cui lavorare. Questo permette di concentrare più energia su attività e follow-up invece che sulla costruzione dell'intera base operativa.",
+      },
+      {
+        title: "Salute basata sui test al centro",
+        text: "Test personali di salute e follow-up rendono l'offerta più concreta rispetto a molte promesse vaghe legate al benessere. Questo crea condizioni migliori per conversazioni rilevanti e un valore cliente più chiaro.",
+      },
+      {
+        title: "Un modello che si può duplicare",
+        text: "Esistono già modalità di lavoro, supporto e un passo successivo più chiaro per chi vuole iniziare. Questo rende più facile partire in piccolo e costruire con struttura nel tempo.",
+      },
+    ],
+  },
 };
 
 const baseContent: Pick<Record<Lang, PartnerPageContent>, "sv" | "en"> = {
@@ -1175,13 +1849,8 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   no: {
     title: "Nysgjerrig på å bli partner?",
     body: "Legg igjen opplysningene dine og noen korte svar, så tar vi kontakt om neste steg dersom det finnes en rimelig match.",
-    name: "Navn",
-    email: "E-post",
-    phone: "Telefon",
-    company: "Firma eller team (valgfritt)",
-    interest: "Hva er du mest ute etter?",
+    interest: "Hva er du først og fremst ute etter?",
     readiness: "Hvor klar er du?",
-    background: "Hvorfor er dette interessant for deg?",
     interestOptions: ["Utforske muligheten", "Bygge virksomhet", "Forstå modellen bedre"],
     readinessOptions: ["Utforsker", "Vil ta en første samtale", "Klar til å gå videre"],
     submit: "Send partnerforespørsel",
@@ -1191,14 +1860,9 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   da: {
     title: "Nysgerrig på at blive partner?",
     body: "Efterlad dine oplysninger og nogle korte svar, så vender vi tilbage om næste skridt, hvis der er et rimeligt match.",
-    name: "Navn",
-    email: "E-mail",
-    phone: "Telefon",
-    company: "Virksomhed eller team (valgfrit)",
-    interest: "Hvad er du mest interesseret i?",
+    interest: "Hvad er du primært ude efter?",
     readiness: "Hvor klar er du?",
-    background: "Hvorfor er dette interessant for dig?",
-    interestOptions: ["Udforske muligheden", "Opbygge forretning", "Forstå modellen bedre"],
+    interestOptions: ["Udforske muligheden", "Bygge en forretning", "Forstå modellen bedre"],
     readinessOptions: ["Udforsker", "Vil tage en første samtale", "Klar til at gå videre"],
     submit: "Send partnerhenvendelse",
     successTitle: "Tak, din interesse er modtaget.",
@@ -1207,15 +1871,10 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   fi: {
     title: "Kiinnostaako partneriksi lähteminen?",
     body: "Jätä yhteystietosi ja muutama lyhyt vastaus, niin palaamme asiaan seuraavista vaiheista, jos yhteensopivuudelle on realistinen peruste.",
-    name: "Nimi",
-    email: "Sähköposti",
-    phone: "Puhelin",
-    company: "Yritys tai tiimi (valinnainen)",
-    interest: "Mikä kiinnostaa sinua eniten?",
+    interest: "Mitä haet ensisijaisesti?",
     readiness: "Kuinka valmis olet?",
-    background: "Miksi tämä kiinnostaa sinua?",
-    interestOptions: ["Tutkia mahdollisuutta", "Rakentaa liiketoimintaa", "Ymmärtää mallia paremmin"],
-    readinessOptions: ["Tutkii", "Haluaa ensimmäisen keskustelun", "Valmis etenemään"],
+    interestOptions: ["Tutkia mahdollisuutta", "Rakentaa liiketoimintaa", "Ymmärtää malli paremmin"],
+    readinessOptions: ["Selvitän vielä", "Haluan ensimmäisen keskustelun", "Valmis etenemään"],
     submit: "Lähetä partnerihakemus",
     successTitle: "Kiitos, kiinnostuksesi on vastaanotettu.",
     successBody: "Käymme vastauksesi läpi ja palaamme asiaan, jos yhteensopivuudelle on realistinen peruste.",
@@ -1223,15 +1882,10 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   de: {
     title: "Interesse an einer Partnerschaft?",
     body: "Hinterlasse deine Daten und ein paar kurze Antworten. Wenn es eine realistische Passung gibt, melden wir uns mit dem nächsten Schritt.",
-    name: "Name",
-    email: "E-Mail",
-    phone: "Telefon",
-    company: "Unternehmen oder Team (optional)",
-    interest: "Was interessiert dich am meisten?",
-    readiness: "Wie bereit bist du?",
-    background: "Warum ist das für dich interessant?",
-    interestOptions: ["Die Möglichkeit erkunden", "Ein Geschäft aufbauen", "Das Modell besser verstehen"],
-    readinessOptions: ["Erkunde", "Möchte ein erstes Gespräch führen", "Bereit weiterzumachen"],
+    interest: "Worauf zielst du in erster Linie ab?",
+    readiness: "Wie weit bist du schon?",
+    interestOptions: ["Möglichkeit prüfen", "Geschäft aufbauen", "Modell besser verstehen"],
+    readinessOptions: ["Ich informiere mich noch", "Ich möchte ein erstes Gespräch", "Ich bin bereit weiterzugehen"],
     submit: "Partneranfrage senden",
     successTitle: "Danke, dein Interesse ist eingegangen.",
     successBody: "Wir prüfen deine Antworten und melden uns, wenn eine realistische Passung besteht.",
@@ -1239,15 +1893,10 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   fr: {
     title: "Envie de devenir partenaire ?",
     body: "Laissez vos coordonnées et quelques réponses courtes. S'il existe une adéquation raisonnable, nous reviendrons vers vous pour la suite.",
-    name: "Nom",
-    email: "E-mail",
-    phone: "Téléphone",
-    company: "Entreprise ou équipe (facultatif)",
-    interest: "Qu'est-ce qui vous intéresse le plus ?",
-    readiness: "À quel point êtes-vous prêt ?",
-    background: "Pourquoi cela vous intéresse-t-il ?",
-    interestOptions: ["Explorer la possibilité", "Développer une activité", "Mieux comprendre le modèle"],
-    readinessOptions: ["En exploration", "Souhaite un premier échange", "Prêt à avancer"],
+    interest: "Que recherchez-vous en priorité ?",
+    readiness: "Où en êtes-vous aujourd'hui ?",
+    interestOptions: ["Explorer l'opportunité", "Construire une activité", "Mieux comprendre le modèle"],
+    readinessOptions: ["J'explore encore", "Je veux un premier échange", "Je suis prêt à avancer"],
     submit: "Envoyer la demande partenaire",
     successTitle: "Merci, votre intérêt a bien été reçu.",
     successBody: "Nous examinons vos réponses et reviendrons vers vous s'il existe une adéquation raisonnable.",
@@ -1255,15 +1904,10 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
   it: {
     title: "Ti interessa diventare partner?",
     body: "Lascia i tuoi dati e qualche risposta breve. Se esiste una corrispondenza ragionevole, ti ricontatteremo per il passo successivo.",
-    name: "Nome",
-    email: "E-mail",
-    phone: "Telefono",
-    company: "Azienda o team (facoltativo)",
-    interest: "Cosa ti interessa di più?",
-    readiness: "Quanto sei pronto?",
-    background: "Perché questo ti interessa?",
-    interestOptions: ["Esplorare la possibilità", "Costruire un'attività", "Capire meglio il modello"],
-    readinessOptions: ["In esplorazione", "Vuole un primo confronto", "Pronto a procedere"],
+    interest: "Che cosa stai cercando soprattutto?",
+    readiness: "A che punto sei?",
+    interestOptions: ["Esplorare l'opportunità", "Costruire un'attività", "Capire meglio il modello"],
+    readinessOptions: ["Sto ancora esplorando", "Voglio un primo confronto", "Sono pronto ad andare avanti"],
     submit: "Invia richiesta partner",
     successTitle: "Grazie, il tuo interesse è stato ricevuto.",
     successBody: "Esamineremo le tue risposte e ti ricontatteremo se emergerà una corrispondenza ragionevole.",
@@ -1312,6 +1956,48 @@ const sectionMotion = {
   transition: { duration: 0.55 },
 };
 
+function getPreviewText(text: string) {
+  const firstSentenceMatch = text.match(/^.*?[.!?](?:\s|$)/);
+  if (firstSentenceMatch?.[0] && firstSentenceMatch[0].trim().length < text.trim().length) {
+    return firstSentenceMatch[0].trim();
+  }
+
+  if (text.length <= 140) {
+    return text;
+  }
+
+  return `${text.slice(0, 140).trimEnd()}...`;
+}
+
+function ExpandableInfoCard({ lang, title, text }: { lang: Lang; title: string; text: string }) {
+  const [open, setOpen] = useState(false);
+  const previewText = getPreviewText(text);
+  const hasMore = previewText !== text;
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen} className="rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm">
+      <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+      {open ? (
+        <CollapsibleContent forceMount className="mt-3 data-[state=closed]:hidden">
+          <p className="text-sm leading-7 text-subtle md:text-[15px]">{text}</p>
+        </CollapsibleContent>
+      ) : (
+        <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">{previewText}</p>
+      )}
+      {hasMore ? (
+        <CollapsibleTrigger asChild>
+          <button
+            type="button"
+            className="mt-4 text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+          >
+            {open ? readMoreByLang[lang].less : readMoreByLang[lang].more}
+          </button>
+        </CollapsibleTrigger>
+      ) : null}
+    </Collapsible>
+  );
+}
+
 const PartnerPage = ({ lang }: PartnerPageProps) => {
   const page = useMemo(() => {
     const basePage = content[lang] ?? content.en;
@@ -1339,6 +2025,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showStickyCta, setShowStickyCta] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -1353,6 +2040,12 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
+  useEffect(() => {
+    const onScroll = () => setShowStickyCta(window.scrollY > 480);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
@@ -1360,6 +2053,10 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
     try {
       const attribution = await getReferralAttribution(location.pathname);
+      if (!attribution.referralCode) {
+        throw new Error(missingReferralByLang[lang]);
+      }
+
       const response = await upsertLead({
         full_name: formData.name,
         email: formData.email,
@@ -1379,12 +2076,12 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       });
 
       if (!response.ok) {
-        throw new Error("Could not submit the partner application.");
+        throw new Error(submitErrorByLang[lang]);
       }
 
       setSubmitted(true);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Could not submit the partner application.");
+      setErrorMessage(error instanceof Error ? error.message : submitErrorByLang[lang]);
     } finally {
       setSubmitting(false);
     }
@@ -1430,6 +2127,47 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </div>
       </section>
 
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {sectionNavByLang[lang].title}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {sectionNavByLang[lang].items.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 pb-2 md:px-6 md:pb-4">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {flowSummaryByLang[lang].title}
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {flowSummaryByLang[lang].items.map((item, index) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="partner-economics" className="section-padding bg-section-alt">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.economics.title}</h2>
@@ -1460,6 +2198,18 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
       <section className="section-padding">
         <motion.div {...sectionMotion} className="container-wide">
+          <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{proofLayerByLang[lang].title}</h2>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{proofLayerByLang[lang].body}</p>
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {proofLayerByLang[lang].cards.map((card) => (
+              <ExpandableInfoCard key={card.title} lang={lang} title={card.title} text={card.text} />
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="partner-reasons" className="section-padding">
+        <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.reasons.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.reasons.body}</p>
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -1474,6 +2224,18 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section className="section-padding bg-section-alt">
+        <motion.div {...sectionMotion} className="container-wide">
+          <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{whyZinzinoByLang[lang].title}</h2>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{whyZinzinoByLang[lang].body}</p>
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {whyZinzinoByLang[lang].cards.map((card) => (
+              <ExpandableInfoCard key={card.title} lang={lang} title={card.title} text={card.text} />
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="partner-fit" className="section-padding bg-section-alt">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.fit.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.fit.body}</p>
@@ -1495,7 +2257,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section className="section-padding">
+      <section id="partner-steps" className="section-padding">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.steps.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.steps.body}</p>
@@ -1515,9 +2277,44 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
       <section id="partner-application" className="section-padding bg-section-alt">
         <motion.div {...sectionMotion} className="container-narrow">
+          <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">{applicationDecisionByLang[lang].title}</h3>
+            <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
+              {applicationDecisionByLang[lang].body}
+            </p>
+            <ul className="mt-5 space-y-3">
+              {applicationDecisionByLang[lang].checks.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
+                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              {afterApplicationByLang[lang].items.map((item, index) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-subtle md:text-[15px]">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {formIntroByLang[lang].eyebrow}
+            </p>
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{page.form.title}</h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-subtle">
+              {formIntroByLang[lang].note}
+            </p>
           </div>
 
           {submitted ? (
@@ -1557,7 +2354,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
               <div className="mt-8 flex justify-end">
                 <button type="submit" disabled={submitting} className="btn-primary min-w-[220px] text-center disabled:opacity-70">
-                  {submitting ? "Submitting..." : page.form.submit}
+                  {submitting ? submittingLabelByLang[lang] : page.form.submit}
                 </button>
               </div>
               {errorMessage ? <p className="mt-4 text-sm text-destructive">{errorMessage}</p> : null}
@@ -1567,6 +2364,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <FooterSection lang={lang} />
+
+      {showStickyCta ? (
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 px-4 py-3 backdrop-blur-lg md:hidden">
+          <div className="container-wide flex items-center justify-between gap-3">
+            <p className="hidden text-sm font-medium text-foreground/85 sm:block">{page.sticky.text}</p>
+            <a href="#partner-application" className="btn-primary w-full whitespace-nowrap px-6 py-3 text-center text-sm sm:w-auto">
+              {page.sticky.cta}
+            </a>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -21,7 +21,7 @@ export const portalTermsSections = [
   },
   {
     title: "Kontakt",
-    body: "För frågor om portalvillkor eller användning, kontakta hello@insidebalance.com.",
+    body: "För frågor om portalvillkor eller användning, kontakta hello@insidebalance.eu.",
   },
 ] as const;
 
@@ -44,7 +44,7 @@ export const portalPrivacySections = [
   },
   {
     title: "Kontakt",
-    body: "Har du frågor om hur vi hanterar personuppgifter i portalen, kontakta hello@insidebalance.com.",
+    body: "Har du frågor om hur vi hanterar personuppgifter i portalen, kontakta hello@insidebalance.eu.",
   },
 ] as const;
 

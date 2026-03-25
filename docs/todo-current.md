@@ -6,7 +6,9 @@ This is the current working todo for the next product passes.
 
 For the more structured master version, use `systematic-todo.md`.
 For the shorter execution queue that I should keep working from automatically, use `top-10-execution-list.md`.
+For the sharper model-first priority order, use `top-7-model-optimization.md`.
 For the zoomed-out product picture, use `system-overview.md`.
+For market prioritization and language-vs-market decisions, use `market-priority-matrix.md`.
 
 It is meant to stay practical:
 

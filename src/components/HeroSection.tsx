@@ -11,11 +11,43 @@ interface HeroSectionProps {
 
 const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
+const signInLabelByLang: Partial<Record<Lang, string>> = {
+  sv: "Logga in",
+  no: "Logg inn",
+  da: "Log ind",
+  fi: "Kirjaudu sisään",
+  de: "Anmelden",
+  fr: "Se connecter",
+  it: "Accedi",
+};
+
+const pendingLabelByLang: Record<Lang, string> = {
+  sv: "Öppnar...",
+  no: "Åpner...",
+  da: "Åbner...",
+  fi: "Avataan...",
+  en: "Opening...",
+  de: "Wird geöffnet...",
+  fr: "Ouverture...",
+  it: "Apertura...",
+};
+
+const genericErrorByLang: Record<Lang, string> = {
+  sv: "Länken kunde inte öppnas just nu.",
+  no: "Lenken kunne ikke åpnes akkurat nå.",
+  da: "Linket kunne ikke åbnes lige nu.",
+  fi: "Linkkiä ei voitu avata juuri nyt.",
+  en: "The link could not be opened right now.",
+  de: "Der Link konnte gerade nicht geöffnet werden.",
+  fr: "Le lien n'a pas pu être ouvert pour le moment.",
+  it: "Il link non può essere aperto in questo momento.",
+};
+
 const HeroSection = ({ lang }: HeroSectionProps) => {
   const copy = t(lang).hero;
-  const loginLabel = lang === "sv" ? "Logga in" : "Sign in";
-  const pendingLabel = lang === "sv" ? "Öppnar..." : "Opening...";
-  const genericError = lang === "sv" ? "Länken kunde inte öppnas just nu." : "The link could not be opened right now.";
+  const loginLabel = signInLabelByLang[lang] ?? "Sign in";
+  const pendingLabel = pendingLabelByLang[lang];
+  const genericError = genericErrorByLang[lang];
 
   return (
     <section className="bg-hero section-padding min-h-[90vh] flex items-center">

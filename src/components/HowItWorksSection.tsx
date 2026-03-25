@@ -123,7 +123,7 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
                 <img src={stepImages[i]} alt={step.title} className="h-28 w-28 object-contain" />
               </div>
               <span className="font-sans text-sm font-semibold tracking-widest text-primary">{step.numberLabel}</span>
-              <h3 className="mt-2 mb-3 font-sans text-xl font-semibold">{step.title}</h3>
+              <h3 className="mb-3 mt-2 font-sans text-xl font-semibold">{step.title}</h3>
               <p className="text-sm leading-relaxed text-subtle">{step.description}</p>
             </motion.div>
           ))}

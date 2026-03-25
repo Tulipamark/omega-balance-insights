@@ -7,6 +7,17 @@ interface LanguageSwitcherProps {
   lang: Lang;
 }
 
+const ariaLabelByLang: Record<Lang, string> = {
+  sv: "Välj språk",
+  no: "Velg språk",
+  da: "Vælg sprog",
+  fi: "Valitse kieli",
+  en: "Select language",
+  de: "Sprache wählen",
+  fr: "Choisir la langue",
+  it: "Seleziona lingua",
+};
+
 const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,7 +38,7 @@ const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 px-4 py-2 text-sm font-medium text-foreground shadow-card backdrop-blur-sm transition-all hover:bg-card"
-          aria-label="Select language"
+          aria-label={ariaLabelByLang[lang]}
         >
           <Globe className="h-4 w-4 text-primary" />
           <span>{current.flag}</span>
