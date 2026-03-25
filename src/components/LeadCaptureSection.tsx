@@ -64,7 +64,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       });
 
       if (!response.ok) {
-        throw new Error(response.error.message);
+        throw new Error(response.error?.message || "Kunde inte boka konsultation.");
       }
 
       window.location.assign(response.destination_url);

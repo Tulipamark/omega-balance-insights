@@ -62,7 +62,7 @@ const TrackedOutboundButton = ({
         session_id: sessionId,
       });
 
-      if (!result.ok || !result.destination_url) {
+      if (!result.ok) {
         const reason = result.error?.code || result.reason || "destination_missing";
 
         if (fallbackEligibleErrors.has(reason)) {
