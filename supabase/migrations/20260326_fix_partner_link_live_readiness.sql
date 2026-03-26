@@ -14,6 +14,9 @@ as $$
   );
 $$;
 
+alter table public.partners
+  add column if not exists consultation_url text;
+
 do $$
 begin
   if exists (
