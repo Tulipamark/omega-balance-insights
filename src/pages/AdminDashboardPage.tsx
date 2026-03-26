@@ -974,6 +974,33 @@ const AdminDashboardPage = () => {
         return aTime - bTime;
       });
   }, [data?.partners, growthCompassRows]);
+  const partnersMovingTowardDuplication = useMemo(() => {
+    if (!data?.partners?.length || !growthCompassRows.length) {
+      return [];
+    }
+
+    const partnerById = new Map((data.partners || []).map((partner) => [partner.partnerId, partner]));
+    const priorityByStatus = new Map([
+      ["leader-track", 3],
+      ["duplicating", 2],
+      ["growing", 1],
+    ]);
+
+    return growthCompassRows
+      .filter((row) => row.status === "growing" || row.status === "duplicating" || row.status === "leader-track")
+      .map((row) => ({
+        row,
+        partner: partnerById.get(row.partnerId) || null,
+      }))
+      .sort((a, b) => {
+        const statusDiff = (priorityByStatus.get(b.row.status) || 0) - (priorityByStatus.get(a.row.status) || 0);
+        if (statusDiff !== 0) {
+          return statusDiff;
+        }
+
+        return b.row.score - a.row.score;
+      });
+  }, [data?.partners, growthCompassRows]);
   const sortedPartnerApplications = data
     ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
@@ -1799,6 +1826,75 @@ const AdminDashboardPage = () => {
                 ))}
               </div>
             </div>
+          </DashboardSection> : null}
+
+          {showPartners ? <DashboardSection
+            title="På väg mot duplicering"
+            description="Partners som redan visar first-line-rörelse eller partnergenererade signaler och därför bör följas extra nära just nu."
+          >
+            <div className="mb-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">I rörelse nu</p>
+                <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(partnersMovingTowardDuplication.length)}</p>
+                <p className="mt-2 text-sm text-subtle">Partners som är över rent solo-läge och visar tidiga dupliceringssignaler.</p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkast just nu</p>
+                <p className="mt-3 text-2xl font-semibold text-foreground">
+                  {partnersMovingTowardDuplication[0]?.row ? formatStatusLabel(partnersMovingTowardDuplication[0].row.status) : "-"}
+                </p>
+                <p className="mt-2 text-sm text-subtle">Högst utvecklade läget bland partners som redan rör sig mot duplication.</p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Fokus nu</p>
+                <p className="mt-3 text-sm leading-6 text-foreground/85">
+                  Skydda rytmen hos dem som redan fått rörelse i first line innan energin sprids för brett eller stannar av.
+                </p>
+              </div>
+            </div>
+
+            <DataTable
+              columns={["Partner", "Status", "Signal", "Saknas nu", "Nästa steg", "Visa"]}
+              rows={partnersMovingTowardDuplication.map(({ row, partner }) => [
+                <div key={`${row.partnerId}-name`}>
+                  <p className="font-medium text-foreground">{row.partnerName}</p>
+                  <p className="text-xs text-subtle">{partner?.email || row.email}</p>
+                </div>,
+                <Badge
+                  key={`${row.partnerId}-status`}
+                  variant={getGrowthCompassVariant(row.status)}
+                  className="rounded-full px-3 py-1"
+                >
+                  {getGrowthCompassLabel(row.status)}
+                </Badge>,
+                <span key={`${row.partnerId}-signal`} className="max-w-[240px] text-sm text-subtle">
+                  {[
+                    `${formatWholeNumber(row.inputs.activeFirstLinePartners30d)} aktiv first line`,
+                    `${formatWholeNumber(row.inputs.partnerGeneratedLeads30d)} partnerleads`,
+                    `${formatWholeNumber(row.inputs.partnerGeneratedCustomers30d)} partnerkunder`,
+                  ].join(" • ")}
+                </span>,
+                <span key={`${row.partnerId}-missing`} className="max-w-[220px] text-sm text-subtle">
+                  {row.missingToNext.length ? row.missingToNext.join(", ") : "Behåll rytmen"}
+                </span>,
+                <span key={`${row.partnerId}-next`} className="max-w-[260px] text-sm text-subtle">
+                  {row.nextBestAction}
+                </span>,
+                <Button
+                  key={`${row.partnerId}-open`}
+                  type="button"
+                  variant="outline"
+                  className="rounded-xl"
+                  onClick={() => {
+                    setSelectedGrowthCompassPartnerId(row.partnerId);
+                    setGrowthCompassDialogOpen(true);
+                  }}
+                >
+                  Öppna kompass
+                </Button>,
+              ])}
+              emptyState="Ingen partner visar ännu tydliga dupliceringssignaler."
+            />
           </DashboardSection> : null}
 
           {showPartners ? <DashboardSection
