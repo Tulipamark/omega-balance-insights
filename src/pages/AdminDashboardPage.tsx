@@ -626,22 +626,22 @@ function getCoreReadiness(lead: Lead) {
   if (lead.status !== "active") {
     return {
       label: "Inte aktuellt ännu",
-      description: "Kärnan blir relevant först efter att personen blivit teammedlem.",
+      description: "Närmare stöd från Omega Balance-teamet blir relevant först efter att personen blivit teammedlem.",
       ready: false,
     };
   }
 
   if (priority === "hot" && hasBuildIntent && (readiness.includes("nu") || readiness.includes("redo"))) {
     return {
-      label: "Möjlig kärna",
-      description: "Personen ser ut att kunna vara aktuell för tätare rytm, calls och närmare stöd.",
+      label: "Möjligt närmare stöd",
+      description: "Personen ser ut att kunna vara aktuell för tätare rytm, calls och närmare stöd från Omega Balance-teamet.",
       ready: true,
     };
   }
 
   return {
     label: "Vanlig teammedlem",
-    description: "Låt personen först visa stabil aktivitet innan kärnan blir relevant.",
+    description: "Låt personen först visa stabil aktivitet innan närmare stöd från Omega Balance-teamet blir relevant.",
     ready: false,
   };
 }
@@ -661,21 +661,21 @@ function getCoreSupportPlan(lead: Lead) {
 
   if (readiness.ready) {
     return {
-      title: "Nästa steg i kärnan",
+      title: "Nästa steg med närmare stöd",
       items: [
         "Bjud in personen till närmare rytm med privata calls eller tätare Zoom.",
-        "Lägg till personen i kärnans närmaste kommunikation, till exempel privat grupp.",
-        "Sätt ett konkret fokus för veckan så kärnaccessen direkt leder till rörelse.",
+        "Lägg till personen i närmaste kommunikationen, till exempel privat grupp eller tätare uppföljning.",
+        "Sätt ett konkret fokus för veckan så det närmare stödet direkt leder till rörelse.",
       ],
     };
   }
 
   return {
-    title: "Nästa steg före kärnan",
+    title: "Nästa steg före närmare stöd",
     items: [
       "Låt personen först visa stabil aktivitet i vardagen.",
       "Följ upp om första resultat börjar bli upprepade, inte bara enstaka.",
-      "När rytmen sitter kan kärnan bli relevant som stödlager.",
+      "När rytmen sitter kan närmare stöd från Omega Balance-teamet bli relevant som stödlager.",
     ],
   };
 }
