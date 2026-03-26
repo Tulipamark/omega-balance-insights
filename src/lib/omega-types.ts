@@ -421,6 +421,7 @@ export interface AdminDashboardData {
   };
   growthCompass: GrowthCompassRow[];
   recentFunnelEvents?: FunnelEvent[];
+  funnelEventTimeline?: FunnelEvent[];
 }
 
 export interface PortalAccessState {
