@@ -84,7 +84,7 @@ Målet just nu är att få hela funneln att fungera som ett operativt system:
 - [x] mät tid från partnerlead till kandidat
 - [x] mät tid från kandidat till onboarding redo
 - [x] mät tid från portalpartner till tre länkar klara
-- [ ] mät tid från tre länkar till aktiv signal
+- [x] mät tid från tre länkar till aktiv signal
 - [x] visa ledtid i admin
 
 ### 3. Bättre Attribution

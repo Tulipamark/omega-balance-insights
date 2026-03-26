@@ -1,4 +1,4 @@
-import type { AdminPartnerRow, FunnelEvent, Lead } from "@/lib/omega-types";
+import type { AdminPartnerRow, FunnelEvent, GrowthCompassRow, Lead } from "@/lib/omega-types";
 
 const LANDING_EVENTS = new Set(["landing_viewed"]);
 const CTA_EVENTS = new Set([
@@ -169,6 +169,15 @@ function getPartnerLinksReadyTimestamp(partner: AdminPartnerRow) {
   return getTimestamp(partner.verifiedAt);
 }
 
+function getPartnerActiveSignalTimestamp(partner: AdminPartnerRow, growthByPartnerId: Map<string, GrowthCompassRow>) {
+  const row = growthByPartnerId.get(partner.partnerId);
+  if (!row || row.status === "inactive") {
+    return null;
+  }
+
+  return getTimestamp(row.firstActiveSignalAt);
+}
+
 function buildStepInsight(
   key: string,
   label: string,
@@ -337,8 +346,9 @@ export function buildFunnelStageTimingInsights(events: FunnelEvent[]): FunnelTim
 }
 
 export function buildPartnerLifecycleTimingInsights(
-  data: Pick<{ partnerApplications: Lead[]; partners: AdminPartnerRow[] }, "partnerApplications" | "partners">,
+  data: Pick<{ partnerApplications: Lead[]; partners: AdminPartnerRow[]; growthCompass: GrowthCompassRow[] }, "partnerApplications" | "partners" | "growthCompass">,
 ): PartnerLifecycleTimingInsights {
+  const growthByPartnerId = new Map(data.growthCompass.map((row) => [row.partnerId, row]));
   const steps = [
     buildRecordStepInsight(
       "partner_lead_to_candidate",
@@ -363,6 +373,14 @@ export function buildPartnerLifecycleTimingInsights(
       data.partners,
       (partner) => getTimestamp(partner.createdAt),
       getPartnerLinksReadyTimestamp,
+    ),
+    buildRecordStepInsight(
+      "links_ready_to_active_signal",
+      "3 länkar till aktiv signal",
+      "Hur snabbt komplett setup blir till första verkliga aktivitet som syns i Growth Compass.",
+      data.partners,
+      getPartnerLinksReadyTimestamp,
+      (partner) => getPartnerActiveSignalTimestamp(partner, growthByPartnerId),
     ),
   ];
 

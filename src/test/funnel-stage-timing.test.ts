@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
-import type { AdminPartnerRow, FunnelEvent, Lead } from "@/lib/omega-types";
+import type { AdminPartnerRow, FunnelEvent, GrowthCompassRow, Lead } from "@/lib/omega-types";
 
 function makeEvent(overrides: Partial<FunnelEvent>): FunnelEvent {
   return {
@@ -56,6 +56,40 @@ function makePartnerRow(overrides: Partial<AdminPartnerRow>): AdminPartnerRow {
     zzLinks: overrides.zzLinks || { test: null, shop: null, partner: null, consultation: null },
     createdAt: overrides.createdAt || "2026-03-26T10:00:00.000Z",
     verifiedAt: overrides.verifiedAt || null,
+  };
+}
+
+function makeGrowthRow(overrides: Partial<GrowthCompassRow>): GrowthCompassRow {
+  return {
+    partnerId: overrides.partnerId || "partner-1",
+    partnerName: overrides.partnerName || "Demo Partner",
+    email: overrides.email || "partner@example.com",
+    referralCode: overrides.referralCode || "OMEGATEAM",
+    status: overrides.status || "inactive",
+    score: overrides.score || 0,
+    nextMilestone: overrides.nextMilestone || "Nasta steg",
+    nextBestAction: overrides.nextBestAction || "Gor nasta steg",
+    explanation: overrides.explanation || "Forklaring",
+    flags: overrides.flags || [],
+    missingToNext: overrides.missingToNext || [],
+    confidence: overrides.confidence || {
+      overall: "medium",
+      metrics: {
+        personalCustomers30d: { level: "medium", reasons: [] },
+        recruitedPartners30d: { level: "medium", reasons: [] },
+        activeFirstLinePartners30d: { level: "medium", reasons: [] },
+        partnerGeneratedLeads30d: { level: "medium", reasons: [] },
+        partnerGeneratedCustomers30d: { level: "medium", reasons: [] },
+      },
+    },
+    firstActiveSignalAt: overrides.firstActiveSignalAt || null,
+    inputs: overrides.inputs || {
+      personalCustomers30d: 0,
+      recruitedPartners30d: 0,
+      activeFirstLinePartners30d: 0,
+      partnerGeneratedLeads30d: 0,
+      partnerGeneratedCustomers30d: 0,
+    },
   };
 }
 
@@ -148,14 +182,26 @@ describe("buildPartnerLifecycleTimingInsights", () => {
           createdAt: "2026-03-26T11:00:00.000Z",
         }),
       ],
+      growthCompass: [
+        makeGrowthRow({
+          partnerId: "partner-a",
+          status: "active",
+          firstActiveSignalAt: "2026-03-26T11:00:00.000Z",
+        }),
+        makeGrowthRow({
+          partnerId: "partner-b",
+          status: "inactive",
+        }),
+      ],
     });
 
     expect(insights.recordsAnalyzed).toBe(2);
-    expect(insights.steps.map((step) => step.fromCount)).toEqual([2, 2, 2]);
-    expect(insights.steps.map((step) => step.completionCount)).toEqual([2, 1, 1]);
+    expect(insights.steps.map((step) => step.fromCount)).toEqual([2, 2, 2, 1]);
+    expect(insights.steps.map((step) => step.completionCount)).toEqual([2, 1, 1, 1]);
     expect(insights.steps[0].medianSeconds).toBe(450);
     expect(insights.steps[1].medianSeconds).toBe(0);
     expect(insights.steps[2].medianSeconds).toBe(1800);
+    expect(insights.steps[3].medianSeconds).toBe(1800);
     expect(insights.headline.title).toContain("Portalpartner till 3 länkar klara");
   });
 });
