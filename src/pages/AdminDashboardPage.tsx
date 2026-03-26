@@ -1016,6 +1016,27 @@ const AdminDashboardPage = () => {
       .sort((a, b) => new Date(b.firstSeenAt).getTime() - new Date(a.firstSeenAt).getTime())
       .slice(0, 10);
   }, [funnelEventTimeline]);
+  const trafficSourceSummary = useMemo(() => {
+    const sourceMixRows = data?.kpis?.sourceMixDaily || [];
+    const aggregate = <TKey extends string>(getKey: (row: typeof sourceMixRows[number]) => TKey) => {
+      const buckets = new Map<TKey, number>();
+
+      sourceMixRows.forEach((row) => {
+        const key = getKey(row);
+        buckets.set(key, (buckets.get(key) || 0) + row.visits);
+      });
+
+      return [...buckets.entries()]
+        .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+        .slice(0, 8);
+    };
+
+    return {
+      topSources: aggregate((row) => row.source || "Direkt"),
+      topCampaigns: aggregate((row) => row.campaign || "Utan kampanj"),
+      topLandingPages: aggregate((row) => row.landing_page || "/"),
+    };
+  }, [data?.kpis?.sourceMixDaily]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1712,6 +1733,46 @@ const AdminDashboardPage = () => {
                   description="Senaste attribuerade besök uppdelade på källa, medium och landningssida."
                 >
                   <DataTruthBadges isDemo={isDemo} />
+                  <div className="mb-4 grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppkällor</p>
+                      <div className="mt-3 space-y-2">
+                        {trafficSourceSummary.topSources.map(([source, visits]) => (
+                          <div key={`source-${source}`} className="flex items-center justify-between gap-3 text-sm">
+                            <span className="truncate text-foreground">{source}</span>
+                            <span className="font-medium text-foreground">{formatWholeNumber(visits)}</span>
+                          </div>
+                        ))}
+                        {!trafficSourceSummary.topSources.length ? <p className="text-sm text-subtle">Ingen källdata än.</p> : null}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppkampanjer</p>
+                      <div className="mt-3 space-y-2">
+                        {trafficSourceSummary.topCampaigns.map(([campaign, visits]) => (
+                          <div key={`campaign-${campaign}`} className="flex items-center justify-between gap-3 text-sm">
+                            <span className="truncate text-foreground">{campaign}</span>
+                            <span className="font-medium text-foreground">{formatWholeNumber(visits)}</span>
+                          </div>
+                        ))}
+                        {!trafficSourceSummary.topCampaigns.length ? <p className="text-sm text-subtle">Ingen kampanjdata än.</p> : null}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Topplandningar</p>
+                      <div className="mt-3 space-y-2">
+                        {trafficSourceSummary.topLandingPages.map(([landingPage, visits]) => (
+                          <div key={`landing-${landingPage}`} className="flex items-center justify-between gap-3 text-sm">
+                            <span className="truncate text-foreground">{landingPage}</span>
+                            <span className="font-medium text-foreground">{formatWholeNumber(visits)}</span>
+                          </div>
+                        ))}
+                        {!trafficSourceSummary.topLandingPages.length ? <p className="text-sm text-subtle">Ingen landningsdata än.</p> : null}
+                      </div>
+                    </div>
+                  </div>
                   <DataTable
                     columns={["Dag", "Källa", "Medium", "Kampanj", "Landningssida", "Besök"]}
                     rows={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => [
