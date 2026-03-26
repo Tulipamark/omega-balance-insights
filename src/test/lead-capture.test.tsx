@@ -6,6 +6,7 @@ import { persistReferralCode } from "@/lib/referral";
 
 const upsertLeadMock = vi.fn();
 const trackClickAndGetRedirectMock = vi.fn();
+const trackFunnelEventMock = vi.fn();
 const assignMock = vi.fn();
 
 vi.mock("framer-motion", () => ({
@@ -19,12 +20,18 @@ vi.mock("@/lib/api", () => ({
   trackClickAndGetRedirect: (...args: unknown[]) => trackClickAndGetRedirectMock(...args),
 }));
 
+vi.mock("@/lib/funnel-events", () => ({
+  logFunnelEvent: (...args: unknown[]) => trackFunnelEventMock(...args),
+}));
+
 describe("LeadCaptureSection", () => {
   beforeEach(() => {
     upsertLeadMock.mockReset();
     trackClickAndGetRedirectMock.mockReset();
+    trackFunnelEventMock.mockReset();
     assignMock.mockReset();
     upsertLeadMock.mockResolvedValue({ ok: true, mode: "created", lead_id: "lead-1" });
+    trackFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-1" });
 
     window.localStorage.clear();
     window.sessionStorage.clear();
@@ -84,6 +91,20 @@ describe("LeadCaptureSection", () => {
         ref: "ELIN2026",
         type: "consultation",
         session_id: expect.any(String),
+      }),
+    );
+    expect(trackFunnelEventMock).toHaveBeenCalledWith(
+      "lead_form_started",
+      expect.objectContaining({
+        pathname: "/sv",
+        search: "?ref=ELIN2026",
+      }),
+    );
+    expect(trackFunnelEventMock).toHaveBeenCalledWith(
+      "lead_form_submitted",
+      expect.objectContaining({
+        pathname: "/sv",
+        referralCode: "ELIN2026",
       }),
     );
     await waitFor(() => expect(assignMock).toHaveBeenCalledWith("https://consult.example/elin"));

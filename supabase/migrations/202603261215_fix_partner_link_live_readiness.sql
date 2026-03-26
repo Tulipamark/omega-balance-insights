@@ -20,6 +20,44 @@ alter table public.partners
 do $$
 begin
   if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'partners'
+      and column_name = 'zinzino_consultation_url'
+  ) then
+    execute $sql$
+      update public.partners
+      set consultation_url = coalesce(consultation_url, zinzino_consultation_url)
+      where consultation_url is null
+        and zinzino_consultation_url is not null
+    $sql$;
+  end if;
+end $$;
+
+update public.partners
+set verified_at = coalesce(verified_at, created_at, now())
+where status = 'verified'
+  and zinzino_test_url is not null
+  and zinzino_shop_url is not null
+  and zinzino_partner_url is not null
+  and consultation_url is not null
+  and verified_at is null;
+
+update public.partners
+set status = 'pending',
+    verified_at = null
+where status = 'verified'
+  and (
+    zinzino_test_url is null
+    or zinzino_shop_url is null
+    or zinzino_partner_url is null
+    or consultation_url is null
+  );
+
+do $$
+begin
+  if exists (
     select 1 from pg_constraint where conname = 'partners_verified_requires_urls'
   ) then
     alter table public.partners

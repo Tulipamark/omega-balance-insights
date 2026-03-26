@@ -1,4 +1,5 @@
 import { defaultLang, isSupportedLang } from "@/lib/i18n";
+import { logFunnelEvent, flushPendingFunnelEvents } from "@/lib/funnel-events";
 import { resolveUserByReferralCode } from "@/lib/omega-data";
 import { trackVisit } from "@/lib/api";
 import type { ReferralAttribution, TrackVisitRequest } from "@/lib/omega-types";
@@ -223,7 +224,17 @@ export async function captureReferralVisit(pathname: string, search: string) {
     user_agent: navigator.userAgent || null,
   };
 
+  void flushPendingFunnelEvents();
   await trackVisit(payload);
+  void logFunnelEvent("landing_viewed", {
+    pathname,
+    search,
+    referralCode,
+    sessionId,
+    details: {
+      landingType: pathname.includes("/partners") ? "partner" : "customer",
+    },
+  });
 
   window.sessionStorage.setItem(VISIT_CACHE_KEY, cacheKey);
 }

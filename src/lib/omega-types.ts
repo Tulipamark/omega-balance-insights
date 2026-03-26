@@ -8,6 +8,21 @@ export type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner
 export type RedirectType = "test" | "shop" | "partner" | "consultation";
 export type LeadSubmitMode = "created" | "updated" | "ignored";
 export type PartnerLeadPriority = "hot" | "follow_up" | "not_now";
+export type FunnelEventName =
+  | "landing_viewed"
+  | "hero_primary_cta_clicked"
+  | "hero_secondary_cta_clicked"
+  | "sticky_cta_clicked"
+  | "closing_cta_clicked"
+  | "lead_form_started"
+  | "lead_form_submitted"
+  | "lead_form_submit_failed"
+  | "consultation_redirect_requested"
+  | "partner_hero_primary_cta_clicked"
+  | "partner_sticky_cta_clicked"
+  | "partner_form_started"
+  | "partner_form_submitted"
+  | "partner_form_submit_failed";
 
 export interface PartnerZzLinks {
   test: string | null;
@@ -54,6 +69,24 @@ export interface TrackVisitRequest {
   utm_medium: string | null;
   utm_campaign: string | null;
   user_agent: string | null;
+}
+
+export interface TrackFunnelEventRequest {
+  name: FunnelEventName;
+  session_id: string;
+  ref?: string | null;
+  page_path: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  user_agent?: string | null;
+  details?: Record<string, unknown>;
+}
+
+export interface TrackFunnelEventResponse {
+  ok: boolean;
+  event_id?: string;
 }
 
 export interface UpsertLeadRequest {
@@ -188,6 +221,22 @@ export interface ReferralVisit {
   created_at: string;
 }
 
+export interface FunnelEvent {
+  id: string;
+  partner_id?: string | null;
+  referral_code?: string | null;
+  session_id: string;
+  event_name: FunnelEventName | string;
+  page_path: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  user_agent?: string | null;
+  details?: Record<string, unknown> | null;
+  created_at: string;
+}
+
 export interface ReferralAttribution {
   referralCode: string | null;
   referredByUserId: string | null;
@@ -303,6 +352,12 @@ export interface KpiSourceMixRow {
   visits: number;
 }
 
+export interface KpiFunnelEventDay {
+  day: string;
+  event_name: string;
+  events: number;
+}
+
 export type ConfidenceLevel = "low" | "medium" | "high";
 
 export interface MetricConfidence {
@@ -352,17 +407,20 @@ export interface AdminDashboardData {
   };
   leadsPerPartner: PartnerPerformanceRow[];
   customersPerPartner: PartnerPerformanceRow[];
+  partnerApplications: Lead[];
   partners: AdminPartnerRow[];
   networkOverview: TeamRow[];
   recentLeads: Lead[];
   recentPartnerApplications: Lead[];
   kpis?: {
     funnelDaily: KpiFunnelDay[];
+    funnelEventsDaily: KpiFunnelEventDay[];
     partnerPipeline: KpiPartnerPipeline | null;
     duplication: KpiDuplicationRow[];
     sourceMixDaily: KpiSourceMixRow[];
   };
   growthCompass: GrowthCompassRow[];
+  recentFunnelEvents?: FunnelEvent[];
 }
 
 export interface PortalAccessState {

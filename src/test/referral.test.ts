@@ -12,14 +12,25 @@ import {
 } from "@/lib/referral";
 
 const trackVisitMock = vi.fn();
+const logFunnelEventMock = vi.fn();
+const flushPendingFunnelEventsMock = vi.fn();
 
 vi.mock("@/lib/api", () => ({
   trackVisit: (...args: unknown[]) => trackVisitMock(...args),
 }));
 
+vi.mock("@/lib/funnel-events", () => ({
+  logFunnelEvent: (...args: unknown[]) => logFunnelEventMock(...args),
+  flushPendingFunnelEvents: (...args: unknown[]) => flushPendingFunnelEventsMock(...args),
+}));
+
 describe("referral utilities", () => {
   beforeEach(() => {
     trackVisitMock.mockReset();
+    logFunnelEventMock.mockReset();
+    flushPendingFunnelEventsMock.mockReset();
+    logFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-1" });
+    flushPendingFunnelEventsMock.mockResolvedValue(undefined);
     window.localStorage.clear();
     window.sessionStorage.clear();
     document.cookie = "omega_referral_code=; path=/; max-age=0";
@@ -95,6 +106,14 @@ describe("referral utilities", () => {
     await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram&utm_medium=social&utm_campaign=spring");
 
     expect(trackVisitMock).toHaveBeenCalledTimes(1);
+    expect(logFunnelEventMock).toHaveBeenCalledWith(
+      "landing_viewed",
+      expect.objectContaining({
+        referralCode: "ELIN2026",
+        sessionId: "session-123",
+        pathname: "/sv",
+      }),
+    );
     expect(trackVisitMock).toHaveBeenCalledWith({
       ref: "ELIN2026",
       session_id: "session-123",

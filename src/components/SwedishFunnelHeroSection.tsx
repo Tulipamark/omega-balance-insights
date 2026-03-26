@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { t, type Lang } from "@/lib/i18n";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { funnelHeroCopy } from "@/lib/funnel-copy";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
@@ -119,11 +120,19 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full text-center"
               pendingLabel={pendingLabelByLang[lang]}
+              trackingEventName="hero_primary_cta_clicked"
+              trackingDetails={{ placement: "hero" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
             >
               {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
             </TrackedOutboundButton>
-            <a href="#how-it-works" className="btn-secondary text-center">
+            <a
+              href="#how-it-works"
+              className="btn-secondary text-center"
+              onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
+                details: { placement: "hero" },
+              })}
+            >
               {fallbackSecondaryCtaByLang[lang] ?? copy.hero.secondaryCta}
             </a>
           </div>

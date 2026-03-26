@@ -7,6 +7,8 @@ import type {
   UpdatePartnerLeadReviewResponse,
   TrackClickRequest,
   TrackClickResponse,
+  TrackFunnelEventRequest,
+  TrackFunnelEventResponse,
   TrackVisitRequest,
   TrackVisitResponse,
   UpsertLeadRequest,
@@ -120,6 +122,24 @@ export async function trackVisit(payload: TrackVisitRequest): Promise<TrackVisit
 
   if (!response.ok || !data) {
     throw new Error("Could not track referral visit right now.");
+  }
+
+  return data;
+}
+
+export async function trackFunnelEvent(payload: TrackFunnelEventRequest): Promise<TrackFunnelEventResponse> {
+  const { supabaseUrl, headers } = await getPublicFunctionHeaders();
+
+  const response = await fetch(`${supabaseUrl}/functions/v1/track-funnel-event`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  });
+
+  const data = (await response.json().catch(() => null)) as TrackFunnelEventResponse | null;
+
+  if (!response.ok || !data) {
+    throw new Error("Could not track funnel event right now.");
   }
 
   return data;

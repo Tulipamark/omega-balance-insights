@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { GROWTH_PROJECTION_SCENARIOS, runGrowthProjection } from "@/lib/growth-projection";
 import { getAdminDashboardData, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
+import { buildPartnerFunnelInsights } from "@/lib/partner-funnel";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { AdminPartnerRow, ConfidenceLevel, Lead, OnboardPartnerFromLeadResponse, PartnerLeadPriority } from "@/lib/omega-types";
 
@@ -36,6 +37,49 @@ function formatPercent(value: number) {
 
 function formatWholeNumber(value: number) {
   return new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(value);
+}
+
+function formatFunnelDelta(value: number | null) {
+  if (value === null) {
+    return "Bassteg";
+  }
+
+  return `${formatPercent(value)} från föregående steg`;
+}
+
+function getFunnelEventLabel(eventName: string) {
+  switch (eventName) {
+    case "landing_viewed":
+      return "Landning visad";
+    case "hero_primary_cta_clicked":
+      return "Hero CTA klick";
+    case "hero_secondary_cta_clicked":
+      return "Hero sekundär CTA";
+    case "sticky_cta_clicked":
+      return "Sticky CTA klick";
+    case "closing_cta_clicked":
+      return "Closing CTA klick";
+    case "lead_form_started":
+      return "Kundform startad";
+    case "lead_form_submitted":
+      return "Kundform skickad";
+    case "lead_form_submit_failed":
+      return "Kundform misslyckades";
+    case "consultation_redirect_requested":
+      return "Konsultationsredirect begärd";
+    case "partner_hero_primary_cta_clicked":
+      return "Partner CTA klick";
+    case "partner_sticky_cta_clicked":
+      return "Partner sticky CTA";
+    case "partner_form_started":
+      return "Partnerform startad";
+    case "partner_form_submitted":
+      return "Partnerform skickad";
+    case "partner_form_submit_failed":
+      return "Partnerform misslyckades";
+    default:
+      return eventName;
+  }
 }
 
 function formatStatusLabel(status: "inactive" | "active" | "growing" | "duplicating" | "leader-track") {
@@ -749,6 +793,29 @@ const AdminDashboardPage = () => {
   const producingPartners = data?.kpis?.duplication?.filter((row) => row.has_generated_leads).length || 0;
   const latestKnownCustomers = latestFunnelDay?.customers ?? 0;
   const growthCompassRows = data?.growthCompass || [];
+  const partnerFunnelInsights = useMemo(() => (data ? buildPartnerFunnelInsights(data) : null), [data]);
+  const funnelEventRows = data?.kpis?.funnelEventsDaily || [];
+  const recentFunnelEvents = data?.recentFunnelEvents || [];
+  const funnelEventSummary = useMemo(() => {
+    const countFor = (eventNames: string[]) =>
+      funnelEventRows
+        .filter((row) => eventNames.includes(row.event_name))
+        .reduce((sum, row) => sum + row.events, 0);
+
+    return {
+      landings: countFor(["landing_viewed"]),
+      ctaClicks: countFor([
+        "hero_primary_cta_clicked",
+        "sticky_cta_clicked",
+        "closing_cta_clicked",
+        "partner_hero_primary_cta_clicked",
+        "partner_sticky_cta_clicked",
+      ]),
+      formStarts: countFor(["lead_form_started", "partner_form_started"]),
+      formSubmits: countFor(["lead_form_submitted", "partner_form_submitted"]),
+      submitFailures: countFor(["lead_form_submit_failed", "partner_form_submit_failed"]),
+    };
+  }, [funnelEventRows]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -759,7 +826,7 @@ const AdminDashboardPage = () => {
   const selectedLeadCoreReadiness = selectedLead ? getCoreReadiness(selectedLead) : null;
   const selectedLeadCoreSupportPlan = selectedLead ? getCoreSupportPlan(selectedLead) : null;
   const sortedPartnerApplications = data
-    ? [...data.recentPartnerApplications].sort((a, b) => {
+    ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
         if (scoreDiff !== 0) {
           return scoreDiff;
@@ -930,6 +997,122 @@ const AdminDashboardPage = () => {
                 />
               </div> : null}
 
+              {showOverview && partnerFunnelInsights ? <DashboardSection
+                title="Partnerfunnel just nu"
+                description="Två kopplade flöden: först från partnerlead till onboarding, sedan från portalstart till verklig aktivitet och duplication."
+              >
+                <DataTruthBadges isDemo={isDemo} interpretive />
+                <div className="grid gap-8 xl:grid-cols-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Från intresse till onboarding</p>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      {partnerFunnelInsights.applicationStages.map((stage) => (
+                        <div key={stage.key} className="rounded-2xl border border-border/70 bg-white/95 p-5 shadow-card">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{stage.label}</p>
+                          <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(stage.count)}</p>
+                          <p className="mt-2 text-sm text-subtle">{stage.description}</p>
+                          <p className="mt-3 text-xs font-medium uppercase tracking-[0.12em] text-foreground/75">
+                            {formatFunnelDelta(stage.conversionFromPrevious)}
+                          </p>
+                          {stage.dropFromPrevious !== null ? (
+                            <p className="mt-1 text-xs text-subtle">Tapp från föregående steg: {formatWholeNumber(stage.dropFromPrevious)}</p>
+                          ) : null}
+                          <p className="mt-3 text-sm leading-6 text-foreground/80">{stage.focus}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Efter onboarding</p>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      {partnerFunnelInsights.activationStages.map((stage) => (
+                        <div key={stage.key} className="rounded-2xl border border-border/70 bg-white/95 p-5 shadow-card">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{stage.label}</p>
+                          <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(stage.count)}</p>
+                          <p className="mt-2 text-sm text-subtle">{stage.description}</p>
+                          <p className="mt-3 text-xs font-medium uppercase tracking-[0.12em] text-foreground/75">
+                            {formatFunnelDelta(stage.conversionFromPrevious)}
+                          </p>
+                          {stage.dropFromPrevious !== null ? (
+                            <p className="mt-1 text-xs text-subtle">Tapp från föregående steg: {formatWholeNumber(stage.dropFromPrevious)}</p>
+                          ) : null}
+                          <p className="mt-3 text-sm leading-6 text-foreground/80">{stage.focus}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+                  <div className="rounded-[1.5rem] border border-border/70 bg-secondary/25 p-5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Prioriterad flaskhals</p>
+                    <p className="mt-3 text-2xl font-semibold text-foreground">{partnerFunnelInsights.headline.title}</p>
+                    <p className="mt-3 text-sm leading-6 text-subtle">{partnerFunnelInsights.headline.summary}</p>
+                    <p className="mt-4 text-sm font-medium leading-6 text-foreground/80">{partnerFunnelInsights.headline.nextAction}</p>
+                  </div>
+
+                  <div className="grid gap-3">
+                    {partnerFunnelInsights.blockers.slice(0, 3).map((blocker) => (
+                      <div key={blocker.key} className="rounded-2xl border border-border/70 bg-white/95 p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-foreground">{blocker.label}</p>
+                            <p className="mt-2 text-sm leading-6 text-subtle">{blocker.description}</p>
+                          </div>
+                          <Badge variant={blocker.count > 0 ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                            {formatWholeNumber(blocker.count)}
+                          </Badge>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-foreground/80">{blocker.nextAction}</p>
+                        <p className="mt-3 text-xs text-subtle">
+                          Exempel: {blocker.samples.length ? blocker.samples.join(", ") : "Inga tydliga namn just nu."}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </DashboardSection> : null}
+
+              {showOverview ? <DashboardSection
+                title="Mikroevent i funneln"
+                description="Tidiga signaler som visar om trafiken faktiskt rör sig från landning till klick och vidare till formulär."
+              >
+                <DataTruthBadges isDemo={isDemo} />
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                  <MetricCard
+                    label="Landningar"
+                    value={funnelEventSummary.landings}
+                    helper="Registrerade landningsvisningar med referral eller lagrad attribution."
+                    icon={<TrendingUp className="h-5 w-5" />}
+                  />
+                  <MetricCard
+                    label="CTA-klick"
+                    value={funnelEventSummary.ctaClicks}
+                    helper="Hero-, sticky- och closing-CTA som faktiskt klickats."
+                    icon={<MousePointerClick className="h-5 w-5" />}
+                  />
+                  <MetricCard
+                    label="Formstarter"
+                    value={funnelEventSummary.formStarts}
+                    helper="När någon faktiskt börjar fylla i kund- eller partnerformulär."
+                    icon={<Activity className="h-5 w-5" />}
+                  />
+                  <MetricCard
+                    label="Skickade formulär"
+                    value={funnelEventSummary.formSubmits}
+                    helper="Formulär som gick till submit-flödet och skickades vidare."
+                    icon={<BadgeCheck className="h-5 w-5" />}
+                  />
+                  <MetricCard
+                    label="Submit-fel"
+                    value={funnelEventSummary.submitFailures}
+                    helper="Formförsök som stannade innan lead kunde drivas vidare."
+                    icon={<ArrowRightLeft className="h-5 w-5" />}
+                  />
+                </div>
+              </DashboardSection> : null}
+
               {showOverview || showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
                 {showTraffic ? <DashboardSection
                   title="Tratten just nu"
@@ -977,6 +1160,44 @@ const AdminDashboardPage = () => {
                     </div>
                   </div>
                 </DashboardSection> : null}
+              </div> : null}
+
+              {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+                <DashboardSection
+                  title="Event per steg"
+                  description="Daglig överblick över mikroevent så att ni kan se var rörelsen avtar innan lead eller onboarding."
+                >
+                  <DataTruthBadges isDemo={isDemo} />
+                  <DataTable
+                    columns={["Dag", "Event", "Antal"]}
+                    rows={funnelEventRows.slice(0, 10).map((row) => [
+                      <span key={`${row.day}-${row.event_name}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
+                      <span key={`${row.day}-${row.event_name}-name`}>{getFunnelEventLabel(row.event_name)}</span>,
+                      <span key={`${row.day}-${row.event_name}-events`}>{formatWholeNumber(row.events)}</span>,
+                    ])}
+                    emptyState="Ingen eventdata än."
+                  />
+                </DashboardSection>
+
+                <DashboardSection
+                  title="Senaste funnel-händelser"
+                  description="Snabb logg över de senaste interaktionerna som nått eventlagret."
+                >
+                  <DataTruthBadges isDemo={isDemo} />
+                  <DataTable
+                    columns={["Tid", "Event", "Sida", "Referral", "Detalj"]}
+                    rows={recentFunnelEvents.slice(0, 10).map((event) => [
+                      <span key={`${event.id}-time`} className="font-medium text-foreground">{formatDate(event.created_at)}</span>,
+                      <span key={`${event.id}-name`}>{getFunnelEventLabel(event.event_name)}</span>,
+                      <span key={`${event.id}-path`} className="max-w-[180px] truncate">{event.page_path}</span>,
+                      <span key={`${event.id}-ref`}>{event.referral_code || "Direkt"}</span>,
+                      <span key={`${event.id}-details`} className="max-w-[220px] truncate text-subtle">
+                        {event.details && Object.keys(event.details).length ? JSON.stringify(event.details) : "-"}
+                      </span>,
+                    ])}
+                    emptyState="Inga funnel-events loggade än."
+                  />
+                </DashboardSection>
               </div> : null}
 
               {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
@@ -1180,6 +1401,50 @@ const AdminDashboardPage = () => {
                 <p className="mt-2 text-sm text-subtle">Partnerkonton i portalen för dem som faktiskt arbetar i vår modell.</p>
               </div>
             </div>
+
+            {partnerFunnelInsights ? (
+              <div className="mb-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+                <div>
+                  <p className="mb-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">Funnel till onboarding</p>
+                  <DataTable
+                    columns={["Steg", "Antal", "Från föregående", "Tapp", "Fokus nu"]}
+                    rows={partnerFunnelInsights.applicationStages.map((stage) => [
+                      <div key={`${stage.key}-label`}>
+                        <p className="font-medium text-foreground">{stage.label}</p>
+                        <p className="mt-1 max-w-[280px] text-xs leading-5 text-subtle">{stage.description}</p>
+                      </div>,
+                      <span key={`${stage.key}-count`} className="font-medium text-foreground">{formatWholeNumber(stage.count)}</span>,
+                      <span key={`${stage.key}-conversion`}>{formatFunnelDelta(stage.conversionFromPrevious)}</span>,
+                      <span key={`${stage.key}-drop`}>{stage.dropFromPrevious === null ? "-" : formatWholeNumber(stage.dropFromPrevious)}</span>,
+                      <span key={`${stage.key}-focus`} className="max-w-[260px] text-sm text-subtle">{stage.focus}</span>,
+                    ])}
+                    emptyState="Ingen funneldata för onboarding än."
+                  />
+                </div>
+
+                <div>
+                  <p className="mb-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">Det som fastnar före portalstart</p>
+                  <div className="space-y-3">
+                    {partnerFunnelInsights.blockers.slice(0, 2).map((blocker) => (
+                      <div key={blocker.key} className="rounded-2xl border border-border/70 bg-white/95 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-sm font-medium text-foreground">{blocker.label}</p>
+                          <Badge variant={blocker.count > 0 ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                            {formatWholeNumber(blocker.count)}
+                          </Badge>
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-subtle">{blocker.description}</p>
+                        <p className="mt-3 text-sm leading-6 text-foreground/80">{blocker.nextAction}</p>
+                        <p className="mt-3 text-xs text-subtle">
+                          Exempel: {blocker.samples.length ? blocker.samples.join(", ") : "Inga tydliga namn just nu."}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
             <DataTable
               columns={["Sökande", "Portalsteg", "Redo", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
               rows={sortedPartnerApplications.map((lead) => [
@@ -1249,6 +1514,49 @@ const AdminDashboardPage = () => {
               ])}
               emptyState="Inga partneransökningar ännu."
             />
+          </DashboardSection> : null}
+
+          {showPartners && partnerFunnelInsights ? <DashboardSection
+            title="Aktivering efter onboarding"
+            description="Här ser ni vad som händer efter att partnern fått portalåtkomst: setup, första aktivitet och verklig duplication."
+          >
+            <DataTruthBadges isDemo={isDemo} interpretive />
+            <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+              <div>
+                <DataTable
+                  columns={["Steg", "Antal", "Från föregående", "Tapp", "Fokus nu"]}
+                  rows={partnerFunnelInsights.activationStages.map((stage) => [
+                    <div key={`${stage.key}-label`}>
+                      <p className="font-medium text-foreground">{stage.label}</p>
+                      <p className="mt-1 max-w-[280px] text-xs leading-5 text-subtle">{stage.description}</p>
+                    </div>,
+                    <span key={`${stage.key}-count`} className="font-medium text-foreground">{formatWholeNumber(stage.count)}</span>,
+                    <span key={`${stage.key}-conversion`}>{formatFunnelDelta(stage.conversionFromPrevious)}</span>,
+                    <span key={`${stage.key}-drop`}>{stage.dropFromPrevious === null ? "-" : formatWholeNumber(stage.dropFromPrevious)}</span>,
+                    <span key={`${stage.key}-focus`} className="max-w-[260px] text-sm text-subtle">{stage.focus}</span>,
+                  ])}
+                  emptyState="Ingen aktiveringsdata än."
+                />
+              </div>
+
+              <div className="space-y-3">
+                {partnerFunnelInsights.blockers.slice(2).map((blocker) => (
+                  <div key={blocker.key} className="rounded-2xl border border-border/70 bg-white/95 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-medium text-foreground">{blocker.label}</p>
+                      <Badge variant={blocker.count > 0 ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                        {formatWholeNumber(blocker.count)}
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-subtle">{blocker.description}</p>
+                    <p className="mt-3 text-sm leading-6 text-foreground/80">{blocker.nextAction}</p>
+                    <p className="mt-3 text-xs text-subtle">
+                      Exempel: {blocker.samples.length ? blocker.samples.join(", ") : "Inga tydliga namn just nu."}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </DashboardSection> : null}
 
           {showPartners ? <DashboardSection title="Partners" description="Aktiva partners med referral-kod, sponsor, enkel pipelinebild och signal om ZZ-länkarna är klara.">

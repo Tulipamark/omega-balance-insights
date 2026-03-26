@@ -6,8 +6,10 @@ import {
   AppUser,
   CreatePartnerInput,
   Customer,
+  FunnelEvent,
   GrowthCompassRow,
   KpiDuplicationRow,
+  KpiFunnelEventDay,
   KpiFunnelDay,
   KpiPartnerPipeline,
   KpiSourceMixRow,
@@ -251,6 +253,95 @@ const mockVisits: ReferralVisit[] = [
   },
 ];
 
+const mockFunnelEvents: FunnelEvent[] = [
+  {
+    id: "event-1",
+    partner_id: "partner-record-user-elin",
+    referral_code: "ELIN2026",
+    session_id: "session-el-1",
+    event_name: "landing_viewed",
+    page_path: "/sv",
+    utm_source: "instagram",
+    utm_medium: "social",
+    utm_campaign: "spring-launch",
+    details: { landingType: "customer" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(),
+  },
+  {
+    id: "event-2",
+    partner_id: "partner-record-user-elin",
+    referral_code: "ELIN2026",
+    session_id: "session-el-1",
+    event_name: "hero_primary_cta_clicked",
+    page_path: "/sv",
+    details: { placement: "hero", destinationType: "test" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 2 + 1000 * 45).toISOString(),
+  },
+  {
+    id: "event-3",
+    partner_id: "partner-record-user-elin",
+    referral_code: "ELIN2026",
+    session_id: "session-el-2",
+    event_name: "lead_form_started",
+    page_path: "/sv",
+    details: { formType: "consultation" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 5).toISOString(),
+  },
+  {
+    id: "event-4",
+    partner_id: "partner-record-user-elin",
+    referral_code: "ELIN2026",
+    session_id: "session-el-2",
+    event_name: "lead_form_submitted",
+    page_path: "/sv",
+    details: { formType: "consultation" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 5 + 1000 * 90).toISOString(),
+  },
+  {
+    id: "event-5",
+    partner_id: "partner-record-user-mikael",
+    referral_code: "MIKAEL88",
+    session_id: "session-mi-1",
+    event_name: "landing_viewed",
+    page_path: "/sv/partners",
+    utm_source: "email",
+    utm_medium: "crm",
+    utm_campaign: "march-follow-up",
+    details: { landingType: "partner" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18).toISOString(),
+  },
+  {
+    id: "event-6",
+    partner_id: "partner-record-user-mikael",
+    referral_code: "MIKAEL88",
+    session_id: "session-mi-1",
+    event_name: "partner_hero_primary_cta_clicked",
+    page_path: "/sv/partners",
+    details: { placement: "hero" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18 + 1000 * 30).toISOString(),
+  },
+  {
+    id: "event-7",
+    partner_id: "partner-record-user-mikael",
+    referral_code: "MIKAEL88",
+    session_id: "session-mi-1",
+    event_name: "partner_form_started",
+    page_path: "/sv/partners",
+    details: { formType: "partner_application" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18 + 1000 * 75).toISOString(),
+  },
+  {
+    id: "event-8",
+    partner_id: "partner-record-user-mikael",
+    referral_code: "MIKAEL88",
+    session_id: "session-mi-1",
+    event_name: "partner_form_submit_failed",
+    page_path: "/sv/partners",
+    details: { formType: "partner_application", reason: "missing_referral" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18 + 1000 * 120).toISOString(),
+  },
+];
+
 function requireSupabase() {
   if (!supabase) {
     throw new Error(
@@ -418,6 +509,39 @@ function buildMockKpiSourceMixDaily(visits: ReferralVisit[]): KpiSourceMixRow[] 
   });
 
   return [...buckets.values()].sort((a, b) => (a.day < b.day ? 1 : b.visits - a.visits));
+}
+
+function buildMockKpiFunnelEventsDaily(events: FunnelEvent[]): KpiFunnelEventDay[] {
+  const buckets = new Map<string, KpiFunnelEventDay>();
+
+  events.forEach((event) => {
+    const day = `${toDayKey(event.created_at)}T00:00:00.000Z`;
+    const key = `${day}|${event.event_name}`;
+    const existing = buckets.get(key);
+
+    if (existing) {
+      existing.events += 1;
+      return;
+    }
+
+    buckets.set(key, {
+      day,
+      event_name: event.event_name,
+      events: 1,
+    });
+  });
+
+  return [...buckets.values()].sort((a, b) => {
+    if (a.day !== b.day) {
+      return a.day < b.day ? 1 : -1;
+    }
+
+    if (a.events !== b.events) {
+      return b.events - a.events;
+    }
+
+    return a.event_name.localeCompare(b.event_name);
+  });
 }
 
 function buildTeamRows(users: AppUser[], relationships: PartnerRelationship[]): TeamRow[] {
@@ -828,10 +952,12 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       },
       leadsPerPartner: performance,
       customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
-        partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships, mockPartnerRecords),
+      partnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")),
+      partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships, mockPartnerRecords),
       networkOverview: buildTeamRows(mockUsers, mockRelationships),
       recentLeads: sortNewest(mockLeads).slice(0, 6),
       recentPartnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")).slice(0, 6),
+      recentFunnelEvents: sortNewest(mockFunnelEvents).slice(0, 12),
       growthCompass: buildGrowthCompassRows(
         mockUsers,
         mockLeads,
@@ -843,6 +969,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       ),
       kpis: {
         funnelDaily: buildMockKpiFunnelDaily(mockVisits, mockLeads, mockCustomers, mockOrders),
+        funnelEventsDaily: buildMockKpiFunnelEventsDaily(mockFunnelEvents),
         partnerPipeline: buildMockKpiPartnerPipeline(mockLeads, mockUsers),
         duplication: buildMockKpiDuplication(mockUsers, mockLeads, mockCustomers, mockOrders, mockVisits),
         sourceMixDaily: buildMockKpiSourceMixDaily(mockVisits),
@@ -859,6 +986,8 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     { data: visits },
     { data: partnerRecords },
     { data: outboundClicks },
+    funnelEventsResponse,
+    funnelEventsDailyResponse,
     funnelResponse,
     pipelineResponse,
     duplicationResponse,
@@ -871,10 +1000,12 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("referral_visits").select("*"),
       client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at"),
     client.from("outbound_clicks").select("id, partner_id, referral_code, session_id, destination_type, created_at"),
-    client.from("kpi_funnel_daily").select("*").limit(14),
+    client.from("funnel_events").select("*").order("created_at", { ascending: false }).limit(20),
+    client.from("kpi_funnel_events_daily").select("*").order("day", { ascending: false }).limit(50),
+    client.from("kpi_funnel_daily").select("*").order("day", { ascending: false }).limit(14),
     client.from("kpi_partner_pipeline").select("*").maybeSingle(),
     client.from("kpi_duplication").select("*").limit(12),
-    client.from("kpi_source_mix_daily").select("*").limit(20),
+    client.from("kpi_source_mix_daily").select("*").order("day", { ascending: false }).limit(20),
   ]);
 
   const performance = buildPartnerPerformance(users || [], leads || [], customers || [], visits || []);
@@ -888,6 +1019,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     },
     leadsPerPartner: performance,
     customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
+    partnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")),
     partners: buildAdminPartnerRows(
       users || [],
       performance,
@@ -907,6 +1039,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     networkOverview: buildTeamRows(users || [], relationships || []),
     recentLeads: sortNewest(leads || []).slice(0, 6),
     recentPartnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")).slice(0, 6),
+    recentFunnelEvents: ((funnelEventsResponse.data as FunnelEvent[] | null) || []).slice(0, 12),
     growthCompass: buildGrowthCompassRows(
       users || [],
       leads || [],
@@ -918,6 +1051,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     ),
     kpis: {
       funnelDaily: (funnelResponse.data as KpiFunnelDay[] | null) || [],
+      funnelEventsDaily: (funnelEventsDailyResponse.data as KpiFunnelEventDay[] | null) || [],
       partnerPipeline: (pipelineResponse.data as KpiPartnerPipeline | null) || null,
       duplication: (duplicationResponse.data as KpiDuplicationRow[] | null) || [],
       sourceMixDaily: (sourceMixResponse.data as KpiSourceMixRow[] | null) || [],

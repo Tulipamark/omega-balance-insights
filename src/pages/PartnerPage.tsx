@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertLead } from "@/lib/api";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
 import { getOrCreateSessionId, getReferralAttribution } from "@/lib/referral";
 
@@ -2026,6 +2027,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showStickyCta, setShowStickyCta] = useState(false);
+  const hasTrackedFormStart = useRef(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -2037,6 +2039,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   });
 
   const updateField = (field: keyof typeof formData, value: string) => {
+    if (!hasTrackedFormStart.current) {
+      hasTrackedFormStart.current = true;
+      void logFunnelEvent("partner_form_started", {
+        pathname: location.pathname,
+        search: location.search,
+        details: {
+          formType: "partner_application",
+        },
+      });
+    }
+
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
@@ -2054,15 +2067,33 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     try {
       const attribution = await getReferralAttribution(location.pathname);
       if (!attribution.referralCode) {
+        void logFunnelEvent("partner_form_submit_failed", {
+          pathname: location.pathname,
+          search: location.search,
+          details: {
+            formType: "partner_application",
+            reason: "missing_referral",
+          },
+        });
         throw new Error(missingReferralByLang[lang]);
       }
 
+      const sessionId = getOrCreateSessionId();
+      void logFunnelEvent("partner_form_submitted", {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode: attribution.referralCode,
+        sessionId,
+        details: {
+          formType: "partner_application",
+        },
+      });
       const response = await upsertLead({
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
         ref: attribution.referralCode,
-        session_id: getOrCreateSessionId(),
+        session_id: sessionId,
         lead_type: "partner",
         lead_source: "partner_form",
         source_page: location.pathname,
@@ -2081,6 +2112,14 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
       setSubmitted(true);
     } catch (error) {
+      void logFunnelEvent("partner_form_submit_failed", {
+        pathname: location.pathname,
+        search: location.search,
+        details: {
+          formType: "partner_application",
+          reason: error instanceof Error ? error.message : "submit_failed",
+        },
+      });
       setErrorMessage(error instanceof Error ? error.message : submitErrorByLang[lang]);
     } finally {
       setSubmitting(false);
@@ -2104,7 +2143,19 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">{page.hero.title}</h1>
               <p className="mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">{page.hero.body}</p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <a href="#partner-application" className="btn-primary text-center">{page.hero.primaryCta}</a>
+                <a
+                  href="#partner-application"
+                  className="btn-primary text-center"
+                  onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                    pathname: location.pathname,
+                    search: location.search,
+                    details: {
+                      placement: "hero",
+                    },
+                  })}
+                >
+                  {page.hero.primaryCta}
+                </a>
                 <a href="#partner-economics" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
               </div>
             </motion.div>
@@ -2369,7 +2420,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 px-4 py-3 backdrop-blur-lg md:hidden">
           <div className="container-wide flex items-center justify-between gap-3">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{page.sticky.text}</p>
-            <a href="#partner-application" className="btn-primary w-full whitespace-nowrap px-6 py-3 text-center text-sm sm:w-auto">
+            <a
+              href="#partner-application"
+              className="btn-primary w-full whitespace-nowrap px-6 py-3 text-center text-sm sm:w-auto"
+              onClick={() => void logFunnelEvent("partner_sticky_cta_clicked", {
+                pathname: location.pathname,
+                search: location.search,
+                details: {
+                  placement: "sticky-bar",
+                },
+              })}
+            >
               {page.sticky.cta}
             </a>
           </div>

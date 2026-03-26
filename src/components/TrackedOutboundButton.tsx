@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { trackClickAndGetRedirect } from "@/lib/api";
+import { logFunnelEvent } from "@/lib/funnel-events";
+import type { FunnelEventName } from "@/lib/omega-types";
 import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 
 type TrackedOutboundButtonProps = {
@@ -9,6 +11,8 @@ type TrackedOutboundButtonProps = {
   className: string;
   children: React.ReactNode;
   pendingLabel?: string;
+  trackingEventName?: FunnelEventName;
+  trackingDetails?: Record<string, unknown>;
   errorMessages?: Partial<Record<keyof typeof reasonCopy, string>> & { generic?: string };
 };
 
@@ -34,6 +38,8 @@ const TrackedOutboundButton = ({
   className,
   children,
   pendingLabel = "Öppnar...",
+  trackingEventName,
+  trackingDetails,
   errorMessages,
 }: TrackedOutboundButtonProps) => {
   const location = useLocation();
@@ -48,6 +54,21 @@ const TrackedOutboundButton = ({
     setErrorMessage(null);
 
     const referralCode = getActiveReferralCode(location.pathname, location.search);
+    const sessionId = getOrCreateSessionId();
+
+    if (trackingEventName) {
+      void logFunnelEvent(trackingEventName, {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode,
+        sessionId,
+        details: {
+          destinationType,
+          ...trackingDetails,
+        },
+      });
+    }
+
     if (!referralCode) {
       window.location.assign(fallbackHref);
       return;
@@ -56,7 +77,6 @@ const TrackedOutboundButton = ({
     setPending(true);
 
     try {
-      const sessionId = getOrCreateSessionId();
       const result = await trackClickAndGetRedirect({
         ref: referralCode,
         type: destinationType,

@@ -5,6 +5,7 @@ import PartnerPage from "@/pages/PartnerPage";
 
 const upsertLeadMock = vi.fn();
 const getReferralAttributionMock = vi.fn();
+const trackFunnelEventMock = vi.fn();
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -14,6 +15,10 @@ vi.mock("framer-motion", () => ({
 
 vi.mock("@/lib/api", () => ({
   upsertLead: (...args: unknown[]) => upsertLeadMock(...args),
+}));
+
+vi.mock("@/lib/funnel-events", () => ({
+  logFunnelEvent: (...args: unknown[]) => trackFunnelEventMock(...args),
 }));
 
 vi.mock("@/lib/referral", () => ({
@@ -33,7 +38,9 @@ describe("PartnerPage", () => {
   beforeEach(() => {
     upsertLeadMock.mockReset();
     getReferralAttributionMock.mockReset();
+    trackFunnelEventMock.mockReset();
     upsertLeadMock.mockResolvedValue({ ok: true, mode: "created", lead_id: "lead-2" });
+    trackFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-2" });
   });
 
   it("submits the partner application with referral ownership intact", async () => {
@@ -72,6 +79,21 @@ describe("PartnerPage", () => {
           background: "Jag vill bygga långsiktigt.",
           landingPage: "/sv/partners",
         },
+      }),
+    );
+    expect(trackFunnelEventMock).toHaveBeenCalledWith(
+      "partner_form_started",
+      expect.objectContaining({
+        pathname: "/sv/partners",
+        search: "",
+      }),
+    );
+    expect(trackFunnelEventMock).toHaveBeenCalledWith(
+      "partner_form_submitted",
+      expect.objectContaining({
+        pathname: "/sv/partners",
+        referralCode: "ELIN2026",
+        sessionId: "session-123",
       }),
     );
   });

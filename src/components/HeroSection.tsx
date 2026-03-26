@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import heroVisual from "@/assets/hero-visual.jpg";
 import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
@@ -93,11 +94,19 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
                 fallbackHref={DEFAULT_ZINZINO_TEST_URL}
                 className="btn-primary text-center"
                 pendingLabel={pendingLabel}
+                trackingEventName="hero_primary_cta_clicked"
+                trackingDetails={{ placement: "hero" }}
                 errorMessages={{ generic: genericError }}
               >
                 {copy.primaryCta}
               </TrackedOutboundButton>
-              <a href="#how-it-works" className="btn-secondary text-center">
+              <a
+                href="#how-it-works"
+                className="btn-secondary text-center"
+                onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
+                  details: { placement: "hero" },
+                })}
+              >
                 {copy.secondaryCta}
               </a>
             </div>

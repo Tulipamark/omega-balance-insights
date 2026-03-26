@@ -5,6 +5,10 @@ interface FooterSectionProps {
   lang: Lang;
 }
 
+function trimTrailingPunctuation(value: string) {
+  return value.trim().replace(/[.!?]+$/, "");
+}
+
 const FooterSection = ({ lang }: FooterSectionProps) => {
   const copy = t(lang).footer;
   const backofficeLabel = {
@@ -38,14 +42,14 @@ const FooterSection = ({ lang }: FooterSectionProps) => {
     it: "Partner Zinzino indipendente",
   } satisfies Record<Lang, string>;
   const localizedPath = (basePath: "/integritet" | "/villkor" | "/kontakt") => (lang === "sv" ? basePath : `/${lang}${basePath}`);
+  const footerLine = `© OmegaBalance 2026 • ${trimTrailingPunctuation(copy.tagline)} • ${independentPartnerLabel[lang]}`;
 
   return (
     <footer className="border-t border-border px-6 py-12 md:px-12">
       <div className="container-wide flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="font-serif text-lg font-semibold tracking-tight">OmegaBalance</p>
         <div className="text-center md:text-left">
-          <p className="text-xs text-subtle">© OmegaBalance 2026 • {copy.tagline}</p>
-          <p className="mt-1 text-[11px] text-subtle">{independentPartnerLabel[lang]}</p>
+          <p className="text-xs text-subtle">{footerLine}</p>
         </div>
         <div className="flex gap-6 text-xs text-subtle">
           <Link to="/dashboard/login" className="transition-colors hover:text-foreground">

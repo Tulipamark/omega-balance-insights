@@ -62,6 +62,8 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full whitespace-nowrap px-6 py-3 text-sm sm:w-auto"
               pendingLabel={pendingLabelByLang[lang]}
+              trackingEventName="sticky_cta_clicked"
+              trackingDetails={{ placement: "sticky-bar" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
             >
               {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}

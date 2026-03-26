@@ -7,6 +7,9 @@ verify_jwt = false
 [functions.track-click-and-redirect]
 verify_jwt = false
 
+[functions.track-funnel-event]
+verify_jwt = false
+
 [functions.onboard-partner-from-lead]
 verify_jwt = false
 

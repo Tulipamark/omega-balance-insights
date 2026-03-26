@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { upsertLead, trackClickAndGetRedirect } from "@/lib/api";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
 import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 
@@ -48,6 +49,22 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTrackedFormStart = useRef(false);
+
+  const trackFormStart = () => {
+    if (hasTrackedFormStart.current) {
+      return;
+    }
+
+    hasTrackedFormStart.current = true;
+    void logFunnelEvent("lead_form_started", {
+      pathname: location.pathname,
+      search: location.search,
+      details: {
+        formType: "consultation",
+      },
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,6 +75,14 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
 
     const referralCode = getActiveReferralCode(location.pathname, location.search);
     if (!referralCode) {
+      void logFunnelEvent("lead_form_submit_failed", {
+        pathname: location.pathname,
+        search: location.search,
+        details: {
+          formType: "consultation",
+          reason: "missing_referral",
+        },
+      });
       setErrorMessage(referralErrorByLang[lang]);
       return;
     }
@@ -67,6 +92,15 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
 
     try {
       const sessionId = getOrCreateSessionId();
+      void logFunnelEvent("lead_form_submitted", {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode,
+        sessionId,
+        details: {
+          formType: "consultation",
+        },
+      });
       const leadResponse = await upsertLead({
         full_name: formData.name,
         email: formData.email,
@@ -86,6 +120,15 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         throw new Error(submitErrorByLang[lang]);
       }
 
+      void logFunnelEvent("consultation_redirect_requested", {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode,
+        sessionId,
+        details: {
+          destinationType: "consultation",
+        },
+      });
       const response = await trackClickAndGetRedirect({
         ref: referralCode,
         type: "consultation",
@@ -99,6 +142,15 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         throw new Error(failRes.error?.message || "Kunde inte boka konsultation.");
       }
     } catch (error) {
+      void logFunnelEvent("lead_form_submit_failed", {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode,
+        details: {
+          formType: "consultation",
+          reason: error instanceof Error ? error.message : "submit_failed",
+        },
+      });
       setErrorMessage(error instanceof Error ? error.message : submitErrorByLang[lang]);
     } finally {
       setSubmitting(false);
@@ -130,7 +182,10 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
                 type="text"
                 required
                 value={formData.name}
-                onChange={(event) => setFormData({ ...formData, name: event.target.value })}
+                onChange={(event) => {
+                  trackFormStart();
+                  setFormData({ ...formData, name: event.target.value });
+                }}
                 className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-ring"
                 placeholder={copy.namePlaceholder}
               />
@@ -144,7 +199,10 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
                 type="email"
                 required
                 value={formData.email}
-                onChange={(event) => setFormData({ ...formData, email: event.target.value })}
+                onChange={(event) => {
+                  trackFormStart();
+                  setFormData({ ...formData, email: event.target.value });
+                }}
                 className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-ring"
                 placeholder={copy.emailPlaceholder}
               />
@@ -157,7 +215,10 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
                 id="phone"
                 type="tel"
                 value={formData.phone}
-                onChange={(event) => setFormData({ ...formData, phone: event.target.value })}
+                onChange={(event) => {
+                  trackFormStart();
+                  setFormData({ ...formData, phone: event.target.value });
+                }}
                 className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-ring"
                 placeholder={copy.phonePlaceholder}
               />

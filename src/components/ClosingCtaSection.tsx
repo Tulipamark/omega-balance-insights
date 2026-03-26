@@ -61,6 +61,8 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full text-center"
               pendingLabel={pendingLabelByLang[lang]}
+              trackingEventName="closing_cta_clicked"
+              trackingDetails={{ placement: "closing-section" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
             >
               {primaryCtaByLang[lang] ?? copy.hero.primaryCta}
