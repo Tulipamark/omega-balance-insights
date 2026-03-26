@@ -1037,6 +1037,30 @@ const AdminDashboardPage = () => {
       topLandingPages: aggregate((row) => row.landing_page || "/"),
     };
   }, [data?.kpis?.sourceMixDaily]);
+  const sessionSourceSummary = useMemo(() => {
+    const buckets = new Map<string, { sessions: number; surfOnly: number; ctaDriven: number; formDriven: number }>();
+
+    sessionJourneySummary.forEach((session) => {
+      const source = session.source || "Direkt";
+      const current = buckets.get(source) || { sessions: 0, surfOnly: 0, ctaDriven: 0, formDriven: 0 };
+
+      current.sessions += 1;
+      if (session.submittedForm || session.reachedForm) {
+        current.formDriven += 1;
+      } else if (session.ctaClicks > 0) {
+        current.ctaDriven += 1;
+      } else {
+        current.surfOnly += 1;
+      }
+
+      buckets.set(source, current);
+    });
+
+    return [...buckets.entries()]
+      .map(([source, metrics]) => ({ source, ...metrics }))
+      .sort((a, b) => b.sessions - a.sessions || a.source.localeCompare(b.source))
+      .slice(0, 8);
+  }, [sessionJourneySummary]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1678,6 +1702,19 @@ const AdminDashboardPage = () => {
                   description="De senaste sessionerna från första landning till sidvisningar, CTA och formulär. Bra för att se om traction stannar vid tittande eller går vidare."
                 >
                   <DataTruthBadges isDemo={isDemo} />
+                  <div className="mb-4">
+                    <DataTable
+                      columns={["Källa", "Sessioner", "Bara surf", "CTA", "Form"]}
+                      rows={sessionSourceSummary.map((row) => [
+                        <span key={`${row.source}-source`} className="font-medium text-foreground">{row.source}</span>,
+                        <span key={`${row.source}-sessions`}>{formatWholeNumber(row.sessions)}</span>,
+                        <span key={`${row.source}-surf`}>{formatWholeNumber(row.surfOnly)}</span>,
+                        <span key={`${row.source}-cta`}>{formatWholeNumber(row.ctaDriven)}</span>,
+                        <span key={`${row.source}-form`}>{formatWholeNumber(row.formDriven)}</span>,
+                      ])}
+                      emptyState="Ingen källsummering än."
+                    />
+                  </div>
                   <DataTable
                     columns={["Start", "Källa", "Landning", "Sidor", "Nästa steg", "Spår"]}
                     rows={sessionJourneySummary.map((session) => [
