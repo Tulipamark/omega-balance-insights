@@ -911,9 +911,10 @@ const AdminDashboardPage = () => {
   const partnerFunnelInsights = useMemo(() => (data ? buildPartnerFunnelInsights(data) : null), [data]);
   const funnelEventRows = data?.kpis?.funnelEventsDaily || [];
   const recentFunnelEvents = data?.recentFunnelEvents || [];
+  const funnelEventTimeline = data?.funnelEventTimeline || [];
   const funnelTimingInsights = useMemo(
-    () => buildFunnelStageTimingInsights(data?.funnelEventTimeline || []),
-    [data?.funnelEventTimeline],
+    () => buildFunnelStageTimingInsights(funnelEventTimeline),
+    [funnelEventTimeline],
   );
   const partnerLifecycleTimingInsights = useMemo(
     () => buildPartnerLifecycleTimingInsights({
@@ -955,6 +956,66 @@ const AdminDashboardPage = () => {
         .slice(0, 8),
     };
   }, [funnelEventRows, recentFunnelEvents]);
+  const sessionJourneySummary = useMemo(() => {
+    const eventsBySession = new Map<string, typeof funnelEventTimeline>();
+
+    funnelEventTimeline.forEach((event) => {
+      if (!event.session_id) {
+        return;
+      }
+
+      const existing = eventsBySession.get(event.session_id) || [];
+      existing.push(event);
+      eventsBySession.set(event.session_id, existing);
+    });
+
+    return [...eventsBySession.entries()]
+      .map(([sessionId, events]) => {
+        const sortedEvents = [...events].sort(
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+        );
+        const firstEvent = sortedEvents[0] || null;
+        const firstLanding = sortedEvents.find((event) => event.event_name === "landing_viewed") || firstEvent;
+        const pageViews = sortedEvents.filter((event) => event.event_name === "page_viewed");
+        const ctaEvents = sortedEvents.filter((event) =>
+          [
+            "hero_primary_cta_clicked",
+            "sticky_cta_clicked",
+            "closing_cta_clicked",
+            "partner_hero_primary_cta_clicked",
+            "partner_sticky_cta_clicked",
+          ].includes(event.event_name),
+        );
+        const formStart = sortedEvents.find((event) =>
+          ["lead_form_started", "partner_form_started"].includes(event.event_name),
+        );
+        const formSubmit = sortedEvents.find((event) =>
+          ["lead_form_submitted", "partner_form_submitted"].includes(event.event_name),
+        );
+        const pageTrail = Array.from(
+          new Set(
+            sortedEvents
+              .filter((event) => event.event_name === "landing_viewed" || event.event_name === "page_viewed")
+              .map((event) => event.page_path),
+          ),
+        );
+
+        return {
+          sessionId,
+          firstSeenAt: firstEvent?.created_at || "",
+          referralCode: firstLanding?.referral_code || firstEvent?.referral_code || null,
+          source: firstLanding?.utm_source || firstEvent?.utm_source || null,
+          landingPage: firstLanding?.page_path || firstEvent?.page_path || "-",
+          pageViews: pageViews.length,
+          ctaClicks: ctaEvents.length,
+          reachedForm: Boolean(formStart),
+          submittedForm: Boolean(formSubmit),
+          pageTrail,
+        };
+      })
+      .sort((a, b) => new Date(b.firstSeenAt).getTime() - new Date(a.firstSeenAt).getTime())
+      .slice(0, 10);
+  }, [funnelEventTimeline]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1588,6 +1649,38 @@ const AdminDashboardPage = () => {
                       <span key={`${pagePath}-views`}>{formatWholeNumber(views)}</span>,
                     ])}
                     emptyState="Inga sidvisningar loggade än."
+                  />
+                </DashboardSection>
+
+                <DashboardSection
+                  title="Sessionsresor"
+                  description="De senaste sessionerna från första landning till sidvisningar, CTA och formulär. Bra för att se om traction stannar vid tittande eller går vidare."
+                >
+                  <DataTruthBadges isDemo={isDemo} />
+                  <DataTable
+                    columns={["Start", "Källa", "Landning", "Sidor", "Nästa steg", "Spår"]}
+                    rows={sessionJourneySummary.map((session) => [
+                      <div key={`${session.sessionId}-start`}>
+                        <p className="font-medium text-foreground">{formatDate(session.firstSeenAt)}</p>
+                        <p className="text-xs text-subtle">{session.referralCode || "Direkt"}</p>
+                      </div>,
+                      <span key={`${session.sessionId}-source`}>{session.source || "Direkt"}</span>,
+                      <span key={`${session.sessionId}-landing`} className="max-w-[180px] truncate">{session.landingPage}</span>,
+                      <span key={`${session.sessionId}-pages`}>{formatWholeNumber(session.pageViews)}</span>,
+                      <div key={`${session.sessionId}-next`} className="text-sm text-subtle">
+                        {session.submittedForm
+                          ? "Form skickad"
+                          : session.reachedForm
+                            ? "Form påbörjad"
+                            : session.ctaClicks > 0
+                              ? `${formatWholeNumber(session.ctaClicks)} CTA-klick`
+                              : "Bara surf"}
+                      </div>,
+                      <span key={`${session.sessionId}-trail`} className="max-w-[260px] truncate text-subtle">
+                        {session.pageTrail.length ? session.pageTrail.join(" -> ") : "-"}
+                      </span>,
+                    ])}
+                    emptyState="Inga sessionsresor loggade än."
                   />
                 </DashboardSection>
 
