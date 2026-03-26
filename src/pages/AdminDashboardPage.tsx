@@ -1001,6 +1001,15 @@ const AdminDashboardPage = () => {
         return b.row.score - a.row.score;
       });
   }, [data?.partners, growthCompassRows]);
+  const leadsReadyButNotOnboarded = useMemo(() => {
+    if (!data?.partnerApplications?.length) {
+      return [];
+    }
+
+    return data.partnerApplications
+      .filter((lead) => lead.status !== "active" && getLeadReviewReady(lead))
+      .sort((a, b) => new Date(a.updated_at || a.created_at).getTime() - new Date(b.updated_at || b.created_at).getTime());
+  }, [data?.partnerApplications]);
   const sortedPartnerApplications = data
     ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
@@ -1662,6 +1671,64 @@ const AdminDashboardPage = () => {
                 <p className="mt-3 text-3xl font-semibold text-foreground">{pipeline?.portal_partner_users ?? 0}</p>
                 <p className="mt-2 text-sm text-subtle">Partnerkonton i portalen för dem som faktiskt arbetar i vår modell.</p>
               </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="mb-5 grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Redo men ej onboardade</p>
+                  <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(leadsReadyButNotOnboarded.length)}</p>
+                  <p className="mt-2 text-sm text-subtle">Allt är bekräftat, men portalåtkomst är ännu inte skapad.</p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Längst väntan</p>
+                  <p className="mt-3 text-3xl font-semibold text-foreground">
+                    {leadsReadyButNotOnboarded[0] ? formatElapsedDays(leadsReadyButNotOnboarded[0].updated_at || leadsReadyButNotOnboarded[0].created_at) : "-"}
+                  </p>
+                  <p className="mt-2 text-sm text-subtle">Tid sedan leaden senast uppdaterades eller först kom in.</p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Fokus nu</p>
+                  <p className="mt-3 text-sm leading-6 text-foreground/85">
+                    Skapa teammedlem snabbt när allt redan är verifierat, så att onboarding startar medan relationen fortfarande är varm.
+                  </p>
+                </div>
+              </div>
+
+              <DataTable
+                columns={["Sökande", "Kontakt", "Redo sedan", "Nästa steg", "Åtgärd"]}
+                rows={leadsReadyButNotOnboarded.map((lead) => [
+                  <div key={`${lead.id}-ready-name`}>
+                    <p className="font-medium text-foreground">{lead.name}</p>
+                    <p className="text-xs text-subtle">{lead.email}</p>
+                  </div>,
+                  <span key={`${lead.id}-ready-contact`} className="max-w-[220px] text-sm text-subtle">
+                    {getLeadContactMethod(lead)}
+                  </span>,
+                  <span key={`${lead.id}-ready-since`}>
+                    {formatElapsedDays(lead.updated_at || lead.created_at)}
+                  </span>,
+                  <span key={`${lead.id}-ready-next`} className="max-w-[280px] text-sm text-subtle">
+                    {getLeadFollowUpRecommendation(lead)}
+                  </span>,
+                  <Button
+                    key={`${lead.id}-ready-open`}
+                    type="button"
+                    variant="outline"
+                    className="rounded-xl"
+                    disabled={isDemo}
+                    onClick={() => {
+                      setSelectedLead(lead);
+                      setProvisionedPartner(null);
+                      setProvisionError(null);
+                      setZinzinoVerified(false);
+                    }}
+                  >
+                    Öppna ansökan
+                  </Button>,
+                ])}
+                emptyState="Ingen lead är klar men ännu inte onboardad just nu."
+              />
             </div>
 
             {partnerFunnelInsights ? (
