@@ -9,7 +9,7 @@ function makeLead(overrides: Partial<Lead>): Lead {
     email: overrides.email || "lead@example.com",
     phone: overrides.phone || null,
     type: "partner_lead",
-    source: overrides.source || "partner_form",
+    lead_source: overrides.lead_source || "partner_form",
     source_page: overrides.source_page || "/partner",
     referred_by_user_id: overrides.referred_by_user_id || null,
     referral_code: overrides.referral_code || null,
