@@ -1,10 +1,11 @@
 import { type FormEvent, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertLead } from "@/lib/api";
 import { defaultLang, isSupportedLang, Lang } from "@/lib/i18n";
+import { getLeadAttributionContext } from "@/lib/referral";
 
 const contactCopyByLang: Record<Lang, {
   title: string;
@@ -174,6 +175,7 @@ const ContactPage = () => {
   const { lang } = useParams<{ lang?: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = contactCopyByLang[currentLang];
+  const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -194,16 +196,28 @@ const ContactPage = () => {
     setErrorMessage(null);
 
     try {
+      const attribution = await getLeadAttributionContext(location.pathname, location.search);
       const response = await upsertLead({
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone || null,
+        session_id: attribution.sessionId,
+        ref: attribution.referralCode,
         lead_type: "customer",
         lead_source: "customer_form",
         source_page: currentLang === "sv" ? "/kontakt" : `/${currentLang}/kontakt`,
         details: {
           intent: "contact",
           message: formData.message,
+          landingPage: attribution.landingPage,
+          attribution: {
+            sessionId: attribution.sessionId,
+            referralCode: attribution.referralCode,
+            referredByUserId: attribution.referredByUserId,
+            landingPage: attribution.landingPage,
+            firstTouch: attribution.firstTouch,
+            lastTouch: attribution.lastTouch,
+          },
         },
       });
 

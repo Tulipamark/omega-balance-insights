@@ -82,6 +82,17 @@ describe("LeadCaptureSection", () => {
         details: {
           intent: "consultation",
           landingPage: "/sv",
+          attribution: expect.objectContaining({
+            sessionId: expect.any(String),
+            referralCode: "ELIN2026",
+            landingPage: "/sv",
+            firstTouch: expect.objectContaining({
+              landingPage: "/sv",
+            }),
+            lastTouch: expect.objectContaining({
+              landingPage: "/sv",
+            }),
+          }),
         },
       }),
     );
@@ -133,6 +144,11 @@ describe("LeadCaptureSection", () => {
           ref: "ELIN2026",
           lead_type: "customer",
           lead_source: "customer_form",
+          details: expect.objectContaining({
+            attribution: expect.objectContaining({
+              referralCode: "ELIN2026",
+            }),
+          }),
         }),
       ),
     );

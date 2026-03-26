@@ -26,7 +26,15 @@ import { getAdminDashboardData, signOutPortalUser, updatePartnerZzLinks } from "
 import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
 import { buildPartnerFunnelInsights } from "@/lib/partner-funnel";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
-import type { AdminPartnerRow, ConfidenceLevel, Lead, OnboardPartnerFromLeadResponse, PartnerLeadPriority } from "@/lib/omega-types";
+import type {
+  AdminPartnerRow,
+  ConfidenceLevel,
+  Lead,
+  LeadAttributionContext,
+  OnboardPartnerFromLeadResponse,
+  PartnerLeadPriority,
+  ReferralTouchpoint,
+} from "@/lib/omega-types";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
@@ -427,6 +435,68 @@ function getLeadAdminNote(lead: Lead) {
   return typeof value === "string" ? value : "";
 }
 
+function getLeadAttribution(lead: Lead): LeadAttributionContext | null {
+  const value = lead.details?.attribution;
+
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const attribution = value as Record<string, unknown>;
+  const lastTouchValue = attribution.lastTouch;
+
+  if (
+    typeof attribution.sessionId !== "string" ||
+    typeof attribution.landingPage !== "string" ||
+    !lastTouchValue ||
+    typeof lastTouchValue !== "object"
+  ) {
+    return null;
+  }
+
+  return {
+    sessionId: attribution.sessionId,
+    referralCode: typeof attribution.referralCode === "string" ? attribution.referralCode : null,
+    referredByUserId: typeof attribution.referredByUserId === "string" ? attribution.referredByUserId : null,
+    landingPage: attribution.landingPage,
+    firstTouch: isReferralTouchpoint(attribution.firstTouch) ? attribution.firstTouch : null,
+    lastTouch: isReferralTouchpoint(lastTouchValue) ? lastTouchValue : {
+      capturedAt: "",
+      landingPage: attribution.landingPage,
+      utmSource: null,
+      utmMedium: null,
+      utmCampaign: null,
+    },
+  };
+}
+
+function isReferralTouchpoint(value: unknown): value is ReferralTouchpoint {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const touchpoint = value as Record<string, unknown>;
+  return (
+    typeof touchpoint.capturedAt === "string" &&
+    typeof touchpoint.landingPage === "string" &&
+    (typeof touchpoint.utmSource === "string" || touchpoint.utmSource === null || touchpoint.utmSource === undefined) &&
+    (typeof touchpoint.utmMedium === "string" || touchpoint.utmMedium === null || touchpoint.utmMedium === undefined) &&
+    (typeof touchpoint.utmCampaign === "string" || touchpoint.utmCampaign === null || touchpoint.utmCampaign === undefined)
+  );
+}
+
+function getTouchpointChannels(touchpoint: ReferralTouchpoint | null) {
+  if (!touchpoint) {
+    return "Inga UTM-parametrar";
+  }
+
+  const parts = [touchpoint.utmSource, touchpoint.utmMedium, touchpoint.utmCampaign].filter(
+    (value): value is string => typeof value === "string" && value.trim().length > 0,
+  );
+
+  return parts.length ? parts.join(" / ") : "Inga UTM-parametrar";
+}
+
 function getLeadTeamIntentConfirmed(lead: Lead) {
   return lead.details?.team_intent_confirmed === true;
 }
@@ -823,8 +893,9 @@ const AdminDashboardPage = () => {
     () => buildPartnerLifecycleTimingInsights({
       partnerApplications: data?.partnerApplications || [],
       partners: data?.partners || [],
+      growthCompass: data?.growthCompass || [],
     }),
-    [data?.partnerApplications, data?.partners],
+    [data?.growthCompass, data?.partnerApplications, data?.partners],
   );
   const funnelEventSummary = useMemo(() => {
     const countFor = (eventNames: string[]) =>
@@ -855,6 +926,11 @@ const AdminDashboardPage = () => {
   const showGuide = currentSection === "guide";
   const selectedLeadCoreReadiness = selectedLead ? getCoreReadiness(selectedLead) : null;
   const selectedLeadCoreSupportPlan = selectedLead ? getCoreSupportPlan(selectedLead) : null;
+  const selectedLeadAttribution = selectedLead ? getLeadAttribution(selectedLead) : null;
+  const partnerNameById = useMemo(
+    () => new Map((data?.partners || []).map((partner) => [partner.partnerId, partner.partnerName])),
+    [data?.partners],
+  );
   const sortedPartnerApplications = data
     ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
@@ -1597,9 +1673,16 @@ const AdminDashboardPage = () => {
                   </p>
                 </div>,
                 <span key={`${lead.id}-source`}>{lead.source_page || "-"}</span>,
-                <Badge key={`${lead.id}-code`} variant="secondary" className="rounded-full px-3 py-1">
-                  {lead.referral_code || "Direkt"}
-                </Badge>,
+                <div key={`${lead.id}-code`} className="space-y-2">
+                  <Badge variant="secondary" className="rounded-full px-3 py-1">
+                    {lead.referral_code || "Direkt"}
+                  </Badge>
+                  {getLeadAttribution(lead)?.firstTouch || getLeadAttribution(lead)?.lastTouch ? (
+                    <p className="max-w-[220px] text-xs leading-5 text-subtle">
+                      FT {getLeadAttribution(lead)?.firstTouch?.landingPage || "-"} / LT {getLeadAttribution(lead)?.lastTouch.landingPage || "-"}
+                    </p>
+                  ) : null}
+                </div>,
                 getPartnerPriorityLabel(getLeadPartnerPriority(lead)) ? (
                   <Badge
                     key={`${lead.id}-priority`}
@@ -1896,6 +1979,39 @@ const AdminDashboardPage = () => {
                   </div>
                 </div>
               </div>
+
+              {selectedLeadAttribution ? (
+                <div className="rounded-2xl border border-border/70 bg-white p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Attribution</p>
+                  <div className="mt-4 grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="font-medium text-foreground">Översikt</p>
+                      <div className="mt-3 space-y-2 text-sm leading-6 text-foreground/85">
+                        <p><span className="font-medium text-foreground">Ägare:</span> {selectedLeadAttribution.referredByUserId ? (partnerNameById.get(selectedLeadAttribution.referredByUserId) || selectedLeadAttribution.referredByUserId) : "Direkt / okänd"}</p>
+                        <p><span className="font-medium text-foreground">Referral:</span> {selectedLeadAttribution.referralCode || "Direkt"}</p>
+                        <p><span className="font-medium text-foreground">Första landning:</span> {selectedLeadAttribution.landingPage}</p>
+                        <p><span className="font-medium text-foreground">Session:</span> <span className="break-all text-xs">{selectedLeadAttribution.sessionId}</span></p>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="font-medium text-foreground">First touch</p>
+                      <div className="mt-3 space-y-2 text-sm leading-6 text-foreground/85">
+                        <p><span className="font-medium text-foreground">Sida:</span> {selectedLeadAttribution.firstTouch?.landingPage || "-"}</p>
+                        <p><span className="font-medium text-foreground">Tid:</span> {selectedLeadAttribution.firstTouch?.capturedAt ? formatDate(selectedLeadAttribution.firstTouch.capturedAt) : "-"}</p>
+                        <p><span className="font-medium text-foreground">Kanal:</span> {getTouchpointChannels(selectedLeadAttribution.firstTouch)}</p>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="font-medium text-foreground">Last touch</p>
+                      <div className="mt-3 space-y-2 text-sm leading-6 text-foreground/85">
+                        <p><span className="font-medium text-foreground">Sida:</span> {selectedLeadAttribution.lastTouch.landingPage}</p>
+                        <p><span className="font-medium text-foreground">Tid:</span> {selectedLeadAttribution.lastTouch.capturedAt ? formatDate(selectedLeadAttribution.lastTouch.capturedAt) : "-"}</p>
+                        <p><span className="font-medium text-foreground">Kanal:</span> {getTouchpointChannels(selectedLeadAttribution.lastTouch)}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
 
               <div className="rounded-2xl border border-border/70 bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Svar</p>

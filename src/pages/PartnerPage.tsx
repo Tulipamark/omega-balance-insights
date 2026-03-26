@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertLead } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
-import { getOrCreateSessionId, getReferralAttribution } from "@/lib/referral";
+import { getLeadAttributionContext, getReferralAttribution } from "@/lib/referral";
 
 interface PartnerPageProps {
   lang: Lang;
@@ -2108,7 +2108,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         throw new Error(missingReferralByLang[lang]);
       }
 
-      const sessionId = getOrCreateSessionId();
+      const attributionContext = await getLeadAttributionContext(location.pathname, location.search);
+      const sessionId = attributionContext.sessionId;
       void logFunnelEvent("partner_form_submitted", {
         pathname: location.pathname,
         search: location.search,
@@ -2132,7 +2133,15 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           interest: formData.interest,
           readiness: formData.readiness,
           background: formData.background,
-          landingPage: attribution.landingPage,
+          landingPage: attributionContext.landingPage,
+          attribution: {
+            sessionId: attributionContext.sessionId,
+            referralCode: attributionContext.referralCode,
+            referredByUserId: attributionContext.referredByUserId,
+            landingPage: attributionContext.landingPage,
+            firstTouch: attributionContext.firstTouch,
+            lastTouch: attributionContext.lastTouch,
+          },
         },
       });
 

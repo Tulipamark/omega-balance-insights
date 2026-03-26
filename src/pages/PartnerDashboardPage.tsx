@@ -386,10 +386,10 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
           action: "Bjud hellre in till ett nästa steg än att förklara allt i text.",
         },
         {
-          title: hasSponsor ? "Stöd uppåt och nedåt" : "Stöd i kärnan",
+          title: hasSponsor ? "Stöd uppåt och nedåt" : "Stöd från Omega Balance-teamet",
           summary: hasSponsor
             ? `Du hjälper nedåt och tar samtidigt hjälp av ${data.sponsor?.name} uppåt när det behövs.`
-            : "Du hjälper din första linje vidare och tar stöd nära toppen när det behövs.",
+            : "Du hjälper din första linje vidare och tar samtidigt stöd direkt från Omega Balance-teamet när det behövs.",
           action: "Håll stödet nära nästa aktivitet, inte som allmän pepp eller teori.",
         },
       ],
@@ -417,10 +417,10 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
           action: "Flytta dialogen till Zoom eller telefon när du märker att intresset är på riktigt.",
         },
         {
-          title: hasSponsor ? "Ta hjälp uppåt" : "Ta stöd nära toppen",
+          title: hasSponsor ? "Ta hjälp uppåt" : "Ta stöd från Omega Balance-teamet",
           summary: hasSponsor
-            ? `Du behöver inte bära allt själv. Ta hjälp av ${data.sponsor?.name} när dialogen behöver nästa nivå.`
-            : "Du behöver inte bära allt själv. Ta stöd nära toppen när dialogen behöver nästa nivå.",
+            ? `Du behöver inte bära allt själv. Ta hjälp av ${data.sponsor?.name} eller din up-line när du kör fast.`
+            : "Du behöver inte bära allt själv. Ta stöd av Omega Balance-teamet när dialogen behöver nästa nivå.",
           action: "Be om hjälp när det kan öka kvaliteten i ett samtal eller nästa steg.",
         },
       ],
@@ -447,11 +447,11 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
         action: "När intresse finns, bjud vidare till ett samtal eller Zoom i stället för att skriva längre meddelanden.",
       },
       {
-        title: hasSponsor ? "Ta hjälp uppåt" : "Stöd nära toppen",
+        title: hasSponsor ? "Ta hjälp uppåt" : "Stöd från Omega Balance-teamet",
         summary: hasSponsor
           ? "När du kör fast är nästa steg ofta att ta hjälp av din up-line."
-          : "När du kör fast är nästa steg ofta att ta stöd nära toppen i stället för att tveka för länge själv.",
-        action: "Hjälp tas bäst i samband med en verklig kontakt eller ett konkret nästa steg.",
+          : "När du kör fast är nästa steg ofta att ta stöd direkt från Omega Balance-teamet i stället för att tveka för länge själv.",
+        action: "Be om hjälp när du har en verklig kontakt i gång eller vill göra nästa steg tydligare.",
       },
     ],
   };
@@ -1362,7 +1362,7 @@ const PartnerDashboardPage = () => {
                         </>
                       ) : (
                         <p className="mt-3 text-sm leading-6 text-subtle">
-                          Du ligger nära toppen i den här modellen. Det betyder att stöd uppåt främst sker direkt från kärnan.
+                          Du ligger nära toppen i den här modellen. Det betyder att stödet uppåt främst kommer direkt från Omega Balance-teamet.
                         </p>
                       )}
                     </div>

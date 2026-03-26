@@ -243,6 +243,23 @@ export interface ReferralAttribution {
   landingPage: string;
 }
 
+export interface ReferralTouchpoint {
+  capturedAt: string;
+  landingPage: string;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+}
+
+export interface LeadAttributionContext {
+  sessionId: string;
+  referralCode: string | null;
+  referredByUserId: string | null;
+  landingPage: string;
+  firstTouch: ReferralTouchpoint | null;
+  lastTouch: ReferralTouchpoint;
+}
+
 export interface LeadSubmissionInput {
   name: string;
   email: string;
@@ -390,6 +407,7 @@ export interface GrowthCompassRow {
   flags: string[];
   missingToNext: string[];
   confidence: GrowthCompassConfidence;
+  firstActiveSignalAt?: string | null;
   inputs: {
     personalCustomers30d: number;
     recruitedPartners30d: number;

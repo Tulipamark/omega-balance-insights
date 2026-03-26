@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   captureReferralVisit,
   getReferralCandidate,
+  getLeadAttributionContext,
   getOrCreateSessionId,
   getStoredReferral,
   getStoredSessionId,
@@ -63,11 +64,17 @@ describe("referral utilities", () => {
   it("persists and reads stored referral context", () => {
     vi.stubGlobal("location", new URL("https://example.com/sv"));
 
-    persistReferralCode("ELIN2026", "/sv");
+    persistReferralCode("ELIN2026", "/sv", "?utm_source=instagram&utm_medium=social&utm_campaign=spring");
 
     expect(getStoredReferral()).toMatchObject({
       referralCode: "ELIN2026",
       landingPage: "/sv",
+      firstTouch: {
+        landingPage: "/sv",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
     });
   });
 
@@ -133,5 +140,30 @@ describe("referral utilities", () => {
     await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram");
 
     expect(trackVisitMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("builds lead attribution with first-touch and last-touch context", async () => {
+    persistSessionId("session-123");
+    persistReferralCode("ELIN2026", "/sv", "?utm_source=instagram&utm_medium=social&utm_campaign=spring");
+
+    const attribution = await getLeadAttributionContext("/sv/partners", "?utm_source=email&utm_medium=crm&utm_campaign=followup");
+
+    expect(attribution).toMatchObject({
+      sessionId: "session-123",
+      referralCode: "ELIN2026",
+      landingPage: "/sv",
+      firstTouch: {
+        landingPage: "/sv",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
+      lastTouch: {
+        landingPage: "/sv/partners",
+        utmSource: "email",
+        utmMedium: "crm",
+        utmCampaign: "followup",
+      },
+    });
   });
 });

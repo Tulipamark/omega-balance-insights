@@ -2,7 +2,7 @@ import { defaultLang, isSupportedLang } from "@/lib/i18n";
 import { logFunnelEvent, flushPendingFunnelEvents } from "@/lib/funnel-events";
 import { resolveUserByReferralCode } from "@/lib/omega-data";
 import { trackVisit } from "@/lib/api";
-import type { ReferralAttribution, TrackVisitRequest } from "@/lib/omega-types";
+import type { LeadAttributionContext, ReferralAttribution, ReferralTouchpoint, TrackVisitRequest } from "@/lib/omega-types";
 
 const REFERRAL_STORAGE_KEY = "omega:referral-context";
 const REFERRAL_COOKIE_KEY = "omega_referral_code";
@@ -15,6 +15,8 @@ type StoredReferral = {
   referralCode: string;
   landingPage: string;
   capturedAt: string;
+  firstTouch?: ReferralTouchpoint;
+  lastTouch?: ReferralTouchpoint;
 };
 
 function readJson<T>(key: string): T | null {
@@ -57,15 +59,35 @@ export function getReferralCandidate(pathname: string, search: string) {
   return normalizeReferralCode(firstSegment);
 }
 
-export function persistReferralCode(referralCode: string, landingPage: string) {
+function buildTouchpoint(landingPage: string, capturedAt: string, search?: string) {
+  const params = new URLSearchParams(search || "");
+
+  return {
+    capturedAt,
+    landingPage,
+    utmSource: params.get("utm_source"),
+    utmMedium: params.get("utm_medium"),
+    utmCampaign: params.get("utm_campaign"),
+  } satisfies ReferralTouchpoint;
+}
+
+export function persistReferralCode(referralCode: string, landingPage: string, search = "") {
   if (typeof window === "undefined") {
     return;
   }
 
+  const existing = readJson<StoredReferral>(REFERRAL_STORAGE_KEY);
+  const capturedAt = new Date().toISOString();
+  const nextTouch = buildTouchpoint(landingPage, capturedAt, search);
+
   const payload: StoredReferral = {
     referralCode,
     landingPage,
-    capturedAt: new Date().toISOString(),
+    capturedAt: existing?.referralCode === referralCode ? existing.capturedAt : capturedAt,
+    firstTouch: existing?.referralCode === referralCode
+      ? (existing.firstTouch || buildTouchpoint(existing.landingPage || landingPage, existing.capturedAt || capturedAt))
+      : nextTouch,
+    lastTouch: nextTouch,
   };
 
   window.localStorage.setItem(REFERRAL_STORAGE_KEY, JSON.stringify(payload));
@@ -95,6 +117,8 @@ export function getStoredReferral() {
     referralCode: cookieValue,
     landingPage: window.location.pathname,
     capturedAt: new Date().toISOString(),
+    firstTouch: buildTouchpoint(window.location.pathname, new Date().toISOString(), window.location.search),
+    lastTouch: buildTouchpoint(window.location.pathname, new Date().toISOString(), window.location.search),
   };
 }
 
@@ -164,6 +188,25 @@ export async function getReferralAttribution(pathname: string): Promise<Referral
   };
 }
 
+export async function getLeadAttributionContext(pathname: string, search: string): Promise<LeadAttributionContext> {
+  const stored = getStoredReferral();
+  const sessionId = getOrCreateSessionId();
+  const activeReferralCode = getReferralCandidate(pathname, search) || stored?.referralCode || null;
+  const owner = activeReferralCode ? await resolveUserByReferralCode(activeReferralCode) : null;
+  const now = new Date().toISOString();
+  const lastTouch = buildTouchpoint(pathname, now, search);
+  const firstTouch = stored?.firstTouch || (activeReferralCode ? buildTouchpoint(stored?.landingPage || pathname, stored?.capturedAt || now, search) : null);
+
+  return {
+    sessionId,
+    referralCode: activeReferralCode,
+    referredByUserId: owner?.id || null,
+    landingPage: stored?.landingPage || pathname,
+    firstTouch,
+    lastTouch,
+  };
+}
+
 export function shouldTrackReferralLanding(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
 
@@ -204,7 +247,7 @@ export async function captureReferralVisit(pathname: string, search: string) {
     return;
   }
 
-  persistReferralCode(referralCode, pathname);
+  persistReferralCode(referralCode, pathname, search);
   const sessionId = getOrCreateSessionId();
 
   const cacheKey = `${referralCode}:${pathname}:${search}`;

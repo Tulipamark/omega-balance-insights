@@ -107,6 +107,28 @@ const mockLeads: Lead[] = [
     referral_code: "ELIN2026",
     referred_by_user_id: "user-elin",
     status: "qualified",
+    details: {
+      attribution: {
+        sessionId: "session-demo-anna",
+        referralCode: "ELIN2026",
+        referredByUserId: "user-elin",
+        landingPage: "/sv",
+        firstTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 26).toISOString(),
+          landingPage: "/sv",
+          utmSource: "instagram",
+          utmMedium: "social",
+          utmCampaign: "spring-launch",
+        },
+        lastTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
+          landingPage: "/sv",
+          utmSource: "email",
+          utmMedium: "crm",
+          utmCampaign: "follow-up",
+        },
+      },
+    },
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 4).toISOString(),
   },
   {
@@ -119,7 +141,29 @@ const mockLeads: Lead[] = [
     referral_code: "ELIN2026",
     referred_by_user_id: "user-elin",
     status: "new",
-    details: { interest: "Build a business" },
+    details: {
+      interest: "Build a business",
+      attribution: {
+        sessionId: "session-demo-jonas",
+        referralCode: "ELIN2026",
+        referredByUserId: "user-elin",
+        landingPage: "/sv",
+        firstTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 30).toISOString(),
+          landingPage: "/sv",
+          utmSource: "instagram",
+          utmMedium: "social",
+          utmCampaign: "partner-story",
+        },
+        lastTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 12).toISOString(),
+          landingPage: "/sv/partners",
+          utmSource: "email",
+          utmMedium: "crm",
+          utmCampaign: "partner-follow-up",
+        },
+      },
+    },
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 12).toISOString(),
   },
   {
@@ -144,7 +188,29 @@ const mockLeads: Lead[] = [
     referral_code: "SAGA444",
     referred_by_user_id: "user-saga",
     status: "qualified",
-    details: { interest: "Extra income" },
+    details: {
+      interest: "Extra income",
+      attribution: {
+        sessionId: "session-demo-david",
+        referralCode: "SAGA444",
+        referredByUserId: "user-saga",
+        landingPage: "/sv/partners",
+        firstTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 52).toISOString(),
+          landingPage: "/sv/partners",
+          utmSource: "facebook",
+          utmMedium: "paid_social",
+          utmCampaign: "extra-income",
+        },
+        lastTouch: {
+          capturedAt: new Date(now.getTime() - 1000 * 60 * 60 * 48).toISOString(),
+          landingPage: "/sv/partners",
+          utmSource: null,
+          utmMedium: null,
+          utmCampaign: null,
+        },
+      },
+    },
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 48).toISOString(),
   },
 ];
@@ -640,6 +706,115 @@ function buildGrowthCompassRows(
 ): GrowthCompassRow[] {
   const partnerUsers = users.filter((user) => user.role === "partner");
 
+  const uniq = <T,>(items: T[]) => [...new Set(items)];
+
+  const getFirstLinePartnerIds = (partnerId: string) =>
+    uniq(
+      relationships
+        .filter((relationship) => relationship.sponsor_user_id === partnerId)
+        .map((relationship) => relationship.partner_user_id),
+    );
+
+  const getAllDownlinePartnerIds = (partnerId: string) => {
+    const result = new Set<string>();
+    const queue = [partnerId];
+
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current) {
+        continue;
+      }
+
+      const children = relationships
+        .filter((relationship) => relationship.sponsor_user_id === current)
+        .map((relationship) => relationship.partner_user_id);
+
+      for (const child of children) {
+        if (!result.has(child)) {
+          result.add(child);
+          queue.push(child);
+        }
+      }
+    }
+
+    result.delete(partnerId);
+    return [...result];
+  };
+
+  const getPartnerRecordIdsForUser = (userId: string) =>
+    partnerRecords
+      .filter((record) => record.user_id === userId)
+      .map((record) => record.id);
+
+  const getEarliestTimestamp = (values: Array<string | null | undefined>) => {
+    const timestamps = values
+      .map((value) => (value ? new Date(value).getTime() : Number.NaN))
+      .filter((value) => Number.isFinite(value))
+      .sort((a, b) => a - b);
+
+    if (!timestamps.length) {
+      return null;
+    }
+
+    return new Date(timestamps[0]).toISOString();
+  };
+
+  const getFirstObservedActivitySignalAt = (partnerId: string) => {
+    const partnerRecordIds = getPartnerRecordIdsForUser(partnerId);
+    const firstLineIds = getFirstLinePartnerIds(partnerId);
+    const downlineIds = getAllDownlinePartnerIds(partnerId);
+
+    const directSignals = [
+      ...leads
+        .filter((lead) => lead.referred_by_user_id === partnerId)
+        .map((lead) => lead.created_at),
+      ...customers
+        .filter((customer) => customer.referred_by_user_id === partnerId)
+        .map((customer) => customer.created_at),
+      ...relationships
+        .filter((relationship) => relationship.sponsor_user_id === partnerId)
+        .map((relationship) => relationship.created_at),
+      ...outboundClicks
+        .filter((click) => click.partner_id && partnerRecordIds.includes(click.partner_id))
+        .map((click) => click.created_at),
+    ];
+
+    const firstLineSignals = [
+      ...leads
+        .filter((lead) => lead.referred_by_user_id && firstLineIds.includes(lead.referred_by_user_id))
+        .map((lead) => lead.created_at),
+      ...customers
+        .filter((customer) => customer.referred_by_user_id && firstLineIds.includes(customer.referred_by_user_id))
+        .map((customer) => customer.created_at),
+      ...visits
+        .filter((visit) => visit.partner_id && firstLineIds.includes(visit.partner_id))
+        .map((visit) => visit.created_at),
+      ...relationships
+        .filter((relationship) => relationship.sponsor_user_id && firstLineIds.includes(relationship.sponsor_user_id))
+        .map((relationship) => relationship.created_at),
+      ...outboundClicks
+        .filter((click) => {
+          if (!click.partner_id) {
+            return false;
+          }
+
+          return firstLineIds.some((firstLineId) => getPartnerRecordIdsForUser(firstLineId).includes(click.partner_id!));
+        })
+        .map((click) => click.created_at),
+    ];
+
+    const downlineSignals = [
+      ...leads
+        .filter((lead) => lead.referred_by_user_id && downlineIds.includes(lead.referred_by_user_id))
+        .map((lead) => lead.created_at),
+      ...customers
+        .filter((customer) => customer.referred_by_user_id && downlineIds.includes(customer.referred_by_user_id))
+        .map((customer) => customer.created_at),
+    ];
+
+    return getEarliestTimestamp([...directSignals, ...firstLineSignals, ...downlineSignals]);
+  };
+
   return partnerUsers
     .map((partner) => {
       const mapped = mapPartnerDataToGrowthCompassInput({
@@ -654,22 +829,23 @@ function buildGrowthCompassRows(
       });
       const result = evaluateGrowthCompass(mapped.input);
 
-      return {
-        partnerId: partner.id,
-        partnerName: partner.name,
-        email: partner.email,
-        referralCode: partner.referral_code,
-        status: result.status,
-        score: result.score,
-        nextMilestone: result.nextMilestone,
-        nextBestAction: result.nextBestAction,
-        explanation: result.explanation,
-        flags: result.flags,
-        missingToNext: result.missingToNext,
-        confidence: mapped.confidence,
-        inputs: mapped.input,
-      } satisfies GrowthCompassRow;
-    })
+        return {
+          partnerId: partner.id,
+          partnerName: partner.name,
+          email: partner.email,
+          referralCode: partner.referral_code,
+          status: result.status,
+          score: result.score,
+          nextMilestone: result.nextMilestone,
+          nextBestAction: result.nextBestAction,
+          explanation: result.explanation,
+          flags: result.flags,
+          missingToNext: result.missingToNext,
+          confidence: mapped.confidence,
+          firstActiveSignalAt: result.status === "inactive" ? null : getFirstObservedActivitySignalAt(partner.id),
+          inputs: mapped.input,
+        } satisfies GrowthCompassRow;
+      })
     .sort((a, b) => b.score - a.score || a.partnerName.localeCompare(b.partnerName));
 }
 

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { upsertLead, trackClickAndGetRedirect } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
-import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
+import { getActiveReferralCode, getLeadAttributionContext } from "@/lib/referral";
 
 interface LeadCaptureSectionProps {
   lang: Lang;
@@ -91,7 +91,8 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
     setErrorMessage(null);
 
     try {
-      const sessionId = getOrCreateSessionId();
+      const attribution = await getLeadAttributionContext(location.pathname, location.search);
+      const sessionId = attribution.sessionId;
       void logFunnelEvent("lead_form_submitted", {
         pathname: location.pathname,
         search: location.search,
@@ -112,7 +113,15 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         source_page: location.pathname,
         details: {
           intent: "consultation",
-          landingPage: location.pathname,
+          landingPage: attribution.landingPage,
+          attribution: {
+            sessionId: attribution.sessionId,
+            referralCode: attribution.referralCode,
+            referredByUserId: attribution.referredByUserId,
+            landingPage: attribution.landingPage,
+            firstTouch: attribution.firstTouch,
+            lastTouch: attribution.lastTouch,
+          },
         },
       });
 

@@ -23,7 +23,27 @@ vi.mock("@/lib/funnel-events", () => ({
 
 vi.mock("@/lib/referral", () => ({
   getReferralAttribution: (...args: unknown[]) => getReferralAttributionMock(...args),
-  getOrCreateSessionId: () => "session-123",
+  getLeadAttributionContext: () =>
+    Promise.resolve({
+      sessionId: "session-123",
+      referralCode: "ELIN2026",
+      referredByUserId: "user-1",
+      landingPage: "/sv/partners",
+      firstTouch: {
+        capturedAt: "2026-03-26T08:00:00.000Z",
+        landingPage: "/sv",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
+      lastTouch: {
+        capturedAt: "2026-03-26T09:00:00.000Z",
+        landingPage: "/sv/partners",
+        utmSource: null,
+        utmMedium: null,
+        utmCampaign: null,
+      },
+    }),
 }));
 
 vi.mock("@/components/FooterSection", () => ({
@@ -78,6 +98,26 @@ describe("PartnerPage", () => {
           readiness: "",
           background: "Jag vill bygga långsiktigt.",
           landingPage: "/sv/partners",
+          attribution: {
+            sessionId: "session-123",
+            referralCode: "ELIN2026",
+            referredByUserId: "user-1",
+            landingPage: "/sv/partners",
+            firstTouch: {
+              capturedAt: "2026-03-26T08:00:00.000Z",
+              landingPage: "/sv",
+              utmSource: "instagram",
+              utmMedium: "social",
+              utmCampaign: "spring",
+            },
+            lastTouch: {
+              capturedAt: "2026-03-26T09:00:00.000Z",
+              landingPage: "/sv/partners",
+              utmSource: null,
+              utmMedium: null,
+              utmCampaign: null,
+            },
+          },
         },
       }),
     );
