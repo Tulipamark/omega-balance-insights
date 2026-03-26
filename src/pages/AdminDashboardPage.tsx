@@ -773,7 +773,7 @@ const AdminDashboardPage = () => {
       await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: (error) => {
-      setProvisionError(error instanceof Error ? error.message : "Could not provision the partner account.");
+      setProvisionError(error instanceof Error ? error.message : "Kunde inte skapa teammedlem just nu.");
       setProvisionedPartner(null);
     },
   });
@@ -794,7 +794,7 @@ const AdminDashboardPage = () => {
       await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: (error) => {
-      setReviewStatus(error instanceof Error ? error.message : "Could not update review.");
+      setReviewStatus(error instanceof Error ? error.message : "Kunde inte uppdatera granskningen just nu.");
     },
   });
 

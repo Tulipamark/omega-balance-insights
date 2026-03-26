@@ -50,7 +50,7 @@ function getFallbackLeadErrorMessage(response: Response, payload: unknown) {
 
 function getBaseFunctionConfig() {
   if (!isSupabaseConfigured) {
-    throw new Error("Supabase is not configured.");
+    throw new Error("Systemet är inte konfigurerat ännu.");
   }
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -182,7 +182,7 @@ export async function onboardPartnerFromLead(
   payload: OnboardPartnerFromLeadRequest,
 ): Promise<OnboardPartnerFromLeadResponse> {
   if (!supabase) {
-    throw new Error("Supabase is not configured.");
+    throw new Error("Systemet är inte konfigurerat ännu.");
   }
 
   const {
@@ -257,7 +257,7 @@ export async function updatePartnerLeadReview(
   payload: UpdatePartnerLeadReviewRequest,
 ): Promise<UpdatePartnerLeadReviewResponse> {
   if (!supabase) {
-    throw new Error("Supabase is not configured.");
+    throw new Error("Systemet är inte konfigurerat ännu.");
   }
 
   const {
