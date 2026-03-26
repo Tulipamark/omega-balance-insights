@@ -23,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { GROWTH_PROJECTION_SCENARIOS, runGrowthProjection } from "@/lib/growth-projection";
 import { getAdminDashboardData, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
-import { buildFunnelStageTimingInsights } from "@/lib/funnel-stage-timing";
+import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
 import { buildPartnerFunnelInsights } from "@/lib/partner-funnel";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { AdminPartnerRow, ConfidenceLevel, Lead, OnboardPartnerFromLeadResponse, PartnerLeadPriority } from "@/lib/omega-types";
@@ -819,6 +819,13 @@ const AdminDashboardPage = () => {
     () => buildFunnelStageTimingInsights(data?.funnelEventTimeline || []),
     [data?.funnelEventTimeline],
   );
+  const partnerLifecycleTimingInsights = useMemo(
+    () => buildPartnerLifecycleTimingInsights({
+      partnerApplications: data?.partnerApplications || [],
+      partners: data?.partners || [],
+    }),
+    [data?.partnerApplications, data?.partners],
+  );
   const funnelEventSummary = useMemo(() => {
     const countFor = (eventNames: string[]) =>
       funnelEventRows
@@ -1136,16 +1143,19 @@ const AdminDashboardPage = () => {
                 </div>
               </DashboardSection> : null}
 
-              {showOverview ? <DashboardSection
-                title="Ledtid mellan steg"
-                description="Första versionen av funnelns tidsmått. Här ser ni hur snabbt verkliga sessioner rör sig från landning till handling."
-              >
-                <DataTruthBadges isDemo={isDemo} />
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {funnelTimingInsights.steps.map((step) => (
-                    <MetricCard
-                      key={step.key}
-                      label={step.label}
+                {showOverview ? <DashboardSection
+                  title="Ledtid mellan steg"
+                  description="Första versionen av funnelns tidsmått. Här ser ni hur snabbt verkliga sessioner rör sig från landning till handling."
+                >
+                  <DataTruthBadges isDemo={isDemo} />
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Besöksflöde</p>
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {funnelTimingInsights.steps.map((step) => (
+                      <MetricCard
+                        key={step.key}
+                        label={step.label}
                       value={formatDuration(step.medianSeconds)}
                       helper={`${formatPercent(step.completionRatePct)} gick vidare från ${formatWholeNumber(step.fromCount)} sessioner. Uppmätta övergångar: ${formatWholeNumber(step.completionCount)}.`}
                       icon={<Activity className="h-5 w-5" />}
@@ -1174,10 +1184,50 @@ const AdminDashboardPage = () => {
                       <span key={`${step.key}-completion`}>{formatPercent(step.completionRatePct)}</span>,
                       <span key={`${step.key}-sample`}>{formatWholeNumber(step.completionCount)} / {formatWholeNumber(step.fromCount)}</span>,
                     ])}
-                    emptyState="Ingen ledtidsdata än."
-                  />
-                </div>
-              </DashboardSection> : null}
+                      emptyState="Ingen ledtidsdata än."
+                    />
+                  </div>
+
+                  <div className="mt-8">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Partnerlivscykel</p>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {partnerLifecycleTimingInsights.steps.map((step) => (
+                        <MetricCard
+                          key={step.key}
+                          label={step.label}
+                          value={formatDuration(step.medianSeconds)}
+                          helper={`${formatPercent(step.completionRatePct)} gick vidare från ${formatWholeNumber(step.fromCount)} poster. Uppmätta övergångar: ${formatWholeNumber(step.completionCount)}.`}
+                          icon={<Activity className="h-5 w-5" />}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="mt-6 grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+                      <div className="rounded-[1.5rem] border border-border/70 bg-secondary/25 p-5">
+                        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Prioriterad partnerfriktion</p>
+                        <p className="mt-3 text-2xl font-semibold text-foreground">{partnerLifecycleTimingInsights.headline.title}</p>
+                        <p className="mt-3 text-sm leading-6 text-subtle">{partnerLifecycleTimingInsights.headline.summary}</p>
+                        <p className="mt-4 text-sm font-medium leading-6 text-foreground/80">{partnerLifecycleTimingInsights.headline.nextAction}</p>
+                        <p className="mt-4 text-xs text-subtle">Analyserade partnerposter: {formatWholeNumber(partnerLifecycleTimingInsights.recordsAnalyzed)}</p>
+                      </div>
+
+                      <DataTable
+                        columns={["Steg", "Median", "Snitt", "Completion", "Underlag"]}
+                        rows={partnerLifecycleTimingInsights.steps.map((step) => [
+                          <div key={`${step.key}-label`}>
+                            <p className="font-medium text-foreground">{step.label}</p>
+                            <p className="text-xs text-subtle">{step.description}</p>
+                          </div>,
+                          <span key={`${step.key}-median`}>{formatDuration(step.medianSeconds)}</span>,
+                          <span key={`${step.key}-average`}>{formatDuration(step.averageSeconds)}</span>,
+                          <span key={`${step.key}-completion`}>{formatPercent(step.completionRatePct)}</span>,
+                          <span key={`${step.key}-sample`}>{formatWholeNumber(step.completionCount)} / {formatWholeNumber(step.fromCount)}</span>,
+                        ])}
+                        emptyState="Ingen partnerledtid än."
+                      />
+                    </div>
+                  </div>
+                </DashboardSection> : null}
 
               {showOverview || showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
                 {showTraffic ? <DashboardSection

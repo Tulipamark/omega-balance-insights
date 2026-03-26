@@ -588,11 +588,12 @@ function buildAdminPartnerRows(
     zinzino_test_url?: string | null;
     zinzino_shop_url?: string | null;
     zinzino_partner_url?: string | null;
-    consultation_url?: string | null;
-    status?: string | null;
-    created_at: string;
-  }>,
-): AdminPartnerRow[] {
+      consultation_url?: string | null;
+      status?: string | null;
+      created_at: string;
+      verified_at?: string | null;
+    }>,
+  ): AdminPartnerRow[] {
   return users
     .filter((user) => user.role === "partner")
     .map((partner) => {
@@ -615,17 +616,18 @@ function buildAdminPartnerRows(
         leads: totals?.leads || 0,
         customers: totals?.customers || 0,
         zzLinksReady,
-        zzLinks: {
-          test: partnerRecord?.zinzino_test_url || null,
-          shop: partnerRecord?.zinzino_shop_url || null,
-          partner: partnerRecord?.zinzino_partner_url || null,
-          consultation: partnerRecord?.consultation_url || null,
-        },
-        createdAt: partner.created_at,
-      };
-    })
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-}
+          zzLinks: {
+            test: partnerRecord?.zinzino_test_url || null,
+            shop: partnerRecord?.zinzino_shop_url || null,
+            partner: partnerRecord?.zinzino_partner_url || null,
+            consultation: partnerRecord?.consultation_url || null,
+          },
+          createdAt: partner.created_at,
+          verifiedAt: partnerRecord?.verified_at || null,
+        };
+      })
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
 
 function buildGrowthCompassRows(
   users: AppUser[],
@@ -998,7 +1000,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("customers").select("*"),
     client.from("partner_relationships").select("*"),
     client.from("referral_visits").select("*"),
-      client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at"),
+      client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at, verified_at"),
     client.from("outbound_clicks").select("id, partner_id, referral_code, session_id, destination_type, created_at"),
     client.from("funnel_events").select("*").order("created_at", { ascending: false }).limit(500),
     client.from("kpi_funnel_events_daily").select("*").order("day", { ascending: false }).limit(50),
@@ -1031,10 +1033,11 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
         zinzino_test_url?: string | null;
         zinzino_shop_url?: string | null;
         zinzino_partner_url?: string | null;
-        consultation_url?: string | null;
-        status?: string | null;
-        created_at: string;
-      }> | null) || []),
+          consultation_url?: string | null;
+          status?: string | null;
+          created_at: string;
+          verified_at?: string | null;
+        }> | null) || []),
     ),
     networkOverview: buildTeamRows(users || [], relationships || []),
     recentLeads: sortNewest(leads || []).slice(0, 6),
@@ -1201,8 +1204,7 @@ function hasCompletePartnerZzLinks(links: {
   return Boolean(
     links.zinzino_test_url &&
     links.zinzino_shop_url &&
-    links.zinzino_partner_url &&
-    links.consultation_url,
+    links.zinzino_partner_url,
   );
 }
 

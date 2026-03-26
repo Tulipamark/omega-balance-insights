@@ -137,6 +137,6 @@ describe("buildPartnerFunnelInsights", () => {
 
     expect(insights.activationStages.map((stage) => stage.count)).toEqual([2, 1, 1, 1]);
     expect(insights.blockers.find((blocker) => blocker.key === "missing-links")?.count).toBe(1);
-    expect(insights.headline.title).toContain("Portalpartners utan 4 länkar");
+    expect(insights.headline.title).toContain("Portalpartners utan 3 länkar");
   });
 });

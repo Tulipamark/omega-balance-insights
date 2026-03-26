@@ -1,4 +1,4 @@
-import type { FunnelEvent } from "@/lib/omega-types";
+import type { AdminPartnerRow, FunnelEvent, Lead } from "@/lib/omega-types";
 
 const LANDING_EVENTS = new Set(["landing_viewed"]);
 const CTA_EVENTS = new Set([
@@ -25,6 +25,16 @@ export interface FunnelTimingStepInsight {
 
 export interface FunnelTimingInsights {
   sessionsAnalyzed: number;
+  steps: FunnelTimingStepInsight[];
+  headline: {
+    title: string;
+    summary: string;
+    nextAction: string;
+  };
+}
+
+export interface PartnerLifecycleTimingInsights {
+  recordsAnalyzed: number;
   steps: FunnelTimingStepInsight[];
   headline: {
     title: string;
@@ -77,6 +87,88 @@ function getFirstTimestamp(events: FunnelEvent[], names: Set<string>, afterTimes
   return null;
 }
 
+function getTimestamp(value: unknown) {
+  if (typeof value !== "string" || !value.trim()) {
+    return null;
+  }
+
+  const timestamp = new Date(value).getTime();
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+function getEarliestTimestamp(...values: Array<number | null | undefined>) {
+  const validValues = values.filter((value): value is number => typeof value === "number");
+  if (!validValues.length) {
+    return null;
+  }
+
+  return Math.min(...validValues);
+}
+
+function getLeadPartnerPriority(lead: Lead) {
+  const value = lead.details?.partner_priority;
+  return value === "hot" || value === "follow_up" || value === "not_now" ? value : null;
+}
+
+function getLeadAdminNote(lead: Lead) {
+  const value = lead.details?.admin_note;
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function hasInternalReview(lead: Lead) {
+  return getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).length > 0;
+}
+
+function getLeadTeamIntentConfirmed(lead: Lead) {
+  return lead.details?.team_intent_confirmed === true;
+}
+
+function getLeadZinzinoVerified(lead: Lead) {
+  return lead.status === "active" || lead.details?.zinzino_verified === true;
+}
+
+function isCandidate(lead: Lead) {
+  return hasInternalReview(lead) || getLeadZinzinoVerified(lead) || getLeadTeamIntentConfirmed(lead) || lead.status === "qualified";
+}
+
+function isReviewReady(lead: Lead) {
+  return lead.status === "active" || (hasInternalReview(lead) && getLeadZinzinoVerified(lead) && getLeadTeamIntentConfirmed(lead));
+}
+
+function getLeadReviewUpdatedTimestamp(lead: Lead) {
+  return getTimestamp(lead.details?.review_updated_at);
+}
+
+function getLeadCandidateTimestamp(lead: Lead) {
+  if (!isCandidate(lead)) {
+    return null;
+  }
+
+  return getEarliestTimestamp(
+    getLeadReviewUpdatedTimestamp(lead),
+    lead.status === "qualified" || lead.status === "active" ? getTimestamp(lead.updated_at) : null,
+  );
+}
+
+function getLeadReviewReadyTimestamp(lead: Lead) {
+  if (!isReviewReady(lead)) {
+    return null;
+  }
+
+  return getEarliestTimestamp(
+    getLeadReviewUpdatedTimestamp(lead),
+    lead.status === "active" ? getTimestamp(lead.updated_at) : null,
+  );
+}
+
+function getPartnerLinksReadyTimestamp(partner: AdminPartnerRow) {
+  if (!partner.zzLinksReady) {
+    return null;
+  }
+
+  return getTimestamp(partner.verifiedAt);
+}
+
 function buildStepInsight(
   key: string,
   label: string,
@@ -115,6 +207,44 @@ function buildStepInsight(
   };
 }
 
+function buildRecordStepInsight<T>(
+  key: string,
+  label: string,
+  description: string,
+  records: T[],
+  getFromTimestamp: (record: T) => number | null,
+  getToTimestamp: (record: T) => number | null,
+): FunnelTimingStepInsight {
+  const durations: number[] = [];
+  let fromCount = 0;
+
+  records.forEach((record) => {
+    const fromTimestamp = getFromTimestamp(record);
+    if (fromTimestamp === null) {
+      return;
+    }
+
+    fromCount += 1;
+    const toTimestamp = getToTimestamp(record);
+    if (toTimestamp === null || toTimestamp < fromTimestamp) {
+      return;
+    }
+
+    durations.push((toTimestamp - fromTimestamp) / 1000);
+  });
+
+  return {
+    key,
+    label,
+    description,
+    fromCount,
+    completionCount: durations.length,
+    completionRatePct: fromCount ? roundToOneDecimal((durations.length / fromCount) * 100) : 0,
+    medianSeconds: getMedian(durations),
+    averageSeconds: getAverage(durations),
+  };
+}
+
 function getNextAction(step: FunnelTimingStepInsight) {
   switch (step.key) {
     case "landing_to_cta":
@@ -123,6 +253,12 @@ function getNextAction(step: FunnelTimingStepInsight) {
       return "Minska friktionen mellan klick och formulär genom tydligare förväntan, enklare övergång och bättre mobilkänsla.";
     case "form_start_to_submit":
       return "Gör formuläret lättare att slutföra och följ upp validering, felmeddelanden och input-hjälp.";
+    case "partner_lead_to_candidate":
+      return "Kort ned tiden till första riktiga bedömning så att nya partnerleads snabbt får prioritet och riktning.";
+    case "candidate_to_ready":
+      return "Driv snabbare mot tydligt ja, ZZ-bekräftelse och teamavsikt så att onboarding kan starta utan friktion.";
+    case "portal_partner_to_links_ready":
+      return "Lås setup direkt efter portalstart så att test-, shop- och partnerlänk blir klara innan momentum tappas.";
     default:
       return "Fortsätt minska friktionen i nästa steg.";
   }
@@ -195,6 +331,68 @@ export function buildFunnelStageTimingInsights(events: FunnelEvent[]): FunnelTim
 
   return {
     sessionsAnalyzed: sessions.length,
+    steps,
+    headline,
+  };
+}
+
+export function buildPartnerLifecycleTimingInsights(
+  data: Pick<{ partnerApplications: Lead[]; partners: AdminPartnerRow[] }, "partnerApplications" | "partners">,
+): PartnerLifecycleTimingInsights {
+  const steps = [
+    buildRecordStepInsight(
+      "partner_lead_to_candidate",
+      "Partnerlead till kandidat",
+      "Hur snabbt en ny partnerlead får sin första verkliga interna bedömning eller progressignal.",
+      data.partnerApplications,
+      (lead) => getTimestamp(lead.created_at),
+      getLeadCandidateTimestamp,
+    ),
+    buildRecordStepInsight(
+      "candidate_to_ready",
+      "Kandidat till onboarding redo",
+      "Hur lång tid det tar att gå från påbörjad bedömning till att allt är bekräftat för portalstart.",
+      data.partnerApplications,
+      getLeadCandidateTimestamp,
+      getLeadReviewReadyTimestamp,
+    ),
+    buildRecordStepInsight(
+      "portal_partner_to_links_ready",
+      "Portalpartner till 3 länkar klara",
+      "Hur snabbt ett nytt partnerkonto får komplett ZZ-setup för test, shop och partner.",
+      data.partners,
+      (partner) => getTimestamp(partner.createdAt),
+      getPartnerLinksReadyTimestamp,
+    ),
+  ];
+
+  const measuredSteps = steps.filter((step) => step.fromCount > 0);
+  const topFrictionStep = measuredSteps.length
+    ? [...measuredSteps].sort((a, b) => {
+        if (a.completionRatePct !== b.completionRatePct) {
+          return a.completionRatePct - b.completionRatePct;
+        }
+
+        return (b.medianSeconds || 0) - (a.medianSeconds || 0);
+      })[0]
+    : null;
+
+  const headline = topFrictionStep
+    ? {
+        title: `Störst tidsfriktion: ${topFrictionStep.label}`,
+        summary: `${topFrictionStep.completionCount} av ${topFrictionStep.fromCount} uppmätta poster tog sig vidare i detta steg. Medianen ligger på ${
+          topFrictionStep.medianSeconds !== null ? `${roundToOneDecimal(topFrictionStep.medianSeconds)} sek` : "okänd tid"
+        }.`,
+        nextAction: getNextAction(topFrictionStep),
+      }
+    : {
+        title: "Ingen partnerledtid än",
+        summary: "Det finns än så länge inte tillräckligt med sammanhängande partnerdata för att räkna ledtid i partnerresan.",
+        nextAction: "Skapa några riktiga onboardingflöden så börjar den här sektionen fyllas med mätbar friktion.",
+      };
+
+  return {
+    recordsAnalyzed: Math.max(data.partnerApplications.length, data.partners.length),
     steps,
     headline,
   };

@@ -281,6 +281,7 @@ export interface AdminPartnerRow {
   zzLinksReady: boolean;
   zzLinks: PartnerZzLinks;
   createdAt: string;
+  verifiedAt?: string | null;
 }
 
 export interface TeamRow {

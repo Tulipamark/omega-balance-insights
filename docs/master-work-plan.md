@@ -34,7 +34,7 @@ Målet just nu är att få hela funneln att fungera som ett operativt system:
 ### Partner- Och Adminflöde
 
 - [x] legal-knappen i partnervyn fungerar rätt även när admin granskar
-- [x] ZZ-link readiness kräver nu fyra länkar i UI och datalager
+- [x] ZZ-link readiness är synkad mot tre länkar i UI och datalager
 - [x] partner- och admin-dialoger stödjer konsultationslänk
 - [x] partnerfunnel finns i admin med steg, tapp och flaskhalsar
 - [x] admin visar mikroevent och senaste funnel-händelser
@@ -81,10 +81,10 @@ Målet just nu är att få hela funneln att fungera som ett operativt system:
 - [x] mät tid från `landing_viewed` till CTA-klick
 - [x] mät tid från CTA-klick till formstart
 - [x] mät tid från formstart till skickat formulär
-- [ ] mät tid från partnerlead till kandidat
-- [ ] mät tid från kandidat till onboarding redo
-- [ ] mät tid från portalpartner till fyra länkar klara
-- [ ] mät tid från fyra länkar till aktiv signal
+- [x] mät tid från partnerlead till kandidat
+- [x] mät tid från kandidat till onboarding redo
+- [x] mät tid från portalpartner till tre länkar klara
+- [ ] mät tid från tre länkar till aktiv signal
 - [x] visa ledtid i admin
 
 ### 3. Bättre Attribution

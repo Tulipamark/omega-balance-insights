@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildFunnelStageTimingInsights } from "@/lib/funnel-stage-timing";
-import type { FunnelEvent } from "@/lib/omega-types";
+import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
+import type { AdminPartnerRow, FunnelEvent, Lead } from "@/lib/omega-types";
 
 function makeEvent(overrides: Partial<FunnelEvent>): FunnelEvent {
   return {
@@ -17,6 +17,45 @@ function makeEvent(overrides: Partial<FunnelEvent>): FunnelEvent {
     user_agent: overrides.user_agent || null,
     details: overrides.details || null,
     created_at: overrides.created_at || "2026-03-26T08:00:00.000Z",
+  };
+}
+
+function makeLead(overrides: Partial<Lead>): Lead {
+  return {
+    id: overrides.id || "lead-1",
+    name: overrides.name || "Demo Lead",
+    email: overrides.email || "lead@example.com",
+    phone: overrides.phone || null,
+    full_name: overrides.full_name || null,
+    type: overrides.type || "partner_lead",
+    lead_type: overrides.lead_type || "partner",
+    lead_source: overrides.lead_source || "contact_form",
+    source_page: overrides.source_page || "/sv/partners",
+    referral_code: overrides.referral_code || "OMEGATEAM",
+    referred_by_user_id: overrides.referred_by_user_id || "user-admin",
+    partner_id: overrides.partner_id || null,
+    session_id: overrides.session_id || null,
+    status: overrides.status || "new",
+    details: overrides.details || null,
+    created_at: overrides.created_at || "2026-03-26T08:00:00.000Z",
+    updated_at: overrides.updated_at || null,
+  };
+}
+
+function makePartnerRow(overrides: Partial<AdminPartnerRow>): AdminPartnerRow {
+  return {
+    partnerId: overrides.partnerId || "partner-1",
+    partnerName: overrides.partnerName || "Demo Partner",
+    email: overrides.email || "partner@example.com",
+    referralCode: overrides.referralCode || "OMEGATEAM",
+    sponsorName: overrides.sponsorName || null,
+    directPartners: overrides.directPartners || 0,
+    leads: overrides.leads || 0,
+    customers: overrides.customers || 0,
+    zzLinksReady: overrides.zzLinksReady || false,
+    zzLinks: overrides.zzLinks || { test: null, shop: null, partner: null, consultation: null },
+    createdAt: overrides.createdAt || "2026-03-26T10:00:00.000Z",
+    verifiedAt: overrides.verifiedAt || null,
   };
 }
 
@@ -61,5 +100,62 @@ describe("buildFunnelStageTimingInsights", () => {
 
     expect(insights.sessionsAnalyzed).toBe(0);
     expect(insights.headline.title).toBe("Ingen ledtidsdata än");
+  });
+});
+
+describe("buildPartnerLifecycleTimingInsights", () => {
+  it("measures partner lifecycle timing from lead to setup", () => {
+    const insights = buildPartnerLifecycleTimingInsights({
+      partnerApplications: [
+        makeLead({
+          id: "lead-a",
+          created_at: "2026-03-26T08:00:00.000Z",
+          updated_at: "2026-03-26T08:15:00.000Z",
+          details: {
+            partner_priority: "hot",
+            admin_note: "Ring idag",
+            review_updated_at: "2026-03-26T08:10:00.000Z",
+            zinzino_verified: true,
+            team_intent_confirmed: true,
+          },
+        }),
+        makeLead({
+          id: "lead-b",
+          created_at: "2026-03-26T09:00:00.000Z",
+          updated_at: "2026-03-26T09:20:00.000Z",
+          status: "qualified",
+          details: {
+            partner_priority: "follow_up",
+            review_updated_at: "2026-03-26T09:05:00.000Z",
+          },
+        }),
+      ],
+      partners: [
+        makePartnerRow({
+          partnerId: "partner-a",
+          createdAt: "2026-03-26T10:00:00.000Z",
+          zzLinksReady: true,
+          verifiedAt: "2026-03-26T10:30:00.000Z",
+          zzLinks: {
+            test: "https://example.com/test",
+            shop: "https://example.com/shop",
+            partner: "https://example.com/partner",
+            consultation: null,
+          },
+        }),
+        makePartnerRow({
+          partnerId: "partner-b",
+          createdAt: "2026-03-26T11:00:00.000Z",
+        }),
+      ],
+    });
+
+    expect(insights.recordsAnalyzed).toBe(2);
+    expect(insights.steps.map((step) => step.fromCount)).toEqual([2, 2, 2]);
+    expect(insights.steps.map((step) => step.completionCount)).toEqual([2, 1, 1]);
+    expect(insights.steps[0].medianSeconds).toBe(450);
+    expect(insights.steps[1].medianSeconds).toBe(0);
+    expect(insights.steps[2].medianSeconds).toBe(1800);
+    expect(insights.headline.title).toContain("Portalpartner till 3 länkar klara");
   });
 });

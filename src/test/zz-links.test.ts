@@ -40,7 +40,7 @@ describe("updatePartnerZzLinks", () => {
     });
   });
 
-  it("marks ZZ links as incomplete when consultation link is missing", async () => {
+  it("marks ZZ links as ready when test, shop and partner links are set", async () => {
     await updatePartnerZzLinks(partner.id, {
       test: "https://example.com/test",
       shop: "https://example.com/shop",
@@ -51,7 +51,7 @@ describe("updatePartnerZzLinks", () => {
     const adminData = await getAdminDashboardData();
     const partnerRow = adminData.partners.find((row) => row.partnerId === partner.id);
 
-    expect(partnerRow?.zzLinksReady).toBe(false);
+    expect(partnerRow?.zzLinksReady).toBe(true);
     expect(partnerRow?.zzLinks.consultation).toBeNull();
   });
 
