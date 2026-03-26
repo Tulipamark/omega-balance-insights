@@ -420,7 +420,7 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
           title: hasSponsor ? "Ta hjälp uppåt" : "Ta stöd från Omega Balance-teamet",
           summary: hasSponsor
             ? `Du behöver inte bära allt själv. Ta hjälp av ${data.sponsor?.name} eller din up-line när du kör fast.`
-            : "Du behöver inte bära allt själv. Ta stöd av Omega Balance-teamet när dialogen behöver nästa nivå.",
+            : "Du behöver inte bära allt själv. Ta stöd av Omega Balance-teamet när du kör fast eller vill göra nästa steg tydligare.",
           action: "Be om hjälp när det kan öka kvaliteten i ett samtal eller nästa steg.",
         },
       ],
