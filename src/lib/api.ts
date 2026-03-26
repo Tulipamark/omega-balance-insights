@@ -24,7 +24,7 @@ function getLeadErrorMessage(reason?: LeadFailureReason) {
     case "invalid_email":
       return "Vi kunde inte spara uppgifterna. Kontrollera e-postadressen och försök igen.";
     default:
-      return "Could not save lead right now.";
+      return "Vi kunde inte spara uppgifterna just nu.";
   }
 }
 
@@ -45,7 +45,7 @@ function getFallbackLeadErrorMessage(response: Response, payload: unknown) {
     }
   }
 
-  return `Lead-save misslyckades (${response.status}).`;
+  return `Vi kunde inte spara uppgifterna just nu (${response.status}).`;
 }
 
 function getBaseFunctionConfig() {
@@ -103,7 +103,7 @@ export async function trackClickAndGetRedirect(payload: TrackClickRequest): Prom
   const data = (await response.json().catch(() => null)) as TrackClickResponse | null;
 
   if (!data) {
-    throw new Error("Could not resolve redirect right now.");
+    throw new Error("Vi kunde inte öppna rätt länk just nu.");
   }
 
   return data;
@@ -121,7 +121,7 @@ export async function trackVisit(payload: TrackVisitRequest): Promise<TrackVisit
   const data = (await response.json().catch(() => null)) as TrackVisitResponse | null;
 
   if (!response.ok || !data) {
-    throw new Error("Could not track referral visit right now.");
+    throw new Error("Vi kunde inte registrera besöket just nu.");
   }
 
   return data;
@@ -139,7 +139,7 @@ export async function trackFunnelEvent(payload: TrackFunnelEventRequest): Promis
   const data = (await response.json().catch(() => null)) as TrackFunnelEventResponse | null;
 
   if (!response.ok || !data) {
-    throw new Error("Could not track funnel event right now.");
+    throw new Error("Vi kunde inte registrera händelsen just nu.");
   }
 
   return data;
@@ -167,7 +167,7 @@ export async function upsertLead(payload: UpsertLeadRequest): Promise<UpsertLead
     throw new Error(
       response.ok
         ? "Vi fick inget giltigt svar när vi försökte spara uppgifterna."
-        : `Lead-save misslyckades (${response.status}).`,
+        : `Vi kunde inte spara uppgifterna just nu (${response.status}).`,
     );
   }
 
@@ -243,11 +243,11 @@ export async function onboardPartnerFromLead(
       }
     }
 
-    throw new Error(error.message || "Could not onboard partner right now.");
+    throw new Error(error.message || "Kunde inte skapa teammedlem just nu.");
   }
 
   if (!data?.ok) {
-    throw new Error(data?.error?.trim() || "Could not onboard partner right now.");
+    throw new Error(data?.error?.trim() || "Kunde inte skapa teammedlem just nu.");
   }
 
   return data;
@@ -318,11 +318,11 @@ export async function updatePartnerLeadReview(
       }
     }
 
-    throw new Error(error.message || "Could not update partner review right now.");
+    throw new Error(error.message || "Kunde inte uppdatera granskningen just nu.");
   }
 
   if (!data?.ok) {
-    throw new Error(data?.error?.trim() || "Could not update partner review right now.");
+    throw new Error(data?.error?.trim() || "Kunde inte uppdatera granskningen just nu.");
   }
 
   return data;
