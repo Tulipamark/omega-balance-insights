@@ -120,6 +120,7 @@ Målet just nu är att få hela funneln att fungera som ett operativt system:
 - [ ] A/B-test-infrastruktur för CTA och rubriker
 - [ ] försiktig utökning av leadkvalitetsfält om datan visar behov
 - [ ] mer automatiserad onboarding efter att funneln är helt observerbar
+- [ ] sätt upp automatiska mejlflöden: bekräftelsemail vid nytt lead, välkomstmail efter godkännande/onboarding och utskick via Supabase + mejltjänst
 - [ ] mer avancerad funnelanalys per källa, partner och marknad
 
 ## Innan Vi Kan Säga "I Hamn"
