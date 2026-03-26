@@ -8,7 +8,7 @@ export const sv: Copy = {
     body: "De flesta har en obalans mellan Omega-6 och Omega-3. Ett enkelt blodprov hemma kan visa din exakta kvot.",
     primaryCta: "Beställ ert balance test här",
     secondaryCta: "Så fungerar testet",
-    partnerCta: "För partners",
+    partnerCta: "Bli partner",
     statLab: "Certifierad laboratorieanalys",
     statTiming: "Resultat efter cirka 3 veckor",
     imageAlt: "Översikt över omegaanalys och fettsyredata",

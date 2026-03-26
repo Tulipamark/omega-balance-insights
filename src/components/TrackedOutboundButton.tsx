@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 import { trackClickAndGetRedirect } from "@/lib/api";
+import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 
 type TrackedOutboundButtonProps = {
-  destinationType: "test" | "shop" | "partner";
+  destinationType: "test" | "shop" | "partner" | "consultation";
   fallbackHref: string;
   className: string;
   children: React.ReactNode;
@@ -16,6 +16,7 @@ const reasonCopy: Record<string, string> = {
   partner_not_found: "Ingen giltig partnerlänk hittades för den här hänvisningen.",
   partner_not_verified: "Partnern är inte verifierad ännu.",
   destination_missing: "Målet för den här länken är inte klart ännu.",
+  consultation_url_missing: "Partnern saknar en konsultationslänk just nu.",
   invalid_type: "Länken kunde inte tolkas korrekt.",
 };
 
@@ -76,9 +77,6 @@ const TrackedOutboundButton = ({
       }
 
       setErrorMessage(errorMessages?.[reason] || reasonCopy[reason] || errorMessages?.generic || genericErrorCopy);
-      return;
-
-      // handled above
     } catch (error) {
       console.error("Outbound redirect failed", error);
       setErrorMessage(errorMessages?.generic || genericErrorCopy);

@@ -1365,7 +1365,7 @@ const AdminDashboardPage = () => {
           <DialogHeader>
             <DialogTitle>ZZ-länkar för partner</DialogTitle>
             <DialogDescription>
-              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop- och partnerlänken bakom Omega-länken.
+              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop-, partner- och konsultationslänken bakom Omega-länken.
             </DialogDescription>
           </DialogHeader>
 
@@ -1408,6 +1408,17 @@ const AdminDashboardPage = () => {
                     id="zz-partner-url"
                     value={zzPartnerUrl}
                     onChange={(event) => setZzPartnerUrl(event.target.value)}
+                    placeholder="https://..."
+                    className="rounded-xl"
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="zz-consultation-url">Konsultationslänk</Label>
+                  <Input
+                    id="zz-consultation-url"
+                    value={zzConsultationUrl}
+                    onChange={(event) => setZzConsultationUrl(event.target.value)}
                     placeholder="https://..."
                     className="rounded-xl"
                   />

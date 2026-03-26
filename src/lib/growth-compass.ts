@@ -37,6 +37,47 @@ function clampNonNegative(value: number) {
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
 }
 
+function hasAnyActivity(input: PartnerProgressInput) {
+  return (
+    input.personalCustomers30d > 0 ||
+    input.recruitedPartners30d > 0 ||
+    input.activeFirstLinePartners30d > 0 ||
+    input.partnerGeneratedLeads30d > 0 ||
+    input.partnerGeneratedCustomers30d > 0
+  );
+}
+
+function hasPersonalActivity(input: PartnerProgressInput) {
+  return input.personalCustomers30d > 0 || input.recruitedPartners30d > 0;
+}
+
+function hasRepeatedPersonalActivity(input: PartnerProgressInput) {
+  return input.personalCustomers30d >= 2 || input.recruitedPartners30d >= 2;
+}
+
+function hasEarlyTeamSignal(input: PartnerProgressInput) {
+  return (
+    input.activeFirstLinePartners30d >= 1 ||
+    input.partnerGeneratedLeads30d >= 1 ||
+    input.partnerGeneratedCustomers30d >= 1
+  );
+}
+
+function hasDuplicationSignal(input: PartnerProgressInput) {
+  return (
+    input.activeFirstLinePartners30d >= 2 &&
+    (input.partnerGeneratedLeads30d >= 3 || input.partnerGeneratedCustomers30d >= 1)
+  );
+}
+
+function hasLeaderSignal(input: PartnerProgressInput) {
+  return (
+    input.activeFirstLinePartners30d >= 3 &&
+    (input.partnerGeneratedLeads30d >= 5 || input.partnerGeneratedCustomers30d >= 2) &&
+    hasPersonalActivity(input)
+  );
+}
+
 export function normalizeGrowthCompassInput(input: PartnerProgressInput): PartnerProgressInput {
   return {
     personalCustomers30d: clampNonNegative(input.personalCustomers30d),
@@ -61,39 +102,20 @@ export function calculateGrowthCompassScore(input: PartnerProgressInput) {
 
 export function getGrowthCompassStatus(input: PartnerProgressInput): PartnerStatus {
   const normalized = normalizeGrowthCompassInput(input);
-  const hasPersonalActivity = normalized.personalCustomers30d > 0 || normalized.recruitedPartners30d > 0;
-  const hasMeaningfulGrowth =
-    normalized.personalCustomers30d >= 2 ||
-    normalized.recruitedPartners30d >= 2;
-  const hasEarlyTeamSignal =
-    normalized.activeFirstLinePartners30d >= 1 ||
-    normalized.partnerGeneratedLeads30d >= 1;
-  const hasDuplication =
-    normalized.activeFirstLinePartners30d >= 2 &&
-    (normalized.partnerGeneratedLeads30d >= 3 || normalized.partnerGeneratedCustomers30d >= 1);
-  const hasLeaderSignal =
-    normalized.activeFirstLinePartners30d >= 3 &&
-    (normalized.partnerGeneratedLeads30d >= 5 || normalized.partnerGeneratedCustomers30d >= 2) &&
-    hasPersonalActivity;
 
-  if (
-    !hasPersonalActivity &&
-    normalized.activeFirstLinePartners30d === 0 &&
-    normalized.partnerGeneratedLeads30d === 0 &&
-    normalized.partnerGeneratedCustomers30d === 0
-  ) {
+  if (!hasAnyActivity(normalized)) {
     return "inactive";
   }
 
-  if (hasLeaderSignal) {
+  if (hasLeaderSignal(normalized)) {
     return "leader-track";
   }
 
-  if (hasDuplication) {
+  if (hasDuplicationSignal(normalized)) {
     return "duplicating";
   }
 
-  if (hasMeaningfulGrowth && hasEarlyTeamSignal) {
+  if (hasRepeatedPersonalActivity(normalized) && hasEarlyTeamSignal(normalized)) {
     return "growing";
   }
 
@@ -104,13 +126,12 @@ export function getGrowthCompassFlags(input: PartnerProgressInput, status?: Part
   const normalized = normalizeGrowthCompassInput(input);
   const resolvedStatus = status ?? getGrowthCompassStatus(normalized);
   const flags = new Set<GrowthCompassFlag>();
-  const hasPersonalActivity = normalized.personalCustomers30d > 0 || normalized.recruitedPartners30d > 0;
 
-  if (!hasPersonalActivity && normalized.activeFirstLinePartners30d === 0 && normalized.partnerGeneratedLeads30d === 0 && normalized.partnerGeneratedCustomers30d === 0) {
+  if (!hasAnyActivity(normalized)) {
     flags.add("no-current-activity");
   }
 
-  if (hasPersonalActivity) {
+  if (hasPersonalActivity(normalized)) {
     flags.add("personal-activity-present");
   }
 
@@ -146,30 +167,35 @@ function getNextMilestone(input: PartnerProgressInput, status: PartnerStatus) {
 
   switch (status) {
     case "inactive":
-      return "Get the first customer or recruit the first partner";
+      return "Skapa den första startsignalen: första kunden eller första rekryterade partnern.";
     case "active":
-      if (normalized.personalCustomers30d < 2) {
-        return "Get the second personal customer";
+      if (!hasRepeatedPersonalActivity(normalized) && !hasEarlyTeamSignal(normalized)) {
+        return "Upprepa första resultatet och skapa den första first-line-signalen.";
       }
-      if (normalized.recruitedPartners30d < 2) {
-        return "Recruit the second partner";
+
+      if (!hasRepeatedPersonalActivity(normalized)) {
+        return "Upprepa första resultatet så att aktiviteten inte bara blir en engångsspik.";
       }
-      return "Activate the first first-line partner";
+
+      return "Aktivera den första first-line-partnern eller skapa den första partnerdrivna signalen.";
     case "growing":
       if (normalized.activeFirstLinePartners30d < 2) {
-        return "Activate 1 more first-line partner";
+        return "Aktivera en andra first-line-partner.";
       }
+
       if (normalized.partnerGeneratedCustomers30d < 1) {
-        return "Help the team generate the first partner-driven customer";
+        return "Hjälp teamet att skapa den första partnergenererade kunden.";
       }
-      return "Reach 3 partner-generated leads";
+
+      return "Nå ett jämnt partnergenererat inflöde, med start i 3 partnergenererade leads.";
     case "duplicating":
       if (normalized.activeFirstLinePartners30d < 3) {
-        return "Activate a third first-line partner";
+        return "Aktivera en tredje first-line-partner.";
       }
-      return "Sustain partner-generated inflow across the next cycle";
+
+      return "Stabilisera det partnergenererade inflödet över nästa cykel.";
     case "leader-track":
-      return "Increase the number of active first-line partners without losing personal momentum";
+      return "Stabilisera strukturen utan att tappa egen närvaro och fart.";
   }
 }
 
@@ -179,60 +205,68 @@ function getMissingToNext(input: PartnerProgressInput, status: PartnerStatus): s
 
   switch (status) {
     case "inactive":
-      if (normalized.personalCustomers30d < 1) {
-        missing.push("1 personlig kund");
-      }
-      if (normalized.recruitedPartners30d < 1) {
-        missing.push("1 rekryterad partner");
-      }
-      return missing;
+      return ["1 första kund eller 1 första rekryterad partner"];
     case "active":
-      if (normalized.personalCustomers30d < 2) {
-        missing.push(`${2 - normalized.personalCustomers30d} kund till`);
+      if (!hasRepeatedPersonalActivity(normalized)) {
+        if (normalized.personalCustomers30d > 0 && normalized.personalCustomers30d < 2) {
+          missing.push(`${2 - normalized.personalCustomers30d} kund till för upprepad egen aktivitet`);
+        } else if (normalized.recruitedPartners30d > 0 && normalized.recruitedPartners30d < 2) {
+          missing.push(`${2 - normalized.recruitedPartners30d} partner till för upprepad rekrytering`);
+        } else {
+          missing.push("ett andra personligt resultat");
+        }
       }
-      if (normalized.recruitedPartners30d < 2) {
-        missing.push(`${2 - normalized.recruitedPartners30d} partner till`);
+
+      if (!hasEarlyTeamSignal(normalized)) {
+        missing.push("1 first-line-signal");
       }
-      if (normalized.activeFirstLinePartners30d < 1) {
-        missing.push("1 aktiv first-line-partner");
-      }
+
       return missing;
     case "growing":
       if (normalized.activeFirstLinePartners30d < 2) {
-        missing.push(`${2 - normalized.activeFirstLinePartners30d} aktiv first-line-partner`);
+        missing.push(`${2 - normalized.activeFirstLinePartners30d} aktiv first-line-partner till`);
       }
-      if (normalized.partnerGeneratedLeads30d < 3 && normalized.partnerGeneratedCustomers30d < 1) {
-        missing.push("partnergenererat inflöde");
+
+      if (normalized.partnerGeneratedCustomers30d < 1 && normalized.partnerGeneratedLeads30d < 3) {
+        missing.push("1 partnergenererad kund eller 3 partnergenererade leads");
       }
+
       return missing;
     case "duplicating":
       if (normalized.activeFirstLinePartners30d < 3) {
-        missing.push(`${3 - normalized.activeFirstLinePartners30d} aktiv first-line-partner`);
+        missing.push(`${3 - normalized.activeFirstLinePartners30d} aktiv first-line-partner till`);
       }
+
       if (normalized.partnerGeneratedLeads30d < 5 && normalized.partnerGeneratedCustomers30d < 2) {
-        missing.push("starkare partnerdriven aktivitet");
+        missing.push("stabilare partnerdrivet inflöde");
       }
-      if (normalized.personalCustomers30d < 1 && normalized.recruitedPartners30d < 1) {
+
+      if (!hasPersonalActivity(normalized)) {
         missing.push("egen aktivitet denna period");
       }
+
       return missing;
     case "leader-track":
-      return ["behåll stabil aktivitet i first line", "fortsätt bygga med fart och kvalitet"];
+      return [
+        "en bredare aktiv first line",
+        "fortsatt partnerdrivet inflöde",
+        "stabilitet över flera perioder",
+      ];
   }
 }
 
 function getNextBestAction(status: PartnerStatus) {
   switch (status) {
     case "inactive":
-      return "Focus on one first result: your first customer or your first recruited partner.";
+      return "Fokusera på ett första resultat: din första kund eller din första rekryterade partner.";
     case "active":
-      return "Repeat your first success and avoid stopping after one result.";
+      return "Upprepa första resultatet innan du lägger på mer komplexitet, och sök sedan den första first-line-signalen.";
     case "growing":
-      return "Shift attention from personal production to activating first-line partners.";
+      return "Flytta fokus från egen produktion till first-line-aktivering så att beteendet kan börja upprepas genom andra.";
     case "duplicating":
-      return "Strengthen consistency in partner-generated leads and customers.";
+      return "Stärk jämnheten i partnergenererade leads och kunder så att strukturen håller bortom en enskild topp.";
     case "leader-track":
-      return "Protect momentum and expand the number of active first-line partners.";
+      return "Skydda momentumet, behåll egen närvaro och stabilisera den partnerdrivna aktiviteten över mer än en cykel.";
   }
 }
 
@@ -241,17 +275,17 @@ function getExplanation(input: PartnerProgressInput, status: PartnerStatus) {
 
   switch (status) {
     case "inactive":
-      return "There is no meaningful recent activity yet, so the model sees no forward movement.";
+      return "Det finns ännu ingen tydlig ny startsignal, så modellen ser ingen aktuell rörelse att bygga vidare på.";
     case "active":
-      return "There is personal movement, but the activity is still mostly driven by the individual.";
+      return "Det finns verklig rörelse, men den är fortfarande främst personlig och ännu inte stark nog för att räknas som tidigt systembeteende.";
     case "growing":
-      return "There is repeated personal traction and early signs that the partner is building beyond a single test.";
+      return "Det finns upprepad aktivitet och en tidig first-line-signal, vilket tyder på att partnern är på väg bort från ett rent enpersonsläge.";
     case "duplicating":
-      return "First-line partners are active and some inflow is starting to come through others.";
+      return "Aktiva first-line-partners och partnergenererat inflöde tyder på att beteendet börjar dupliceras genom andra.";
     case "leader-track":
       return normalized.partnerGeneratedCustomers30d > 0
-        ? "The partner shows real duplication, active first-line depth, and downstream customer activity."
-        : "The partner shows strong first-line activation and sustained duplication signals.";
+        ? "Partnern visar aktiv first-line-bredd, verklig duplicering och kundutfall längre ned i teamet."
+        : "Partnern visar stark aktiv first-line-bredd och partnerdrivet inflöde, men behöver fortfarande visa stabilitet över tid.";
   }
 }
 

@@ -49,6 +49,19 @@ describe("growth compass", () => {
     ).toBe("active");
   });
 
+  it("keeps strong solo customer activity in active until team signal exists", () => {
+    const result = evaluateGrowthCompass({
+      personalCustomers30d: 5,
+      recruitedPartners30d: 0,
+      activeFirstLinePartners30d: 0,
+      partnerGeneratedLeads30d: 0,
+      partnerGeneratedCustomers30d: 0,
+    });
+
+    expect(result.status).toBe("active");
+    expect(result.missingToNext).toContain("1 first-line-signal");
+  });
+
   it("classifies repeated activity with early team signal as growing", () => {
     const result = evaluateGrowthCompass({
       personalCustomers30d: 2,
@@ -59,7 +72,20 @@ describe("growth compass", () => {
     });
 
     expect(result.status).toBe("growing");
-    expect(result.nextBestAction).toContain("activating first-line partners");
+    expect(result.nextBestAction).toContain("first-line-aktivering");
+  });
+
+  it("allows recruiting-led build mode with early first-line signal", () => {
+    const result = evaluateGrowthCompass({
+      personalCustomers30d: 0,
+      recruitedPartners30d: 2,
+      activeFirstLinePartners30d: 1,
+      partnerGeneratedLeads30d: 1,
+      partnerGeneratedCustomers30d: 0,
+    });
+
+    expect(result.status).toBe("growing");
+    expect(result.explanation).toContain("first-line-signal");
   });
 
   it("classifies real team momentum as duplicating", () => {
@@ -73,6 +99,19 @@ describe("growth compass", () => {
 
     expect(result.status).toBe("duplicating");
     expect(result.flags).toContain("duplication-started");
+  });
+
+  it("keeps residual team signal without fresh personal movement in active", () => {
+    const result = evaluateGrowthCompass({
+      personalCustomers30d: 0,
+      recruitedPartners30d: 0,
+      activeFirstLinePartners30d: 1,
+      partnerGeneratedLeads30d: 0,
+      partnerGeneratedCustomers30d: 0,
+    });
+
+    expect(result.status).toBe("active");
+    expect(result.nextMilestone).toContain("Upprepa första resultatet");
   });
 
   it("classifies strongest signals as leader-track", () => {

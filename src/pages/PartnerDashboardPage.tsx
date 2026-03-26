@@ -157,7 +157,7 @@ function getLeadUrgencyVariant(lead: Lead) {
 }
 
 function hasRequiredZzLinks(data: PartnerDashboardData) {
-  return Boolean(data.zzLinks.test && data.zzLinks.shop && data.zzLinks.partner);
+  return Boolean(data.zzLinks.test && data.zzLinks.shop && data.zzLinks.partner && data.zzLinks.consultation);
 }
 
 function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: boolean) {
@@ -173,7 +173,7 @@ function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: bool
   if (!hasRequiredZzLinks(data)) {
     return {
       title: "Lägg in dina ZZ-länkar",
-      description: "Test, shop och partnerlänk behöver finnas på plats innan du börjar arbeta externt.",
+      description: "Test-, shop-, partner- och konsultationslänk behöver finnas på plats innan du börjar arbeta externt.",
       mode: "links" as const,
       label: "Öppna länkar",
     };
@@ -457,6 +457,38 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
   };
 }
 
+function buildDuplicationRhythm(data: PartnerDashboardData) {
+  const nearestDownline = data.team[0];
+  const hasSponsor = Boolean(data.sponsor);
+  const hasDirectPartner = data.metrics.directPartners > 0;
+
+  if (!hasDirectPartner) {
+    return {
+      title: "Duplicering börjar så här",
+      items: [
+        "Bygg först din egen rytm tills du vet vad som faktiskt fungerar i praktiken.",
+        "Spara kort vad du säger i första kontakt, hur du följer upp och när du bjuder vidare till samtal eller Zoom.",
+        hasSponsor
+          ? "När något börjar fungera, stäm av med din up-line hur samma arbetssätt kan göras enklare att upprepa."
+          : "När något börjar fungera, håll arbetssättet enkelt nog att upprepa innan du försöker bredda det.",
+      ],
+    };
+  }
+
+  return {
+    title: "Din dupliceringsrytm",
+    items: [
+      nearestDownline
+        ? `Fokusera denna vecka på att hjälpa ${nearestDownline.partnerName} till ett enda tydligt nästa steg.`
+        : "Fokusera denna vecka på din närmaste first line och håll stödet nära nästa aktivitet.",
+      "Använd gemensamt samtal eller Zoom när det höjer kvaliteten, i stället för att skriva längre förklaringar i efterhand.",
+      hasSponsor
+        ? `När ni kör fast, lyft läget kort till ${data.sponsor?.name} med vad som redan är gjort och vad nästa hinder faktiskt är.`
+        : "När ni kör fast, lyft bara det som behöver nästa nivå av stöd och håll resten nära vardagsarbetet.",
+    ],
+  };
+}
+
 function buildLeadQueueSummary(leads: Lead[]) {
   const urgent = leads.filter((lead) => lead.status === "new" || lead.status === "qualified").length;
   const active = leads.filter((lead) => lead.status === "active").length;
@@ -516,7 +548,7 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   const checklist = [
     { label: "Godkänn portalvillkor och integritet", done: legalAccepted },
-    { label: "Lägg in dina tre ZZ-länkar", done: zzLinksReady },
+    { label: "Lägg in dina fyra ZZ-länkar", done: zzLinksReady },
     { label: "Dela din referral-länk", done: data.partner.referral_code.length > 0 },
     { label: "Skapa första kundsignal", done: customerLeads > 0 || customers > 0 },
     { label: "Skapa första partnerintresse", done: partnerLeads > 0 },
@@ -536,9 +568,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   if (!zzLinksReady) {
     return {
       stageLabel: "Lägg grunden",
-      summary: "Innan du driver trafik eller följer upp leads behöver dina tre ZZ-länkar finnas på plats.",
-      nextMilestone: "Test-, shop- och partnerlänk sparade",
-      nextBestAction: "Gå till Länkar och lägg in dina tre personliga ZZ-länkar innan du börjar arbeta externt.",
+      summary: "Innan du driver trafik eller följer upp leads behöver test-, shop-, partner- och konsultationslänken finnas på plats.",
+      nextMilestone: "Fyra Zinzino-destinationer sparade",
+      nextBestAction: "Gå till Länkar och lägg in dina fyra personliga ZZ-länkar innan du börjar arbeta externt.",
       checklist,
     };
   }
@@ -665,6 +697,7 @@ const PartnerDashboardPage = () => {
   const legalAccepted = hasAcceptedPortalLegal(accessQuery.data?.portalUser);
   const journey = data ? buildPartnerFirst30Days(data, legalAccepted) : null;
   const viewingAsAdmin = accessQuery.data?.portalUser?.role === "admin";
+  const legalActionHref = viewingAsAdmin ? "/dashboard/admin/legal-preview" : "/dashboard/partner/legal";
   const showOverview = currentSection === "overview";
   const showLeads = currentSection === "leads";
   const showLinks = currentSection === "links";
@@ -676,6 +709,7 @@ const PartnerDashboardPage = () => {
   const weeklyPlan = data ? buildWeeklyPlan(data) : null;
   const practicalSuggestions = data ? buildPracticalWorkSuggestions(data) : null;
   const duplicationPlaybook = data ? buildDuplicationPlaybook(data) : null;
+  const duplicationRhythm = data ? buildDuplicationRhythm(data) : null;
   const startAction = data ? buildPartnerStartAction(data, legalAccepted) : null;
   const leadQueueSummary = data ? buildLeadQueueSummary(data.leads) : [];
   const partnerLeadQueueSummary = data ? buildLeadQueueSummary(data.partnerLeads) : [];
@@ -750,7 +784,7 @@ const PartnerDashboardPage = () => {
             <DialogHeader>
               <DialogTitle>Mina ZZ-länkar</DialogTitle>
               <DialogDescription>
-                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop- och partnerlänken i flödet.
+                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop-, partner- och konsultationslänken i flödet.
               </DialogDescription>
             </DialogHeader>
 
@@ -783,6 +817,17 @@ const PartnerDashboardPage = () => {
                   id="partner-zz-partner"
                   value={zzPartnerUrl}
                   onChange={(event) => setZzPartnerUrl(event.target.value)}
+                  placeholder="https://..."
+                  className="rounded-xl"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="partner-zz-consultation">Konsultationslänk</Label>
+                <Input
+                  id="partner-zz-consultation"
+                  value={zzConsultationUrl}
+                  onChange={(event) => setZzConsultationUrl(event.target.value)}
                   placeholder="https://..."
                   className="rounded-xl"
                 />
@@ -877,7 +922,7 @@ const PartnerDashboardPage = () => {
                           </Button>
                         ) : (
                           <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
-                            <Link to="/dashboard/partner/legal">{startAction.label}</Link>
+                            <Link to={legalActionHref}>{startAction.label}</Link>
                           </Button>
                         )}
                       </div>
@@ -942,6 +987,19 @@ const PartnerDashboardPage = () => {
                             <p className="text-sm font-medium text-foreground">{card.title}</p>
                             <p className="mt-2 text-sm leading-6 text-subtle">{card.summary}</p>
                             <p className="mt-2 text-xs leading-5 text-foreground/80">{card.action}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {duplicationRhythm ? (
+                    <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{duplicationRhythm.title}</p>
+                      <div className="mt-3 space-y-2.5">
+                        {duplicationRhythm.items.map((item) => (
+                          <div key={item} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
+                            <p className="text-sm text-foreground">{item}</p>
                           </div>
                         ))}
                       </div>
@@ -1052,7 +1110,7 @@ const PartnerDashboardPage = () => {
             >
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-border/70 bg-secondary/30 p-4">
                 <p className="text-sm leading-6 text-subtle">
-                  Lägg in och uppdatera dina egna test-, shop- och partnerlänkar här.
+                  Lägg in och uppdatera dina egna test-, shop-, partner- och konsultationslänkar här.
                 </p>
                 <Button type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm" onClick={openZzLinksDialog}>
                   Redigera mina länkar
@@ -1064,6 +1122,7 @@ const PartnerDashboardPage = () => {
                   { label: "Testlänk", value: data.zzLinks.test },
                   { label: "Shoplänk", value: data.zzLinks.shop },
                   { label: "Partnerlänk", value: data.zzLinks.partner },
+                  { label: "Konsultationslänk", value: data.zzLinks.consultation },
                 ].map((linkItem) => (
                   <div key={linkItem.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{linkItem.label}</p>
@@ -1336,6 +1395,19 @@ const PartnerDashboardPage = () => {
                       )}
                     </div>
                   </div>
+
+                  {duplicationRhythm ? (
+                    <div className="mb-4 rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{duplicationRhythm.title}</p>
+                      <div className="mt-3 grid gap-3 md:grid-cols-3">
+                        {duplicationRhythm.items.map((item) => (
+                          <div key={item} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
+                            <p className="text-sm leading-6 text-foreground">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
 
                   <DataTable
                     columns={["Partner", "Nivå", "Tillagd"]}

@@ -5,7 +5,7 @@ vi.mock("@/integrations/supabase/client", () => ({
   isSupabaseConfigured: false,
 }));
 
-import { getDemoPartnerOptions, getPartnerDashboardData, updatePartnerZzLinks } from "@/lib/omega-data";
+import { getAdminDashboardData, getDemoPartnerOptions, getPartnerDashboardData, updatePartnerZzLinks } from "@/lib/omega-data";
 
 describe("updatePartnerZzLinks", () => {
   const partner = getDemoPartnerOptions()[0];
@@ -38,6 +38,21 @@ describe("updatePartnerZzLinks", () => {
       partner: "https://example.com/partner",
       consultation: "https://example.com/call",
     });
+  });
+
+  it("marks ZZ links as incomplete when consultation link is missing", async () => {
+    await updatePartnerZzLinks(partner.id, {
+      test: "https://example.com/test",
+      shop: "https://example.com/shop",
+      partner: "https://example.com/partner",
+      consultation: null,
+    });
+
+    const adminData = await getAdminDashboardData();
+    const partnerRow = adminData.partners.find((row) => row.partnerId === partner.id);
+
+    expect(partnerRow?.zzLinksReady).toBe(false);
+    expect(partnerRow?.zzLinks.consultation).toBeNull();
   });
 
   it("rejects links that do not use https", async () => {

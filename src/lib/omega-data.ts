@@ -216,6 +216,7 @@ const mockPartnerRecords = mockUsers
     consultation_url: `https://www.zinzino.com/consultation/${user.referral_code.toLowerCase()}`,
     status: "verified",
     created_at: user.created_at,
+    verified_at: user.created_at,
   }));
 
 const mockOutboundClicks: OutboundClickSignal[] = [];
@@ -477,7 +478,8 @@ function buildAdminPartnerRows(
       const zzLinksReady = Boolean(
         partnerRecord?.zinzino_test_url &&
         partnerRecord?.zinzino_shop_url &&
-        partnerRecord?.zinzino_partner_url,
+        partnerRecord?.zinzino_partner_url &&
+        partnerRecord?.consultation_url,
       );
 
       return {
@@ -1055,6 +1057,50 @@ function normalizeHttpsUrl(value: string | null | undefined, label: string) {
   return parsed.toString();
 }
 
+function hasCompletePartnerZzLinks(links: {
+  zinzino_test_url: string | null;
+  zinzino_shop_url: string | null;
+  zinzino_partner_url: string | null;
+  consultation_url: string | null;
+}) {
+  return Boolean(
+    links.zinzino_test_url &&
+    links.zinzino_shop_url &&
+    links.zinzino_partner_url &&
+    links.consultation_url,
+  );
+}
+
+function derivePartnerRecordState(
+  links: {
+    zinzino_test_url: string | null;
+    zinzino_shop_url: string | null;
+    zinzino_partner_url: string | null;
+    consultation_url: string | null;
+  },
+  existingStatus?: string | null,
+  existingVerifiedAt?: string | null,
+) {
+  if (existingStatus === "rejected") {
+    return {
+      status: "rejected",
+      verified_at: existingVerifiedAt ?? null,
+    };
+  }
+
+  if (hasCompletePartnerZzLinks(links)) {
+    return {
+      status: "verified",
+      verified_at: existingVerifiedAt ?? new Date().toISOString(),
+    };
+  }
+
+  return {
+    status: "pending",
+    verified_at: null,
+  };
+}
+
 export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZzLinks) {
   const normalizedLinks = {
     zinzino_test_url: normalizeHttpsUrl(zzLinks.test, "Testlänk"),
@@ -1067,10 +1113,14 @@ export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZz
     const existingRecord = mockPartnerRecords.find((record) => record.user_id === partnerId);
 
     if (existingRecord) {
+      const nextState = derivePartnerRecordState(normalizedLinks, existingRecord.status, existingRecord.verified_at);
+
       existingRecord.zinzino_test_url = normalizedLinks.zinzino_test_url;
       existingRecord.zinzino_shop_url = normalizedLinks.zinzino_shop_url;
       existingRecord.zinzino_partner_url = normalizedLinks.zinzino_partner_url;
       existingRecord.consultation_url = normalizedLinks.consultation_url;
+      existingRecord.status = nextState.status;
+      existingRecord.verified_at = nextState.verified_at;
     } else {
       const partnerUser = mockUsers.find((user) => user.id === partnerId);
 
@@ -1078,12 +1128,15 @@ export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZz
         throw new Error("Partnern kunde inte hittas.");
       }
 
+      const nextState = derivePartnerRecordState(normalizedLinks);
+
       mockPartnerRecords.push({
         id: `partner-record-${partnerId}`,
         user_id: partnerId,
         referral_code: partnerUser.referral_code,
-        status: "verified",
+        status: nextState.status,
         created_at: new Date().toISOString(),
+        verified_at: nextState.verified_at,
         ...normalizedLinks,
       });
     }
@@ -1094,18 +1147,22 @@ export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZz
   const client = requireSupabase();
   const { data: partnerRecord, error: fetchError } = await client
     .from("partners")
-    .select("id")
+    .select("id, status, verified_at")
     .eq("user_id", partnerId)
-    .maybeSingle();
+    .maybeSingle<{ id: string; status?: string | null; verified_at?: string | null }>();
 
   if (fetchError) {
     throw new Error(fetchError.message);
   }
 
   if (partnerRecord?.id) {
+    const nextState = derivePartnerRecordState(normalizedLinks, partnerRecord.status, partnerRecord.verified_at);
     const { error: updateError } = await client
       .from("partners")
-      .update(normalizedLinks)
+      .update({
+        ...normalizedLinks,
+        ...nextState,
+      })
       .eq("id", partnerRecord.id);
 
     if (updateError) {
@@ -1125,10 +1182,11 @@ export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZz
     throw new Error(partnerUserError.message);
   }
 
+  const nextState = derivePartnerRecordState(normalizedLinks);
   const { error: insertError } = await client.from("partners").insert({
     user_id: partnerId,
     referral_code: partnerUser?.referral_code || null,
-    status: "verified",
+    ...nextState,
     ...normalizedLinks,
   });
 
