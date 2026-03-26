@@ -1010,6 +1010,26 @@ const AdminDashboardPage = () => {
       .filter((lead) => lead.status !== "active" && getLeadReviewReady(lead))
       .sort((a, b) => new Date(a.updated_at || a.created_at).getTime() - new Date(b.updated_at || b.created_at).getTime());
   }, [data?.partnerApplications]);
+  const adminStuckLists = useMemo(() => {
+    if (!data || !partnerFunnelInsights) {
+      return [];
+    }
+
+    const applicationLookup = new Map(data.partnerApplications.map((lead) => [lead.name, lead]));
+    const partnerLookup = new Map(data.partners.map((partner) => [partner.partnerName, partner]));
+
+    return partnerFunnelInsights.blockers.map((blocker) => ({
+      ...blocker,
+      sampleLeads: blocker.samples
+        .map((name) => applicationLookup.get(name))
+        .filter((lead): lead is Lead => Boolean(lead))
+        .slice(0, 3),
+      samplePartners: blocker.samples
+        .map((name) => partnerLookup.get(name))
+        .filter((partner): partner is AdminPartnerRow => Boolean(partner))
+        .slice(0, 3),
+    }));
+  }, [data, partnerFunnelInsights]);
   const sortedPartnerApplications = data
     ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
@@ -1256,6 +1276,62 @@ const AdminDashboardPage = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+              </DashboardSection> : null}
+
+              {showOverview && adminStuckLists.length ? <DashboardSection
+                title="Stuck-lists per steg"
+                description="Arbetsköer för exakt var rörelsen fastnar just nu. Börja där antalet och friktionen är störst."
+              >
+                <div className="grid gap-4 xl:grid-cols-2">
+                  {adminStuckLists.map((blocker) => (
+                    <div key={blocker.key} className="rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{blocker.label}</p>
+                          <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(blocker.count)}</p>
+                        </div>
+                        <Badge variant={blocker.count > 0 ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                          {blocker.count > 0 ? "Behöver åtgärd" : "Under kontroll"}
+                        </Badge>
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-subtle">{blocker.description}</p>
+                      <p className="mt-3 text-sm leading-6 text-foreground/85">{blocker.nextAction}</p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {blocker.sampleLeads.map((lead) => (
+                          <Button
+                            key={`${blocker.key}-${lead.id}`}
+                            type="button"
+                            variant="outline"
+                            className="rounded-full"
+                            disabled={isDemo}
+                            onClick={() => {
+                              setSelectedLead(lead);
+                              setProvisionedPartner(null);
+                              setProvisionError(null);
+                              setZinzinoVerified(false);
+                            }}
+                          >
+                            {lead.name}
+                          </Button>
+                        ))}
+                        {blocker.samplePartners.map((partner) => (
+                          <Button
+                            key={`${blocker.key}-${partner.partnerId}`}
+                            type="button"
+                            variant="outline"
+                            className="rounded-full"
+                            onClick={() => setSelectedPartnerForLinks(partner)}
+                          >
+                            {partner.partnerName}
+                          </Button>
+                        ))}
+                        {!blocker.sampleLeads.length && !blocker.samplePartners.length ? (
+                          <span className="text-sm text-subtle">Inga tydliga namn just nu.</span>
+                        ) : null}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </DashboardSection> : null}
 
