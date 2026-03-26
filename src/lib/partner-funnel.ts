@@ -168,9 +168,9 @@ export function buildPartnerFunnelInsights(
     ),
     buildStage(
       "links-ready",
-      "4 länkar klara",
+      "3 länkar klara",
       partnersWithLinks.length,
-      "Partnern har komplett ZZ-setup för test, shop, partner och konsultation.",
+      "Partnern har komplett ZZ-setup för test, shop och partner.",
       "Det här är den första operativa grind som måste passeras snabbt.",
       data.partners.length,
     ),
@@ -211,7 +211,7 @@ export function buildPartnerFunnelInsights(
     },
     {
       key: "missing-links",
-      label: "Portalpartners utan 4 länkar",
+      label: "Portalpartners utan 3 länkar",
       count: data.partners.filter((partner) => !partner.zzLinksReady).length,
       description: "Partners som finns i portalen men där funneln ännu inte kan användas fullt ut.",
       nextAction: "Komplettera setup direkt efter portalstart så att bokning och redirect fungerar.",

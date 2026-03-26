@@ -57,6 +57,7 @@ const PrivacyPage = () => {
   const { lang } = useParams<{ lang?: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = privacyCopyByLang[currentLang];
+
   return (
     <InfoPageLayout
       lang={currentLang}

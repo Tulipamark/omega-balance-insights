@@ -136,17 +136,17 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
         </section>
 
         <section className="rounded-[2rem] border border-border/70 bg-card p-8 shadow-elevated md:p-10">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
-                <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">
-                  {isAdminVariant ? "Adminåtkomst" : "Logga in"}
-                </h2>
-              </div>
-              <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
-                Till sajten
-              </Link>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">
+                {isAdminVariant ? "Adminåtkomst" : "Logga in"}
+              </h2>
             </div>
+            <Link to="/sv" className="text-sm text-primary transition-colors hover:text-primary/80">
+              Till sajten
+            </Link>
+          </div>
 
           {isSupabaseConfigured ? (
             <form onSubmit={handleSubmit} className="mt-8 space-y-4">

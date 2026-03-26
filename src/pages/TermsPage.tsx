@@ -57,6 +57,7 @@ const TermsPage = () => {
   const { lang } = useParams<{ lang?: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = termsCopyByLang[currentLang];
+
   return (
     <InfoPageLayout
       lang={currentLang}

@@ -6,7 +6,7 @@ export const it: Copy = {
     titleStart: "Conosci il tuo",
     titleAccent: "equilibrio Omega?",
     body: "La maggior parte delle persone ha uno squilibrio tra Omega-6 e Omega-3. Un semplice test del sangue da fare a casa può rivelare il tuo rapporto esatto.",
-    primaryCta: "Ordina il tuo balance test qui",
+    primaryCta: "Ordina il tuo BalanceTest qui",
     secondaryCta: "Come funziona il test",
     partnerCta: "Per i partner",
     statLab: "Analisi di laboratorio certificata",
@@ -101,7 +101,7 @@ export const it: Copy = {
     headlinesLabel: "Headline",
     ctasLabel: "Pulsanti call to action",
     headlines: ["Conosci il tuo equilibrio Omega?", "L'unico numero che potrebbe cambiare il tuo modo di mangiare.", "Misura ciò che conta. Parti dal tuo rapporto Omega."],
-    ctas: ["Ordina il tuo balance test qui", "Scopri il tuo rapporto", "Ricevi la tua analisi personalizzata"],
+    ctas: ["Ordina il tuo BalanceTest qui", "Scopri il tuo rapporto", "Ricevi la tua analisi personalizzata"],
   },
   sticky: {
     text: "Scopri oggi il tuo rapporto Omega-6 / Omega-3",

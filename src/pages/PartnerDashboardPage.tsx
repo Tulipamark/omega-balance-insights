@@ -157,7 +157,7 @@ function getLeadUrgencyVariant(lead: Lead) {
 }
 
 function hasRequiredZzLinks(data: PartnerDashboardData) {
-  return Boolean(data.zzLinks.test && data.zzLinks.shop && data.zzLinks.partner && data.zzLinks.consultation);
+  return Boolean(data.zzLinks.test && data.zzLinks.shop && data.zzLinks.partner);
 }
 
 function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: boolean) {
@@ -173,7 +173,7 @@ function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: bool
   if (!hasRequiredZzLinks(data)) {
     return {
       title: "Lägg in dina ZZ-länkar",
-      description: "Test-, shop-, partner- och konsultationslänk behöver finnas på plats innan du börjar arbeta externt.",
+      description: "Test-, shop- och partnerlänk behöver finnas på plats innan du börjar arbeta externt.",
       mode: "links" as const,
       label: "Öppna länkar",
     };
@@ -548,7 +548,7 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   const checklist = [
     { label: "Godkänn portalvillkor och integritet", done: legalAccepted },
-    { label: "Lägg in dina fyra ZZ-länkar", done: zzLinksReady },
+    { label: "Lägg in dina tre ZZ-länkar", done: zzLinksReady },
     { label: "Dela din referral-länk", done: data.partner.referral_code.length > 0 },
     { label: "Skapa första kundsignal", done: customerLeads > 0 || customers > 0 },
     { label: "Skapa första partnerintresse", done: partnerLeads > 0 },
@@ -568,9 +568,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   if (!zzLinksReady) {
     return {
       stageLabel: "Lägg grunden",
-      summary: "Innan du driver trafik eller följer upp leads behöver test-, shop-, partner- och konsultationslänken finnas på plats.",
-      nextMilestone: "Fyra Zinzino-destinationer sparade",
-      nextBestAction: "Gå till Länkar och lägg in dina fyra personliga ZZ-länkar innan du börjar arbeta externt.",
+      summary: "Innan du driver trafik eller följer upp leads behöver test-, shop- och partnerlänken finnas på plats.",
+      nextMilestone: "Tre Zinzino-destinationer sparade",
+      nextBestAction: "Gå till Länkar och lägg in dina tre personliga ZZ-länkar innan du börjar arbeta externt.",
       checklist,
     };
   }
@@ -784,7 +784,7 @@ const PartnerDashboardPage = () => {
             <DialogHeader>
               <DialogTitle>Mina ZZ-länkar</DialogTitle>
               <DialogDescription>
-                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop-, partner- och konsultationslänken i flödet.
+                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop- och partnerlänken i flödet.
               </DialogDescription>
             </DialogHeader>
 
@@ -822,16 +822,6 @@ const PartnerDashboardPage = () => {
                 />
               </div>
 
-              <div className="grid gap-2">
-                <Label htmlFor="partner-zz-consultation">Konsultationslänk</Label>
-                <Input
-                  id="partner-zz-consultation"
-                  value={zzConsultationUrl}
-                  onChange={(event) => setZzConsultationUrl(event.target.value)}
-                  placeholder="https://..."
-                  className="rounded-xl"
-                />
-              </div>
             </div>
 
           <DialogFooter className="mt-3 flex-col items-stretch gap-3 sm:flex-row sm:justify-between">
@@ -1110,7 +1100,7 @@ const PartnerDashboardPage = () => {
             >
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-border/70 bg-secondary/30 p-4">
                 <p className="text-sm leading-6 text-subtle">
-                  Lägg in och uppdatera dina egna test-, shop-, partner- och konsultationslänkar här.
+                  Lägg in och uppdatera dina egna test-, shop- och partnerlänkar här.
                 </p>
                 <Button type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm" onClick={openZzLinksDialog}>
                   Redigera mina länkar
@@ -1122,7 +1112,6 @@ const PartnerDashboardPage = () => {
                   { label: "Testlänk", value: data.zzLinks.test },
                   { label: "Shoplänk", value: data.zzLinks.shop },
                   { label: "Partnerlänk", value: data.zzLinks.partner },
-                  { label: "Konsultationslänk", value: data.zzLinks.consultation },
                 ].map((linkItem) => (
                   <div key={linkItem.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{linkItem.label}</p>

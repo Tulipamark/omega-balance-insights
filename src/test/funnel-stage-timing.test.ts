@@ -52,7 +52,7 @@ describe("buildFunnelStageTimingInsights", () => {
 
     expect(insights.steps[0].fromCount).toBe(1);
     expect(insights.steps[0].completionCount).toBe(0);
-    expect(insights.headline.title).toContain("Storst tidsfriktion");
+    expect(insights.headline.title).toContain("Störst tidsfriktion");
     expect(insights.headline.summary).toContain("0 av 1");
   });
 
@@ -60,6 +60,6 @@ describe("buildFunnelStageTimingInsights", () => {
     const insights = buildFunnelStageTimingInsights([]);
 
     expect(insights.sessionsAnalyzed).toBe(0);
-    expect(insights.headline.title).toBe("Ingen ledtidsdata an");
+    expect(insights.headline.title).toBe("Ingen ledtidsdata än");
   });
 });

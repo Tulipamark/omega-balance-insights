@@ -602,8 +602,7 @@ function buildAdminPartnerRows(
       const zzLinksReady = Boolean(
         partnerRecord?.zinzino_test_url &&
         partnerRecord?.zinzino_shop_url &&
-        partnerRecord?.zinzino_partner_url &&
-        partnerRecord?.consultation_url,
+        partnerRecord?.zinzino_partner_url,
       );
 
       return {

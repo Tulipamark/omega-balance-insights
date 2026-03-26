@@ -118,13 +118,13 @@ function buildStepInsight(
 function getNextAction(step: FunnelTimingStepInsight) {
   switch (step.key) {
     case "landing_to_cta":
-      return "Se over hero-copy, tydlighet i forsta CTA och om landningen snabbt forklarar nasta steg.";
+      return "Se över hero-copy, tydlighet i första CTA och om landningen snabbt förklarar nästa steg.";
     case "cta_to_form_start":
-      return "Minska friktionen mellan klick och formular genom tydligare forvantan, enklare overgang och battre mobilkansla.";
+      return "Minska friktionen mellan klick och formulär genom tydligare förväntan, enklare övergång och bättre mobilkänsla.";
     case "form_start_to_submit":
-      return "Gor formularet lattare att slutföra och folj upp validering, felmeddelanden och input-hjalp.";
+      return "Gör formuläret lättare att slutföra och följ upp validering, felmeddelanden och input-hjälp.";
     default:
-      return "Fortsatt minska friktionen i nasta steg.";
+      return "Fortsätt minska friktionen i nästa steg.";
   }
 }
 
@@ -145,7 +145,7 @@ export function buildFunnelStageTimingInsights(events: FunnelEvent[]): FunnelTim
     buildStepInsight(
       "landing_to_cta",
       "Landning till CTA-klick",
-      "Hur snabbt forsta besoket blir till ett konkret klick pa nasta steg.",
+      "Hur snabbt första besöket blir till ett konkret klick på nästa steg.",
       sessions,
       LANDING_EVENTS,
       CTA_EVENTS,
@@ -153,15 +153,15 @@ export function buildFunnelStageTimingInsights(events: FunnelEvent[]): FunnelTim
     buildStepInsight(
       "cta_to_form_start",
       "CTA-klick till formstart",
-      "Hur snabbt klicket blir till faktisk aktivitet i kund- eller partnerformularet.",
+      "Hur snabbt klicket blir till faktisk aktivitet i kund- eller partnerformuläret.",
       sessions,
       CTA_EVENTS,
       FORM_START_EVENTS,
     ),
     buildStepInsight(
       "form_start_to_submit",
-      "Formstart till skickat formular",
-      "Hur latt det ar att ta sig fran pabörjat formular till fardigt submit.",
+      "Formstart till skickat formulär",
+      "Hur lätt det är att ta sig från påbörjat formulär till färdigt submit.",
       sessions,
       FORM_START_EVENTS,
       FORM_SUBMIT_EVENTS,
@@ -181,16 +181,16 @@ export function buildFunnelStageTimingInsights(events: FunnelEvent[]): FunnelTim
 
   const headline = topFrictionStep
     ? {
-        title: `Storst tidsfriktion: ${topFrictionStep.label}`,
-        summary: `${topFrictionStep.completionCount} av ${topFrictionStep.fromCount} uppmatta sessioner tog sig vidare i detta steg. Medianen ligger pa ${
-          topFrictionStep.medianSeconds !== null ? `${roundToOneDecimal(topFrictionStep.medianSeconds)} sek` : "okand tid"
+        title: `Störst tidsfriktion: ${topFrictionStep.label}`,
+        summary: `${topFrictionStep.completionCount} av ${topFrictionStep.fromCount} uppmätta sessioner tog sig vidare i detta steg. Medianen ligger på ${
+          topFrictionStep.medianSeconds !== null ? `${roundToOneDecimal(topFrictionStep.medianSeconds)} sek` : "okänd tid"
         }.`,
         nextAction: getNextAction(topFrictionStep),
       }
     : {
-        title: "Ingen ledtidsdata an",
-        summary: "Det finns an sa lange inte tillrackligt manga sammanhangande sessioner for att rakna ledtid mellan stegen.",
-        nextAction: "Skapa nagra riktiga testfloden sa borjar den har sektionen fyllas med matbar friktion.",
+        title: "Ingen ledtidsdata än",
+        summary: "Det finns än så länge inte tillräckligt många sammanhängande sessioner för att räkna ledtid mellan stegen.",
+        nextAction: "Skapa några riktiga testflöden så börjar den här sektionen fyllas med mätbar friktion.",
       };
 
   return {

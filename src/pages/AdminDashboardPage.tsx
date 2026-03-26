@@ -1021,7 +1021,7 @@ const AdminDashboardPage = () => {
               </div> : null}
 
               {showOverview && partnerFunnelInsights ? <DashboardSection
-                title="Partnerfunnel just nu"
+                title="Partnerfunnel i nuläget"
                 description="Två kopplade flöden: först från partnerlead till onboarding, sedan från portalstart till verklig aktivitet och duplication."
               >
                 <DataTruthBadges isDemo={isDemo} interpretive />
@@ -1128,7 +1128,7 @@ const AdminDashboardPage = () => {
                     icon={<BadgeCheck className="h-5 w-5" />}
                   />
                   <MetricCard
-                    label="Submit-fel"
+                    label="Skickfel"
                     value={funnelEventSummary.submitFailures}
                     helper="Formförsök som stannade innan lead kunde drivas vidare."
                     icon={<ArrowRightLeft className="h-5 w-5" />}
@@ -1138,7 +1138,7 @@ const AdminDashboardPage = () => {
 
               {showOverview ? <DashboardSection
                 title="Ledtid mellan steg"
-                description="Forsta versionen av funnelns tidsmatt. Har ser ni hur snabbt verkliga sessioner ror sig fran landning till handling."
+                description="Första versionen av funnelns tidsmått. Här ser ni hur snabbt verkliga sessioner rör sig från landning till handling."
               >
                 <DataTruthBadges isDemo={isDemo} />
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -1147,7 +1147,7 @@ const AdminDashboardPage = () => {
                       key={step.key}
                       label={step.label}
                       value={formatDuration(step.medianSeconds)}
-                      helper={`${formatPercent(step.completionRatePct)} completion fran ${formatWholeNumber(step.fromCount)} sessioner. Uppmätta overgangar: ${formatWholeNumber(step.completionCount)}.`}
+                      helper={`${formatPercent(step.completionRatePct)} gick vidare från ${formatWholeNumber(step.fromCount)} sessioner. Uppmätta övergångar: ${formatWholeNumber(step.completionCount)}.`}
                       icon={<Activity className="h-5 w-5" />}
                     />
                   ))}
@@ -1739,7 +1739,7 @@ const AdminDashboardPage = () => {
           <DialogHeader>
             <DialogTitle>ZZ-länkar för partner</DialogTitle>
             <DialogDescription>
-              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop-, partner- och konsultationslänken bakom Omega-länken.
+              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop- och partnerlänken bakom Omega-länken.
             </DialogDescription>
           </DialogHeader>
 
@@ -1787,16 +1787,6 @@ const AdminDashboardPage = () => {
                   />
                 </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="zz-consultation-url">Konsultationslänk</Label>
-                  <Input
-                    id="zz-consultation-url"
-                    value={zzConsultationUrl}
-                    onChange={(event) => setZzConsultationUrl(event.target.value)}
-                    placeholder="https://..."
-                    className="rounded-xl"
-                  />
-                </div>
               </div>
             </div>
           ) : null}

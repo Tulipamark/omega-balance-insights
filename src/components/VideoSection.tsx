@@ -10,7 +10,7 @@ interface VideoSectionProps {
 }
 
 const transcriptByLang: Partial<Record<Lang, string>> = {
-  sv: "Många tror att de äter rätt. Men ändå känner de sig trötta eller har låg energi. Problemet är att det inte handlar om vad du äter utan vad kroppen faktiskt tar upp. Ett balance test visar din fettsyraprofil. Du tar några droppar blod hemma och får ett konkret svar. Baserat på resultatet får du personliga rekommendationer. Ta reda på din balans. Det tar bara några minuter att komma igång.",
+  sv: "Många tror att de äter rätt. Men ändå känner de sig trötta eller har låg energi. Problemet är att det inte handlar om vad du äter utan vad kroppen faktiskt tar upp. Ett BalanceTest visar din fettsyraprofil. Du tar några droppar blod hemma och får ett konkret svar. Baserat på resultatet får du personliga rekommendationer. Ta reda på din balans. Det tar bara några minuter att komma igång.",
 };
 
 const transcriptLabelByLang: Record<Lang, string> = {

@@ -60,7 +60,7 @@ const PartnerLegalAcceptancePage = ({ previewMode = false }: PartnerLegalAccepta
 
   const navigation = useMemo(() => {
     if (previewMode) {
-      return [{ label: "Legal preview", href: "/dashboard/admin/legal-preview", icon: dashboardIcons.dashboard }];
+      return [{ label: "Juridisk förhandsvisning", href: "/dashboard/admin/legal-preview", icon: dashboardIcons.dashboard }];
     }
 
     return [{ label: "Godkänn villkor", href: "/dashboard/partner/legal", icon: dashboardIcons.dashboard }];
@@ -92,13 +92,13 @@ const PartnerLegalAcceptancePage = ({ previewMode = false }: PartnerLegalAccepta
 
   return (
     <DashboardShell
-      title={previewMode ? "Legal preview" : "Godkänn villkor"}
+      title={previewMode ? "Juridisk förhandsvisning" : "Godkänn villkor"}
       subtitle={
         previewMode
           ? "Förhandsvisning av första-inloggningssteget för portalvillkor och integritet."
           : "Innan du använder portalen behöver du läsa igenom och godkänna portalvillkor, integritetspolicy, förstå att detta är vårt interna teamlager och bekräfta att du är minst 18 år och myndig."
       }
-      roleLabel={previewMode ? "Admin preview" : "Partner"}
+      roleLabel={previewMode ? "Adminförhandsvisning" : "Partner"}
       navigation={navigation}
       onSignOut={previewMode ? undefined : () => void signOutPortalUser()}
     >
@@ -214,7 +214,7 @@ const PartnerLegalAcceptancePage = ({ previewMode = false }: PartnerLegalAccepta
               disabled={previewMode || !canSubmit || acceptMutation.isPending}
               onClick={() => acceptMutation.mutate()}
             >
-              {previewMode ? "Previewläge" : acceptMutation.isPending ? "Sparar..." : "Jag har läst och godkänner"}
+              {previewMode ? "Förhandsvisning" : acceptMutation.isPending ? "Sparar..." : "Jag har läst och godkänner"}
             </Button>
             {previewMode ? (
               <p className="text-sm leading-6 text-subtle">Det här är en förhandsvisning. Godkännandet sparas inte från adminläget.</p>
