@@ -10,6 +10,7 @@ export type LeadSubmitMode = "created" | "updated" | "ignored";
 export type PartnerLeadPriority = "hot" | "follow_up" | "not_now";
 export type FunnelEventName =
   | "landing_viewed"
+  | "page_viewed"
   | "hero_primary_cta_clicked"
   | "hero_secondary_cta_clicked"
   | "sticky_cta_clicked"

@@ -102,6 +102,8 @@ function getFunnelEventLabel(eventName: string) {
   switch (eventName) {
     case "landing_viewed":
       return "Landning visad";
+    case "page_viewed":
+      return "Sida visad";
     case "hero_primary_cta_clicked":
       return "Hero CTA klick";
     case "hero_secondary_cta_clicked":
@@ -927,7 +929,16 @@ const AdminDashboardPage = () => {
         .filter((row) => eventNames.includes(row.event_name))
         .reduce((sum, row) => sum + row.events, 0);
 
+    const pageViewsByPath = new Map<string, number>();
+    recentFunnelEvents
+      .filter((event) => event.event_name === "page_viewed")
+      .forEach((event) => {
+        const current = pageViewsByPath.get(event.page_path) || 0;
+        pageViewsByPath.set(event.page_path, current + 1);
+      });
+
     return {
+      pageViews: countFor(["page_viewed"]),
       landings: countFor(["landing_viewed"]),
       ctaClicks: countFor([
         "hero_primary_cta_clicked",
@@ -939,8 +950,11 @@ const AdminDashboardPage = () => {
       formStarts: countFor(["lead_form_started", "partner_form_started"]),
       formSubmits: countFor(["lead_form_submitted", "partner_form_submitted"]),
       submitFailures: countFor(["lead_form_submit_failed", "partner_form_submit_failed"]),
+      topViewedPages: [...pageViewsByPath.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 8),
     };
-  }, [funnelEventRows]);
+  }, [funnelEventRows, recentFunnelEvents]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1548,6 +1562,35 @@ const AdminDashboardPage = () => {
               </div> : null}
 
               {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+                <DashboardSection
+                  title="Surfade sidor"
+                  description="Enkel överblick över vilka sidor besökare faktiskt tittar på när de rör sig vidare efter första landningen."
+                >
+                  <DataTruthBadges isDemo={isDemo} />
+                  <div className="mb-4 grid gap-4 md:grid-cols-2">
+                    <MetricCard
+                      label="Sidvisningar"
+                      value={funnelEventSummary.pageViews}
+                      helper="Registrerade page_viewed-events på publika sidor."
+                      icon={<Activity className="h-5 w-5" />}
+                    />
+                    <MetricCard
+                      label="Landningar"
+                      value={funnelEventSummary.landings}
+                      helper="Första attribuerade landningar via referrals eller lagrad attribution."
+                      icon={<TrendingUp className="h-5 w-5" />}
+                    />
+                  </div>
+                  <DataTable
+                    columns={["Sida", "Sidvisningar"]}
+                    rows={funnelEventSummary.topViewedPages.map(([pagePath, views]) => [
+                      <span key={`${pagePath}-path`} className="font-medium text-foreground">{pagePath}</span>,
+                      <span key={`${pagePath}-views`}>{formatWholeNumber(views)}</span>,
+                    ])}
+                    emptyState="Inga sidvisningar loggade än."
+                  />
+                </DashboardSection>
+
                 <DashboardSection
                   title="Duplicering"
                   description="Vilka partners som faktiskt börjar skapa eget attribuerat inflöde och kända resultat."

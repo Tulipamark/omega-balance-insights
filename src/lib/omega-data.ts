@@ -321,6 +321,19 @@ const mockVisits: ReferralVisit[] = [
 
 const mockFunnelEvents: FunnelEvent[] = [
   {
+    id: "event-0",
+    partner_id: "partner-record-user-elin",
+    referral_code: "ELIN2026",
+    session_id: "session-el-1",
+    event_name: "page_viewed",
+    page_path: "/sv",
+    utm_source: "instagram",
+    utm_medium: "social",
+    utm_campaign: "spring-launch",
+    details: { pageType: "customer" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 2 - 1000 * 15).toISOString(),
+  },
+  {
     id: "event-1",
     partner_id: "partner-record-user-elin",
     referral_code: "ELIN2026",
@@ -375,6 +388,19 @@ const mockFunnelEvents: FunnelEvent[] = [
     utm_campaign: "march-follow-up",
     details: { landingType: "partner" },
     created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18).toISOString(),
+  },
+  {
+    id: "event-5b",
+    partner_id: "partner-record-user-mikael",
+    referral_code: "MIKAEL88",
+    session_id: "session-mi-1",
+    event_name: "page_viewed",
+    page_path: "/sv/kontakt",
+    utm_source: "email",
+    utm_medium: "crm",
+    utm_campaign: "march-follow-up",
+    details: { pageType: "customer" },
+    created_at: new Date(now.getTime() - 1000 * 60 * 60 * 18 + 1000 * 20).toISOString(),
   },
   {
     id: "event-6",
