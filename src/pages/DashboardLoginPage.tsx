@@ -88,7 +88,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
         return;
       }
 
-      navigate(isAdminVariant ? "/dashboard/admin" : "/dashboard", { replace: true });
+      navigate(isAdminVariant ? "/dashboard/admin" : "/dashboard/partner", { replace: true });
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Det gick inte att logga in.");
     } finally {
@@ -103,12 +103,16 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
     accessQuery.data?.portalUser &&
     (!isAdminVariant || accessQuery.data.portalUser.role === "admin")
   ) {
-    return (
-      <Navigate
-        to={accessQuery.data.portalUser.role === "admin" ? "/dashboard/admin" : "/dashboard/partner"}
-        replace
-      />
-    );
+      return (
+        <Navigate
+          to={
+            isAdminVariant
+              ? "/dashboard/admin"
+              : "/dashboard/partner"
+          }
+          replace
+        />
+      );
   }
 
   return (
