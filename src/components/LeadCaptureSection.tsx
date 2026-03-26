@@ -181,7 +181,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
             <p className="text-lg text-subtle">{copy.body}</p>
           </div>
 
-          <form className="space-y-5 rounded-2xl bg-card p-8 text-left shadow-elevated md:p-10" onSubmit={(event) => void handleSubmit(event)}>
+          <form className="space-y-5 rounded-2xl bg-card p-6 text-left shadow-elevated md:p-10" onSubmit={(event) => void handleSubmit(event)}>
             <div>
               <label htmlFor="name" className="mb-2 block text-sm font-medium">
                 {copy.nameLabel}
@@ -232,7 +232,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
                 placeholder={copy.phonePlaceholder}
               />
             </div>
-            <button type="submit" disabled={submitting} className="btn-primary w-full text-center disabled:opacity-70">
+            <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70">
               {submitting ? submittingLabelByLang[lang] : copy.consultationCta}
             </button>
             {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}

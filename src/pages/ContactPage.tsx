@@ -281,7 +281,7 @@ const ContactPage = () => {
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.message}</span>
               <Textarea required value={formData.message} onChange={(event) => updateField("message", event.target.value)} className="min-h-[144px] rounded-xl" />
             </label>
-            <button type="submit" disabled={submitting} className="btn-primary min-w-[220px] text-center disabled:opacity-70">
+            <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
               {submitting ? copy.submitting : copy.submit}
             </button>
             {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}

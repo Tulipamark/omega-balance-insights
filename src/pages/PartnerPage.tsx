@@ -2365,7 +2365,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section id="partner-application" className="section-padding bg-section-alt">
+      <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
         <motion.div {...sectionMotion} className="container-narrow">
           <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
             <h3 className="text-lg font-semibold tracking-tight">{applicationDecisionByLang[lang].title}</h3>
@@ -2416,7 +2416,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               <p className="mt-3 text-sm leading-7 text-subtle md:text-base">{page.form.successBody}</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-sm md:p-10">
+            <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
               <div className="grid gap-5 md:grid-cols-2">
                 <Field label={page.form.name}><Input required value={formData.name} onChange={(e) => updateField("name", e.target.value)} className="h-12 rounded-xl" /></Field>
                 <Field label={page.form.email}><Input required type="email" value={formData.email} onChange={(e) => updateField("email", e.target.value)} className="h-12 rounded-xl" /></Field>
@@ -2443,7 +2443,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               </div>
 
               <div className="mt-8 flex justify-end">
-                <button type="submit" disabled={submitting} className="btn-primary min-w-[220px] text-center disabled:opacity-70">
+                <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
                   {submitting ? submittingLabelByLang[lang] : page.form.submit}
                 </button>
               </div>
