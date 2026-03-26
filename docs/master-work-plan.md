@@ -100,7 +100,7 @@ Målet just nu är att få hela funneln att fungera som ett operativt system:
 
 - [ ] skapa tydligare stuck-lists per steg i admin
 - [ ] visa vilka leads som är klara men ännu inte onboardade
-- [ ] visa vilka partners som har setup men ingen aktivitet
+- [x] visa vilka partners som har setup men ingen aktivitet
 - [ ] visa vilka partners som rör sig mot duplicering
 
 ### UX Och Conversion

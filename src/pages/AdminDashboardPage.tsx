@@ -48,6 +48,30 @@ function formatWholeNumber(value: number) {
   return new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(value);
 }
 
+function formatElapsedDays(from: string | null | undefined) {
+  if (!from) {
+    return "-";
+  }
+
+  const timestamp = new Date(from).getTime();
+  if (!Number.isFinite(timestamp)) {
+    return "-";
+  }
+
+  const diffMs = Date.now() - timestamp;
+  const diffDays = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+
+  if (diffDays === 0) {
+    return "I dag";
+  }
+
+  if (diffDays === 1) {
+    return "1 dag";
+  }
+
+  return `${formatWholeNumber(diffDays)} dagar`;
+}
+
 function formatDuration(seconds: number | null) {
   if (seconds === null) {
     return "-";
@@ -931,6 +955,25 @@ const AdminDashboardPage = () => {
     () => new Map((data?.partners || []).map((partner) => [partner.partnerId, partner.partnerName])),
     [data?.partners],
   );
+  const partnersWithSetupNoActivity = useMemo(() => {
+    if (!data?.partners?.length || !growthCompassRows.length) {
+      return [];
+    }
+
+    const growthByPartnerId = new Map(growthCompassRows.map((row) => [row.partnerId, row]));
+
+    return data.partners
+      .map((partner) => ({
+        partner,
+        growth: growthByPartnerId.get(partner.partnerId) || null,
+      }))
+      .filter(({ partner, growth }) => partner.zzLinksReady && growth?.status === "inactive")
+      .sort((a, b) => {
+        const aTime = new Date(a.partner.verifiedAt || a.partner.createdAt).getTime();
+        const bTime = new Date(b.partner.verifiedAt || b.partner.createdAt).getTime();
+        return aTime - bTime;
+      });
+  }, [data?.partners, growthCompassRows]);
   const sortedPartnerApplications = data
     ? [...data.partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
@@ -1756,6 +1799,58 @@ const AdminDashboardPage = () => {
                 ))}
               </div>
             </div>
+          </DashboardSection> : null}
+
+          {showPartners ? <DashboardSection
+            title="Setup klar men ingen aktivitet"
+            description="Partners som har alla tre ZZ-länkar på plats men ännu saknar första aktiva signal i Tillväxtkompassen."
+          >
+            <div className="mb-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Behöver aktivering nu</p>
+                <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(partnersWithSetupNoActivity.length)}</p>
+                <p className="mt-2 text-sm text-subtle">Komplett setup finns, men första verkliga signal saknas fortfarande.</p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Äldsta väntan</p>
+                <p className="mt-3 text-3xl font-semibold text-foreground">
+                  {partnersWithSetupNoActivity[0] ? formatElapsedDays(partnersWithSetupNoActivity[0].partner.verifiedAt || partnersWithSetupNoActivity[0].partner.createdAt) : "-"}
+                </p>
+                <p className="mt-2 text-sm text-subtle">Tid sedan länkarna var klara eller partnern lades till i portalen.</p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Fokus nu</p>
+                <p className="mt-3 text-sm leading-6 text-foreground/85">
+                  Följ upp första inloggning, första delade länk och första verkliga kund- eller partnerdialog innan setup bara blir passiv.
+                </p>
+              </div>
+            </div>
+
+            <DataTable
+              columns={["Partner", "Sponsor", "Länkar klara", "Väntat", "Nästa steg", "Åtgärd"]}
+              rows={partnersWithSetupNoActivity.map(({ partner }) => [
+                <div key={`${partner.partnerId}-name`}>
+                  <p className="font-medium text-foreground">{partner.partnerName}</p>
+                  <p className="text-xs text-subtle">{partner.email}</p>
+                </div>,
+                <span key={`${partner.partnerId}-sponsor`}>{partner.sponsorName || "Direkt"}</span>,
+                <span key={`${partner.partnerId}-verified`}>{formatDate(partner.verifiedAt || partner.createdAt)}</span>,
+                <span key={`${partner.partnerId}-waiting`}>{formatElapsedDays(partner.verifiedAt || partner.createdAt)}</span>,
+                <span key={`${partner.partnerId}-action`} className="max-w-[280px] text-sm text-subtle">
+                  Säkerställ ett konkret första steg: inloggning, delad länk eller bokad uppföljning denna vecka.
+                </span>,
+                <Button
+                  key={`${partner.partnerId}-open-links`}
+                  type="button"
+                  variant="outline"
+                  className="rounded-xl"
+                  onClick={() => setSelectedPartnerForLinks(partner)}
+                >
+                  Öppna länkar
+                </Button>,
+              ])}
+              emptyState="Ingen partner med komplett setup står still just nu."
+            />
           </DashboardSection> : null}
 
           {showPartners ? <DashboardSection title="Partners" description="Aktiva partners med referral-kod, sponsor, enkel pipelinebild och signal om ZZ-länkarna är klara.">
