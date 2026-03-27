@@ -1202,6 +1202,93 @@ const AdminDashboardPage = () => {
       .filter((lead) => lead.status !== "active" && getLeadReviewReady(lead))
       .sort((a, b) => new Date(a.updated_at || a.created_at).getTime() - new Date(b.updated_at || b.created_at).getTime());
   }, [data?.partnerApplications]);
+  const onboardingDecisionSummary = useMemo(() => {
+    const applications = data?.partnerApplications || [];
+    const growthByPartnerName = new Map(growthCompassRows.map((row) => [row.partnerName.toLowerCase(), row]));
+    const partnerByEmail = new Map((data?.partners || []).map((partner) => [partner.email.toLowerCase(), partner]));
+
+    const needsReview = applications.filter((lead) => {
+      const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+      return lead.status !== "active" && !hasInternalReview;
+    });
+    const waitingForZz = applications.filter((lead) => {
+      const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+      return lead.status !== "active" && hasInternalReview && !getLeadZinzinoVerified(lead);
+    });
+    const waitingForIntent = applications.filter((lead) => {
+      const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
+      return lead.status !== "active" && hasInternalReview && getLeadZinzinoVerified(lead) && !getLeadTeamIntentConfirmed(lead);
+    });
+    const readyNow = applications.filter((lead) => lead.status !== "active" && getLeadReviewReady(lead));
+    const onboardingNeedsActivation = applications
+      .filter((lead) => lead.status === "active")
+      .map((lead) => {
+        const partner = partnerByEmail.get(lead.email.toLowerCase()) || null;
+        const growth = growthByPartnerName.get(lead.name.toLowerCase()) || null;
+        return { lead, partner, growth };
+      })
+      .filter(({ partner, growth }) => {
+        if (!partner) {
+          return true;
+        }
+
+        return !partner.zzLinksReady || growth?.status === "inactive" || !growth;
+      });
+
+    const oldestDate = (leads: Lead[]) => leads[0]?.updated_at || leads[0]?.created_at || null;
+    const topPriorityLead =
+      sortedPartnerApplications.find((lead) => lead.status !== "active") ||
+      applications.find((lead) => lead.status !== "active") ||
+      null;
+
+    const actionQueue = [
+      {
+        key: "review",
+        label: "Första bedömning",
+        count: needsReview.length,
+        oldest: oldestDate(needsReview),
+        nextStep: "Gör en snabb intern bedömning och sätt tydlig prioritet på de varma kandidaterna.",
+      },
+      {
+        key: "zz",
+        label: "Väntar på ZZ-verifiering",
+        count: waitingForZz.length,
+        oldest: oldestDate(waitingForZz),
+        nextStep: "Följ upp via samtal eller Zoom tills ZZ-join är tydligt bekräftad.",
+      },
+      {
+        key: "intent",
+        label: "Väntar på build intent",
+        count: waitingForIntent.length,
+        oldest: oldestDate(waitingForIntent),
+        nextStep: "Be om ett tydligt ja eller nej till att bygga med er modell innan portalstart.",
+      },
+      {
+        key: "ready",
+        label: "Redo för onboarding",
+        count: readyNow.length,
+        oldest: oldestDate(readyNow),
+        nextStep: "Skapa teammedlem snabbt medan relationen fortfarande är varm och beslutad.",
+      },
+      {
+        key: "activation",
+        label: "Behöver första aktivering",
+        count: onboardingNeedsActivation.length,
+        oldest: onboardingNeedsActivation[0]?.lead.updated_at || onboardingNeedsActivation[0]?.lead.created_at || null,
+        nextStep: "Säkra första inloggning, länkar och ett konkret första steg samma vecka.",
+      },
+    ].filter((item) => item.count > 0);
+
+    return {
+      needsReview,
+      waitingForZz,
+      waitingForIntent,
+      readyNow,
+      onboardingNeedsActivation,
+      topPriorityLead,
+      actionQueue,
+    };
+  }, [data?.partnerApplications, data?.partners, growthCompassRows, sortedPartnerApplications]);
   const adminStuckLists = useMemo(() => {
     if (!data || !partnerFunnelInsights) {
       return [];
@@ -2109,6 +2196,54 @@ const AdminDashboardPage = () => {
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Teammedlemmar</p>
                 <p className="mt-3 text-3xl font-semibold text-foreground">{pipeline?.portal_partner_users ?? 0}</p>
                 <p className="mt-2 text-sm text-subtle">Partnerkonton i portalen för dem som faktiskt arbetar i vår modell.</p>
+              </div>
+            </div>
+
+            <div className="mb-6 rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Varmast just nu</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {onboardingDecisionSummary.topPriorityLead?.name || "-"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {onboardingDecisionSummary.topPriorityLead
+                      ? getLeadFollowUpRecommendation(onboardingDecisionSummary.topPriorityLead)
+                      : "Ingen tydlig kandidat sticker ut just nu."}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa låsta steg</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {onboardingDecisionSummary.actionQueue[0]?.label || "-"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {onboardingDecisionSummary.actionQueue[0]
+                      ? `${formatWholeNumber(onboardingDecisionSummary.actionQueue[0].count)} poster ligger här just nu.`
+                      : "Inga tydliga blockers i onboardingflödet just nu."}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Fokus denna rytm</p>
+                  <p className="mt-3 text-sm leading-6 text-foreground/85">
+                    Flytta kandidater ett steg i taget: bedöm snabbt, verifiera ZZ, bekräfta build intent och onboarda direkt när allt är klart.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <DataTable
+                  columns={["Kö", "Antal", "Äldst väntan", "Nästa steg"]}
+                  rows={onboardingDecisionSummary.actionQueue.map((item) => [
+                    <span key={`${item.key}-label`} className="font-medium text-foreground">{item.label}</span>,
+                    <span key={`${item.key}-count`}>{formatWholeNumber(item.count)}</span>,
+                    <span key={`${item.key}-oldest`}>{formatElapsedDays(item.oldest)}</span>,
+                    <span key={`${item.key}-next`} className="max-w-[320px] text-sm text-subtle">{item.nextStep}</span>,
+                  ])}
+                  emptyState="Inga onboardingköer sticker ut just nu."
+                />
               </div>
             </div>
 
