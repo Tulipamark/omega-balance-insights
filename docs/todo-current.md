@@ -45,6 +45,15 @@ It is meant to stay practical:
 
 ## Next Priorities
 
+### Right Now For Live
+
+Keep the next passes narrow and real:
+
+- run one manual customer flow and one manual partner flow against live data
+- verify admin shows attribution, session, and next-step signals as expected
+- keep fixing only issues that would confuse a real visitor, partner, or admin
+- avoid broad new feature work until the live usage pass stays clean
+
 ### 1. Candidate -> Team Member
 
 Make this more concrete and measurable.

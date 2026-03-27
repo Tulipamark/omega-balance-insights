@@ -154,4 +154,36 @@ describe("ContactPage", () => {
       }),
     );
   });
+  it("ignores repeated submits while the contact request is pending", async () => {
+    let resolveLead!: (value: { ok: true; mode: string; lead_id: string }) => void;
+    upsertLeadMock.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveLead = resolve;
+      }),
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/sv/kontakt"]}>
+        <Routes>
+          <Route path="/:lang/kontakt" element={<ContactPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
+    fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
+    fireEvent.change(screen.getByLabelText("Meddelande"), { target: { value: "Jag vill veta mer." } });
+
+    const submitButton = screen.getByRole("button", { name: /Skicka meddelande/i });
+    fireEvent.click(submitButton);
+    fireEvent.click(submitButton);
+
+    expect(await screen.findByRole("button", { name: /Skickar/i })).toBeDisabled();
+    expect(upsertLeadMock).toHaveBeenCalledTimes(1);
+
+    resolveLead({ ok: true, mode: "created", lead_id: "lead-4" });
+
+    expect(await screen.findByText(/Tack, ditt meddelande .* Vi .* snart vi kan\./i)).toBeInTheDocument();
+    expect(upsertLeadMock).toHaveBeenCalledTimes(1);
+  });
 });

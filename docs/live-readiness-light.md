@@ -90,6 +90,16 @@ We are ready enough for real usage when:
 
 If one of those is still weak, we are not ready enough yet.
 
+## Already Hardened
+
+These parts should now be treated as baseline protections, not optional polish:
+
+- customer, contact, and partner forms ignore rapid duplicate submits
+- admin has clearer decision layers for onboarding, activation, and traffic
+- attribution survives better across first touch, last touch, and session stitching
+- optional traffic tracking is gated behind consent
+- dashboard routes are split so the live app loads lighter than before
+
 ## Small Sharp Usage Pass
 
 Before real traffic, run one small manual check:

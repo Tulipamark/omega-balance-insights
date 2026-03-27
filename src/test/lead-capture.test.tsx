@@ -194,4 +194,35 @@ describe("LeadCaptureSection", () => {
 
     expect(await screen.findByText("This partner is not verified for routing.")).toBeInTheDocument();
   });
+  it("ignores repeated submits while the consultation request is pending", async () => {
+    let resolveRedirect!: (value: { ok: true; destination_url: string }) => void;
+    trackClickAndGetRedirectMock.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveRedirect = resolve;
+      }),
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/sv?ref=ELIN2026"]}>
+        <LeadCaptureSection lang="sv" />
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
+    fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
+
+    const submitButton = screen.getByRole("button", { name: /Boka konsultation/i });
+    fireEvent.click(submitButton);
+    fireEvent.click(submitButton);
+
+    expect(await screen.findByRole("button", { name: /Skickar/i })).toBeDisabled();
+    await waitFor(() => expect(upsertLeadMock).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(trackClickAndGetRedirectMock).toHaveBeenCalledTimes(1));
+
+    resolveRedirect({ ok: true, destination_url: "https://consult.example/elin" });
+
+    await waitFor(() => expect(assignMock).toHaveBeenCalledWith("https://consult.example/elin"));
+    expect(upsertLeadMock).toHaveBeenCalledTimes(1);
+    expect(trackClickAndGetRedirectMock).toHaveBeenCalledTimes(1);
+  });
 });
