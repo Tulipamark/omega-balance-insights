@@ -29,7 +29,7 @@ function makeLead(overrides: Partial<Lead>): Lead {
     full_name: overrides.full_name || null,
     type: overrides.type || "partner_lead",
     lead_type: overrides.lead_type || "partner",
-    lead_source: overrides.lead_source || "contact_form",
+    lead_source: overrides.lead_source || "partner_form",
     source_page: overrides.source_page || "/sv/partners",
     referral_code: overrides.referral_code || "OMEGATEAM",
     referred_by_user_id: overrides.referred_by_user_id || "user-admin",
