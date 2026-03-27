@@ -1202,6 +1202,16 @@ const AdminDashboardPage = () => {
       .filter((lead) => lead.status !== "active" && getLeadReviewReady(lead))
       .sort((a, b) => new Date(a.updated_at || a.created_at).getTime() - new Date(b.updated_at || b.created_at).getTime());
   }, [data?.partnerApplications]);
+  const sortedPartnerApplications = data
+    ? [...data.partnerApplications].sort((a, b) => {
+        const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
+        if (scoreDiff !== 0) {
+          return scoreDiff;
+        }
+
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      })
+    : [];
   const onboardingDecisionSummary = useMemo(() => {
     const applications = data?.partnerApplications || [];
     const growthByPartnerName = new Map(growthCompassRows.map((row) => [row.partnerName.toLowerCase(), row]));
@@ -1309,16 +1319,6 @@ const AdminDashboardPage = () => {
         .slice(0, 3),
     }));
   }, [data, partnerFunnelInsights]);
-  const sortedPartnerApplications = data
-    ? [...data.partnerApplications].sort((a, b) => {
-        const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
-        if (scoreDiff !== 0) {
-          return scoreDiff;
-        }
-
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      })
-    : [];
   const selectedLeadBlockers = selectedLead
     ? [
         ...(partnerPriority !== "none" || adminNote.trim() ? [] : ["Sätt prioritet eller intern bedömning"]),
