@@ -114,4 +114,12 @@ export type Copy = {
     terms: string;
     contact: string;
   };
+  cookie: {
+    title: string;
+    message: string;
+    necessary: string;
+    optional: string;
+    accept: string;
+    decline: string;
+  };
 };

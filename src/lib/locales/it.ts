@@ -154,4 +154,12 @@ export const it: Copy = {
     terms: "Termini",
     contact: "Contatti",
   },
+  cookie: {
+    title: "Cookie e consenso",
+    message: "Usiamo archiviazione locale e cookie necessari per referral link, sessioni e funzionalita di base. La misurazione facoltativa del traffico parte solo dopo il tuo consenso.",
+    necessary: "Necessario per referral, sessioni e funzioni di base.",
+    optional: "Facoltativo per page view e miglioramento dei flussi.",
+    accept: "Accetta la misurazione facoltativa",
+    decline: "Solo necessario",
+  },
 };

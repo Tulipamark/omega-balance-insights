@@ -154,4 +154,12 @@ export const en: Copy = {
     terms: "Terms",
     contact: "Contact",
   },
+  cookie: {
+    title: "Cookies and consent",
+    message: "We use necessary local storage and cookies for referral links, sessions, and core functionality. Optional traffic measurement starts only after your consent.",
+    necessary: "Necessary for referrals, sessions, and core functionality.",
+    optional: "Optional for page views and flow improvement.",
+    accept: "Accept optional measurement",
+    decline: "Necessary only",
+  },
 };

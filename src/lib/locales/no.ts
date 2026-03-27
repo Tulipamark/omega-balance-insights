@@ -154,4 +154,12 @@ export const no: Copy = {
     terms: "Vilkår",
     contact: "Kontakt",
   },
+  cookie: {
+    title: "Informasjonskapsler og samtykke",
+    message: "Vi bruker nodvendig lokal lagring og informasjonskapsler for referral-lenker, okter og grunnleggende funksjon. Valgfri trafikkmaling starter forst etter ditt samtykke.",
+    necessary: "Nodvendig for referral, okter og grunnfunksjon.",
+    optional: "Valgfritt for sidevisninger og forbedring av flyter.",
+    accept: "Godta valgfri maling",
+    decline: "Bare nodvendig",
+  },
 };

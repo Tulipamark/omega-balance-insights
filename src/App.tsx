@@ -17,6 +17,8 @@ import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
 import { isSupabaseConfigured } from "./integrations/supabase/client";
+import { CookieConsentBanner } from "./components/CookieConsentBanner";
+import { useCookieConsent } from "./hooks/use-cookie-consent";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <CookieConsentBoundary />
         <RecoveryRedirectBoundary />
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
@@ -80,6 +83,25 @@ function PartnerPageWrapper() {
 function ReferralTrackingBoundary() {
   useReferralTracking();
   return null;
+}
+
+function CookieConsentBoundary() {
+  const location = useLocation();
+  const { consentStatus, acceptOptionalTracking, declineOptionalTracking } = useCookieConsent();
+  const firstSegment = location.pathname.split("/").filter(Boolean)[0];
+  const lang = isSupportedLang(firstSegment) ? firstSegment : defaultLang;
+
+  if (consentStatus !== "pending") {
+    return null;
+  }
+
+  return (
+    <CookieConsentBanner
+      lang={lang}
+      onAccept={acceptOptionalTracking}
+      onDecline={declineOptionalTracking}
+    />
+  );
 }
 
 function RecoveryRedirectBoundary() {

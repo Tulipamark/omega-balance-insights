@@ -154,4 +154,12 @@ export const de: Copy = {
     terms: "Bedingungen",
     contact: "Kontakt",
   },
+  cookie: {
+    title: "Cookies und Einwilligung",
+    message: "Wir verwenden notwendige lokale Speicherung und Cookies fur Referral-Links, Sitzungen und Grundfunktionen. Optionale Traffic-Messung startet erst nach deiner Einwilligung.",
+    necessary: "Notwendig fur Referral, Sitzungen und Grundfunktion.",
+    optional: "Optional fur Seitenaufrufe und die Verbesserung von Ablaufen.",
+    accept: "Optionale Messung akzeptieren",
+    decline: "Nur Notwendiges",
+  },
 };

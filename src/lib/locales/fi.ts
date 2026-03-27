@@ -154,4 +154,12 @@ export const fi: Copy = {
     terms: "Ehdot",
     contact: "Yhteystiedot",
   },
+  cookie: {
+    title: "Evasteet ja suostumus",
+    message: "Kaytamme valttamatonta paikallista tallennusta ja evasteita referral-linkkeihin, sessioihin ja perustoimintoihin. Valinnainen liikennemittaus kaynnistyy vasta suostumuksesi jalkeen.",
+    necessary: "Valttamaton referral-linkeille, sessioille ja perustoiminnoille.",
+    optional: "Valinnainen sivunaytoille ja polkujen parantamiseen.",
+    accept: "Hyvaksy valinnainen mittaus",
+    decline: "Vain valttamaton",
+  },
 };

@@ -232,4 +232,12 @@ export const sv: Copy = {
     terms: "Villkor",
     contact: "Kontakt",
   },
+  cookie: {
+    title: "Cookies och samtycke",
+    message: "Vi använder nödvändig lokal lagring och cookies för referral-länkar, sessioner och grundläggande funktion. Valfri trafikmätning aktiveras först efter ditt samtycke.",
+    necessary: "Nödvändigt för referral, session och grundfunktion.",
+    optional: "Valfritt för sidvisningar och förbättring av flöden.",
+    accept: "Acceptera valfri mätning",
+    decline: "Bara nödvändigt",
+  },
 };

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { captureReferralVisit, getActiveReferralCode, getOrCreateSessionId, updateStoredReferralTouch } from "@/lib/referral";
+import { useCookieConsent } from "@/hooks/use-cookie-consent";
 
 const PAGE_VIEW_CACHE_KEY = "omega_page_view_cache";
 const PAGE_VIEW_DEDUP_WINDOW_MS = 1000 * 30;
@@ -39,12 +40,17 @@ function shouldLogPageView(pathname: string, search: string) {
 
 export function useReferralTracking() {
   const location = useLocation();
+  const { hasAcceptedOptionalTracking } = useCookieConsent();
 
   useEffect(() => {
     void captureReferralVisit(location.pathname, location.search);
     updateStoredReferralTouch(location.pathname, location.search);
 
-    if (!shouldTrackPageView(location.pathname) || !shouldLogPageView(location.pathname, location.search)) {
+    if (
+      !hasAcceptedOptionalTracking ||
+      !shouldTrackPageView(location.pathname) ||
+      !shouldLogPageView(location.pathname, location.search)
+    ) {
       return;
     }
 
@@ -57,5 +63,5 @@ export function useReferralTracking() {
         pageType: location.pathname.includes("/partners") ? "partner" : "customer",
       },
     });
-  }, [location.pathname, location.search]);
+  }, [hasAcceptedOptionalTracking, location.pathname, location.search]);
 }
