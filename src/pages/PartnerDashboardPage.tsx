@@ -807,6 +807,39 @@ const PartnerDashboardPage = () => {
     action: string;
     mode: "copy-link" | "links" | "leads" | "legal" | "focus";
   }>;
+  const firstLineFocusQueue = data
+    ? [
+        data.team[0]
+          ? {
+              key: `downline-${data.team[0].partnerId}`,
+              title: `Hjälp ${data.team[0].partnerName} vidare`,
+              summary: "Din närmaste first line ger störst hävstång just nu om du håller stödet nära nästa aktivitet.",
+              action: "Ta ett kort avstämningssamtal och landa i ett enda tydligt nästa steg denna vecka.",
+            }
+          : null,
+        {
+          key: "up-line-support",
+          title: data.sponsor ? `Ta stöd av ${data.sponsor.name}` : "Ta stöd av Omega Balance-teamet",
+          summary: data.sponsor
+            ? "När dialog eller uppföljning fastnar blir nästa steg ofta lättare om du tar stöd uppåt tidigt."
+            : "När du ligger nära toppen behöver du inte bära allt själv. Ta stöd uppåt så fort nästa steg blir oklart.",
+          action: "Be om hjälp i skarpa lägen, helst kopplat till en verklig kontakt eller ett konkret nästa steg.",
+        },
+        {
+          key: "duplicate-rhythm",
+          title: "Skydda dupliceringsrytmen",
+          summary: "Duplicering börjar när du hjälper någon annan till sitt första tydliga resultat, inte bara när du själv producerar mer.",
+          action: data.team.length
+            ? "Fokusera på en person i taget i din first line tills ni fått första tydliga signalen där."
+            : "När din första direkta partner kommer in, hjälp den personen igång innan du försöker bredda för mycket.",
+        },
+      ].filter(Boolean) as Array<{
+        key: string;
+        title: string;
+        summary: string;
+        action: string;
+      }>
+    : [];
   const matchesLeadFilter = (lead: Lead, filter: "all" | "urgent" | "active" | "new") => {
     if (filter === "all") {
       return true;
@@ -1578,6 +1611,21 @@ const PartnerDashboardPage = () => {
                         {duplicationRhythm.items.map((item) => (
                           <div key={item} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
                             <p className="text-sm leading-6 text-foreground">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {firstLineFocusQueue.length ? (
+                    <div className="mb-4 rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Arbeta med first line nu</p>
+                      <div className="mt-3 grid gap-3">
+                        {firstLineFocusQueue.map((item) => (
+                          <div key={item.key} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                            <p className="text-sm font-medium text-foreground">{item.title}</p>
+                            <p className="mt-2 text-sm leading-6 text-subtle">{item.summary}</p>
+                            <p className="mt-2 text-xs leading-5 text-foreground/80">{item.action}</p>
                           </div>
                         ))}
                       </div>
