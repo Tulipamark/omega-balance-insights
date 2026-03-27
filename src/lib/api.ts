@@ -1,4 +1,4 @@
-import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+﻿import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type {
   LeadFailureReason,
   OnboardPartnerFromLeadRequest,
@@ -18,11 +18,11 @@ import type {
 function getLeadErrorMessage(reason?: LeadFailureReason) {
   switch (reason) {
     case "partner_not_found":
-      return "Referral-koden kunde inte kopplas till någon partner.";
+      return "Referral-koden kunde inte kopplas till n\u00e5gon partner.";
     case "partner_not_verified":
-      return "Den här partnern är ännu inte verifierad för detta flödet.";
+      return "Den h\u00e4r partnern \u00e4r \u00e4nnu inte verifierad f\u00f6r detta fl\u00f6det.";
     case "invalid_email":
-      return "Vi kunde inte spara uppgifterna. Kontrollera e-postadressen och försök igen.";
+      return "Vi kunde inte spara uppgifterna. Kontrollera e-postadressen och f\u00f6rs\u00f6k igen.";
     default:
       return "Vi kunde inte spara uppgifterna just nu.";
   }
@@ -50,7 +50,7 @@ function getFallbackLeadErrorMessage(response: Response, payload: unknown) {
 
 function getBaseFunctionConfig() {
   if (!isSupabaseConfigured) {
-    throw new Error("Systemet är inte konfigurerat ännu.");
+    throw new Error("Systemet \u00e4r inte konfigurerat \u00e4nnu.");
   }
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -78,7 +78,7 @@ async function getProtectedFunctionHeaders() {
   const accessToken = session.data.session?.access_token;
 
   if (!accessToken) {
-    throw new Error("Du måste vara inloggad för att göra detta.");
+    throw new Error("Du m\u00e5ste vara inloggad f\u00f6r att g\u00f6ra detta.");
   }
 
   return {
@@ -103,7 +103,7 @@ export async function trackClickAndGetRedirect(payload: TrackClickRequest): Prom
   const data = (await response.json().catch(() => null)) as TrackClickResponse | null;
 
   if (!data) {
-    throw new Error("Vi kunde inte öppna rätt länk just nu.");
+    throw new Error("Vi kunde inte \u00f6ppna r\u00e4tt l\u00e4nk just nu.");
   }
 
   return data;
@@ -121,7 +121,7 @@ export async function trackVisit(payload: TrackVisitRequest): Promise<TrackVisit
   const data = (await response.json().catch(() => null)) as TrackVisitResponse | null;
 
   if (!response.ok || !data) {
-    throw new Error("Vi kunde inte registrera besöket just nu.");
+    throw new Error("Vi kunde inte registrera bes\u00f6ket just nu.");
   }
 
   return data;
@@ -139,7 +139,7 @@ export async function trackFunnelEvent(payload: TrackFunnelEventRequest): Promis
   const data = (await response.json().catch(() => null)) as TrackFunnelEventResponse | null;
 
   if (!response.ok || !data) {
-    throw new Error("Vi kunde inte registrera händelsen just nu.");
+    throw new Error("Vi kunde inte registrera h\u00e4ndelsen just nu.");
   }
 
   return data;
@@ -166,7 +166,7 @@ export async function upsertLead(payload: UpsertLeadRequest): Promise<UpsertLead
   if (!data) {
     throw new Error(
       response.ok
-        ? "Vi fick inget giltigt svar när vi försökte spara uppgifterna."
+        ? "Vi fick inget giltigt svar n\u00e4r vi f\u00f6rs\u00f6kte spara uppgifterna."
         : `Vi kunde inte spara uppgifterna just nu (${response.status}).`,
     );
   }
@@ -182,7 +182,7 @@ export async function onboardPartnerFromLead(
   payload: OnboardPartnerFromLeadRequest,
 ): Promise<OnboardPartnerFromLeadResponse> {
   if (!supabase) {
-    throw new Error("Systemet är inte konfigurerat ännu.");
+    throw new Error("Systemet \u00e4r inte konfigurerat \u00e4nnu.");
   }
 
   const {
@@ -210,7 +210,7 @@ export async function onboardPartnerFromLead(
   }
 
   if (!accessToken) {
-    throw new Error("Du måste vara inloggad för att skapa partnerkonto.");
+    throw new Error("Du m\u00e5ste vara inloggad f\u00f6r att skapa partnerkonto.");
   }
 
   const {
@@ -257,7 +257,7 @@ export async function updatePartnerLeadReview(
   payload: UpdatePartnerLeadReviewRequest,
 ): Promise<UpdatePartnerLeadReviewResponse> {
   if (!supabase) {
-    throw new Error("Systemet är inte konfigurerat ännu.");
+    throw new Error("Systemet \u00e4r inte konfigurerat \u00e4nnu.");
   }
 
   const {
@@ -285,7 +285,7 @@ export async function updatePartnerLeadReview(
   }
 
   if (!accessToken) {
-    throw new Error("Du måste vara inloggad för att göra detta.");
+    throw new Error("Du m\u00e5ste vara inloggad f\u00f6r att g\u00f6ra detta.");
   }
 
   const {

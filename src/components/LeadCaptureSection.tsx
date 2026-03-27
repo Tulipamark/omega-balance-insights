@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { upsertLead, trackClickAndGetRedirect } from "@/lib/api";
@@ -11,32 +11,32 @@ interface LeadCaptureSectionProps {
 }
 
 const referralErrorByLang: Record<Lang, string> = {
-  sv: "Bokningen kan bara fortsätta via en giltig referral-länk.",
+  sv: "Bokningen kan bara forts\u00e4tta via en giltig referral-l\u00e4nk.",
   no: "Bookingen kan bare fortsette via en gyldig referral-lenke.",
-  da: "Bookingen kan kun fortsætte via et gyldigt referral-link.",
+  da: "Bookingen kan kun forts\u00e6tte via et gyldigt referral-link.",
   fi: "Varaus voi jatkua vain kelvollisen referral-linkin kautta.",
   en: "The booking can only continue from a valid referral link.",
-  de: "Die Buchung kann nur über einen gültigen Referral-Link fortgesetzt werden.",
-  fr: "La réservation ne peut se poursuivre qu'à partir d'un lien de recommandation valide.",
-  it: "La prenotazione può continuare solo tramite un link referral valido.",
+  de: "Die Buchung kann nur \u00fcber einen g\u00fcltigen Referral-Link fortgesetzt werden.",
+  fr: "La r\u00e9servation ne peut se poursuivre qu'\u00e0 partir d'un lien de recommandation valide.",
+  it: "La prenotazione pu\u00f2 continuare solo tramite un link referral valido.",
 };
 
 const submitErrorByLang: Record<Lang, string> = {
-  sv: "Kunde inte skicka formuläret just nu.",
-  no: "Kunne ikke sende skjemaet akkurat nå.",
+  sv: "Kunde inte skicka formul\u00e4ret just nu.",
+  no: "Kunne ikke sende skjemaet akkurat n\u00e5.",
   da: "Kunne ikke sende formularen lige nu.",
-  fi: "Lomaketta ei voitu lähettää juuri nyt.",
+  fi: "Lomaketta ei voitu l\u00e4hett\u00e4\u00e4 juuri nyt.",
   en: "The form could not be submitted right now.",
   de: "Das Formular konnte gerade nicht gesendet werden.",
-  fr: "Le formulaire n'a pas pu être envoyé pour le moment.",
-  it: "Il modulo non può essere inviato in questo momento.",
+  fr: "Le formulaire n'a pas pu \u00eatre envoy\u00e9 pour le moment.",
+  it: "Il modulo non pu\u00f2 essere inviato in questo momento.",
 };
 
 const submittingLabelByLang: Record<Lang, string> = {
   sv: "Skickar...",
   no: "Sender...",
   da: "Sender...",
-  fi: "Lähetetään...",
+  fi: "L\u00e4hetet\u00e4\u00e4n...",
   en: "Submitting...",
   de: "Wird gesendet...",
   fr: "Envoi...",
