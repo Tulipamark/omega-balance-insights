@@ -14,16 +14,16 @@ import NotFound from "./pages/NotFound.tsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
-import DashboardLoginPage from "./pages/DashboardLoginPage.tsx";
-import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
-import PartnerDashboardPage from "./pages/PartnerDashboardPage.tsx";
-import PartnerLegalAcceptancePage from "./pages/PartnerLegalAcceptancePage.tsx";
 import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
 import { isSupabaseConfigured } from "./integrations/supabase/client";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
 
 const queryClient = new QueryClient();
+const DashboardLoginPage = React.lazy(() => import("./pages/DashboardLoginPage.tsx"));
+const AdminDashboardPage = React.lazy(() => import("./pages/AdminDashboardPage.tsx"));
+const PartnerDashboardPage = React.lazy(() => import("./pages/PartnerDashboardPage.tsx"));
+const PartnerLegalAcceptancePage = React.lazy(() => import("./pages/PartnerLegalAcceptancePage.tsx"));
 
 // Trigger rebuild for GitHub-linked preview environments.
 const App = () => (
@@ -34,30 +34,32 @@ const App = () => (
       <BrowserRouter>
         <RecoveryRedirectBoundary />
         <ReferralTrackingBoundary />
-        <Routes>
-          <Route path="/" element={<HomePageWrapper />} />
-          <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/integritet" element={<PrivacyPage />} />
-          <Route path="/villkor" element={<TermsPage />} />
-          <Route path="/kontakt" element={<ContactPage />} />
-          <Route path="/:lang/integritet" element={<PrivacyPage />} />
-          <Route path="/:lang/villkor" element={<TermsPage />} />
-          <Route path="/:lang/kontakt" element={<ContactPage />} />
-          <Route path="/dashboard" element={<DashboardIndexPage />} />
-          <Route path="/dashboard/login" element={<DashboardLoginPage />} />
-          <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
-          <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/admin/legal-preview" element={<ProtectedDashboardRoute requiredRole="admin"><PartnerLegalAcceptancePage previewMode /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/admin/:section" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/partner/legal" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerLegalAcceptancePage /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
-          <Route path="/:lang" element={<Index />} />
-          <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
-          <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <React.Suspense fallback={<RouteLoadingState />}>
+          <Routes>
+            <Route path="/" element={<HomePageWrapper />} />
+            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/integritet" element={<PrivacyPage />} />
+            <Route path="/villkor" element={<TermsPage />} />
+            <Route path="/kontakt" element={<ContactPage />} />
+            <Route path="/:lang/integritet" element={<PrivacyPage />} />
+            <Route path="/:lang/villkor" element={<TermsPage />} />
+            <Route path="/:lang/kontakt" element={<ContactPage />} />
+            <Route path="/dashboard" element={<DashboardIndexPage />} />
+            <Route path="/dashboard/login" element={<DashboardLoginPage />} />
+            <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
+            <Route path="/dashboard/admin" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
+            <Route path="/dashboard/admin/legal-preview" element={<ProtectedDashboardRoute requiredRole="admin"><PartnerLegalAcceptancePage previewMode /></ProtectedDashboardRoute>} />
+            <Route path="/dashboard/admin/:section" element={<ProtectedDashboardRoute requiredRole="admin"><AdminDashboardPage /></ProtectedDashboardRoute>} />
+            <Route path="/dashboard/partner/legal" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerLegalAcceptancePage /></ProtectedDashboardRoute>} />
+            <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
+            <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
+            <Route path="/:lang" element={<Index />} />
+            <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
+            <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </React.Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
@@ -148,6 +150,20 @@ function DashboardLoadingState({ admin }: { admin: boolean }) {
             </div>
           </div>
         ) : null}
+      </div>
+    </div>
+  );
+}
+
+function RouteLoadingState() {
+  return (
+    <div className="min-h-screen bg-background px-6 py-10">
+      <div className="mx-auto max-w-2xl rounded-[1.75rem] border border-border/70 bg-white/95 p-8 shadow-card">
+        <p className="text-sm uppercase tracking-[0.16em] text-muted-foreground">Laddar vy</p>
+        <h1 className="mt-3 text-2xl font-semibold text-foreground">Vi hämtar nästa del av appen...</h1>
+        <p className="mt-3 text-sm leading-6 text-subtle">
+          Första dashboard-laddningen är nu uppdelad i mindre delar för att hålla startsidan lättare.
+        </p>
       </div>
     </div>
   );
