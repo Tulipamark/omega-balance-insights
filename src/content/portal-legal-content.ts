@@ -1,56 +1,135 @@
-export const portalTermsSections = [
-  {
-    title: "Allmänt",
-    body: "Genom att använda portalen godkänner du dessa villkor. Vi förbehåller oss rätten att uppdatera innehållet vid behov.",
-  },
-  {
-    title: "Ålder och behörighet",
-    body: "Du måste vara minst 18 år och myndig för att få tillgång till OmegaBalance-portalen. Samma grundkrav gäller också för att kunna gå vidare som partner i Zinzino via vårt upplägg.",
-  },
-  {
-    title: "Portalens roll",
-    body: "OmegaBalance-portalen är ett internt teamlager för trafik, attribution, leadhantering, onboardingstöd och uppföljning. Den ersätter inte Zinzinos officiella plattform, struktur, rank eller kompensation.",
-  },
-  {
-    title: "Ansvar och användning",
-    body: "Du ansvarar för att använda portalen på ett korrekt och professionellt sätt. Innehållet är avsett som stöd i arbetet, inte som juridisk, medicinsk eller finansiell rådgivning.",
-  },
-  {
-    title: "Länkar och destinationer",
-    body: "Omega-länken används som det externa arbetslagret. Zinzino-länkarna bakom portalen ska vara korrekta och aktuella för respektive partner.",
-  },
-  {
-    title: "Kontakt",
-    body: "För frågor om portalvillkor eller användning, kontakta hello@insidebalance.eu.",
-  },
-] as const;
+import type { Lang } from "@/lib/i18n";
 
-export const portalPrivacySections = [
-  {
-    title: "Vilka uppgifter vi samlar in",
-    body: "När du använder portalen eller fyller i formulär kan vi behandla uppgifter som namn, e-postadress, telefonnummer, attribution, referral-data och annan information du själv väljer att dela.",
-  },
-  {
-    title: "Hur uppgifterna används",
-    body: "Vi använder uppgifterna för att hantera leads, attribution, uppföljning, onboarding och drift av portalen. Uppgifterna används också för att förbättra arbetsflöden och användarupplevelse.",
-  },
-  {
-    title: "Lagring och åtkomst",
-    body: "Vi sparar uppgifter så länge det behövs för portalens drift, uppföljning och lagliga skyldigheter. Åtkomst begränsas till relevanta användare och administratörer i systemet.",
-  },
-  {
-    title: "Dina rättigheter",
-    body: "Du kan begära utdrag, rättelse eller radering av personuppgifter samt invända mot viss behandling. Kontakta oss om du vill utöva någon av dina rättigheter.",
-  },
-  {
-    title: "Kontakt",
-    body: "Har du frågor om hur vi hanterar personuppgifter i portalen, kontakta hello@insidebalance.eu.",
-  },
-] as const;
+type LegalSection = {
+  title: string;
+  body: string;
+};
 
-export const portalNoticePoints = [
-  "Du måste vara minst 18 år och myndig för att få tillgång till portalen och gå vidare i partnerflödet.",
-  "Portalen är vårt interna teamlager och inte Zinzinos officiella plattform.",
-  "Zinzino ansvarar för officiell struktur, rank, placering, kvalificering och kompensation.",
-  "OmegaBalance ansvarar för vårt arbetslager kring trafik, attribution, leads, onboarding och teamstöd.",
-] as const;
+const termsByLang: Record<Lang, readonly LegalSection[]> = {
+  sv: [
+    { title: "Tillämpning", body: "Dessa villkor gäller för Omega Balance-webbplatsen, kontakt- och partnerformulär samt den interna portalen. Vid köp, partnerregistrering, ersättning, rank eller placering hos Zinzino gäller även Zinzinos egna villkor och tvingande lokala regler." },
+    { title: "Portalens roll", body: "Portalen är vårt interna arbetslager för trafik, attribution, leads, onboarding och teamstöd. Den ersätter inte Zinzinos officiella plattform och betyder inte att Omega Balance beslutar om Zinzinos struktur, kompensation eller formella partnerstatus." },
+    { title: "Användning och ansvar", body: "Du måste vara minst 18 år och rättsligt behörig för att använda portalen eller gå vidare i partnerflödet. Portalen får bara användas för legitim uppföljning, kommunikation och teamarbete. Innehållet är information och arbetsstöd, inte juridisk, medicinsk, skattemässig eller finansiell rådgivning." },
+    { title: "Externa tjänster, lokala regler och ändringar", body: "Vissa flöden leder vidare till externa tjänster som Zinzino eller våra driftleverantörer. Dessa tjänster har egna villkor. Tvingande regler i användarens land kan ge ytterligare rättigheter som gäller före motstridiga avtalsvillkor. Vi kan uppdatera villkoren när verksamhet, lagkrav eller plattform förändras. Frågor skickas till hello@insidebalance.eu." },
+  ],
+  no: [
+    { title: "Virkeområde", body: "Disse vilkårene gjelder for Omega Balance-nettstedet, kontakt- og partnerskjemaer samt den interne portalen. Ved kjøp, partnerregistrering, kompensasjon, rang eller plassering hos Zinzino gjelder også Zinzinos egne vilkår og ufravikelige lokale regler." },
+    { title: "Portalens rolle", body: "Portalen er vårt interne arbeidslag for trafikk, attribusjon, leads, onboarding og teamstøtte. Den erstatter ikke Zinzinos offisielle plattform og betyr ikke at Omega Balance avgjør Zinzinos struktur, kompensasjon eller formelle partnerstatus." },
+    { title: "Bruk og ansvar", body: "Du må være minst 18 år og rettslig kompetent til å bruke portalen eller gå videre i partnerløpet. Portalen skal bare brukes til legitim oppfølging, kommunikasjon og teamarbeid. Innholdet er informasjon og arbeidsstøtte, ikke juridisk, medisinsk, skattemessig eller finansiell rådgivning." },
+    { title: "Eksterne tjenester, lokale regler og endringer", body: "Noen flyter går videre til eksterne tjenester som Zinzino eller våre driftsleverandører. Disse tjenestene har egne vilkår. Ufravikelige regler i brukerens land kan gi ytterligere rettigheter som går foran motstridende avtaletekst. Vi kan oppdatere vilkårene når virksomheten, lovkravene eller plattformen endres. Spørsmål sendes til hello@insidebalance.eu." },
+  ],
+  da: [
+    { title: "Anvendelsesområde", body: "Disse vilkår gælder for Omega Balance-websitet, kontakt- og partnerformularer samt den interne portal. Ved køb, partnerregistrering, kompensation, rang eller placering hos Zinzino gælder også Zinzinos egne vilkår og ufravigelige lokale regler." },
+    { title: "Portalens rolle", body: "Portalen er vores interne arbejdslag for trafik, attribution, leads, onboarding og teamstøtte. Den erstatter ikke Zinzinos officielle platform og betyder ikke, at Omega Balance afgør Zinzinos struktur, kompensation eller formelle partnerstatus." },
+    { title: "Brug og ansvar", body: "Du skal være mindst 18 år og retligt myndig for at bruge portalen eller gå videre i partnerforløbet. Portalen må kun bruges til legitim opfølgning, kommunikation og teamarbejde. Indholdet er information og arbejdsstøtte, ikke juridisk, medicinsk, skattemæssig eller finansiel rådgivning." },
+    { title: "Eksterne tjenester, lokale regler og ændringer", body: "Nogle flows går videre til eksterne tjenester som Zinzino eller vores driftsleverandører. Disse tjenester har egne vilkår. Ufravigelige regler i brugerens land kan give yderligere rettigheder, som går forud for modstridende vilkår. Vi kan opdatere vilkårene, når forretningen, lovkrav eller platformen ændrer sig. Spørgsmål sendes til hello@insidebalance.eu." },
+  ],
+  fi: [
+    { title: "Soveltamisala", body: "Nämä ehdot koskevat Omega Balance -sivustoa, yhteydenotto- ja partnerilomakkeita sekä sisäistä portaalia. Ostoihin, partneriksi liittymiseen, korvauksiin, rankingiin tai sijoitteluun Zinzino-järjestelmässä sovelletaan lisäksi Zinzinoa koskevia ehtoja ja pakottavaa paikallista lainsäädäntöä." },
+    { title: "Portaalin rooli", body: "Portaali on sisäinen työkerroksemme liikenteelle, attribuutiolle, liideille, onboardingille ja tiimituen hallinnalle. Se ei korvaa Zinzino-ympäristön virallista alustaa eikä tarkoita, että Omega Balance päättäisi Zinzino-rakenteesta, korvauksista tai virallisesta partneristatuksesta." },
+    { title: "Käyttö ja vastuu", body: "Sinun tulee olla vähintään 18-vuotias ja oikeudellisesti kelpoinen voidaksesi käyttää portaalia tai edetä partneripolulla. Portaalia saa käyttää vain lailliseen seurantaan, viestintään ja tiimityöhön. Sisältö on tietoa ja työskentelyn tukea, ei oikeudellista, lääketieteellistä, vero- tai talousneuvontaa." },
+    { title: "Ulkoiset palvelut, paikalliset säännöt ja muutokset", body: "Osa poluista vie ulkoisiin palveluihin, kuten Zinzinolle tai palveluntarjoajillemme. Näillä palveluilla on omat ehtonsa. Pakottavat säännöt käyttäjän asuinmaassa voivat antaa lisäoikeuksia, jotka ovat ristiriitaisten sopimusehtojen edellä. Voimme päivittää ehtoja, kun toiminta, laki tai alusta muuttuu. Kysymykset voi lähettää osoitteeseen hello@insidebalance.eu." },
+  ],
+  en: [
+    { title: "Scope", body: "These terms apply to the Omega Balance website, contact and partner forms, and the internal portal. Purchases, partner registration, compensation, rank, or placement handled by Zinzino are also subject to Zinzino's own terms and any mandatory local laws that apply in the user's market." },
+    { title: "Role of the portal", body: "The portal is our internal layer for traffic, attribution, leads, onboarding, and team support. It does not replace Zinzino's official platform and must not be read as if Omega Balance decides Zinzino structure, compensation, or formal partner status." },
+    { title: "Use and responsibility", body: "You must be at least 18 years old and legally capable of using the portal or continuing in the partner flow. The portal may only be used for legitimate follow-up, communication, and team work. Content is provided as information and operational support, not legal, medical, tax, or financial advice." },
+    { title: "Third-party services, local rules, and changes", body: "Some journeys continue to external services such as Zinzino or our operating providers. Those services have their own terms. Mandatory rules in the user's country may grant additional rights that override conflicting contract wording. We may update these terms when our business, legal obligations, or platform change. Questions can be sent to hello@insidebalance.eu." },
+  ],
+  de: [
+    { title: "Geltungsbereich", body: "Diese Bedingungen gelten für die Omega Balance-Website, Kontakt- und Partnerformulare sowie das interne Portal. Für Käufe, Partnerregistrierung, Vergütung, Rang oder Platzierung bei Zinzino gelten zusätzlich Zinzinos eigene Bedingungen und zwingende lokale Vorschriften." },
+    { title: "Rolle des Portals", body: "Das Portal ist unsere interne Ebene für Traffic, Attribution, Leads, Onboarding und Teamunterstützung. Es ersetzt nicht Zinzinos offizielle Plattform und bedeutet nicht, dass Omega Balance über Zinzino-Struktur, Vergütung oder formellen Partnerstatus entscheidet." },
+    { title: "Nutzung und Verantwortung", body: "Du musst mindestens 18 Jahre alt und rechtlich geschäftsfähig sein, um das Portal zu nutzen oder im Partnerprozess weiterzugehen. Das Portal darf nur für legitime Nachverfolgung, Kommunikation und Teamarbeit genutzt werden. Die Inhalte dienen als Information und operative Unterstützung, nicht als Rechts-, Medizin-, Steuer- oder Finanzberatung." },
+    { title: "Drittanbieter, lokale Regeln und Änderungen", body: "Einige Abläufe führen zu externen Diensten wie Zinzino oder unseren Betriebsdienstleistern. Diese Dienste haben eigene Bedingungen. Zwingende Regeln im Land des Nutzers können zusätzliche Rechte gewähren, die widersprechenden Vertragstexten vorgehen. Wir können diese Bedingungen anpassen, wenn sich Geschäft, Rechtslage oder Plattform ändern. Fragen gehen an hello@insidebalance.eu." },
+  ],
+  fr: [
+    { title: "Champ d'application", body: "Ces conditions s'appliquent au site Omega Balance, aux formulaires de contact et de partenariat ainsi qu'au portail interne. Les achats, l'inscription partenaire, la rémunération, le rang ou le placement gérés par Zinzino restent soumis aux propres conditions de Zinzino et aux règles locales impératives applicables." },
+    { title: "Rôle du portail", body: "Le portail constitue notre couche interne pour le trafic, l'attribution, les leads, l'onboarding et le support d'équipe. Il ne remplace pas la plateforme officielle de Zinzino et ne signifie pas qu'Omega Balance décide de la structure, de la rémunération ou du statut partenaire officiel chez Zinzino." },
+    { title: "Utilisation et responsabilité", body: "Vous devez avoir au moins 18 ans et la capacité juridique nécessaire pour utiliser le portail ou poursuivre dans le parcours partenaire. Le portail ne peut être utilisé que pour un suivi légitime, la communication et le travail d'équipe. Le contenu est fourni comme information et appui opérationnel, non comme conseil juridique, médical, fiscal ou financier." },
+    { title: "Services tiers, règles locales et modifications", body: "Certains parcours se poursuivent vers des services externes comme Zinzino ou nos prestataires techniques. Ces services ont leurs propres conditions. Les règles impératives du pays de l'utilisateur peuvent accorder des droits supplémentaires qui prévalent sur un texte contractuel contraire. Nous pouvons mettre à jour ces conditions lorsque l'activité, les obligations légales ou la plateforme évoluent. Les questions peuvent être envoyées à hello@insidebalance.eu." },
+  ],
+  it: [
+    { title: "Ambito di applicazione", body: "Queste condizioni si applicano al sito Omega Balance, ai moduli di contatto e partnership e al portale interno. Acquisti, registrazione partner, compensi, rank o posizionamento gestiti da Zinzino restano soggetti anche ai termini di Zinzino e alle norme locali imperative applicabili." },
+    { title: "Ruolo del portale", body: "Il portale è il nostro livello interno per traffico, attribution, lead, onboarding e supporto al team. Non sostituisce la piattaforma ufficiale di Zinzino e non significa che Omega Balance decida struttura, compensi o status partner formale in Zinzino." },
+    { title: "Uso e responsabilità", body: "Devi avere almeno 18 anni ed essere legalmente capace di usare il portale o proseguire nel percorso partner. Il portale può essere usato solo per follow-up legittimo, comunicazione e lavoro di team. I contenuti sono forniti come informazione e supporto operativo, non come consulenza legale, medica, fiscale o finanziaria." },
+    { title: "Servizi di terzi, regole locali e modifiche", body: "Alcuni flussi proseguono verso servizi esterni come Zinzino o i nostri fornitori tecnici. Tali servizi hanno propri termini. Le norme imperative del Paese dell'utente possono attribuire diritti ulteriori che prevalgono su clausole contrarie. Possiamo aggiornare queste condizioni quando cambiano attività, obblighi legali o piattaforma. Per domande scrivi a hello@insidebalance.eu." },
+  ],
+};
+
+const privacyByLang: Record<Lang, readonly LegalSection[]> = {
+  sv: [
+    { title: "Personuppgiftsansvarig och kontakt", body: "Omega Balance ansvarar för den behandling som beskrivs här för webbplatsen och portalen. Vid frågor om integritet eller om du vill utöva dina rättigheter kontaktar du hello@insidebalance.eu." },
+    { title: "Vilka uppgifter vi behandlar och varför", body: "Vi kan behandla namn, e-postadress, telefonnummer, innehåll du skickar i formulär, referral-kod, sessionsdata, sidvisningar, CTA-händelser, attribution, portalstatus och teknisk enhetsinformation. Uppgifterna används för att hantera kontakt- och partnerförfrågningar, driva portalen, följa upp attribution och onboarding, skydda systemet och förbättra arbetsflöden." },
+    { title: "Rättslig grund, mottagare och lagring", body: "Rättslig grund är normalt avtal eller åtgärder inför avtal, berättigat intresse för drift, säkerhet och uppföljning samt rättslig förpliktelse där lag kräver lagring. Uppgifter kan delas med våra tekniska leverantörer och med Zinzino när det behövs för processen du själv går vidare i. Om uppgifter överförs utanför EU/EES ska giltig överföringsmekanism användas. Uppgifter sparas bara så länge de behövs för aktiv dialog, portalåtkomst, onboarding, uppföljning, säkerhet och lagkrav." },
+    { title: "Cookies, tracking, rättigheter och klagomål", body: "Webbplatsen använder lokal lagring och cookies för att hålla ihop referral-länkar, sessioner och nödvändig portalfunktion. Vi använder också trafik- och funneldata för att förstå vilka sidor och flöden som fungerar. Om en viss kategori inte anses nödvändig enligt lokal ePrivacy- eller cookie-reglering ska den bara användas efter giltigt samtycke. Du kan ha rätt till tillgång, rättelse, radering, begränsning, dataportabilitet och att invända mot viss behandling enligt GDPR och lokal lag. Du kan också klaga till Integritetsskyddsmyndigheten (IMY) eller annan behörig tillsynsmyndighet i ditt land." },
+  ],
+  no: [
+    { title: "Behandlingsansvarlig og kontakt", body: "Omega Balance er ansvarlig for behandlingen som beskrives her for nettstedet og portalen. Ved spørsmål om personvern eller hvis du vil utøve rettighetene dine, kontakt hello@insidebalance.eu." },
+    { title: "Hvilke opplysninger vi behandler og hvorfor", body: "Vi kan behandle navn, e-postadresse, telefonnummer, innhold du sender i skjemaer, referral-kode, sesjonsdata, sidevisninger, CTA-hendelser, attribusjon, portalstatus og teknisk enhetsinformasjon. Opplysningene brukes til å håndtere kontakt- og partnerhenvendelser, drive portalen, følge opp attribusjon og onboarding, beskytte systemet og forbedre arbeidsflyter." },
+    { title: "Behandlingsgrunnlag, mottakere og lagring", body: "Behandlingsgrunnlaget er normalt avtale eller tiltak før avtale, berettiget interesse for drift, sikkerhet og oppfølging samt rettslig plikt der lov krever lagring. Opplysninger kan deles med våre tekniske leverandører og med Zinzino når det er nødvendig for prosessen du selv går videre i. Hvis opplysninger overføres utenfor EU/EØS, skal en gyldig overføringsmekanisme brukes. Opplysninger lagres bare så lenge de trengs for aktiv dialog, portaltilgang, onboarding, oppfølging, sikkerhet og lovkrav." },
+    { title: "Cookies, sporing, rettigheter og klage", body: "Nettstedet bruker lokal lagring og cookies for å holde referral-lenker, sesjoner og nødvendig portalfunksjon samlet. Vi bruker også trafikk- og funneldata for å forstå hvilke sider og flyter som virker. Hvis en kategori ikke anses nødvendig etter lokal ePrivacy- eller cookieregulering, skal den bare brukes etter gyldig samtykke. Du kan ha rett til innsyn, retting, sletting, begrensning, dataportabilitet og å protestere mot visse behandlinger etter GDPR og lokal lov. Du kan også klage til Datatilsynet eller annen kompetent tilsynsmyndighet i landet ditt." },
+  ],
+  da: [
+    { title: "Dataansvarlig og kontakt", body: "Omega Balance er ansvarlig for den behandling, der beskrives her for websitet og portalen. Ved spørgsmål om privatliv eller hvis du vil udøve dine rettigheder, kontakt hello@insidebalance.eu." },
+    { title: "Hvilke oplysninger vi behandler og hvorfor", body: "Vi kan behandle navn, e-mailadresse, telefonnummer, indhold du sender i formularer, referral-kode, sessionsdata, sidevisninger, CTA-hændelser, attribution, portalstatus og teknisk enhedsinformation. Oplysningerne bruges til at håndtere kontakt- og partnerhenvendelser, drive portalen, følge attribution og onboarding, beskytte systemet og forbedre arbejdsgange." },
+    { title: "Behandlingsgrundlag, modtagere og lagring", body: "Behandlingsgrundlaget er normalt aftale eller skridt før aftale, legitim interesse i drift, sikkerhed og opfølgning samt retlig forpligtelse, hvor loven kræver opbevaring. Oplysninger kan deles med vores tekniske leverandører og med Zinzino, når det er nødvendigt for det forløb, du selv går videre i. Hvis oplysninger overføres uden for EU/EØS, skal gyldig overførselsmekanisme bruges. Oplysninger opbevares kun så længe de er nødvendige for aktiv dialog, portaladgang, onboarding, opfølgning, sikkerhed og lovkrav." },
+    { title: "Cookies, tracking, rettigheder og klage", body: "Websitet bruger lokal lagring og cookies til at holde referral-links, sessioner og nødvendig portalfunktion samlet. Vi bruger også trafik- og funneldata til at forstå hvilke sider og flows der virker. Hvis en kategori ikke anses nødvendig efter lokal ePrivacy- eller cookieregulering, må den kun bruges efter gyldigt samtykke. Du kan have ret til indsigt, rettelse, sletning, begrænsning, dataportabilitet og at gøre indsigelse mod visse behandlinger efter GDPR og lokal ret. Du kan også klage til Datatilsynet eller en anden kompetent tilsynsmyndighed i dit land." },
+  ],
+  fi: [
+    { title: "Rekisterinpitäjä ja yhteystiedot", body: "Omega Balance vastaa tässä kuvatusta henkilötietojen käsittelystä sivustolla ja portaalissa. Tietosuojaan liittyvissä kysymyksissä tai oikeuksien käyttämiseksi voit ottaa yhteyttä osoitteeseen hello@insidebalance.eu." },
+    { title: "Mitä tietoja käsittelemme ja miksi", body: "Voimme käsitellä nimeä, sähköpostiosoitetta, puhelinnumeroa, lomakkeissa annettua sisältöä, referral-koodia, sessiotietoja, sivunäyttöjä, CTA-tapahtumia, attribuutiota, portaalistatusta ja teknisiä laitetietoja. Tietoja käytetään yhteydenottojen ja partnerihakemusten käsittelyyn, portaalin ylläpitoon, attribuution ja onboardingin seurantaan, järjestelmän suojaamiseen ja työnkulkujen parantamiseen." },
+    { title: "Käsittelyperusteet, vastaanottajat ja säilytys", body: "Käsittelyperuste on yleensä sopimus tai sopimusta edeltävät toimet, oikeutettu etu toiminnan, turvallisuuden ja seurannan kannalta sekä lakisääteinen velvoite, jos laki edellyttää säilytystä. Tietoja voidaan jakaa teknisille palveluntarjoajillemme ja Zinzinolle silloin, kun se on tarpeen siinä prosessissa, johon itse etenet. Jos tietoja siirretään EU:n tai ETA:n ulkopuolelle, käytössä tulee olla laillinen siirtomekanismi. Tietoja säilytetään vain niin kauan kuin niitä tarvitaan aktiiviseen yhteydenpitoon, portaalin käyttöön, onboardingiin, seurantaan, turvallisuuteen ja lakisääteisiin velvoitteisiin." },
+    { title: "Evästeet, seuranta, oikeudet ja valitus", body: "Sivusto käyttää paikallista tallennusta ja evästeitä referral-linkkien, sessioiden ja välttämättömän portaalitoiminnan ylläpitämiseen. Käytämme myös liikenne- ja funneldataa ymmärtääksemme, mitkä sivut ja polut toimivat. Jos jokin kategoria ei ole välttämätön paikallisen ePrivacy- tai evästesääntelyn mukaan, sitä saa käyttää vain pätevän suostumuksen jälkeen. Sinulla voi olla oikeus saada pääsy tietoihin, oikaista niitä, pyytää poistamista, rajoittaa käsittelyä, saada tiedot siirrettyä ja vastustaa tiettyä käsittelyä GDPR:n ja paikallisen lain mukaisesti. Voit myös tehdä valituksen tietosuojavaltuutetun toimistolle tai muulle toimivaltaiselle viranomaiselle maassasi." },
+  ],
+  en: [
+    { title: "Controller and contact", body: "Omega Balance is responsible for the processing described here for the website and portal. If you have privacy questions or want to exercise your rights, contact hello@insidebalance.eu." },
+    { title: "What data we process and why", body: "We may process your name, email address, phone number, content submitted in forms, referral code, session data, page views, CTA events, attribution data, portal status, and technical device information. This is used to handle contact and partner enquiries, operate the portal, follow attribution and onboarding, protect the service, and improve workflows." },
+    { title: "Legal bases, recipients, and retention", body: "The main legal bases are contract or steps prior to contract, legitimate interests in operating and securing the service, and legal obligations where records must be retained. Data may be shared with our technical providers and with Zinzino where needed for the process you choose to continue in. If data is transferred outside the EU or EEA, an appropriate transfer mechanism should apply. Data is kept only as long as needed for active dialogue, portal access, onboarding, follow-up, security, and legal requirements." },
+    { title: "Cookies, tracking, rights, and complaints", body: "The website uses local storage and cookies to keep referral links, sessions, and necessary portal functions working. We also use traffic and funnel data to understand which pages and journeys perform. If a category is not considered necessary under applicable ePrivacy or cookie rules, it should only be used after valid consent. Depending on your jurisdiction, you may have rights to access, rectification, erasure, restriction, portability, and objection under the GDPR and local law. You may also lodge a complaint with your local supervisory authority." },
+  ],
+  de: [
+    { title: "Verantwortlicher und Kontakt", body: "Omega Balance ist für die hier beschriebene Verarbeitung auf Website und Portal verantwortlich. Bei Fragen zum Datenschutz oder zur Ausübung deiner Rechte kontaktiere bitte hello@insidebalance.eu." },
+    { title: "Welche Daten wir verarbeiten und warum", body: "Wir können Namen, E-Mail-Adresse, Telefonnummer, Formularinhalte, Referral-Code, Sitzungsdaten, Seitenaufrufe, CTA-Ereignisse, Attributionsdaten, Portalstatus und technische Geräteinformationen verarbeiten. Dies dient der Bearbeitung von Kontakt- und Partneranfragen, dem Betrieb des Portals, der Nachverfolgung von Attribution und Onboarding, dem Schutz des Dienstes und der Verbesserung von Arbeitsabläufen." },
+    { title: "Rechtsgrundlagen, Empfänger und Speicherdauer", body: "Rechtsgrundlagen sind in der Regel Vertrag oder vorvertragliche Maßnahmen, berechtigte Interessen an Betrieb und Sicherheit sowie gesetzliche Pflichten, soweit Daten aufbewahrt werden müssen. Daten können an technische Dienstleister und an Zinzino weitergegeben werden, soweit dies für den von dir gewählten Prozess erforderlich ist. Bei Übermittlungen außerhalb der EU oder des EWR muss ein zulässiger Übermittlungsmechanismus gelten. Daten werden nur so lange gespeichert, wie sie für aktiven Dialog, Portalzugang, Onboarding, Nachverfolgung, Sicherheit und gesetzliche Anforderungen benötigt werden." },
+    { title: "Cookies, Tracking, Rechte und Beschwerden", body: "Die Website nutzt lokale Speicherung und Cookies, um Referral-Links, Sitzungen und notwendige Portalfunktionen zusammenzuhalten. Zusätzlich verwenden wir Traffic- und Funnel-Daten, um zu verstehen, welche Seiten und Abläufe funktionieren. Wenn eine Kategorie nach anwendbarem ePrivacy- oder Cookie-Recht nicht als notwendig gilt, darf sie nur nach wirksamer Einwilligung verwendet werden. Je nach Zuständigkeit kannst du Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch nach DSGVO und lokalem Recht haben. Außerdem kannst du dich an die zuständige Datenschutzaufsichtsbehörde wenden." },
+  ],
+  fr: [
+    { title: "Responsable du traitement et contact", body: "Omega Balance est responsable du traitement décrit ici pour le site et le portail. Pour toute question relative à la protection des données ou pour exercer vos droits, contactez hello@insidebalance.eu." },
+    { title: "Quelles données nous traitons et pourquoi", body: "Nous pouvons traiter votre nom, votre adresse e-mail, votre numéro de téléphone, le contenu envoyé dans les formulaires, le code de recommandation, les données de session, les pages vues, les événements CTA, les données d'attribution, le statut portail et des informations techniques sur l'appareil. Ces données servent à gérer les demandes de contact et de partenariat, faire fonctionner le portail, suivre l'attribution et l'onboarding, protéger le service et améliorer les flux de travail." },
+    { title: "Bases juridiques, destinataires et conservation", body: "Les bases juridiques principales sont le contrat ou les mesures précontractuelles, l'intérêt légitime pour exploiter et sécuriser le service, ainsi que les obligations légales lorsque des données doivent être conservées. Les données peuvent être partagées avec nos prestataires techniques et avec Zinzino lorsque cela est nécessaire au parcours que vous choisissez de poursuivre. En cas de transfert hors UE ou EEE, un mécanisme valable doit s'appliquer. Les données ne sont conservées que le temps nécessaire au dialogue actif, à l'accès au portail, à l'onboarding, au suivi, à la sécurité et aux obligations légales." },
+    { title: "Cookies, tracking, droits et réclamations", body: "Le site utilise le stockage local et des cookies pour maintenir le fonctionnement des liens de recommandation, des sessions et des fonctions nécessaires du portail. Nous utilisons aussi des données de trafic et de funnel pour comprendre quelles pages et quels parcours fonctionnent. Si une catégorie n'est pas considérée comme nécessaire au regard des règles applicables ePrivacy ou cookies, elle ne doit être utilisée qu'après un consentement valable. Selon votre situation, vous pouvez disposer de droits d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition au titre du RGPD et du droit local. Vous pouvez également déposer une réclamation auprès de la CNIL ou d'une autre autorité compétente." },
+  ],
+  it: [
+    { title: "Titolare del trattamento e contatto", body: "Omega Balance è responsabile del trattamento descritto qui per il sito e il portale. Per domande sulla privacy o per esercitare i tuoi diritti puoi contattare hello@insidebalance.eu." },
+    { title: "Quali dati trattiamo e perché", body: "Possiamo trattare nome, indirizzo e-mail, numero di telefono, contenuti inviati nei moduli, codice referral, dati di sessione, pagine viste, eventi CTA, dati di attribution, stato del portale e informazioni tecniche sul dispositivo. Questi dati servono a gestire richieste di contatto e partnership, far funzionare il portale, seguire attribution e onboarding, proteggere il servizio e migliorare i flussi di lavoro." },
+    { title: "Basi giuridiche, destinatari e conservazione", body: "Le principali basi giuridiche sono il contratto o misure precontrattuali, l'interesse legittimo a gestire e proteggere il servizio e gli obblighi legali quando alcuni dati devono essere conservati. I dati possono essere condivisi con fornitori tecnici e con Zinzino quando necessario per il percorso che scegli di proseguire. Se i dati sono trasferiti fuori dall'UE o dallo SEE, deve applicarsi un meccanismo di trasferimento valido. I dati sono conservati solo per il tempo necessario al dialogo attivo, all'accesso al portale, all'onboarding, al follow-up, alla sicurezza e agli obblighi legali." },
+    { title: "Cookie, tracking, diritti e reclami", body: "Il sito utilizza memorizzazione locale e cookie per mantenere funzionanti link referral, sessioni e funzioni necessarie del portale. Utilizziamo anche dati di traffico e funnel per capire quali pagine e percorsi funzionano. Se una categoria non è considerata necessaria ai sensi delle regole applicabili su ePrivacy o cookie, deve essere usata solo dopo consenso valido. A seconda della giurisdizione, puoi avere diritti di accesso, rettifica, cancellazione, limitazione, portabilità e opposizione ai sensi del GDPR e della legge locale. Puoi anche presentare reclamo al Garante o ad altra autorità competente." },
+  ],
+};
+
+const noticePointsByLang: Record<Lang, readonly string[]> = {
+  sv: ["Du måste vara minst 18 år och myndig för att få tillgång till portalen.", "Portalen är vårt interna teamlager och inte Zinzinos officiella plattform.", "Zinzino ansvarar för officiell struktur, rank, placering, kvalificering och kompensation.", "Omega Balance ansvarar för vårt arbetslager kring trafik, attribution, leads, onboarding och teamstöd."],
+  no: ["Du må være minst 18 år og myndig for å få tilgang til portalen.", "Portalen er vårt interne teamlag og ikke Zinzinos offisielle plattform.", "Zinzino har ansvar for offisiell struktur, rang, plassering, kvalifisering og kompensasjon.", "Omega Balance har ansvar for vårt arbeidslag rundt trafikk, attribusjon, leads, onboarding og teamstøtte."],
+  da: ["Du skal være mindst 18 år og myndig for at få adgang til portalen.", "Portalen er vores interne teamlag og ikke Zinzinos officielle platform.", "Zinzino har ansvar for officiel struktur, rang, placering, kvalificering og kompensation.", "Omega Balance har ansvar for vores arbejdslag omkring trafik, attribution, leads, onboarding og teamstøtte."],
+  fi: ["Sinun tulee olla vähintään 18-vuotias ja täysivaltainen saadaksesi pääsyn portaaliin.", "Portaali on sisäinen tiimikerroksemme eikä Zinzino-järjestelmän virallinen alusta.", "Zinzino vastaa virallisesta rakenteesta, rankingista, sijoittelusta, kvalifioinnista ja korvauksista.", "Omega Balance vastaa omasta työkerroksestamme liikenteen, attribuution, liidien, onboardingin ja tiimituen osalta."],
+  en: ["You must be at least 18 years old and legally competent to access the portal.", "The portal is our internal team layer and not Zinzino's official platform.", "Zinzino remains responsible for official structure, rank, placement, qualification, and compensation.", "Omega Balance is responsible for our operational layer around traffic, attribution, leads, onboarding, and team support."],
+  de: ["Du musst mindestens 18 Jahre alt und geschäftsfähig sein, um Zugang zum Portal zu erhalten.", "Das Portal ist unsere interne Team-Ebene und nicht Zinzinos offizielle Plattform.", "Zinzino bleibt für offizielle Struktur, Rang, Platzierung, Qualifikation und Vergütung verantwortlich.", "Omega Balance verantwortet unsere operative Ebene für Traffic, Attribution, Leads, Onboarding und Teamunterstützung."],
+  fr: ["Vous devez avoir au moins 18 ans et la capacité juridique nécessaire pour accéder au portail.", "Le portail constitue notre couche interne d'équipe et non la plateforme officielle de Zinzino.", "Zinzino reste responsable de la structure officielle, du rang, du placement, de la qualification et de la rémunération.", "Omega Balance est responsable de notre couche opérationnelle concernant le trafic, l'attribution, les leads, l'onboarding et le support d'équipe."],
+  it: ["Devi avere almeno 18 anni ed essere legalmente capace di accedere al portale.", "Il portale è il nostro livello interno di team e non la piattaforma ufficiale di Zinzino.", "Zinzino resta responsabile di struttura ufficiale, rank, posizionamento, qualificazione e compensi.", "Omega Balance è responsabile del nostro livello operativo per traffico, attribution, lead, onboarding e supporto al team."],
+};
+
+export function getPortalTermsSections(lang: Lang) {
+  return termsByLang[lang] || termsByLang.sv;
+}
+
+export function getPortalPrivacySections(lang: Lang) {
+  return privacyByLang[lang] || privacyByLang.sv;
+}
+
+export function getPortalNoticePoints(lang: Lang) {
+  return noticePointsByLang[lang] || noticePointsByLang.sv;
+}
+
+export const portalTermsSections = termsByLang.sv;
+export const portalPrivacySections = privacyByLang.sv;
+export const portalNoticePoints = noticePointsByLang.sv;

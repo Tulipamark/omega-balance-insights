@@ -1,7 +1,7 @@
 import type { AcceptPortalLegalRequest, AppUser } from "@/lib/omega-types";
 
-export const PORTAL_TERMS_VERSION = "2026-03-25";
-export const PORTAL_PRIVACY_VERSION = "2026-03-25";
+export const PORTAL_TERMS_VERSION = "2026-03-27";
+export const PORTAL_PRIVACY_VERSION = "2026-03-27";
 export const PORTAL_NOTICE_VERSION = "2026-03-25";
 
 export function hasAcceptedPortalLegal(user: AppUser | null | undefined) {
