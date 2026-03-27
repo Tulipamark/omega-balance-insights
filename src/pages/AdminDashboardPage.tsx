@@ -558,6 +558,45 @@ function getLeadUrgencyReason(lead: Lead) {
   return "Tidigt läge eller låg signal just nu. Håll kvar i listan utan att lägga först energi här.";
 }
 
+function getPartnerActivationUrgency(
+  status: "inactive" | "active" | "growing" | "duplicating" | "leader-track",
+  zzLinksReady: boolean,
+) {
+  if (!zzLinksReady) {
+    return "Säkra setup nu";
+  }
+
+  switch (status) {
+    case "inactive":
+      return "Aktivera nu";
+    case "active":
+      return "Följ upp nära";
+    case "growing":
+    case "duplicating":
+    case "leader-track":
+      return "Skydda momentum";
+    default:
+      return "Följ upp";
+  }
+}
+
+function getPartnerActivationUrgencyVariant(
+  status: "inactive" | "active" | "growing" | "duplicating" | "leader-track",
+  zzLinksReady: boolean,
+): "destructive" | "secondary" | "outline" | "default" {
+  switch (getPartnerActivationUrgency(status, zzLinksReady)) {
+    case "Säkra setup nu":
+    case "Aktivera nu":
+      return "destructive";
+    case "Skydda momentum":
+      return "default";
+    case "Följ upp nära":
+      return "secondary";
+    default:
+      return "outline";
+  }
+}
+
 function getGrowthCompassVariant(status: "inactive" | "active" | "growing" | "duplicating" | "leader-track") {
   switch (status) {
     case "inactive":
@@ -1409,6 +1448,48 @@ const AdminDashboardPage = () => {
         null,
     };
   }, [data?.partners, growthCompassRows, partnersMovingTowardDuplication, partnersWithSetupNoActivity]);
+  const topPartnerActivationList = useMemo(() => {
+    const setupRows = activationDecisionSummary.awaitingSetup
+      .slice(0, 2)
+      .map(({ row, partner }) => ({
+        key: `${row.partnerId}-setup`,
+        partnerId: row.partnerId,
+        partnerName: row.partnerName,
+        email: partner?.email || row.email,
+        urgency: getPartnerActivationUrgency(row.status, false),
+        urgencyVariant: getPartnerActivationUrgencyVariant(row.status, false),
+        reason: "Partnern har portalåtkomst men saknar länkar som gör att något konkret kan börja delas.",
+        nextStep: "Lägg in test-, shop- och partnerlänk direkt och säkra att första delningen verkligen blir av.",
+      }));
+
+    const inactiveRows = activationDecisionSummary.readyButInactive
+      .slice(0, 2)
+      .map(({ partner }) => ({
+        key: `${partner.partnerId}-inactive`,
+        partnerId: partner.partnerId,
+        partnerName: partner.partnerName,
+        email: partner.email,
+        urgency: getPartnerActivationUrgency("inactive", partner.zzLinksReady),
+        urgencyVariant: getPartnerActivationUrgencyVariant("inactive", partner.zzLinksReady),
+        reason: "Setup är klar men första verkliga signalen saknas fortfarande, så energin riskerar att stanna av tidigt.",
+        nextStep: "Följ upp inloggning, första delning eller första bokade dialog denna vecka.",
+      }));
+
+    const momentumRows = activationDecisionSummary.movingNow
+      .slice(0, 2)
+      .map(({ row, partner }) => ({
+        key: `${row.partnerId}-momentum`,
+        partnerId: row.partnerId,
+        partnerName: row.partnerName,
+        email: partner?.email || row.email,
+        urgency: getPartnerActivationUrgency(row.status, partner?.zzLinksReady ?? true),
+        urgencyVariant: getPartnerActivationUrgencyVariant(row.status, partner?.zzLinksReady ?? true),
+        reason: "Partnern visar redan rörelse och bör få tätare stöd så att first-line-momentum inte tappas.",
+        nextStep: row.nextBestAction,
+      }));
+
+    return [...setupRows, ...inactiveRows, ...momentumRows].slice(0, 6);
+  }, [activationDecisionSummary]);
   const leadsReadyButNotOnboarded = useMemo(() => {
     if (!data?.partnerApplications?.length) {
       return [];
@@ -2961,6 +3042,55 @@ const AdminDashboardPage = () => {
                     <span key={`${item.key}-next`} className="max-w-[320px] text-sm text-subtle">{item.nextStep}</span>,
                   ])}
                   emptyState="Inga aktiveringsköer sticker ut just nu."
+                />
+              </div>
+            </div>
+
+            <div className="mb-6 rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta dessa först efter onboarding</p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    Den korta arbetskön för partners som behöver setup, första aktivitet eller tätare stöd för att hålla dupliceringsrörelsen levande.
+                  </p>
+                </div>
+                <Badge variant="outline" className="rounded-full px-3 py-1">
+                  {formatWholeNumber(topPartnerActivationList.length)} poster
+                </Badge>
+              </div>
+
+              <div className="mt-6">
+                <DataTable
+                  columns={["Partner", "Nu-läge", "Varför först", "Nästa steg", "Åtgärd"]}
+                  rows={topPartnerActivationList.map((item) => [
+                    <div key={`${item.key}-name`}>
+                      <p className="font-medium text-foreground">{item.partnerName}</p>
+                      <p className="text-xs text-subtle">{item.email}</p>
+                    </div>,
+                    <Badge
+                      key={`${item.key}-urgency`}
+                      variant={item.urgencyVariant}
+                      className="rounded-full px-3 py-1"
+                    >
+                      {item.urgency}
+                    </Badge>,
+                    <span key={`${item.key}-reason`} className="max-w-[280px] text-sm text-subtle">
+                      {item.reason}
+                    </span>,
+                    <span key={`${item.key}-next`} className="max-w-[320px] text-sm text-subtle">
+                      {item.nextStep}
+                    </span>,
+                    <Button
+                      key={`${item.key}-open`}
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl"
+                      onClick={() => setSelectedGrowthCompassPartnerId(item.partnerId)}
+                    >
+                      Fokusera
+                    </Button>,
+                  ])}
+                  emptyState="Ingen partner behöver särskild aktiveringsprioritet just nu."
                 />
               </div>
             </div>
