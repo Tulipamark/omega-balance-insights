@@ -1559,6 +1559,17 @@ const AdminDashboardPage = () => {
       blockerEntries,
     };
   }, [data?.partnerApplications]);
+  const topApplicationFocusList = useMemo(() => {
+    return sortedPartnerApplications
+      .filter((lead) => getLeadUrgencyLabel(lead) !== "Kan vänta")
+      .slice(0, 5)
+      .map((lead) => ({
+        lead,
+        urgency: getLeadUrgencyLabel(lead),
+        reason: getLeadUrgencyReason(lead),
+        nextStep: getLeadFollowUpRecommendation(lead),
+      }));
+  }, [sortedPartnerApplications]);
   const adminStuckLists = useMemo(() => {
     if (!data || !partnerFunnelInsights) {
       return [];
@@ -2756,6 +2767,61 @@ const AdminDashboardPage = () => {
                 </div>
               </div>
             ) : null}
+
+            <div className="mb-6 rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta dessa först</p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    Den korta arbetskön för i dag. Här visas bara poster som faktiskt bör tas nu eller mycket snart.
+                  </p>
+                </div>
+                <Badge variant="outline" className="rounded-full px-3 py-1">
+                  {formatWholeNumber(topApplicationFocusList.length)} poster
+                </Badge>
+              </div>
+
+              <div className="mt-6">
+                <DataTable
+                  columns={["Sökande", "Nu-läge", "Varför först", "Nästa steg", "Åtgärd"]}
+                  rows={topApplicationFocusList.map((item) => [
+                    <div key={`${item.lead.id}-focus-name`}>
+                      <p className="font-medium text-foreground">{item.lead.name}</p>
+                      <p className="text-xs text-subtle">{item.lead.email}</p>
+                    </div>,
+                    <Badge
+                      key={`${item.lead.id}-focus-urgency`}
+                      variant={getLeadUrgencyVariant(item.lead)}
+                      className="rounded-full px-3 py-1"
+                    >
+                      {item.urgency}
+                    </Badge>,
+                    <span key={`${item.lead.id}-focus-reason`} className="max-w-[280px] text-sm text-subtle">
+                      {item.reason}
+                    </span>,
+                    <span key={`${item.lead.id}-focus-next`} className="max-w-[320px] text-sm text-subtle">
+                      {item.nextStep}
+                    </span>,
+                    <Button
+                      key={`${item.lead.id}-focus-open`}
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl"
+                      disabled={isDemo}
+                      onClick={() => {
+                        setSelectedLead(item.lead);
+                        setProvisionedPartner(null);
+                        setProvisionError(null);
+                        setZinzinoVerified(false);
+                      }}
+                    >
+                      Öppna
+                    </Button>,
+                  ])}
+                  emptyState="Inga akuta eller nära uppföljningar sticker ut just nu."
+                />
+              </div>
+            </div>
 
             <DataTable
               columns={["Sökande", "Portalsteg", "Prioritera nu", "Redo", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
