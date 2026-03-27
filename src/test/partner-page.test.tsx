@@ -160,4 +160,47 @@ describe("PartnerPage", () => {
     expect(await screen.findByText("Partneransökan behöver skickas via en giltig partnerlänk.")).toBeInTheDocument();
     expect(upsertLeadMock).not.toHaveBeenCalled();
   });
+  it("ignores repeated submits while a partner application is already sending", async () => {
+    getReferralAttributionMock.mockResolvedValue({
+      referralCode: "ELIN2026",
+      referredByUserId: "user-1",
+      landingPage: "/sv/partners",
+    });
+
+    let resolveLead: ((value: { ok: true; mode: string; lead_id: string }) => void) | null = null;
+    upsertLeadMock.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveLead = resolve;
+        }),
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/sv/partners"]}>
+        <PartnerPage lang="sv" />
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
+    fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
+    fireEvent.change(screen.getByLabelText("Telefonnummer"), { target: { value: "0701234567" } });
+    fireEvent.change(screen.getByLabelText(/varför är detta intressant/i), { target: { value: "Jag vill bygga långsiktigt." } });
+
+    const submitButton = screen.getByRole("button", { name: /skicka partnerförfrågan/i });
+    const form = submitButton.closest("form");
+
+    expect(form).not.toBeNull();
+
+    fireEvent.click(submitButton);
+    fireEvent.submit(form as HTMLFormElement);
+
+    await waitFor(() => expect(upsertLeadMock).toHaveBeenCalledTimes(1));
+    expect(submitButton).toBeDisabled();
+
+    resolveLead?.({ ok: true, mode: "created", lead_id: "lead-2" });
+
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: /skicka partnerförfrågan/i })).not.toBeInTheDocument(),
+    );
+  });
 });

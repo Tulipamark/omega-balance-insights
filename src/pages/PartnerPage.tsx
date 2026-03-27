@@ -2091,6 +2091,11 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (submitting) {
+      return;
+    }
+
     setSubmitting(true);
     setErrorMessage(null);
 
