@@ -1382,6 +1382,54 @@ const AdminDashboardPage = () => {
         .slice(0, 3),
     }));
   }, [data, partnerFunnelInsights]);
+  const overviewPrioritySummary = useMemo(() => {
+    const priorities = [
+      onboardingDecisionSummary.actionQueue[0]
+        ? {
+            area: "Onboarding",
+            title: onboardingDecisionSummary.actionQueue[0].label,
+            count: onboardingDecisionSummary.actionQueue[0].count,
+            age: onboardingDecisionSummary.actionQueue[0].oldest,
+            nextStep: onboardingDecisionSummary.actionQueue[0].nextStep,
+          }
+        : null,
+      activationDecisionSummary.actionQueue[0]
+        ? {
+            area: "Aktivering",
+            title: activationDecisionSummary.actionQueue[0].label,
+            count: activationDecisionSummary.actionQueue[0].count,
+            age: activationDecisionSummary.actionQueue[0].oldest,
+            nextStep: activationDecisionSummary.actionQueue[0].nextStep,
+          }
+        : null,
+      trafficActionSummary.actionQueue[0]
+        ? {
+            area: "Trafik",
+            title: `${trafficActionSummary.actionQueue[0].source} - ${trafficActionSummary.actionQueue[0].priority}`,
+            count: 1,
+            age: null,
+            nextStep: trafficActionSummary.actionQueue[0].nextStep,
+          }
+        : null,
+      adminStuckLists[0]
+        ? {
+            area: "Flaskhals",
+            title: adminStuckLists[0].label,
+            count: adminStuckLists[0].count,
+            age: null,
+            nextStep: adminStuckLists[0].nextAction,
+          }
+        : null,
+    ]
+      .filter((item): item is { area: string; title: string; count: number; age: string | null; nextStep: string } => Boolean(item))
+      .sort((a, b) => b.count - a.count || a.area.localeCompare(b.area))
+      .slice(0, 4);
+
+    return {
+      priorities,
+      headline: priorities[0] || null,
+    };
+  }, [activationDecisionSummary.actionQueue, adminStuckLists, onboardingDecisionSummary.actionQueue, trafficActionSummary.actionQueue]);
   const selectedLeadBlockers = selectedLead
     ? [
         ...(partnerPriority !== "none" || adminNote.trim() ? [] : ["Sätt prioritet eller intern bedömning"]),
@@ -1618,6 +1666,42 @@ const AdminDashboardPage = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+              </DashboardSection> : null}
+
+              {showOverview && overviewPrioritySummary.priorities.length ? <DashboardSection
+                title="Dagens fokus"
+                description="De viktigaste besluten just nu, samlade från onboarding, aktivering, trafik och flaskhalsar."
+              >
+                <DataTruthBadges isDemo={isDemo} interpretive />
+                <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+                  <div className="rounded-[1.5rem] border border-border/70 bg-secondary/25 p-5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Högst prioritet</p>
+                    <p className="mt-3 text-2xl font-semibold text-foreground">
+                      {overviewPrioritySummary.headline?.title || "-"}
+                    </p>
+                    <p className="mt-3 text-sm leading-6 text-subtle">
+                      {overviewPrioritySummary.headline
+                        ? `${overviewPrioritySummary.headline.area} berör ${formatWholeNumber(overviewPrioritySummary.headline.count)} poster${overviewPrioritySummary.headline.age ? ` och den äldsta väntan är ${formatElapsedDays(overviewPrioritySummary.headline.age).toLowerCase()}` : ""}.`
+                        : "Ingen tydlig toppprioritet just nu."}
+                    </p>
+                    <p className="mt-4 text-sm font-medium leading-6 text-foreground/80">
+                      {overviewPrioritySummary.headline?.nextStep || "Fortsätt arbeta steg för steg i adminytan."}
+                    </p>
+                  </div>
+
+                  <DataTable
+                    columns={["Område", "Nu", "Omfattning", "Nästa steg"]}
+                    rows={overviewPrioritySummary.priorities.map((item) => [
+                      <span key={`${item.area}-area`} className="font-medium text-foreground">{item.area}</span>,
+                      <span key={`${item.area}-title`} className="max-w-[220px] text-sm text-subtle">{item.title}</span>,
+                      <span key={`${item.area}-count`}>
+                        {formatWholeNumber(item.count)}{item.age ? ` • ${formatElapsedDays(item.age)}` : ""}
+                      </span>,
+                      <span key={`${item.area}-next`} className="max-w-[320px] text-sm text-subtle">{item.nextStep}</span>,
+                    ])}
+                    emptyState="Ingen prioritering sticker ut just nu."
+                  />
                 </div>
               </DashboardSection> : null}
 
