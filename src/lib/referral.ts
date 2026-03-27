@@ -19,6 +19,10 @@ type StoredReferral = {
   lastTouch?: ReferralTouchpoint;
 };
 
+function hasMeaningfulUtmValue(value: string | null | undefined) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 function readJson<T>(key: string): T | null {
   if (typeof window === "undefined") {
     return null;
@@ -59,15 +63,15 @@ export function getReferralCandidate(pathname: string, search: string) {
   return normalizeReferralCode(firstSegment);
 }
 
-function buildTouchpoint(landingPage: string, capturedAt: string, search?: string) {
+function buildTouchpoint(landingPage: string, capturedAt: string, search?: string, fallback?: ReferralTouchpoint | null) {
   const params = new URLSearchParams(search || "");
 
   return {
     capturedAt,
     landingPage,
-    utmSource: params.get("utm_source"),
-    utmMedium: params.get("utm_medium"),
-    utmCampaign: params.get("utm_campaign"),
+    utmSource: hasMeaningfulUtmValue(params.get("utm_source")) ? params.get("utm_source") : fallback?.utmSource ?? null,
+    utmMedium: hasMeaningfulUtmValue(params.get("utm_medium")) ? params.get("utm_medium") : fallback?.utmMedium ?? null,
+    utmCampaign: hasMeaningfulUtmValue(params.get("utm_campaign")) ? params.get("utm_campaign") : fallback?.utmCampaign ?? null,
   } satisfies ReferralTouchpoint;
 }
 
@@ -88,6 +92,31 @@ export function persistReferralCode(referralCode: string, landingPage: string, s
       ? (existing.firstTouch || buildTouchpoint(existing.landingPage || landingPage, existing.capturedAt || capturedAt))
       : nextTouch,
     lastTouch: nextTouch,
+  };
+
+  window.localStorage.setItem(REFERRAL_STORAGE_KEY, JSON.stringify(payload));
+  document.cookie = `${REFERRAL_COOKIE_KEY}=${referralCode}; path=/; max-age=${60 * 60 * 24 * 30}`;
+}
+
+export function updateStoredReferralTouch(pathname: string, search = "") {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const stored = getStoredReferral();
+  const referralCode = getReferralCandidate(pathname, search) || stored?.referralCode;
+  if (!referralCode) {
+    return;
+  }
+
+  const capturedAt = new Date().toISOString();
+  const firstTouch = stored?.firstTouch || buildTouchpoint(stored?.landingPage || pathname, stored?.capturedAt || capturedAt, "", stored?.lastTouch || null);
+  const payload: StoredReferral = {
+    referralCode,
+    landingPage: stored?.landingPage || pathname,
+    capturedAt: stored?.capturedAt || capturedAt,
+    firstTouch,
+    lastTouch: buildTouchpoint(pathname, capturedAt, search, stored?.lastTouch || firstTouch),
   };
 
   window.localStorage.setItem(REFERRAL_STORAGE_KEY, JSON.stringify(payload));
@@ -194,8 +223,8 @@ export async function getLeadAttributionContext(pathname: string, search: string
   const activeReferralCode = getReferralCandidate(pathname, search) || stored?.referralCode || null;
   const owner = activeReferralCode ? await resolveUserByReferralCode(activeReferralCode) : null;
   const now = new Date().toISOString();
-  const lastTouch = buildTouchpoint(pathname, now, search);
-  const firstTouch = stored?.firstTouch || (activeReferralCode ? buildTouchpoint(stored?.landingPage || pathname, stored?.capturedAt || now, search) : null);
+  const lastTouch = buildTouchpoint(pathname, now, search, stored?.lastTouch || stored?.firstTouch || null);
+  const firstTouch = stored?.firstTouch || (activeReferralCode ? buildTouchpoint(stored?.landingPage || pathname, stored?.capturedAt || now, search, stored?.lastTouch || null) : null);
 
   return {
     sessionId,

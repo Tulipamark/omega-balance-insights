@@ -10,6 +10,7 @@ import {
   persistSessionId,
   persistReferralCode,
   shouldTrackReferralLanding,
+  updateStoredReferralTouch,
 } from "@/lib/referral";
 
 const trackVisitMock = vi.fn();
@@ -164,6 +165,39 @@ describe("referral utilities", () => {
         utmMedium: "crm",
         utmCampaign: "followup",
       },
+    });
+  });
+
+  it("updates stored last-touch across multi-step navigation without losing original utm context", async () => {
+    persistSessionId("session-123");
+    persistReferralCode("ELIN2026", "/sv", "?utm_source=instagram&utm_medium=social&utm_campaign=spring");
+
+    updateStoredReferralTouch("/sv/kontakt", "");
+
+    const stored = getStoredReferral();
+    expect(stored).toMatchObject({
+      referralCode: "ELIN2026",
+      landingPage: "/sv",
+      firstTouch: {
+        landingPage: "/sv",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
+      lastTouch: {
+        landingPage: "/sv/kontakt",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
+    });
+
+    const attribution = await getLeadAttributionContext("/sv/kontakt", "");
+    expect(attribution.lastTouch).toMatchObject({
+      landingPage: "/sv/kontakt",
+      utmSource: "instagram",
+      utmMedium: "social",
+      utmCampaign: "spring",
     });
   });
 });
