@@ -135,6 +135,100 @@ function getFunnelEventLabel(eventName: string) {
   }
 }
 
+function formatDetailValue(value: unknown) {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function getPageTypeLabel(value: unknown) {
+  switch (value) {
+    case "customer":
+      return "Kundsida";
+    case "partner":
+      return "Partnersida";
+    case "admin":
+      return "Adminsida";
+    default:
+      return null;
+  }
+}
+
+function getLandingTypeLabel(value: unknown) {
+  switch (value) {
+    case "customer":
+      return "Kundlandning";
+    case "partner":
+      return "Partnerlandning";
+    default:
+      return null;
+  }
+}
+
+function getPlacementLabel(value: unknown) {
+  switch (value) {
+    case "hero":
+      return "Hero";
+    case "sticky-bar":
+      return "Sticky-bar";
+    case "closing-section":
+      return "Closing-sektion";
+    default:
+      return formatDetailValue(value);
+  }
+}
+
+function getDestinationTypeLabel(value: unknown) {
+  switch (value) {
+    case "test":
+      return "Testlänk";
+    case "shop":
+      return "Shoplänk";
+    case "partner":
+      return "Partnerlänk";
+    case "consultation":
+      return "Konsultation";
+    default:
+      return formatDetailValue(value);
+  }
+}
+
+function getFormTypeLabel(value: unknown) {
+  switch (value) {
+    case "consultation":
+      return "Konsultationsform";
+    case "contact":
+      return "Kontaktform";
+    case "partner_application":
+      return "Partneransökan";
+    default:
+      return formatDetailValue(value);
+  }
+}
+
+function formatFunnelEventDetails(details: unknown) {
+  if (!details || typeof details !== "object" || Array.isArray(details)) {
+    return "-";
+  }
+
+  const detailMap = details as Record<string, unknown>;
+  const formattedParts = [
+    getLandingTypeLabel(detailMap.landingType),
+    getPageTypeLabel(detailMap.pageType),
+    getPlacementLabel(detailMap.placement),
+    getDestinationTypeLabel(detailMap.destinationType),
+    getFormTypeLabel(detailMap.formType),
+  ].filter((value): value is string => Boolean(value));
+
+  if (formattedParts.length) {
+    return formattedParts.join(" • ");
+  }
+
+  if (typeof detailMap.reason === "string" && detailMap.reason.trim()) {
+    return detailMap.reason.trim();
+  }
+
+  return JSON.stringify(details);
+}
+
 function formatStatusLabel(status: "inactive" | "active" | "growing" | "duplicating" | "leader-track") {
   switch (status) {
     case "inactive":
@@ -1965,7 +2059,7 @@ const AdminDashboardPage = () => {
                       <span key={`${event.id}-path`} className="max-w-[180px] truncate">{event.page_path}</span>,
                       <span key={`${event.id}-ref`}>{event.referral_code || "Direkt"}</span>,
                       <span key={`${event.id}-details`} className="max-w-[220px] truncate text-subtle">
-                        {event.details && Object.keys(event.details).length ? JSON.stringify(event.details) : "-"}
+                        {formatFunnelEventDetails(event.details)}
                       </span>,
                     ])}
                     emptyState="Inga funnel-events loggade än."
