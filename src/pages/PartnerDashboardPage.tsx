@@ -725,6 +725,50 @@ const PartnerDashboardPage = () => {
         })
         .slice(0, 3)
     : [];
+  const topTodayQueue = [
+    startAction
+      ? {
+          key: "start-action",
+          title: startAction.title,
+          summary: startAction.description,
+          action: startAction.label,
+          mode: startAction.mode,
+        }
+      : null,
+    firstResultFocus
+      ? {
+          key: "first-result",
+          title: firstResultFocus.title,
+          summary: firstResultFocus.reason,
+          action: firstResultFocus.action,
+          mode: "focus" as const,
+        }
+      : null,
+    prioritizedLeads[0]
+      ? {
+          key: `lead-${prioritizedLeads[0].id}`,
+          title: `Följ upp ${prioritizedLeads[0].name}`,
+          summary: `${getLeadStatusLabel(prioritizedLeads[0].status)} • ${getLeadSituationLabel(prioritizedLeads[0])}`,
+          action: getLeadNextAction(prioritizedLeads[0]),
+          mode: "leads" as const,
+        }
+      : null,
+    weeklyPlan?.items[0]
+      ? {
+          key: "weekly-rhythm",
+          title: weeklyPlan.title,
+          summary: "Det viktigaste rytmsteget att hålla fast vid just nu.",
+          action: weeklyPlan.items[0],
+          mode: "focus" as const,
+        }
+      : null,
+  ].filter(Boolean).slice(0, 4) as Array<{
+    key: string;
+    title: string;
+    summary: string;
+    action: string;
+    mode: "copy-link" | "links" | "leads" | "legal" | "focus";
+  }>;
   const matchesLeadFilter = (lead: Lead, filter: "all" | "urgent" | "active" | "new") => {
     if (filter === "all") {
       return true;
@@ -915,6 +959,46 @@ const PartnerDashboardPage = () => {
                             <Link to={legalActionHref}>{startAction.label}</Link>
                           </Button>
                         )}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {topTodayQueue.length ? (
+                    <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta detta nu</p>
+                      <div className="mt-3 space-y-3">
+                        {topTodayQueue.map((item) => (
+                          <div key={item.key} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                            <p className="text-sm font-medium text-foreground">{item.title}</p>
+                            <p className="mt-2 text-sm leading-6 text-subtle">{item.summary}</p>
+                            <p className="mt-2 text-xs leading-5 text-foreground/80">{item.action}</p>
+                            <div className="mt-3">
+                              {item.mode === "copy-link" ? (
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  className="h-8 rounded-lg px-3 text-sm"
+                                  onClick={() => navigator.clipboard.writeText(partnerLink)}
+                                >
+                                  <Copy className="mr-2 h-3.5 w-3.5" />
+                                  Kopiera länk
+                                </Button>
+                              ) : item.mode === "links" ? (
+                                <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+                                  <Link to="/dashboard/partner/links">Öppna länkar</Link>
+                                </Button>
+                              ) : item.mode === "leads" ? (
+                                <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+                                  <Link to="/dashboard/partner/leads">Öppna leads</Link>
+                                </Button>
+                              ) : item.mode === "legal" ? (
+                                <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+                                  <Link to={legalActionHref}>Öppna legal</Link>
+                                </Button>
+                              ) : null}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ) : null}
