@@ -1,6 +1,7 @@
 import * as React from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,7 +18,7 @@ import DashboardLoginPage from "./pages/DashboardLoginPage.tsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.tsx";
 import PartnerDashboardPage from "./pages/PartnerDashboardPage.tsx";
 import PartnerLegalAcceptancePage from "./pages/PartnerLegalAcceptancePage.tsx";
-import { getPortalAccessState } from "./lib/omega-data";
+import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
 import { isSupabaseConfigured } from "./integrations/supabase/client";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
@@ -99,6 +100,59 @@ function RecoveryRedirectBoundary() {
   return null;
 }
 
+function useDashboardRecoveryLoading(isLoading: boolean) {
+  const [showRecovery, setShowRecovery] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      setShowRecovery(false);
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setShowRecovery(true), 2500);
+    return () => window.clearTimeout(timeout);
+  }, [isLoading]);
+
+  return showRecovery;
+}
+
+function DashboardLoadingState({ admin }: { admin: boolean }) {
+  const showRecovery = useDashboardRecoveryLoading(true);
+  const loginPath = admin ? "/dashboard/admin-login?force_login=1" : "/dashboard/login?force_login=1";
+  const demoPath = admin ? "/dashboard/admin?demo=1" : "/dashboard/partner?demo=1";
+
+  return (
+    <div className="min-h-screen bg-background px-6 py-10">
+      <div className="mx-auto max-w-2xl rounded-[1.75rem] border border-border/70 bg-white/95 p-8 shadow-card">
+        <p className="text-sm uppercase tracking-[0.16em] text-muted-foreground">Instrumentpanel</p>
+        <h1 className="mt-3 text-2xl font-semibold text-foreground">Laddar åtkomst...</h1>
+        <p className="mt-3 text-sm leading-6 text-subtle">
+          Vi kontrollerar din portalåtkomst och session just nu.
+        </p>
+
+        {showRecovery ? (
+          <div className="mt-6 space-y-4">
+            <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+              Det tar ovanligt lång tid. Om en gammal session har fastnat kan du gå vidare härifrån i stället.
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild type="button" variant="outline" className="rounded-xl">
+                <Link to={loginPath}>Till inloggning</Link>
+              </Button>
+              <Button asChild type="button" variant="outline" className="rounded-xl">
+                <Link to={demoPath}>Öppna demoläge</Link>
+              </Button>
+              <Button type="button" variant="outline" className="rounded-xl" onClick={() => void signOutPortalUser()}>
+                Logga ut fastnad session
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function DashboardIndexPage() {
   const location = useLocation();
   const isDemoRoute = new URLSearchParams(location.search).has("demo");
@@ -115,7 +169,7 @@ function DashboardIndexPage() {
   }
 
   if (accessQuery.isLoading) {
-    return <div className="min-h-screen bg-background px-6 py-10">Loading dashboard...</div>;
+    return <DashboardLoadingState admin={false} />;
   }
 
   if (!accessQuery.data?.authUser) {
@@ -160,7 +214,7 @@ function ProtectedDashboardRoute({
   }
 
   if (accessQuery.isLoading) {
-    return <div className="min-h-screen bg-background px-6 py-10">Loading dashboard...</div>;
+    return <DashboardLoadingState admin={requiredRole === "admin"} />;
   }
 
   if (!accessQuery.data?.authUser) {

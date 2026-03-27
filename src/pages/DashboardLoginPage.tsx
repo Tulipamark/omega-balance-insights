@@ -19,6 +19,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const forceLogin = searchParams.get("force_login") === "1";
 
   const accessQuery = useQuery({
     queryKey: ["portal-access"],
@@ -98,6 +99,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
 
   if (
     isSupabaseConfigured &&
+    !forceLogin &&
     accessQuery.isFetched &&
     !accessQuery.isFetching &&
     accessQuery.data?.portalUser &&
@@ -159,6 +161,11 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
                   {reasonMessage}
                 </div>
               ) : null}
+              {forceLogin ? (
+                <div className="rounded-2xl border border-sky-300/70 bg-sky-50 px-4 py-3 text-sm leading-6 text-sky-900">
+                  Automatisk redirect är pausad här så att du kan bryta en fastnad session eller logga in på nytt.
+                </div>
+              ) : null}
               {showWrongRoleBanner ? (
                 <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
                   Du är redan inloggad med ett partnerkonto. Logga ut först om du vill byta till ett adminkonto.
@@ -216,6 +223,11 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
               {showWrongRoleBanner ? (
                 <Button type="button" variant="outline" className="h-12 w-full rounded-xl" onClick={() => void signOutPortalUser()}>
                   Logga ut och byt konto
+                </Button>
+              ) : null}
+              {forceLogin && accessQuery.data?.authUser ? (
+                <Button type="button" variant="outline" className="h-12 w-full rounded-xl" onClick={() => void signOutPortalUser()}>
+                  Logga ut befintlig session
                 </Button>
               ) : null}
               <div className="flex items-center justify-between">
