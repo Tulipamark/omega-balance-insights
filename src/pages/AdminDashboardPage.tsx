@@ -499,6 +499,65 @@ function getPartnerPriorityVariant(priority?: PartnerLeadPriority | null): "dest
   }
 }
 
+function getLeadUrgencyLabel(lead: Lead) {
+  if (lead.status === "active") {
+    return "Onboarda nu";
+  }
+
+  if (getLeadReviewReady(lead)) {
+    return "Kontakta nu";
+  }
+
+  const priority = getLeadPartnerPriority(lead);
+  if (priority === "hot") {
+    return "Kontakta nu";
+  }
+
+  if (priority === "follow_up" || getLeadZinzinoVerified(lead) || getLeadTeamIntentConfirmed(lead)) {
+    return "Följ upp snart";
+  }
+
+  return "Kan vänta";
+}
+
+function getLeadUrgencyVariant(lead: Lead): "destructive" | "secondary" | "outline" | "default" {
+  switch (getLeadUrgencyLabel(lead)) {
+    case "Onboarda nu":
+      return "default";
+    case "Kontakta nu":
+      return "destructive";
+    case "Följ upp snart":
+      return "secondary";
+    default:
+      return "outline";
+  }
+}
+
+function getLeadUrgencyReason(lead: Lead) {
+  if (lead.status === "active") {
+    return "Portalåtkomst finns redan, så fokus bör ligga på att få igång första aktivitet direkt.";
+  }
+
+  if (getLeadReviewReady(lead)) {
+    return "Alla kriterier är klara och relationen bör flyttas direkt till onboarding innan värmen hinner svalna.";
+  }
+
+  const priority = getLeadPartnerPriority(lead);
+  if (priority === "hot") {
+    return "Leaden är markerad som varm och bör få snabb personlig uppföljning.";
+  }
+
+  if (priority === "follow_up") {
+    return "Kandidaten är relevant, men nästa steg kräver inte samma direkthet som de varmaste posterna.";
+  }
+
+  if (getLeadZinzinoVerified(lead) || getLeadTeamIntentConfirmed(lead)) {
+    return "Något viktigt steg är redan taget, så den här kandidaten bör inte tappa fart.";
+  }
+
+  return "Tidigt läge eller låg signal just nu. Håll kvar i listan utan att lägga först energi här.";
+}
+
 function getGrowthCompassVariant(status: "inactive" | "active" | "growing" | "duplicating" | "leader-track") {
   switch (status) {
     case "inactive":
@@ -2699,7 +2758,7 @@ const AdminDashboardPage = () => {
             ) : null}
 
             <DataTable
-              columns={["Sökande", "Portalsteg", "Redo", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
+              columns={["Sökande", "Portalsteg", "Prioritera nu", "Redo", "Källsida", "Referral", "Prioritet", "Mottagen", "Åtgärd"]}
               rows={sortedPartnerApplications.map((lead) => [
                 <div key={`${lead.id}-applicant`}>
                   <p className="font-medium text-foreground">{lead.name}</p>
@@ -2714,6 +2773,17 @@ const AdminDashboardPage = () => {
                   </Badge>
                   <p className="mt-2 max-w-[220px] text-xs leading-5 text-subtle">
                     {getPortalStageDescription(lead)}
+                  </p>
+                </div>,
+                <div key={`${lead.id}-urgency`} className="max-w-[220px]">
+                  <Badge
+                    variant={getLeadUrgencyVariant(lead)}
+                    className="rounded-full px-3 py-1"
+                  >
+                    {getLeadUrgencyLabel(lead)}
+                  </Badge>
+                  <p className="mt-2 text-xs leading-5 text-subtle">
+                    {getLeadUrgencyReason(lead)}
                   </p>
                 </div>,
                 <div key={`${lead.id}-readiness`} className="max-w-[220px]">
