@@ -1193,6 +1193,69 @@ const AdminDashboardPage = () => {
         return b.row.score - a.row.score;
       });
   }, [data?.partners, growthCompassRows]);
+  const activationDecisionSummary = useMemo(() => {
+    const partnerById = new Map((data?.partners || []).map((partner) => [partner.partnerId, partner]));
+
+    const awaitingSetup = growthCompassRows
+      .filter((row) => {
+        const partner = partnerById.get(row.partnerId);
+        return partner && !partner.zzLinksReady;
+      })
+      .map((row) => ({ row, partner: partnerById.get(row.partnerId) || null }));
+
+    const readyButInactive = partnersWithSetupNoActivity;
+
+    const buildingRhythm = growthCompassRows
+      .filter((row) => row.status === "active")
+      .map((row) => ({ row, partner: partnerById.get(row.partnerId) || null }))
+      .sort((a, b) => b.row.score - a.row.score);
+
+    const movingNow = partnersMovingTowardDuplication;
+
+    const actionQueue = [
+      {
+        key: "setup",
+        label: "Länkar saknas efter portalstart",
+        count: awaitingSetup.length,
+        oldest: awaitingSetup[0]?.partner?.createdAt || null,
+        nextStep: "Säkra test-, shop- och partnerlänk direkt så att personen kan börja dela något konkret.",
+      },
+      {
+        key: "inactive",
+        label: "Setup klar men ingen aktivitet",
+        count: readyButInactive.length,
+        oldest: readyButInactive[0]?.partner.verifiedAt || readyButInactive[0]?.partner.createdAt || null,
+        nextStep: "Följ upp första inloggning, första delning och ett verkligt första samtal samma vecka.",
+      },
+      {
+        key: "active",
+        label: "Aktiv men ännu inte duplicering",
+        count: buildingRhythm.length,
+        oldest: buildingRhythm[0]?.partner?.verifiedAt || buildingRhythm[0]?.partner?.createdAt || null,
+        nextStep: "Skydda rytmen och hjälp partnern få första line-rörelse innan energin sprids.",
+      },
+      {
+        key: "moving",
+        label: "På väg mot duplicering",
+        count: movingNow.length,
+        oldest: movingNow[0]?.partner?.verifiedAt || movingNow[0]?.partner?.createdAt || null,
+        nextStep: "Ge tätare stöd till dem som redan visar first-line-signal eller partnergenererade leads.",
+      },
+    ].filter((item) => item.count > 0);
+
+    return {
+      awaitingSetup,
+      readyButInactive,
+      buildingRhythm,
+      movingNow,
+      actionQueue,
+      strongestPartner:
+        movingNow[0]?.row ||
+        buildingRhythm[0]?.row ||
+        readyButInactive[0]?.growth ||
+        null,
+    };
+  }, [data?.partners, growthCompassRows, partnersMovingTowardDuplication, partnersWithSetupNoActivity]);
   const leadsReadyButNotOnboarded = useMemo(() => {
     if (!data?.partnerApplications?.length) {
       return [];
@@ -2431,6 +2494,54 @@ const AdminDashboardPage = () => {
             description="Här ser ni vad som händer efter att partnern fått portalåtkomst: setup, första aktivitet och verklig duplication."
           >
             <DataTruthBadges isDemo={isDemo} interpretive />
+            <div className="mb-6 rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Viktigaste läget nu</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {activationDecisionSummary.actionQueue[0]?.label || "-"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {activationDecisionSummary.actionQueue[0]
+                      ? `${formatWholeNumber(activationDecisionSummary.actionQueue[0].count)} partnerposter ligger här just nu.`
+                      : "Ingen tydlig aktiveringskö sticker ut just nu."}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkast partner nu</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {activationDecisionSummary.strongestPartner?.partnerName || "-"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {activationDecisionSummary.strongestPartner
+                      ? `${formatStatusLabel(activationDecisionSummary.strongestPartner.status)} med ${formatWholeNumber(activationDecisionSummary.strongestPartner.score)} i intern poäng.`
+                      : "Ingen partner sticker ut tydligt än."}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Fokus denna rytm</p>
+                  <p className="mt-3 text-sm leading-6 text-foreground/85">
+                    Hjälp varje partner vidare till nästa konkreta steg: få länkar klara, skapa första aktivitet och skydda de första dupliceringssignalerna.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <DataTable
+                  columns={["Kö", "Antal", "Äldst väntan", "Nästa steg"]}
+                  rows={activationDecisionSummary.actionQueue.map((item) => [
+                    <span key={`${item.key}-label`} className="font-medium text-foreground">{item.label}</span>,
+                    <span key={`${item.key}-count`}>{formatWholeNumber(item.count)}</span>,
+                    <span key={`${item.key}-oldest`}>{formatElapsedDays(item.oldest)}</span>,
+                    <span key={`${item.key}-next`} className="max-w-[320px] text-sm text-subtle">{item.nextStep}</span>,
+                  ])}
+                  emptyState="Inga aktiveringsköer sticker ut just nu."
+                />
+              </div>
+            </div>
+
             <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
               <div>
                 <DataTable
