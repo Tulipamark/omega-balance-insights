@@ -1456,6 +1456,50 @@ const AdminDashboardPage = () => {
       actionQueue,
     };
   }, [data?.partnerApplications, data?.partners, growthCompassRows, sortedPartnerApplications]);
+  const candidateTeamReadinessSummary = useMemo(() => {
+    const candidates = (data?.partnerApplications || []).filter((lead) => lead.status !== "active");
+    const internalReviewReady = candidates.filter(
+      (lead) => getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0,
+    );
+    const zzVerified = candidates.filter((lead) => getLeadZinzinoVerified(lead));
+    const intentConfirmed = candidates.filter((lead) => getLeadTeamIntentConfirmed(lead));
+    const readyNow = candidates.filter((lead) => getLeadReviewReady(lead));
+
+    const blockerEntries = [
+      {
+        key: "review",
+        label: "Intern bedömning saknas",
+        count: candidates.filter(
+          (lead) => getLeadPartnerPriority(lead) === null && getLeadAdminNote(lead).trim().length === 0,
+        ).length,
+        nextStep: "Sätt prioritet eller skriv en kort intern notering direkt efter första avstämningen.",
+      },
+      {
+        key: "zz",
+        label: "ZZ-join ej verifierad",
+        count: candidates.filter((lead) => !getLeadZinzinoVerified(lead)).length,
+        nextStep: "Bekräfta aktiv join innan personen flyttas vidare till teamlagret.",
+      },
+      {
+        key: "intent",
+        label: "Build intent ej bekräftat",
+        count: candidates.filter((lead) => !getLeadTeamIntentConfirmed(lead)).length,
+        nextStep: "Be om ett tydligt ja till att faktiskt bygga med er modell, inte bara undersöka.",
+      },
+    ]
+      .filter((item) => item.count > 0)
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+
+    return {
+      totalCandidates: candidates.length,
+      internalReviewReady: internalReviewReady.length,
+      zzVerified: zzVerified.length,
+      intentConfirmed: intentConfirmed.length,
+      readyNow: readyNow.length,
+      topBlocker: blockerEntries[0] || null,
+      blockerEntries,
+    };
+  }, [data?.partnerApplications]);
   const adminStuckLists = useMemo(() => {
     if (!data || !partnerFunnelInsights) {
       return [];
@@ -2484,6 +2528,71 @@ const AdminDashboardPage = () => {
                     <span key={`${item.key}-next`} className="max-w-[320px] text-sm text-subtle">{item.nextStep}</span>,
                   ])}
                   emptyState="Inga onboardingköer sticker ut just nu."
+                />
+              </div>
+            </div>
+
+            <div className="mb-6 rounded-[1.5rem] border border-border/70 bg-white/95 p-5 shadow-card">
+              <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Kandidat till teammedlem</p>
+                  <p className="mt-2 max-w-3xl text-sm leading-6 text-subtle">
+                    Här ser ni vad som faktiskt måste vara klart innan någon ska bli teammedlem i portalen: intern bedömning,
+                    verifierad ZZ-join och tydligt build intent.
+                  </p>
+
+                  <div className="mt-5 grid gap-4 md:grid-cols-4">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Kandidater nu</p>
+                      <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(candidateTeamReadinessSummary.totalCandidates)}</p>
+                      <p className="mt-2 text-sm text-subtle">Alla som ännu inte är aktiva teammedlemmar.</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Intern bedömning klar</p>
+                      <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(candidateTeamReadinessSummary.internalReviewReady)}</p>
+                      <p className="mt-2 text-sm text-subtle">Prioritet eller intern notering finns redan satt.</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">ZZ verifierad</p>
+                      <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(candidateTeamReadinessSummary.zzVerified)}</p>
+                      <p className="mt-2 text-sm text-subtle">Aktiv join är bekräftad och inte bara antagen.</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Redo för teamlager</p>
+                      <p className="mt-3 text-3xl font-semibold text-foreground">{formatWholeNumber(candidateTeamReadinessSummary.readyNow)}</p>
+                      <p className="mt-2 text-sm text-subtle">Alla tre kriterierna är klara och onboarding kan starta.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Största blocker just nu</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {candidateTeamReadinessSummary.topBlocker?.label || "-"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {candidateTeamReadinessSummary.topBlocker
+                      ? `${formatWholeNumber(candidateTeamReadinessSummary.topBlocker.count)} kandidater stoppas här just nu.`
+                      : "Inga tydliga kandidatblockers sticker ut just nu."}
+                  </p>
+                  <p className="mt-4 text-sm leading-6 text-foreground/85">
+                    {candidateTeamReadinessSummary.topBlocker?.nextStep || "Håll tempot uppe från första bedömning till faktisk portalstart."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <DataTable
+                  columns={["Kriterium", "Hur många saknar detta", "Vad admin bör göra nu"]}
+                  rows={candidateTeamReadinessSummary.blockerEntries.map((item) => [
+                    <span key={`${item.key}-label`} className="font-medium text-foreground">{item.label}</span>,
+                    <span key={`${item.key}-count`}>{formatWholeNumber(item.count)}</span>,
+                    <span key={`${item.key}-step`} className="max-w-[420px] text-sm text-subtle">{item.nextStep}</span>,
+                  ])}
+                  emptyState="Alla tydliga kandidatkriterier är uppfyllda just nu."
                 />
               </div>
             </div>

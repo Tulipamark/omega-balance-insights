@@ -34,6 +34,7 @@ It is meant to stay practical:
   - partner lead
   - candidate
   - team member
+- Admin now shows clearer candidate -> team member criteria and top blockers before portal access.
 - Core docs exist for:
   - portal lifecycle
   - team engagement levels
