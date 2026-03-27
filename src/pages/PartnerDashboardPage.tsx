@@ -1003,6 +1003,14 @@ const PartnerDashboardPage = () => {
                     <p className="mt-2 text-sm text-foreground">{journey.encouragement}</p>
                   </div>
 
+                  <div className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Klara steg</p>
+                    <p className="mt-2 text-2xl font-semibold text-foreground">
+                      {journey.checklist.filter((item) => item.done).length} / {journey.checklist.length}
+                    </p>
+                    <p className="mt-1 text-xs text-subtle">Du bygger vidare ett steg i taget.</p>
+                  </div>
+
                   <div className="mt-4 grid gap-3 md:grid-cols-2">
                     <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">NÃƒÂ¤sta milstolpe</p>
