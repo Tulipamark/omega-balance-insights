@@ -503,6 +503,18 @@ function buildLeadQueueSummary(leads: Lead[]) {
   ];
 }
 
+function buildLeadExecutionSummary(leads: Lead[]) {
+  const takeToday = leads.filter((lead) => lead.status === "new").length;
+  const followUpNow = leads.filter((lead) => lead.status === "qualified").length;
+  const activeDialogs = leads.filter((lead) => lead.status === "active").length;
+
+  return [
+    { label: "Ta i dag", value: takeToday, note: "Nya kontakter som bör få första svar snabbt." },
+    { label: "Följ upp nu", value: followUpNow, note: "Varmare dialoger som inte bör tappa fart." },
+    { label: "Håll levande", value: activeDialogs, note: "Aktiva samtal som behöver nästa steg, inte bara väntan." },
+  ];
+}
+
 function getFirstResultProgress(data: PartnerDashboardData) {
   const allLeads = [...data.leads, ...data.partnerLeads];
   const hasLead = allLeads.length > 0;
@@ -713,8 +725,34 @@ const PartnerDashboardPage = () => {
   const startAction = data ? buildPartnerStartAction(data, legalAccepted) : null;
   const leadQueueSummary = data ? buildLeadQueueSummary(data.leads) : [];
   const partnerLeadQueueSummary = data ? buildLeadQueueSummary(data.partnerLeads) : [];
+  const leadExecutionSummary = data ? buildLeadExecutionSummary(data.leads) : [];
+  const partnerLeadExecutionSummary = data ? buildLeadExecutionSummary(data.partnerLeads) : [];
   const prioritizedLeads = data
     ? [...data.leads, ...data.partnerLeads]
+        .sort((a, b) => {
+          const scoreDiff = getLeadPriorityScore(b) - getLeadPriorityScore(a);
+          if (scoreDiff !== 0) {
+            return scoreDiff;
+          }
+
+          return new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime();
+        })
+        .slice(0, 3)
+    : [];
+  const prioritizedCustomerLeads = data
+    ? [...data.leads]
+        .sort((a, b) => {
+          const scoreDiff = getLeadPriorityScore(b) - getLeadPriorityScore(a);
+          if (scoreDiff !== 0) {
+            return scoreDiff;
+          }
+
+          return new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime();
+        })
+        .slice(0, 3)
+    : [];
+  const prioritizedPartnerLeads = data
+    ? [...data.partnerLeads]
         .sort((a, b) => {
           const scoreDiff = getLeadPriorityScore(b) - getLeadPriorityScore(a);
           if (scoreDiff !== 0) {
@@ -1246,6 +1284,15 @@ const PartnerDashboardPage = () => {
                     </div>
                   ))}
                 </div>
+                <div className="mb-4 grid gap-3 md:grid-cols-3">
+                  {leadExecutionSummary.map((item) => (
+                    <div key={item.label} className="rounded-[1rem] border border-border/70 bg-white/90 p-3.5 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{item.value}</p>
+                      <p className="mt-2 text-xs leading-5 text-subtle">{item.note}</p>
+                    </div>
+                  ))}
+                </div>
                 <div className="mb-4 flex flex-wrap gap-2">
                   {[
                     { value: "all", label: "Alla" },
@@ -1288,6 +1335,29 @@ const PartnerDashboardPage = () => {
                   ])}
                   emptyState="Inga leads matchar filtret just nu."
                 />
+                <div className="mt-5 rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta först bland kundleads</p>
+                  <div className="mt-3 space-y-3">
+                    {prioritizedCustomerLeads.length ? (
+                      prioritizedCustomerLeads.map((lead, index) => (
+                        <div key={`${lead.id}-customer-priority`} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="font-medium text-foreground">{index + 1}. {lead.name}</p>
+                              <p className="text-xs text-subtle">{lead.email}</p>
+                            </div>
+                            <Badge variant={getLeadUrgencyVariant(lead)} className="rounded-full px-3 py-1">
+                              {getLeadUrgencyLabel(lead)}
+                            </Badge>
+                          </div>
+                          <p className="mt-3 text-sm text-foreground">{getLeadNextAction(lead)}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-subtle">Inga kundleads ännu. Fokusera först på att skapa första kundsignalen.</p>
+                    )}
+                  </div>
+                </div>
               </DashboardSection>
 
               {showLeads ? (
@@ -1380,15 +1450,24 @@ const PartnerDashboardPage = () => {
             <div className="grid gap-8 xl:grid-cols-2">
               {showLeads ? (
                 <DashboardSection title="Mina partnerleads" description="Här ser du partnerintresse och vad du bör göra härnäst.">
-                  <div className="mb-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    {partnerLeadQueueSummary.map((item) => (
-                      <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
-                        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
-                        <p className="mt-2 text-2xl font-semibold text-foreground">{item.value}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mb-4 flex flex-wrap gap-2">
+                <div className="mb-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  {partnerLeadQueueSummary.map((item) => (
+                    <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mb-4 grid gap-3 md:grid-cols-3">
+                  {partnerLeadExecutionSummary.map((item) => (
+                    <div key={item.label} className="rounded-[1rem] border border-border/70 bg-white/90 p-3.5 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{item.value}</p>
+                      <p className="mt-2 text-xs leading-5 text-subtle">{item.note}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mb-4 flex flex-wrap gap-2">
                     {[
                       { value: "all", label: "Alla" },
                       { value: "urgent", label: "Brådskande" },
@@ -1428,6 +1507,29 @@ const PartnerDashboardPage = () => {
                     ])}
                     emptyState="Inga partnerleads matchar filtret just nu."
                   />
+                  <div className="mt-5 rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta först bland partnerleads</p>
+                    <div className="mt-3 space-y-3">
+                      {prioritizedPartnerLeads.length ? (
+                        prioritizedPartnerLeads.map((lead, index) => (
+                          <div key={`${lead.id}-partner-priority`} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="font-medium text-foreground">{index + 1}. {lead.name}</p>
+                                <p className="text-xs text-subtle">{lead.email}</p>
+                              </div>
+                              <Badge variant={getLeadUrgencyVariant(lead)} className="rounded-full px-3 py-1">
+                                {getLeadUrgencyLabel(lead)}
+                              </Badge>
+                            </div>
+                            <p className="mt-3 text-sm text-foreground">{getLeadNextAction(lead)}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-subtle">Inga partnerleads ännu. Fokusera först på att skapa första partnersignalen.</p>
+                      )}
+                    </div>
+                  </div>
                 </DashboardSection>
               ) : null}
 
