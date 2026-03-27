@@ -1061,6 +1061,78 @@ const AdminDashboardPage = () => {
       .sort((a, b) => b.sessions - a.sessions || a.source.localeCompare(b.source))
       .slice(0, 8);
   }, [sessionJourneySummary]);
+  const trafficActionSummary = useMemo(() => {
+    const actionableSources = sessionSourceSummary
+      .map((row) => {
+        const ctaRate = row.sessions ? row.ctaDriven / row.sessions : 0;
+        const formRate = row.sessions ? row.formDriven / row.sessions : 0;
+        const surfRate = row.sessions ? row.surfOnly / row.sessions : 0;
+
+        let recommendation = "Fortsätt samla underlag.";
+        let focus = "neutral";
+
+        if (row.formDriven > 0) {
+          recommendation = "Bra källa för handling. Fortsätt mata samma budskap och följ upp snabbt.";
+          focus = "scale";
+        } else if (row.ctaDriven > 0) {
+          recommendation = "Driver klick men inte formulär ännu. Testa tydligare nästa steg efter CTA.";
+          focus = "convert";
+        } else if (row.sessions >= 2) {
+          recommendation = "Ger mest surf just nu. Justera budskap eller skicka trafiken till en tydligare landning.";
+          focus = "fix";
+        }
+
+        return {
+          ...row,
+          ctaRate,
+          formRate,
+          surfRate,
+          recommendation,
+          focus,
+        };
+      })
+      .sort((a, b) => {
+        const scoreA = a.formDriven * 3 + a.ctaDriven * 2 - a.surfOnly;
+        const scoreB = b.formDriven * 3 + b.ctaDriven * 2 - b.surfOnly;
+        return scoreB - scoreA || b.sessions - a.sessions || a.source.localeCompare(b.source);
+      });
+
+    const strongestSource = actionableSources.find((row) => row.formDriven > 0) || actionableSources[0] || null;
+    const frictionSource =
+      actionableSources.find((row) => row.surfOnly >= 2 && row.formDriven === 0) ||
+      actionableSources.find((row) => row.ctaDriven > 0 && row.formDriven === 0) ||
+      null;
+    const strongestLanding = trafficSourceSummary.topLandingPages[0] || null;
+
+    const actionQueue = actionableSources
+      .filter((row) => row.sessions > 0)
+      .map((row) => ({
+        source: row.source,
+        priority:
+          row.formDriven > 0
+            ? "Skala"
+            : row.ctaDriven > 0
+              ? "Konvertera"
+              : row.surfOnly >= 2
+                ? "Justera"
+                : "Bevaka",
+        summary:
+          row.formDriven > 0
+            ? `${formatWholeNumber(row.formDriven)} sessioner nådde formulär. Dubbel ned på samma vinkel.`
+            : row.ctaDriven > 0
+              ? `${formatWholeNumber(row.ctaDriven)} sessioner klickade vidare men stannade före formulär.`
+              : `${formatWholeNumber(row.surfOnly)} sessioner stannade vid surf.`,
+        nextStep: row.recommendation,
+      }))
+      .slice(0, 5);
+
+    return {
+      strongestSource,
+      frictionSource,
+      strongestLanding,
+      actionQueue,
+    };
+  }, [sessionSourceSummary, trafficSourceSummary.topLandingPages]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1668,6 +1740,63 @@ const AdminDashboardPage = () => {
               </div> : null}
 
               {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+                <DashboardSection
+                  title="Trafikbeslut just nu"
+                  description="Tolkning av var traction faktiskt fungerar, var den fastnar och vad admin bör göra härnäst."
+                >
+                  <DataTruthBadges isDemo={isDemo} interpretive />
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkaste källa</p>
+                      <p className="mt-3 text-xl font-semibold text-foreground">
+                        {trafficActionSummary.strongestSource?.source || "-"}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        {trafficActionSummary.strongestSource
+                          ? `${formatWholeNumber(trafficActionSummary.strongestSource.formDriven)} nådde formulär och ${formatWholeNumber(trafficActionSummary.strongestSource.sessions)} sessioner observerades.`
+                          : "Ingen källa sticker ut än."}
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Störst friktion</p>
+                      <p className="mt-3 text-xl font-semibold text-foreground">
+                        {trafficActionSummary.frictionSource?.source || "-"}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        {trafficActionSummary.frictionSource
+                          ? trafficActionSummary.frictionSource.recommendation
+                          : "Ingen tydlig flaskhals i källdata än."}
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkaste landning</p>
+                      <p className="mt-3 text-xl font-semibold text-foreground">
+                        {trafficActionSummary.strongestLanding?.[0] || "-"}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        {trafficActionSummary.strongestLanding
+                          ? `${formatWholeNumber(trafficActionSummary.strongestLanding[1])} attribuerade besök.`
+                          : "Ingen landning sticker ut än."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <DataTable
+                      columns={["Källa", "Prioritet", "Signal", "Nästa steg"]}
+                      rows={trafficActionSummary.actionQueue.map((item) => [
+                        <span key={`${item.source}-source`} className="font-medium text-foreground">{item.source}</span>,
+                        <span key={`${item.source}-priority`}>{item.priority}</span>,
+                        <span key={`${item.source}-summary`} className="max-w-[220px] truncate text-subtle">{item.summary}</span>,
+                        <span key={`${item.source}-next`} className="max-w-[320px] truncate text-subtle">{item.nextStep}</span>,
+                      ])}
+                      emptyState="Ingen trafik att prioritera än."
+                    />
+                  </div>
+                </DashboardSection>
+
                 <DashboardSection
                   title="Surfade sidor"
                   description="Enkel överblick över vilka sidor besökare faktiskt tittar på när de rör sig vidare efter första landningen."
