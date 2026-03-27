@@ -1,9 +1,10 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertLead } from "@/lib/api";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { defaultLang, isSupportedLang, Lang } from "@/lib/i18n";
 import { getLeadAttributionContext } from "@/lib/referral";
 
@@ -179,6 +180,7 @@ const ContactPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTrackedFormStart = useRef(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -190,13 +192,40 @@ const ContactPage = () => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
+  const trackFormStart = () => {
+    if (hasTrackedFormStart.current) {
+      return;
+    }
+
+    hasTrackedFormStart.current = true;
+    void logFunnelEvent("lead_form_started", {
+      pathname: location.pathname,
+      search: location.search,
+      details: {
+        formType: "contact",
+      },
+    });
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submitting) {
+      return;
+    }
     setSubmitting(true);
     setErrorMessage(null);
 
     try {
       const attribution = await getLeadAttributionContext(location.pathname, location.search);
+      void logFunnelEvent("lead_form_submitted", {
+        pathname: location.pathname,
+        search: location.search,
+        referralCode: attribution.referralCode,
+        sessionId: attribution.sessionId,
+        details: {
+          formType: "contact",
+        },
+      });
       const response = await upsertLead({
         full_name: formData.name,
         email: formData.email,
@@ -227,6 +256,14 @@ const ContactPage = () => {
 
       setSubmitted(true);
     } catch (error) {
+      void logFunnelEvent("lead_form_submit_failed", {
+        pathname: location.pathname,
+        search: location.search,
+        details: {
+          formType: "contact",
+          reason: error instanceof Error ? error.message : "submit_failed",
+        },
+      });
       setErrorMessage(error instanceof Error ? error.message : copy.error);
     } finally {
       setSubmitting(false);
@@ -267,19 +304,31 @@ const ContactPage = () => {
           <form className="mt-6 space-y-5" onSubmit={(event) => void handleSubmit(event)}>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.name}</span>
-              <Input required value={formData.name} onChange={(event) => updateField("name", event.target.value)} className="h-12 rounded-xl" />
+              <Input required value={formData.name} onChange={(event) => {
+                trackFormStart();
+                updateField("name", event.target.value);
+              }} className="h-12 rounded-xl" />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.email}</span>
-              <Input required type="email" value={formData.email} onChange={(event) => updateField("email", event.target.value)} className="h-12 rounded-xl" />
+              <Input required type="email" value={formData.email} onChange={(event) => {
+                trackFormStart();
+                updateField("email", event.target.value);
+              }} className="h-12 rounded-xl" />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.phone}</span>
-              <Input value={formData.phone} onChange={(event) => updateField("phone", event.target.value)} className="h-12 rounded-xl" />
+              <Input value={formData.phone} onChange={(event) => {
+                trackFormStart();
+                updateField("phone", event.target.value);
+              }} className="h-12 rounded-xl" />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.message}</span>
-              <Textarea required value={formData.message} onChange={(event) => updateField("message", event.target.value)} className="min-h-[144px] rounded-xl" />
+              <Textarea required value={formData.message} onChange={(event) => {
+                trackFormStart();
+                updateField("message", event.target.value);
+              }} className="min-h-[144px] rounded-xl" />
             </label>
             <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
               {submitting ? copy.submitting : copy.submit}
