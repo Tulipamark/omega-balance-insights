@@ -525,7 +525,7 @@ function getFirstResultProgress(data: PartnerDashboardData) {
 
   return [
     {
-      label: "Färsta aktivitet",
+      label: "Första aktivitet",
       description: "Ett lead eller en första signal har skapats.",
       done: hasLead,
       current: !hasLead,
@@ -537,7 +537,7 @@ function getFirstResultProgress(data: PartnerDashboardData) {
       current: hasLead && !hasResponse,
     },
     {
-      label: "Färsta resultat",
+      label: "Första resultat",
       description: "En kundsignal eller tydlig partnerreaktion finns.",
       done: hasResult,
       current: hasResponse && !hasResult,
