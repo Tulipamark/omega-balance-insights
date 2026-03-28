@@ -3156,6 +3156,30 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
       <section className="px-4 py-6 md:px-6 md:py-8">
         <motion.div {...sectionMotion} className={sectionShellClass}>
+          <div className="rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {marketSignalByLang[lang].eyebrow}
+            </p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
+              {marketSignalByLang[lang].title}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
+              {marketSignalByLang[lang].body}
+            </p>
+            <a
+              href={marketSignalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+            >
+              {marketSignalByLang[lang].cta}
+            </a>
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {partnerPayoffByLang[lang].eyebrow}
@@ -3383,23 +3407,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">{card.text}</p>
               </div>
             ))}
-          </div>
-          <div className="mt-8 rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {marketSignalByLang[lang].eyebrow}
-            </p>
-            <h3 className="mt-2 text-lg font-semibold tracking-tight">{marketSignalByLang[lang].title}</h3>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-[15px]">
-              {marketSignalByLang[lang].body}
-            </p>
-            <a
-              href={marketSignalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
-            >
-              {marketSignalByLang[lang].cta}
-            </a>
           </div>
         </motion.div>
       </section>
