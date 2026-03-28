@@ -2388,6 +2388,41 @@ const partnerSystemModelByLang: Record<Lang, { eyebrow: string; title: string; b
   },
 };
 
+const partnerSystemSummaryByLang: Record<Lang, { title: string; body: string }> = {
+  sv: {
+    title: "System",
+    body: "Trafik in. Intresse fångas upp. Uppföljning sker i rätt ordning. Affär kan byggas steg för steg.",
+  },
+  no: {
+    title: "System",
+    body: "Trafikk inn. Interesse fanges opp. Oppfølging skjer i riktig rekkefølge. Business kan bygges steg for steg.",
+  },
+  da: {
+    title: "System",
+    body: "Trafik ind. Interesse fanges op. Opfølgning sker i den rigtige rækkefølge. Forretning kan bygges trin for trin.",
+  },
+  fi: {
+    title: "Järjestelmä",
+    body: "Liikenne sisään. Kiinnostus kerätään talteen. Seuranta tapahtuu oikeassa järjestyksessä. Liiketoimintaa voidaan rakentaa askel askeleelta.",
+  },
+  en: {
+    title: "System",
+    body: "Traffic comes in. Interest gets captured. Follow-up happens in the right order. Business can be built step by step.",
+  },
+  de: {
+    title: "System",
+    body: "Traffic kommt hinein. Interesse wird erfasst. Follow-up passiert in der richtigen Reihenfolge. Geschäft kann Schritt für Schritt aufgebaut werden.",
+  },
+  fr: {
+    title: "Système",
+    body: "Le trafic entre. L’intérêt est capté. Le suivi se fait dans le bon ordre. L’activité peut se construire étape par étape.",
+  },
+  it: {
+    title: "Sistema",
+    body: "Il traffico entra. L’interesse viene raccolto. Il follow-up avviene nel giusto ordine. L’attività può essere costruita passo dopo passo.",
+  },
+};
+
 const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items: string[] }> = {
   sv: {
     eyebrow: "Varför det här är intressant",
@@ -2954,32 +2989,34 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   const applicationSection = (
     <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
       <motion.div {...sectionMotion} className={sectionShellClass}>
-        <div className="mb-8 rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
-          <h3 className="text-lg font-semibold tracking-tight">{applicationDecision.title}</h3>
-          <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
-            {applicationDecision.body}
-          </p>
-          <ul className="mt-5 space-y-3">
-            {applicationDecision.checks.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
-                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <div className="mb-8 grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">{applicationDecision.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
+              {applicationDecision.body}
+            </p>
+            <ul className="mt-5 space-y-3">
+              {applicationDecision.checks.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
+                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <div className="mb-8 rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
-          <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {afterApplicationByLang[lang].items.map((item, index) => (
-              <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                  {index + 1}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-subtle md:text-[15px]">{item}</p>
-              </div>
-            ))}
+          <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
+            <div className="mt-5 grid gap-4 md:grid-cols-3 xl:grid-cols-1">
+              {afterApplicationByLang[lang].items.map((item, index) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-subtle md:text-[15px]">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -3010,7 +3047,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <p className="mt-3 text-sm leading-7 text-subtle md:text-base">{page.form.successBody}</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
+          <form onSubmit={handleSubmit} className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-elevated md:p-10">
             <div className="grid gap-5 md:grid-cols-2">
               <Field label={page.form.name}><Input required value={formData.name} onChange={(e) => updateField("name", e.target.value)} className="h-12 rounded-xl" /></Field>
               <Field label={page.form.email}><Input required type="email" value={formData.email} onChange={(e) => updateField("email", e.target.value)} className="h-12 rounded-xl" /></Field>
@@ -3060,11 +3097,11 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           </div>
 
           <div className="grid items-start gap-10">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">{page.hero.badge}</span>
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="rounded-[2rem] border border-border/70 bg-card/70 px-6 py-8 shadow-sm backdrop-blur-sm md:px-8 md:py-10">
+              <span className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium shadow-sm">{page.hero.badge}</span>
               <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">{page.hero.title}</h1>
               <p className="mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">{page.hero.body}</p>
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <a
                   href="#partner-application"
                   className="btn-primary text-center"
@@ -3080,33 +3117,54 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 </a>
                 <a href="#partner-system" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
               </div>
-              <div className="mt-8 max-w-2xl rounded-[1.5rem] border border-border/80 bg-card/90 p-5 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                  {conversionAssist.eyebrow}
-                </p>
-                <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
-                  {conversionAssist.title}
-                </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  {conversionAssist.items.map((item) => (
-                    <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
-                      <p className="text-sm leading-6 text-foreground/85">{item}</p>
-                    </div>
-                  ))}
+              <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
+                <div className="rounded-[1.5rem] border border-border/80 bg-background/80 p-5 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                    {conversionAssist.eyebrow}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
+                    {conversionAssist.title}
+                  </p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                    {conversionAssist.items.map((item) => (
+                      <div key={item} className="rounded-2xl border border-border/70 bg-card px-4 py-4">
+                        <p className="text-sm leading-6 text-foreground/85">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href="#partner-application"
+                    className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+                    onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                      pathname: location.pathname,
+                      search: location.search,
+                      details: {
+                        placement: "hero-fast-track",
+                      },
+                    })}
+                  >
+                    {conversionAssist.cta}
+                  </a>
                 </div>
-                <a
-                  href="#partner-application"
-                  className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
-                  onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
-                    pathname: location.pathname,
-                    search: location.search,
-                    details: {
-                      placement: "hero-fast-track",
-                    },
-                  })}
-                >
-                  {conversionAssist.cta}
-                </a>
+                <div className="rounded-[1.5rem] border border-border/80 bg-secondary/35 p-5 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                    {marketSignalByLang[lang].eyebrow}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
+                    {marketSignalByLang[lang].title}
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-subtle">
+                    {marketSignalByLang[lang].body}
+                  </p>
+                  <a
+                    href={marketSignalUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+                  >
+                    {marketSignalByLang[lang].cta}
+                  </a>
+                </div>
               </div>
               <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 grid gap-4 lg:grid-cols-3">
               {page.hero.cards.map((card) => {
@@ -3130,50 +3188,40 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       <section id="partner-system" className="px-4 py-8 md:px-6 md:py-10">
         <motion.div {...sectionMotion} className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {partnerSystemModelByLang[lang].eyebrow}
-            </p>
-            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
-              {partnerSystemModelByLang[lang].title}
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
-              {partnerSystemModelByLang[lang].body}
-            </p>
+            <div className="grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:items-start">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  {partnerSystemModelByLang[lang].eyebrow}
+                </p>
+                <h2 className="mt-2 max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">
+                  {partnerSystemModelByLang[lang].title}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-subtle md:text-base">
+                  {partnerSystemModelByLang[lang].body}
+                </p>
+              </div>
+              <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-4 md:p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  {partnerSystemSummaryByLang[lang].title}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-subtle">
+                  {partnerSystemSummaryByLang[lang].body}
+                </p>
+              </div>
+            </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {partnerSystemModelByLang[lang].items.map((item, index) => (
-                <div key={item.title} className="rounded-2xl border border-border/70 bg-background px-5 py-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {index + 1}
-                  </p>
-                  <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">{item.title}</p>
-                  <p className="mt-2 text-sm leading-7 text-subtle">{item.text}</p>
+                <div key={item.title} className="rounded-2xl border border-border/70 bg-background px-5 py-5 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
+                      {index + 1}
+                    </div>
+                    <p className="text-lg font-semibold tracking-tight text-foreground">{item.title}</p>
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-subtle">{item.text}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </motion.div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <motion.div {...sectionMotion} className={sectionShellClass}>
-          <div className="rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {marketSignalByLang[lang].eyebrow}
-            </p>
-            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
-              {marketSignalByLang[lang].title}
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
-              {marketSignalByLang[lang].body}
-            </p>
-            <a
-              href={marketSignalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
-            >
-              {marketSignalByLang[lang].cta}
-            </a>
           </div>
         </motion.div>
       </section>
