@@ -1147,6 +1147,55 @@ const commercialApplicationDecisionOverridesByLang: Partial<Record<Lang, { check
       "Du behöver inte kunna allt från start, men vill förstå tillräckligt för att gå vidare.",
     ],
   },
+  no: {
+    checks: [
+      "Du vil bygge stegvis og langsiktig, ikke jage raske snarveier.",
+      "Du er åpen for dialog, oppfølging og tydelige neste steg.",
+      "Du trenger ikke kunne alt fra start, men vil forstå nok til å gå videre.",
+    ],
+  },
+  da: {
+    checks: [
+      "Du vil bygge trin for trin og langsigtet, ikke jagte hurtige genveje.",
+      "Du er åben for dialog, opfølgning og tydelige næste skridt.",
+      "Du behøver ikke vide alt fra start, men vil forstå nok til at gå videre.",
+    ],
+  },
+  fi: {
+    checks: [
+      "Haluat rakentaa vaiheittain ja pitkäjänteisesti etkä etsi nopeita oikoteitä.",
+      "Olet avoin dialogille, seurannalle ja selkeille seuraaville askelille.",
+      "Sinun ei tarvitse tietää kaikkea alusta asti, mutta haluat ymmärtää riittävästi voidaksesi edetä.",
+    ],
+  },
+  en: {
+    checks: [
+      "You want to build step by step and for the long term, not chase shortcuts.",
+      "You are open to dialogue, follow-up, and clear next steps.",
+      "You do not need to know everything from day one, but you want to understand enough to move forward.",
+    ],
+  },
+  de: {
+    checks: [
+      "Du willst Schritt für Schritt und langfristig aufbauen, statt schnellen Abkürzungen nachzujagen.",
+      "Du bist offen für Dialog, Follow-up und klare nächste Schritte.",
+      "Du musst nicht von Anfang an alles wissen, willst aber genug verstehen, um weiterzugehen.",
+    ],
+  },
+  fr: {
+    checks: [
+      "Vous voulez construire étape par étape et dans la durée, pas courir après des raccourcis.",
+      "Vous êtes ouvert au dialogue, au suivi et à des prochaines étapes claires.",
+      "Vous n’avez pas besoin de tout savoir dès le départ, mais vous voulez comprendre suffisamment pour avancer.",
+    ],
+  },
+  it: {
+    checks: [
+      "Vuoi costruire passo dopo passo e nel lungo periodo, non inseguire scorciatoie veloci.",
+      "Sei aperto al dialogo, al follow-up e a prossimi passi chiari.",
+      "Non devi sapere tutto fin dall’inizio, ma vuoi capire abbastanza per andare avanti.",
+    ],
+  },
 };
 
 const economicsTraditionalLabelByLang: Record<Lang, string> = {
@@ -2425,7 +2474,7 @@ const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items:
 const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
   sv: {
     title: "Bygg partnerverksamhet med ett färdigt system för trafik, leads och uppföljning",
-    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll, jaga folk eller famla fram nästa steg själv. Här ansöker du till ett arbetssätt som ska göra det lättare att skapa rätt partnerdialoger.",
+    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll. Du ansöker till ett arbetssätt som gör vägen från intresse till verklig partnerdialog tydligare, enklare och mer strukturerad.",
     cards: [
       {
         title: "Färdigt system",
@@ -2446,7 +2495,7 @@ const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["he
   },
   en: {
     title: "Build a partner business with a ready-made system for traffic, leads, and follow-up",
-    body: "For people who want to build seriously with a clear model instead of starting from zero, chasing people, or figuring out every next step alone. Here you apply to a working method built to make the right partner conversations easier to create.",
+    body: "For people who want to build seriously with a clear model instead of starting from zero. You apply to a way of working that makes the path from interest to real partner dialogue clearer, easier, and more structured.",
     cards: [
       {
         title: "Ready-made system",
@@ -2465,12 +2514,136 @@ const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["he
       },
     ],
   },
+  no: {
+    title: "Bygg partnervirksomhet med et ferdig system for trafikk, leads og oppfølging",
+    body: "For deg som vil bygge seriøst med en tydelig modell i stedet for å starte fra null. Du søker deg inn i en arbeidsmåte som gjør veien fra interesse til reell partnerdialog tydeligere, enklere og mer strukturert.",
+    cards: [
+      {
+        title: "Ferdig system",
+        text: "Du trenger ikke bygge trafikk, leadflyt og oppfølgingslogikk helt selv fra start.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Seriøs modell",
+        text: "Du jobber med struktur, oppfølging og reelle neste steg i stedet for tilfeldige rykk og løs improvisasjon.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Tydelig neste steg",
+        text: "Målet er ikke at du skal forstå alt med en gang, men raskt se om modellen passer for deg.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  da: {
+    title: "Byg partnerforretning med et færdigt system for trafik, leads og opfølgning",
+    body: "For dig, der vil bygge seriøst med en tydelig model i stedet for at starte fra nul. Du ansøger til en arbejdsform, der gør vejen fra interesse til reel partnerdialog tydeligere, enklere og mere struktureret.",
+    cards: [
+      {
+        title: "Færdigt system",
+        text: "Du behøver ikke selv at bygge trafik, leadflow og opfølgningslogik helt fra bunden.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Seriøs model",
+        text: "Du arbejder med struktur, opfølgning og reelle næste skridt i stedet for tilfældige ryk og løs improvisation.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Tydeligt næste skridt",
+        text: "Målet er ikke, at du skal forstå alt med det samme, men hurtigt se, om modellen passer til dig.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  fi: {
+    title: "Rakenna partneriliiketoimintaa valmiilla järjestelmällä liikenteelle, liideille ja seurannalle",
+    body: "Sinulle, joka haluat rakentaa vakavasti selkeän mallin avulla etkä aloittaa tyhjästä. Haet toimintatapaan, joka tekee polusta kiinnostuksesta todelliseen partnerikeskusteluun selkeämmän, helpomman ja rakenteellisemman.",
+    cards: [
+      {
+        title: "Valmis järjestelmä",
+        text: "Sinun ei tarvitse rakentaa liikennettä, liidivirtaa ja seurantaa kokonaan itse alusta lähtien.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Vakava malli",
+        text: "Työskentelet rakenteen, seurannan ja todellisten seuraavien askelten kanssa satunnaisten yritysten sijaan.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Selkeä seuraava askel",
+        text: "Tavoite ei ole, että ymmärtäisit kaiken heti, vaan että näet nopeasti, sopiiko malli sinulle.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  de: {
+    title: "Baue ein Partnergeschäft mit einem fertigen System für Traffic, Leads und Follow-up",
+    body: "Für Menschen, die mit einem klaren Modell seriös aufbauen wollen, statt bei null anzufangen. Du bewirbst dich auf eine Arbeitsweise, die den Weg von Interesse zu echtem Partnerdialog klarer, einfacher und strukturierter macht.",
+    cards: [
+      {
+        title: "Fertiges System",
+        text: "Du musst Traffic, Leadfluss und Follow-up-Logik nicht komplett selbst von Grund auf aufbauen.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Seriöses Modell",
+        text: "Du arbeitest mit Struktur, Follow-up und echten nächsten Schritten statt mit Zufall und einzelnen Aktionen.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Klarer nächster Schritt",
+        text: "Es geht nicht darum, sofort alles zu verstehen, sondern schnell zu erkennen, ob das Modell zu dir passt.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  fr: {
+    title: "Développez une activité partenaire avec un système prêt à l’emploi pour le trafic, les leads et le suivi",
+    body: "Pour celles et ceux qui veulent construire sérieusement avec un modèle clair au lieu de partir de zéro. Vous candidatez à une manière de travailler qui rend le passage de l’intérêt à un vrai dialogue partenaire plus clair, plus simple et plus structuré.",
+    cards: [
+      {
+        title: "Système prêt à l’emploi",
+        text: "Vous n’avez pas besoin de construire seul tout le trafic, le flux de leads et la logique de suivi dès le départ.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Modèle sérieux",
+        text: "Vous travaillez avec de la structure, du suivi et de vraies prochaines étapes plutôt qu’avec des efforts dispersés et du hasard.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Prochaine étape claire",
+        text: "L’objectif n’est pas que vous compreniez tout immédiatement, mais que vous voyiez vite si le modèle vous correspond.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  it: {
+    title: "Costruisci un’attività partner con un sistema pronto per traffico, lead e follow-up",
+    body: "Per chi vuole costruire seriamente con un modello chiaro invece di partire da zero. Ti candidi a un modo di lavorare che rende il percorso dall’interesse al vero dialogo partner più chiaro, più semplice e più strutturato.",
+    cards: [
+      {
+        title: "Sistema pronto",
+        text: "Non devi costruire da solo traffico, flusso lead e logica di follow-up fin dall’inizio.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Modello serio",
+        text: "Lavori con struttura, follow-up e passi successivi reali invece che con tentativi sparsi e casualità.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Passo successivo chiaro",
+        text: "L’obiettivo non è capire tutto subito, ma vedere rapidamente se il modello è giusto per te.",
+        icon: BarChart3,
+      },
+    ],
+  },
 };
 
 const finalCommercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageContent["hero"]>>> = {
-  sv: {
-    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll. Du ansöker till ett arbetssätt som gör vägen från intresse till verklig partnerdialog tydligare, enklare och mer strukturerad.",
-  },
+  sv: {},
 };
 
 const finalConversionAssistOverridesByLang: Partial<Record<Lang, { eyebrow: string; title: string }>> = {
@@ -2478,10 +2651,45 @@ const finalConversionAssistOverridesByLang: Partial<Record<Lang, { eyebrow: stri
     eyebrow: "Det första steget är enkelt",
     title: "Du behöver inte vara redo på allt för att gå vidare",
   },
+  no: {
+    eyebrow: "Det første steget er enkelt",
+    title: "Du trenger ikke være klar på alt for å gå videre",
+  },
+  da: {
+    eyebrow: "Det første skridt er enkelt",
+    title: "Du behøver ikke være klar på det hele for at gå videre",
+  },
+  fi: {
+    eyebrow: "Ensimmäinen askel on helppo",
+    title: "Sinun ei tarvitse olla valmis kaikkeen voidaksesi edetä",
+  },
+  en: {
+    eyebrow: "The first step is simple",
+    title: "You do not need to be ready for everything to move forward",
+  },
+  de: {
+    eyebrow: "Der erste Schritt ist einfach",
+    title: "Du musst nicht für alles bereit sein, um weiterzugehen",
+  },
+  fr: {
+    eyebrow: "La première étape est simple",
+    title: "Vous n’avez pas besoin d’être prêt à tout pour avancer",
+  },
+  it: {
+    eyebrow: "Il primo passo è semplice",
+    title: "Non devi essere pronto a tutto per andare avanti",
+  },
 };
 
 const finalEconomicsModelBodyOverridesByLang: Partial<Record<Lang, string>> = {
   sv: "När färre externa led tar marginal finns mer utrymme kvar i modellen. Det är en del av logiken bakom varför partnerintäkter kan finnas.",
+  no: "Når færre eksterne ledd tar margin, blir det mer rom igjen i modellen. Det er en del av logikken bak hvorfor partnerinntekter kan finnes.",
+  da: "Når færre eksterne led tager margin, er der mere rum tilbage i modellen. Det er en del af logikken bag, at partnerindtægter kan eksistere.",
+  fi: "Kun ulkoisia väliportaita on vähemmän ottamassa marginaalia, malliin jää enemmän liikkumavaraa. Se on osa logiikkaa sen takana, miksi partnerituloja voi syntyä.",
+  en: "When fewer outside layers take margin, more room stays in the model. That is part of the logic behind why partner income can exist.",
+  de: "Wenn weniger externe Stufen Marge herausnehmen, bleibt mehr Spielraum im Modell. Das ist ein Teil der Logik dahinter, warum Partnereinkommen möglich sein kann.",
+  fr: "Quand moins d’intermédiaires externes prennent de marge, il reste plus de marge de manœuvre dans le modèle. Cela fait partie de la logique qui explique pourquoi un revenu partenaire peut exister.",
+  it: "Quando meno passaggi esterni assorbono margine, nel modello resta più spazio. Fa parte della logica che spiega perché può esistere un reddito partner.",
 };
 
 const sectionMotion = {
