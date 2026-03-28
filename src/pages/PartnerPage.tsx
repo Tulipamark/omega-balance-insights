@@ -454,20 +454,20 @@ const afterApplicationByLang: Record<Lang, { title: string; items: string[] }> =
 
 const proofLayerByLang: Record<Lang, { title: string; body: string; cards: { title: string; text: string }[] }> = {
   sv: {
-    title: "Så blir det konkret i verkligheten",
-    body: "Det här ska inte bara låta logiskt. En ny partner behöver förstå varför modellen är intressant genom konkreta exempel som går att förklara, upprepa och bygga vidare på.",
+    title: "Varför det här kan vara värt att bygga",
+    body: "Som blivande partner behöver du inte allt på plats från start. Det viktiga är att snabbt se varför modellen kan ge dig bättre samtal, tydligare uppföljning och en mer strukturerad väg framåt.",
     cards: [
       {
-        title: "Värdekedjan blir begriplig",
-        text: "Vi visar en enkel ekonomilogik där färre externa led gör det lättare att förstå varför mer kan stanna i modellen än i traditionell butikskedja. Det betyder inte att pengar uppstår av sig själva, utan att mindre värde försvinner i mellanled som inte tillför något i den faktiska kundrelationen. För en ny partner gör det resonemanget modellen lättare att förstå, förklara och stå för.",
+        title: "Du får en enklare affärslogik att stå för",
+        text: "När färre externa led tar marginal blir det lättare att förstå varför det finns utrymme kvar i modellen. För dig som partner betyder det en tydligare affärslogik att förklara och bygga vidare på.",
       },
       {
-        title: "Testet gör samtalet enklare",
-        text: "En möjlig resa är: nyfiken kontakt -> genomfört test -> uppföljning -> tydligare kundvärde. I stället för att bara prata generellt om välmående kan partnern utgå från något kunden faktiskt vill förstå bättre. Det gör samtalet mer relevant, uppföljningen mer naturlig och erbjudandet lättare att arbeta vidare med över tid.",
+        title: "Du får lättare att starta relevanta samtal",
+        text: "När kunden utgår från ett test blir dialogen enklare att börja i något konkret. Det gör det lättare för dig att följa upp naturligt och föra samtalet vidare utan att det känns påträngande.",
       },
       {
-        title: "Trenden får verklig betydelse",
-        text: "Vi kopplar biomarkörer, mätning och personlig hälsa till varför det här är relevant nu, i stället för att bara säga att marknaden växer. Människor vill i högre grad förstå sina egna värden, följa upp vad som faktiskt händer och fatta mer informerade beslut. Det gör att kategorin känns mer modern och mer relevant än många äldre hälsoupplägg.",
+        title: "Du bygger i en kategori som känns mer relevant nu",
+        text: "Fler människor vill förstå sina värden bättre, följa upp vad som faktiskt händer och fatta mer informerade beslut. Det gör modellen lättare att uppleva som relevant än upplägg som mest bygger på allmän inspiration.",
       },
     ],
   },
