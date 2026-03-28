@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
+import { ArrowDown, ArrowRight, BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import FooterSection from "@/components/FooterSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -1126,6 +1126,127 @@ const economicsNoteByLang: Record<Lang, string> = {
   de: "Illustratives Beispiel auf Basis allgemeiner Branchenaufschläge.",
   fr: "Exemple illustratif fondé sur des marges générales du secteur.",
   it: "Esempio illustrativo basato su ricarichi generali di settore.",
+};
+
+const economicsIncreaseLabelByLang: Record<Lang, string> = {
+  sv: "+100 % per led",
+  no: "+100 % per ledd",
+  da: "+100 % pr. led",
+  fi: "+100 % per porras",
+  en: "+100% per layer",
+  de: "+100 % pro Stufe",
+  fr: "+100 % par niveau",
+  it: "+100% per livello",
+};
+
+const economicsTraditionalLabelByLang: Record<Lang, string> = {
+  sv: "Traditionell kedja",
+  no: "Tradisjonell kjede",
+  da: "Traditionel kæde",
+  fi: "Perinteinen ketju",
+  en: "Traditional chain",
+  de: "Traditionelle Kette",
+  fr: "Chaîne traditionnelle",
+  it: "Catena tradizionale",
+};
+
+const economicsTraditionalBodyByLang: Record<Lang, string> = {
+  sv: "Varje extra extern aktör lägger på sin marginal. Då växer slutpriset steg för steg innan kunden ens är framme.",
+  no: "Hver ekstra ekstern aktør legger på sin margin. Da vokser sluttprisen trinn for trinn før kunden i det hele tatt er fremme.",
+  da: "Hver ekstra ekstern aktør lægger sin margin oveni. Så vokser slutprisen trin for trin, før kunden overhovedet er nået frem.",
+  fi: "Jokainen ulkoinen lisäporras lisää oman katteensa. Silloin loppuhinta nousee askel askeleelta jo ennen kuin tuote on asiakkaalla.",
+  en: "Each extra outside actor adds its own margin. That makes the end price climb step by step before the customer is even reached.",
+  de: "Jede zusätzliche externe Stufe legt ihre eigene Marge oben drauf. So steigt der Endpreis Schritt für Schritt, bevor der Kunde überhaupt erreicht ist.",
+  fr: "Chaque acteur externe supplémentaire ajoute sa propre marge. Le prix final monte donc étape par étape avant même d’arriver au client.",
+  it: "Ogni attore esterno aggiuntivo inserisce il proprio margine. Così il prezzo finale sale passo dopo passo prima ancora di arrivare al cliente.",
+};
+
+const economicsDirectLabelByLang: Record<Lang, string> = {
+  sv: "Direktmodell",
+  no: "Direktemodell",
+  da: "Direkte model",
+  fi: "Suora malli",
+  en: "Direct model",
+  de: "Direktmodell",
+  fr: "Modèle direct",
+  it: "Modello diretto",
+};
+
+const economicsDirectBodyByLang: Record<Lang, string> = {
+  sv: "När flera externa led kapas uppstår ett marginalutrymme som inte längre behöver ätas upp av grossist- och butiksmarginaler.",
+  no: "Når flere eksterne ledd kuttes bort, oppstår et marginrom som ikke lenger trenger å spises opp av grossist- og butikkmarginer.",
+  da: "Når flere eksterne led skæres væk, opstår der et marginrum, som ikke længere behøver at blive spist op af grossist- og butiksmarginer.",
+  fi: "Kun useita ulkoisia portaita poistetaan, syntyy marginaalitilaa, jota tukku- ja myymälämarginaalit eivät enää syö pois.",
+  en: "When several outside layers are removed, margin room appears that no longer has to be absorbed by wholesale and retail margins.",
+  de: "Wenn mehrere externe Stufen wegfallen, entsteht ein freier Spielraum, der nicht länger von Großhandels- und Einzelhandelsmargen aufgezehrt wird.",
+  fr: "Lorsque plusieurs niveaux externes disparaissent, une réserve de valeur apparaît au lieu d’être absorbée par les marges du grossiste et du magasin.",
+  it: "Quando diversi livelli esterni vengono eliminati, si libera uno spazio economico che non deve più essere assorbito dai margini di grossista e negozio.",
+};
+
+const economicsSplitTitleByLang: Record<Lang, string> = {
+  sv: "Så kan den frigjorda marginalen delas",
+  no: "Slik kan den frigjorte marginen deles",
+  da: "Sådan kan den frigjorte margin deles",
+  fi: "Näin vapautunut marginaali voidaan jakaa",
+  en: "How the freed-up margin can be shared",
+  de: "So kann die frei gewordene Marge verteilt werden",
+  fr: "Comment la marge libérée peut être répartie",
+  it: "Come può essere condiviso il margine liberato",
+};
+
+const economicsSplitBodyByLang: Record<Lang, string> = {
+  sv: "När pengar inte försvinner i onödiga led kan samma marginalutrymme i stället delas mellan bolaget och partner-/ZZ-ledet.",
+  no: "Når penger ikke forsvinner i unødvendige ledd, kan det samme marginrommet i stedet deles mellom selskapet og partner-/ZZ-leddet.",
+  da: "Når penge ikke forsvinder i unødvendige led, kan det samme marginrum i stedet deles mellem selskabet og partner-/ZZ-leddet.",
+  fi: "Kun raha ei katoa turhiin portaisiin, sama marginaalitila voidaan jakaa yrityksen ja partneri-/ZZ-tason välillä.",
+  en: "When money does not disappear into unnecessary layers, the same margin room can instead be shared between the company and the partner/ZZ layer.",
+  de: "Wenn Geld nicht in unnötigen Stufen verschwindet, kann derselbe Spielraum stattdessen zwischen Unternehmen und Partner-/ZZ-Ebene geteilt werden.",
+  fr: "Lorsque l’argent ne disparaît pas dans des niveaux inutiles, la même réserve peut alors être partagée entre l’entreprise et le niveau partenaire/ZZ.",
+  it: "Quando il denaro non scompare in livelli inutili, lo stesso spazio economico può invece essere condiviso tra azienda e livello partner/ZZ.",
+};
+
+const economicsSplitCompanyLabelByLang: Record<Lang, string> = {
+  sv: "Bolaget",
+  no: "Selskapet",
+  da: "Selskabet",
+  fi: "Yhtiö",
+  en: "Company",
+  de: "Unternehmen",
+  fr: "Entreprise",
+  it: "Azienda",
+};
+
+const economicsSplitPartnerLabelByLang: Record<Lang, string> = {
+  sv: "Partner / ZZ",
+  no: "Partner / ZZ",
+  da: "Partner / ZZ",
+  fi: "Partneri / ZZ",
+  en: "Partner / ZZ",
+  de: "Partner / ZZ",
+  fr: "Partenaire / ZZ",
+  it: "Partner / ZZ",
+};
+
+const economicsSplitValueByLang: Record<Lang, string> = {
+  sv: "50 %",
+  no: "50 %",
+  da: "50 %",
+  fi: "50 %",
+  en: "50%",
+  de: "50 %",
+  fr: "50 %",
+  it: "50%",
+};
+
+const economicsSplitNoteByLang: Record<Lang, string> = {
+  sv: "Förenklad pedagogisk bild av hur ett frigjort marginalutrymme kan delas när externa mellanled kapas. Det är inte en officiell payout-tabell.",
+  no: "Forenklet pedagogisk bilde av hvordan et frigjort marginrom kan deles når eksterne mellomledd kuttes. Dette er ikke en offisiell payout-tabell.",
+  da: "Forenklet pædagogisk billede af, hvordan et frigjort marginrum kan deles, når eksterne mellemled fjernes. Dette er ikke en officiel payout-tabel.",
+  fi: "Yksinkertaistettu havainnollistus siitä, miten vapautunut marginaalitila voidaan jakaa, kun ulkoisia väliportaita poistetaan. Tämä ei ole virallinen payout-taulukko.",
+  en: "A simplified teaching example of how freed-up margin room can be shared when outside middle layers are removed. It is not an official payout table.",
+  de: "Vereinfachtes Schaubild dafür, wie ein eingesparter Spielraum verteilt werden kann, wenn externe Zwischenstufen entfallen. Dies ist keine offizielle Auszahlungstabelle.",
+  fr: "Illustration pédagogique simplifiée de la manière dont une réserve économisée peut être répartie lorsque les intermédiaires externes sont supprimés. Ce n’est pas un tableau de rémunération officiel.",
+  it: "Schema semplificato per mostrare come uno spazio economico risparmiato possa essere condiviso quando i livelli intermedi esterni vengono rimossi. Non è una tabella payout ufficiale.",
 };
 
 const heroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
@@ -2268,18 +2389,87 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.economics.title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.economics.body}</p>
           <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
-            <div className="grid gap-4 md:grid-cols-4">
-              {page.economics.steps.map((step, index) => (
-                <div key={step.label} className="relative rounded-2xl border border-border/70 bg-background px-5 py-6">
-                  <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
-                  <p className="mt-3 font-serif text-2xl font-semibold tracking-tight md:text-3xl">{step.value}</p>
-                  {index < page.economics.steps.length - 1 ? null : null}
-                </div>
-              ))}
+            <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-4 md:p-5">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-semibold tracking-tight text-foreground">
+                  {economicsTraditionalLabelByLang[lang] ?? economicsTraditionalLabelByLang.en}
+                </p>
+                <span className="rounded-full border border-border/70 bg-card px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                </span>
+              </div>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-foreground/80 md:text-base">
+                {economicsTraditionalBodyByLang[lang] ?? economicsTraditionalBodyByLang.en}
+              </p>
+              <div className="mt-5 grid gap-3 md:grid-cols-[repeat(4,minmax(0,1fr))]">
+                {page.economics.steps.map((step, index) => (
+                  <div key={step.label} className="flex items-center gap-3 md:contents">
+                    <div className="relative flex-1 rounded-2xl border border-border/70 bg-card px-5 py-6">
+                      <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
+                      <p className="mt-3 font-serif text-2xl font-semibold tracking-tight md:text-3xl">{step.value}</p>
+                    </div>
+                    {index < page.economics.steps.length - 1 ? (
+                      <>
+                        <div className="flex items-center justify-center md:hidden">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                            <ArrowDown className="h-3.5 w-3.5" />
+                            {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                          </div>
+                        </div>
+                        <div className="hidden items-center justify-center md:flex">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                            <ArrowRight className="h-3.5 w-3.5" />
+                            {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="mt-6 rounded-2xl border border-border/70 bg-secondary/35 px-5 py-5">
-              <p className="text-sm font-semibold tracking-tight text-foreground">{page.economics.modelLabel}</p>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-foreground/85 md:text-base">{page.economics.modelBody}</p>
+            <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+              <div className="rounded-2xl border border-border/70 bg-secondary/35 px-5 py-5">
+                <p className="text-sm font-semibold tracking-tight text-foreground">
+                  {economicsDirectLabelByLang[lang] ?? economicsDirectLabelByLang.en}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">
+                  {economicsDirectBodyByLang[lang] ?? economicsDirectBodyByLang.en}
+                </p>
+                <div className="mt-4 rounded-2xl border border-border/70 bg-card px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{page.economics.modelLabel}</p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">{page.economics.modelBody}</p>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-background px-5 py-5">
+                <p className="text-sm font-semibold tracking-tight text-foreground">
+                  {economicsSplitTitleByLang[lang] ?? economicsSplitTitleByLang.en}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">
+                  {economicsSplitBodyByLang[lang] ?? economicsSplitBodyByLang.en}
+                </p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      {economicsSplitCompanyLabelByLang[lang] ?? economicsSplitCompanyLabelByLang.en}
+                    </p>
+                    <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
+                      {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      {economicsSplitPartnerLabelByLang[lang] ?? economicsSplitPartnerLabelByLang.en}
+                    </p>
+                    <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
+                      {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-4 text-xs leading-6 text-muted-foreground">
+                  {economicsSplitNoteByLang[lang] ?? economicsSplitNoteByLang.en}
+                </p>
+              </div>
             </div>
             <div className="mt-5 border-t border-border/70 pt-4">
               <p className="text-xs leading-6 text-muted-foreground md:text-sm">
