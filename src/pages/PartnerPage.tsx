@@ -1522,7 +1522,7 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
       },
       {
         title: "Rätt i tiden",
-        text: "Vi tror att intresset för mer mätbar och individanpassad hälsa kommer att fortsätta växa de kommande åren.",
+        text: "Intresset för mer mätbar, personlig och uppföljningsbar hälsa växer. Det gör att testbaserad hälsa kan bli en betydligt större kategori de kommande åren än många traditionella hälsoupplägg.",
       },
     ],
   },
@@ -1544,7 +1544,7 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
       },
       {
         title: "Well timed",
-        text: "We believe interest in more measurable and individual health will continue to grow over the coming years.",
+        text: "Interest in more measurable, personal, and trackable health is growing. That makes test-based health a category that could become meaningfully larger over the coming years than many traditional health setups.",
       },
     ],
   },
@@ -1566,7 +1566,7 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
       },
       {
         title: "Riktig i tiden",
-        text: "Vi tror interessen for mer målbar og individtilpasset helse vil fortsette å vokse i årene som kommer.",
+        text: "Interessen for mer målbar, personlig og oppfølgbar helse vokser. Det gjør at testbasert helse kan bli en langt større kategori i årene som kommer enn mange tradisjonelle helseopplegg.",
       },
     ],
   },
@@ -1588,7 +1588,7 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
       },
       {
         title: "God timing",
-        text: "Vi tror, at interessen for mere målbar og individtilpasset sundhed vil fortsætte med at vokse i de kommende år.",
+        text: "Interessen for mere målbar, personlig og opfølgningsbar sundhed vokser. Det gør, at testbaseret sundhed kan blive en markant større kategori i de kommende år end mange traditionelle sundhedsoplæg.",
       },
     ],
   },
@@ -2471,6 +2471,59 @@ const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items:
   },
 };
 
+const marketSignalUrl = "https://www.mckinsey.com/industries/consumer-packaged-goods/our-insights/future-of-wellness-trends";
+
+const marketSignalByLang: Record<Lang, { eyebrow: string; title: string; body: string; cta: string }> = {
+  sv: {
+    eyebrow: "Extern signal",
+    title: "Det här är inte bara vår egen tes",
+    body: "McKinsey beskriver wellness som en global marknad på ungefär 2 biljoner dollar och lyfter samtidigt fram ett växande intresse för mer personlig, mätbar hälsa. Det stärker bilden av att testbaserad hälsa kan bli en betydligt större kategori framåt.",
+    cta: "Läs McKinseys Future of Wellness 2025",
+  },
+  no: {
+    eyebrow: "Ekstern signal",
+    title: "Dette er ikke bare vår egen tese",
+    body: "McKinsey beskriver wellness som et globalt marked på rundt 2 billioner dollar og peker samtidig på økende interesse for mer personlig og målbar helse. Det styrker bildet av at testbasert helse kan bli en langt større kategori fremover.",
+    cta: "Les McKinseys Future of Wellness 2025",
+  },
+  da: {
+    eyebrow: "Ekstern signal",
+    title: "Det her er ikke kun vores egen tese",
+    body: "McKinsey beskriver wellness som et globalt marked på omkring 2 billioner dollar og peger samtidig på stigende interesse for mere personlig og målbar sundhed. Det styrker billedet af, at testbaseret sundhed kan blive en markant større kategori fremover.",
+    cta: "Læs McKinseys Future of Wellness 2025",
+  },
+  fi: {
+    eyebrow: "Ulkoinen signaali",
+    title: "Tämä ei ole vain meidän oma näkemyksemme",
+    body: "McKinsey kuvaa wellnessin noin 2 biljoonan dollarin globaaliksi markkinaksi ja nostaa samalla esiin kasvavan kiinnostuksen henkilökohtaisempaan ja mitattavampaan terveyteen. Se vahvistaa kuvaa siitä, että testipohjaisesta terveydestä voi tulla selvästi suurempi kategoria tulevaisuudessa.",
+    cta: "Lue McKinseyn Future of Wellness 2025",
+  },
+  en: {
+    eyebrow: "External signal",
+    title: "This is not only our own thesis",
+    body: "McKinsey describes wellness as a roughly $2 trillion global market and also points to rising demand for more personal and measurable health. That supports the view that test-based health could become a much larger category over time.",
+    cta: "Read McKinsey’s Future of Wellness 2025",
+  },
+  de: {
+    eyebrow: "Externe Einordnung",
+    title: "Das ist nicht nur unsere eigene These",
+    body: "McKinsey beschreibt Wellness als einen globalen Markt von rund 2 Billionen US-Dollar und verweist zugleich auf das wachsende Interesse an persönlicherer und messbarer Gesundheit. Das stützt die Sicht, dass testbasierte Gesundheit langfristig zu einer deutlich größeren Kategorie werden kann.",
+    cta: "McKinseys Future of Wellness 2025 lesen",
+  },
+  fr: {
+    eyebrow: "Signal externe",
+    title: "Ce n’est pas seulement notre propre thèse",
+    body: "McKinsey décrit le wellness comme un marché mondial d’environ 2 000 milliards de dollars et souligne en parallèle l’intérêt croissant pour une santé plus personnelle et plus mesurable. Cela renforce l’idée que la santé fondée sur le test peut devenir une catégorie bien plus importante à l’avenir.",
+    cta: "Lire le Future of Wellness 2025 de McKinsey",
+  },
+  it: {
+    eyebrow: "Segnale esterno",
+    title: "Non è solo una nostra tesi",
+    body: "McKinsey descrive il wellness come un mercato globale da circa 2 trilioni di dollari e segnala anche un interesse crescente per una salute più personale e più misurabile. Questo rafforza l’idea che la salute basata sul test possa diventare una categoria molto più grande nel tempo.",
+    cta: "Leggi il Future of Wellness 2025 di McKinsey",
+  },
+};
+
 const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
   sv: {
     title: "Bygg partnerverksamhet med ett färdigt system för trafik, leads och uppföljning",
@@ -2895,11 +2948,13 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     ...applicationDecisionByLang[lang],
     ...(commercialApplicationDecisionOverridesByLang[lang] ?? {}),
   };
+  const heroShellClass = "container-wide !max-w-[68rem]";
+  const sectionShellClass = "container-wide !max-w-[68rem]";
 
   const applicationSection = (
     <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
-      <motion.div {...sectionMotion} className="container-narrow">
-        <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
+      <motion.div {...sectionMotion} className={sectionShellClass}>
+        <div className="mb-8 rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
           <h3 className="text-lg font-semibold tracking-tight">{applicationDecision.title}</h3>
           <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
             {applicationDecision.body}
@@ -2914,7 +2969,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           </ul>
         </div>
 
-        <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
+        <div className="mb-8 rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
           <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {afterApplicationByLang[lang].items.map((item, index) => (
@@ -2933,11 +2988,11 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             {formIntroByLang[lang].eyebrow}
           </p>
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{page.form.title}</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-subtle">
+          <p className="mt-4 text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
+          <p className="mt-3 text-sm leading-7 text-subtle">
             {formIntroByLang[lang].note}
           </p>
-          <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {conversionAssist.items.map((item) => (
               <div key={item} className="rounded-2xl border border-border/70 bg-card px-4 py-4 shadow-sm">
                 <p className="text-sm leading-6 text-foreground/85">{item}</p>
@@ -2947,7 +3002,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </div>
 
         {submitted ? (
-          <div className="mx-auto mt-10 max-w-2xl rounded-[1.75rem] border border-border/80 bg-card p-10 text-center shadow-sm">
+          <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-10 text-center shadow-sm">
             <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
               <Users2 className="h-6 w-6" />
             </div>
@@ -2955,7 +3010,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <p className="mt-3 text-sm leading-7 text-subtle md:text-base">{page.form.successBody}</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
+          <form onSubmit={handleSubmit} className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
             <div className="grid gap-5 md:grid-cols-2">
               <Field label={page.form.name}><Input required value={formData.name} onChange={(e) => updateField("name", e.target.value)} className="h-12 rounded-xl" /></Field>
               <Field label={page.form.email}><Input required type="email" value={formData.email} onChange={(e) => updateField("email", e.target.value)} className="h-12 rounded-xl" /></Field>
@@ -2996,7 +3051,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   return (
     <div className="min-h-screen bg-background">
       <section className="bg-hero section-padding pb-16 md:pb-24">
-        <div className="container-wide">
+        <div className={heroShellClass}>
           <div className="mb-12 flex items-center justify-between gap-4">
             <Link to={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               OmegaBalance
@@ -3004,10 +3059,10 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <LanguageSwitcher lang={lang} />
           </div>
 
-          <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <div className="grid items-start gap-10">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <span className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">{page.hero.badge}</span>
-              <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">{page.hero.title}</h1>
+              <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">{page.hero.title}</h1>
               <p className="mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">{page.hero.body}</p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <a
@@ -3053,9 +3108,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                   {conversionAssist.cta}
                 </a>
               </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="grid gap-4">
+              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 grid gap-4 lg:grid-cols-3">
               {page.hero.cards.map((card) => {
                 const Icon = card.icon;
                 return (
@@ -3068,13 +3121,14 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                   </div>
                 );
               })}
+              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
       <section id="partner-system" className="px-4 py-8 md:px-6 md:py-10">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {partnerSystemModelByLang[lang].eyebrow}
@@ -3085,7 +3139,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
               {partnerSystemModelByLang[lang].body}
             </p>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
               {partnerSystemModelByLang[lang].items.map((item, index) => (
                 <div key={item.title} className="rounded-2xl border border-border/70 bg-background px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -3101,7 +3155,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section className="px-4 py-6 md:px-6 md:py-8">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {partnerPayoffByLang[lang].eyebrow}
@@ -3121,7 +3175,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
+        <div className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
@@ -3153,7 +3207,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       {applicationSection}
 
       <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
+        <div className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {partnerDeepDiveByLang[lang].eyebrow}
@@ -3169,7 +3223,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
+        <div className={sectionShellClass}>
           <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {sectionNavByLang[lang].title}
@@ -3195,7 +3249,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {flowSummaryByLang[lang].title}
             </p>
-            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
               {flowSummaryByLang[lang].items.map((item, index) => (
                 <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -3210,7 +3264,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section id="partner-economics" className="section-padding bg-section-alt">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.economics.title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.economics.body}</p>
           <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
@@ -3307,7 +3361,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section className="px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{proofLayerByLang[lang].title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{proofLayerByLang[lang].body}</p>
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
@@ -3319,10 +3373,10 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section id="partner-reasons" className="px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.reasons.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.reasons.body}</p>
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
             {page.reasons.cards.map((card) => (
               <div key={card.title} className="flex h-full flex-col rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm">
                 <h3 className="text-lg font-semibold tracking-tight">{card.title}</h3>
@@ -3330,11 +3384,28 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               </div>
             ))}
           </div>
+          <div className="mt-8 rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {marketSignalByLang[lang].eyebrow}
+            </p>
+            <h3 className="mt-2 text-lg font-semibold tracking-tight">{marketSignalByLang[lang].title}</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-[15px]">
+              {marketSignalByLang[lang].body}
+            </p>
+            <a
+              href={marketSignalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+            >
+              {marketSignalByLang[lang].cta}
+            </a>
+          </div>
         </motion.div>
       </section>
 
       <section className="bg-section-alt px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{whyZinzinoByLang[lang].title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{whyZinzinoByLang[lang].body}</p>
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
@@ -3346,7 +3417,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section id="partner-fit" className="bg-section-alt px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.fit.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.fit.body}</p>
           <div className="mt-10 grid gap-5 xl:grid-cols-3">
@@ -3368,7 +3439,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       </section>
 
       <section id="partner-steps" className="px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className="container-wide">
+        <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.steps.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.steps.body}</p>
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
