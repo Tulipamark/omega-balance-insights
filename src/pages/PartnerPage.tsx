@@ -1139,6 +1139,16 @@ const economicsIncreaseLabelByLang: Record<Lang, string> = {
   it: "+100% per livello",
 };
 
+const commercialApplicationDecisionOverridesByLang: Partial<Record<Lang, { checks: string[] }>> = {
+  sv: {
+    checks: [
+      "Du vill bygga stegvis och långsiktigt, inte jaga snabba genvägar.",
+      "Du är öppen för dialog, uppföljning och tydliga nästa steg.",
+      "Du behöver inte kunna allt från start, men vill förstå tillräckligt för att gå vidare.",
+    ],
+  },
+};
+
 const economicsTraditionalLabelByLang: Record<Lang, string> = {
   sv: "Traditionell kedja",
   no: "Tradisjonell kjede",
@@ -2238,6 +2248,242 @@ const partnerDeepDiveByLang: Record<Lang, { eyebrow: string; title: string; body
   },
 };
 
+const partnerSystemModelByLang: Record<Lang, { eyebrow: string; title: string; body: string; items: { title: string; text: string }[] }> = {
+  sv: {
+    eyebrow: "Så fungerar det",
+    title: "En enkel modell från trafik till partnerdialog",
+    body: "Det här är inte tänkt att kännas diffust. Modellen ska gå att förstå snabbt och använda steg för steg.",
+    items: [
+      { title: "Trafik", text: "Rätt personer hittar in via ett färdigt digitalt flöde." },
+      { title: "Leads", text: "Intresse fångas upp och blir tydligare än lösa DMs och kalla kontakter." },
+      { title: "Uppföljning", text: "Rätt personer får rätt nästa steg via dialog, samtal eller Zoom." },
+      { title: "Intäkt", text: "Fler relevanta partnerdialoger kan bli affär när modellen används konsekvent." },
+    ],
+  },
+  no: {
+    eyebrow: "Slik fungerer det",
+    title: "En enkel modell fra trafikk til partnerdialog",
+    body: "Dette skal ikke oppleves diffust. Modellen skal være rask å forstå og mulig å bruke steg for steg.",
+    items: [
+      { title: "Trafikk", text: "Riktige personer finner inn gjennom et ferdig digitalt flyt." },
+      { title: "Leads", text: "Interesse fanges opp og blir tydeligere enn løse meldinger og kalde kontakter." },
+      { title: "Oppfølging", text: "Riktige personer får riktig neste steg via dialog, samtale eller Zoom." },
+      { title: "Inntekt", text: "Flere relevante partnerdialoger kan bli business når modellen brukes konsekvent." },
+    ],
+  },
+  da: {
+    eyebrow: "Sådan fungerer det",
+    title: "En enkel model fra trafik til partnerdialog",
+    body: "Det her skal ikke føles diffust. Modellen skal være hurtig at forstå og kunne bruges trin for trin.",
+    items: [
+      { title: "Trafik", text: "De rigtige mennesker finder ind via et færdigt digitalt flow." },
+      { title: "Leads", text: "Interesse fanges op og bliver tydeligere end løse beskeder og kolde kontakter." },
+      { title: "Opfølgning", text: "De rigtige mennesker får det rigtige næste skridt via dialog, samtale eller Zoom." },
+      { title: "Indtægt", text: "Flere relevante partnerdialoger kan blive til forretning, når modellen bruges konsekvent." },
+    ],
+  },
+  fi: {
+    eyebrow: "Näin se toimii",
+    title: "Yksinkertainen malli liikenteestä partnerikeskusteluun",
+    body: "Tämän ei kuulu tuntua epämääräiseltä. Mallin pitää olla nopeasti ymmärrettävä ja käytettävä askel askeleelta.",
+    items: [
+      { title: "Liikenne", text: "Oikeat ihmiset löytävät sisään valmiin digitaalisen virtauksen kautta." },
+      { title: "Liidit", text: "Kiinnostus kerätään talteen selkeämmin kuin irrallisissa viesteissä ja kylmissä kontakteissa." },
+      { title: "Seuranta", text: "Oikeat ihmiset saavat oikean seuraavan askeleen dialogin, puhelun tai Zoomin kautta." },
+      { title: "Tulo", text: "Useammat relevantit partnerikeskustelut voivat muuttua liiketoiminnaksi, kun mallia käytetään johdonmukaisesti." },
+    ],
+  },
+  en: {
+    eyebrow: "How it works",
+    title: "A simple model from traffic to partner dialogue",
+    body: "This should not feel vague. The model should be quick to understand and usable step by step.",
+    items: [
+      { title: "Traffic", text: "The right people enter through a ready-made digital flow." },
+      { title: "Leads", text: "Interest gets captured more clearly than through loose DMs and cold outreach." },
+      { title: "Follow-up", text: "The right people get the right next step through dialogue, calls, or Zoom." },
+      { title: "Income", text: "More relevant partner conversations can become business when the model is used consistently." },
+    ],
+  },
+  de: {
+    eyebrow: "So funktioniert es",
+    title: "Ein einfaches Modell von Traffic bis Partnerdialog",
+    body: "Das soll nicht vage wirken. Das Modell soll schnell verständlich und Schritt für Schritt nutzbar sein.",
+    items: [
+      { title: "Traffic", text: "Die richtigen Personen kommen über einen fertigen digitalen Ablauf hinein." },
+      { title: "Leads", text: "Interesse wird klarer erfasst als über lose Nachrichten und kalte Kontakte." },
+      { title: "Follow-up", text: "Die richtigen Personen bekommen den richtigen nächsten Schritt per Dialog, Gespräch oder Zoom." },
+      { title: "Einnahmen", text: "Mehr relevante Partnergespräche können zu Geschäft werden, wenn das Modell konsequent genutzt wird." },
+    ],
+  },
+  fr: {
+    eyebrow: "Comment cela fonctionne",
+    title: "Un modèle simple du trafic jusqu’au dialogue partenaire",
+    body: "Cela ne doit pas sembler vague. Le modèle doit être rapide à comprendre et utilisable étape par étape.",
+    items: [
+      { title: "Trafic", text: "Les bonnes personnes entrent via un parcours digital déjà prêt." },
+      { title: "Leads", text: "L’intérêt est capté plus clairement qu’avec des messages dispersés et des contacts à froid." },
+      { title: "Suivi", text: "Les bonnes personnes reçoivent la bonne prochaine étape via dialogue, appel ou Zoom." },
+      { title: "Revenu", text: "Davantage de conversations partenaires pertinentes peuvent devenir du business si le modèle est utilisé de façon cohérente." },
+    ],
+  },
+  it: {
+    eyebrow: "Come funziona",
+    title: "Un modello semplice dal traffico al dialogo partner",
+    body: "Non deve sembrare vago. Il modello deve essere rapido da capire e utilizzabile passo dopo passo.",
+    items: [
+      { title: "Traffico", text: "Le persone giuste entrano tramite un flusso digitale già pronto." },
+      { title: "Lead", text: "L’interesse viene raccolto in modo più chiaro rispetto a messaggi sparsi e contatti a freddo." },
+      { title: "Follow-up", text: "Le persone giuste ricevono il giusto passo successivo tramite dialogo, call o Zoom." },
+      { title: "Entrata", text: "Più dialoghi partner rilevanti possono diventare business quando il modello viene usato con coerenza." },
+    ],
+  },
+};
+
+const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items: string[] }> = {
+  sv: {
+    eyebrow: "Varför det här är intressant",
+    title: "Det här får rätt partner ut av modellen",
+    items: [
+      "Du slipper bygga allt från noll själv.",
+      "Du får en tydligare väg från intresse till verklig dialog.",
+      "Du jobbar med struktur i stället för slump och lösa ryck.",
+      "Du söker till ett arbetssätt, inte bara till en länk.",
+    ],
+  },
+  no: {
+    eyebrow: "Hvorfor dette er interessant",
+    title: "Dette får riktig partner ut av modellen",
+    items: [
+      "Du slipper å bygge alt fra null selv.",
+      "Du får en tydeligere vei fra interesse til reell dialog.",
+      "Du jobber med struktur i stedet for tilfeldighet og løse rykk.",
+      "Du søker til en arbeidsmåte, ikke bare til en lenke.",
+    ],
+  },
+  da: {
+    eyebrow: "Hvorfor det er interessant",
+    title: "Det får den rigtige partner ud af modellen",
+    items: [
+      "Du slipper for at bygge alt fra bunden selv.",
+      "Du får en tydeligere vej fra interesse til reel dialog.",
+      "Du arbejder med struktur i stedet for tilfældighed og løse ryk.",
+      "Du søger til en arbejdsform, ikke bare til et link.",
+    ],
+  },
+  fi: {
+    eyebrow: "Miksi tämä on kiinnostavaa",
+    title: "Tämän oikea partneri saa mallista",
+    items: [
+      "Sinun ei tarvitse rakentaa kaikkea nollasta itse.",
+      "Saat selkeämmän reitin kiinnostuksesta oikeaan keskusteluun.",
+      "Työskentelet rakenteella etkä sattuman ja irrallisten yritysten varassa.",
+      "Et hae vain linkkiä, vaan toimivaa työskentelytapaa.",
+    ],
+  },
+  en: {
+    eyebrow: "Why this matters",
+    title: "What the right partner gets from the model",
+    items: [
+      "You do not need to build everything from scratch on your own.",
+      "You get a clearer path from interest to real dialogue.",
+      "You work with structure instead of randomness and scattered effort.",
+      "You apply to a working method, not just to a link.",
+    ],
+  },
+  de: {
+    eyebrow: "Warum das interessant ist",
+    title: "Das bekommt der richtige Partner aus dem Modell",
+    items: [
+      "Du musst nicht alles selbst von null aufbauen.",
+      "Du bekommst einen klareren Weg von Interesse zu echtem Dialog.",
+      "Du arbeitest mit Struktur statt mit Zufall und einzelnen Aktionen.",
+      "Du bewirbst dich auf eine Arbeitsweise, nicht nur auf einen Link.",
+    ],
+  },
+  fr: {
+    eyebrow: "Pourquoi c’est intéressant",
+    title: "Ce que le bon partenaire retire du modèle",
+    items: [
+      "Vous n’avez pas à tout construire seul depuis zéro.",
+      "Vous obtenez un chemin plus clair entre intérêt et vrai dialogue.",
+      "Vous travaillez avec une structure plutôt qu’avec le hasard et des efforts dispersés.",
+      "Vous candidatez à une manière de travailler, pas seulement à un lien.",
+    ],
+  },
+  it: {
+    eyebrow: "Perché è interessante",
+    title: "Cosa ottiene il partner giusto dal modello",
+    items: [
+      "Non devi costruire tutto da zero da solo.",
+      "Hai un percorso più chiaro dall’interesse al dialogo reale.",
+      "Lavori con struttura invece che con casualità e tentativi sparsi.",
+      "Ti candidi a un metodo di lavoro, non solo a un link.",
+    ],
+  },
+};
+
+const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
+  sv: {
+    title: "Bygg partnerverksamhet med ett färdigt system för trafik, leads och uppföljning",
+    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll, jaga folk eller famla fram nästa steg själv. Här ansöker du till ett arbetssätt som ska göra det lättare att skapa rätt partnerdialoger.",
+    cards: [
+      {
+        title: "Färdigt system",
+        text: "Du behöver inte bygga trafik, leadflöde och uppföljningslogik helt själv från start.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Seriös modell",
+        text: "Du arbetar med struktur, uppföljning och verkliga nästa steg i stället för lösa ryck och slump.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Tydligt nästa steg",
+        text: "Målet är inte att du ska förstå allt direkt, utan att du snabbt ska se om modellen är rätt för dig.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  en: {
+    title: "Build a partner business with a ready-made system for traffic, leads, and follow-up",
+    body: "For people who want to build seriously with a clear model instead of starting from zero, chasing people, or figuring out every next step alone. Here you apply to a working method built to make the right partner conversations easier to create.",
+    cards: [
+      {
+        title: "Ready-made system",
+        text: "You do not need to build traffic, lead flow, and follow-up logic entirely on your own from the start.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Serious model",
+        text: "You work with structure, follow-up, and real next steps instead of randomness and scattered effort.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Clear next step",
+        text: "The goal is not for you to understand everything instantly, but to quickly see whether the model fits you.",
+        icon: BarChart3,
+      },
+    ],
+  },
+};
+
+const finalCommercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageContent["hero"]>>> = {
+  sv: {
+    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll. Du ansöker till ett arbetssätt som gör vägen från intresse till verklig partnerdialog tydligare, enklare och mer strukturerad.",
+  },
+};
+
+const finalConversionAssistOverridesByLang: Partial<Record<Lang, { eyebrow: string; title: string }>> = {
+  sv: {
+    eyebrow: "Det första steget är enkelt",
+    title: "Du behöver inte vara redo på allt för att gå vidare",
+  },
+};
+
+const finalEconomicsModelBodyOverridesByLang: Partial<Record<Lang, string>> = {
+  sv: "När färre externa led tar marginal finns mer utrymme kvar i modellen. Det är en del av logiken bakom varför partnerintäkter kan finnas.",
+};
+
 const sectionMotion = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -2293,12 +2539,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
     return {
       ...basePage,
-      hero: heroOverridesByLang[lang] ? { ...basePage.hero, ...heroOverridesByLang[lang] } : basePage.hero,
+      hero: {
+        ...basePage.hero,
+        ...(heroOverridesByLang[lang] ?? {}),
+        ...(commercialHeroOverridesByLang[lang] ?? {}),
+        ...(finalCommercialHeroOverridesByLang[lang] ?? {}),
+      },
       economics: {
         ...basePage.economics,
         steps: economicsStepsByLang[lang] ?? economicsStepsByLang.en,
         modelLabel: economicsModelLabelByLang[lang] ?? economicsModelLabelByLang.en,
-        modelBody: economicsModelBodyByLang[lang] ?? economicsModelBodyByLang.en,
+        modelBody: finalEconomicsModelBodyOverridesByLang[lang] ?? economicsModelBodyByLang[lang] ?? economicsModelBodyByLang.en,
         calloutTitle: economicsCalloutTitleByLang[lang] ?? economicsCalloutTitleByLang.en,
         calloutBody: economicsCalloutBodyByLang[lang] ?? economicsCalloutBodyByLang.en,
         note: economicsNoteByLang[lang] ?? economicsNoteByLang.en,
@@ -2428,16 +2679,25 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     }
   };
 
+  const conversionAssist = {
+    ...conversionAssistByLang[lang],
+    ...(finalConversionAssistOverridesByLang[lang] ?? {}),
+  };
+  const applicationDecision = {
+    ...applicationDecisionByLang[lang],
+    ...(commercialApplicationDecisionOverridesByLang[lang] ?? {}),
+  };
+
   const applicationSection = (
     <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
       <motion.div {...sectionMotion} className="container-narrow">
         <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
-          <h3 className="text-lg font-semibold tracking-tight">{applicationDecisionByLang[lang].title}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{applicationDecision.title}</h3>
           <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
-            {applicationDecisionByLang[lang].body}
+            {applicationDecision.body}
           </p>
           <ul className="mt-5 space-y-3">
-            {applicationDecisionByLang[lang].checks.map((item) => (
+            {applicationDecision.checks.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
                 <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
                 <span>{item}</span>
@@ -2470,7 +2730,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             {formIntroByLang[lang].note}
           </p>
           <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
-            {conversionAssistByLang[lang].items.map((item) => (
+            {conversionAssist.items.map((item) => (
               <div key={item} className="rounded-2xl border border-border/70 bg-card px-4 py-4 shadow-sm">
                 <p className="text-sm leading-6 text-foreground/85">{item}</p>
               </div>
@@ -2555,17 +2815,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 >
                   {page.hero.primaryCta}
                 </a>
-                <a href="#partner-economics" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
+                <a href="#partner-system" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
               </div>
               <div className="mt-8 max-w-2xl rounded-[1.5rem] border border-border/80 bg-card/90 p-5 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                  {conversionAssistByLang[lang].eyebrow}
+                  {conversionAssist.eyebrow}
                 </p>
                 <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
-                  {conversionAssistByLang[lang].title}
+                  {conversionAssist.title}
                 </p>
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  {conversionAssistByLang[lang].items.map((item) => (
+                  {conversionAssist.items.map((item) => (
                     <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
                       <p className="text-sm leading-6 text-foreground/85">{item}</p>
                     </div>
@@ -2582,7 +2842,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                     },
                   })}
                 >
-                  {conversionAssistByLang[lang].cta}
+                  {conversionAssist.cta}
                 </a>
               </div>
             </motion.div>
@@ -2601,6 +2861,142 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 );
               })}
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section id="partner-system" className="px-4 py-8 md:px-6 md:py-10">
+        <motion.div {...sectionMotion} className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {partnerSystemModelByLang[lang].eyebrow}
+            </p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
+              {partnerSystemModelByLang[lang].title}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
+              {partnerSystemModelByLang[lang].body}
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {partnerSystemModelByLang[lang].items.map((item, index) => (
+                <div key={item.title} className="rounded-2xl border border-border/70 bg-background px-5 py-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">{item.title}</p>
+                  <p className="mt-2 text-sm leading-7 text-subtle">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <motion.div {...sectionMotion} className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {partnerPayoffByLang[lang].eyebrow}
+            </p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
+              {partnerPayoffByLang[lang].title}
+            </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {partnerPayoffByLang[lang].items.map((item) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-background px-5 py-5">
+                  <p className="text-sm leading-7 text-foreground/85">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xl font-semibold tracking-tight text-foreground">
+                  {partnerMidPageCtaByLang[lang].title}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-subtle md:text-base">
+                  {partnerMidPageCtaByLang[lang].body}
+                </p>
+              </div>
+              <a
+                href="#partner-application"
+                className="btn-primary whitespace-nowrap text-center"
+                onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                  pathname: location.pathname,
+                  search: location.search,
+                  details: {
+                    placement: "mid-page-bridge",
+                  },
+                })}
+              >
+                {partnerMidPageCtaByLang[lang].cta}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {applicationSection}
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {partnerDeepDiveByLang[lang].eyebrow}
+            </p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
+              {partnerDeepDiveByLang[lang].title}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
+              {partnerDeepDiveByLang[lang].body}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {sectionNavByLang[lang].title}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {sectionNavByLang[lang].items.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {flowSummaryByLang[lang].title}
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {flowSummaryByLang[lang].items.map((item, index) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -2712,95 +3108,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             ))}
           </div>
         </motion.div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
-            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-xl font-semibold tracking-tight text-foreground">
-                  {partnerMidPageCtaByLang[lang].title}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-subtle md:text-base">
-                  {partnerMidPageCtaByLang[lang].body}
-                </p>
-              </div>
-              <a
-                href="#partner-application"
-                className="btn-primary whitespace-nowrap text-center"
-                onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
-                  pathname: location.pathname,
-                  search: location.search,
-                  details: {
-                    placement: "mid-page-bridge",
-                  },
-                })}
-              >
-                {partnerMidPageCtaByLang[lang].cta}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {applicationSection}
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {partnerDeepDiveByLang[lang].eyebrow}
-            </p>
-            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
-              {partnerDeepDiveByLang[lang].title}
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
-              {partnerDeepDiveByLang[lang].body}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {sectionNavByLang[lang].title}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {sectionNavByLang[lang].items.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {flowSummaryByLang[lang].title}
-            </p>
-            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-              {flowSummaryByLang[lang].items.map((item, index) => (
-                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {index + 1}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </section>
 
       <section id="partner-reasons" className="px-4 py-10 md:px-6 md:py-12">
