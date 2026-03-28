@@ -2101,6 +2101,143 @@ const stickyOverridesByLang: Partial<Record<Lang, PartnerPageContent["sticky"]>>
   },
 };
 
+const conversionAssistByLang: Record<Lang, { eyebrow: string; title: string; items: string[]; cta: string }> = {
+  sv: {
+    eyebrow: "Snabb väg vidare",
+    title: "Du behöver inte kunna allt innan du skickar in",
+    items: ["Tar ungefär 2 minuter", "Ingen bindning eller press", "Personlig återkoppling om nästa steg"],
+    cta: "Gå direkt till ansökan",
+  },
+  no: {
+    eyebrow: "Rask vei videre",
+    title: "Du trenger ikke kunne alt før du sender inn",
+    items: ["Tar omtrent 2 minutter", "Ingen binding eller press", "Personlig tilbakemelding om neste steg"],
+    cta: "Gå direkte til søknaden",
+  },
+  da: {
+    eyebrow: "Hurtig vej videre",
+    title: "Du behøver ikke vide alt, før du sender ind",
+    items: ["Tager cirka 2 minutter", "Ingen binding eller pres", "Personlig tilbagemelding om næste skridt"],
+    cta: "Gå direkte til ansøgningen",
+  },
+  fi: {
+    eyebrow: "Nopea reitti eteenpäin",
+    title: "Sinun ei tarvitse tietää kaikkea ennen hakemista",
+    items: ["Vie noin 2 minuuttia", "Ei sitoutumista tai painetta", "Henkilökohtainen palaute seuraavista askelista"],
+    cta: "Siirry suoraan hakemukseen",
+  },
+  en: {
+    eyebrow: "Fast track",
+    title: "You do not need to know everything before you apply",
+    items: ["Takes about 2 minutes", "No obligation or pressure", "Personal follow-up on next steps"],
+    cta: "Go straight to the application",
+  },
+  de: {
+    eyebrow: "Schneller weiter",
+    title: "Du musst nicht alles wissen, bevor du dich meldest",
+    items: ["Dauert etwa 2 Minuten", "Keine Bindung und kein Druck", "Persönliche Rückmeldung zu den nächsten Schritten"],
+    cta: "Direkt zur Bewerbung",
+  },
+  fr: {
+    eyebrow: "Accès rapide",
+    title: "Vous n’avez pas besoin de tout savoir avant de candidater",
+    items: ["Prend environ 2 minutes", "Aucun engagement ni pression", "Retour personnel sur la suite"],
+    cta: "Aller directement à la candidature",
+  },
+  it: {
+    eyebrow: "Percorso rapido",
+    title: "Non devi sapere tutto prima di candidarti",
+    items: ["Richiede circa 2 minuti", "Nessun vincolo o pressione", "Riscontro personale sui prossimi passi"],
+    cta: "Vai direttamente alla candidatura",
+  },
+};
+
+const partnerMidPageCtaByLang: Record<Lang, { title: string; body: string; cta: string }> = {
+  sv: {
+    title: "Känns modellen logisk för dig?",
+    body: "Om du ser potentialen behöver du inte läsa allt flera gånger. Skicka in din ansökan så tar vi nästa steg i dialog i stället.",
+    cta: "Ansök nu",
+  },
+  no: {
+    title: "Kjennes modellen logisk for deg?",
+    body: "Hvis du ser potensialet, trenger du ikke lese alt flere ganger. Send inn søknaden, så tar vi neste steg i dialog i stedet.",
+    cta: "Søk nå",
+  },
+  da: {
+    title: "Virker modellen logisk for dig?",
+    body: "Hvis du kan se potentialet, behøver du ikke læse alt flere gange. Send ansøgningen, så tager vi næste skridt i dialog i stedet.",
+    cta: "Ansøg nu",
+  },
+  fi: {
+    title: "Tuntuuko malli sinusta loogiselta?",
+    body: "Jos näet potentiaalin, sinun ei tarvitse lukea kaikkea monta kertaa. Lähetä hakemus, niin käymme seuraavat askeleet läpi keskustellen.",
+    cta: "Hae nyt",
+  },
+  en: {
+    title: "Does the model make sense to you?",
+    body: "If you can already see the potential, you do not need to reread everything. Apply now and we can handle the next step in conversation instead.",
+    cta: "Apply now",
+  },
+  de: {
+    title: "Ergibt das Modell für dich Sinn?",
+    body: "Wenn du das Potenzial bereits siehst, musst du nicht alles mehrfach lesen. Schick die Bewerbung jetzt ab, dann klären wir den nächsten Schritt im Gespräch.",
+    cta: "Jetzt bewerben",
+  },
+  fr: {
+    title: "Le modèle vous paraît-il logique ?",
+    body: "Si vous voyez déjà le potentiel, vous n’avez pas besoin de tout relire. Envoyez votre candidature maintenant et nous verrons la suite ensemble.",
+    cta: "Postuler maintenant",
+  },
+  it: {
+    title: "Il modello ti sembra sensato?",
+    body: "Se vedi già il potenziale, non serve rileggere tutto più volte. Invia ora la candidatura e affrontiamo il passo successivo nel dialogo.",
+    cta: "Candidati ora",
+  },
+};
+
+const partnerDeepDiveByLang: Record<Lang, { eyebrow: string; title: string; body: string }> = {
+  sv: {
+    eyebrow: "Steg 2",
+    title: "Fördjupa dig om du vill förstå mer innan du bestämmer dig",
+    body: "Här under finns resten av underlaget för dig som vill läsa djupare om produktlogik, timing, matchning och hur processen ser ut vidare.",
+  },
+  no: {
+    eyebrow: "Steg 2",
+    title: "Fordyp deg hvis du vil forstå mer før du bestemmer deg",
+    body: "Her under finner du resten av grunnlaget hvis du vil lese dypere om produktlogikk, timing, match og hvordan prosessen ser ut videre.",
+  },
+  da: {
+    eyebrow: "Trin 2",
+    title: "Dyk ned i det, hvis du vil forstå mere før du beslutter dig",
+    body: "Herunder finder du resten af grundlaget, hvis du vil læse dybere om produktlogik, timing, match og hvordan processen ser ud videre.",
+  },
+  fi: {
+    eyebrow: "Vaihe 2",
+    title: "Syvenny tähän, jos haluat ymmärtää enemmän ennen päätöstä",
+    body: "Alta löydät muun materiaalin, jos haluat lukea tarkemmin tuotteen logiikasta, ajoituksesta, sopivuudesta ja siitä, miltä prosessi näyttää eteenpäin.",
+  },
+  en: {
+    eyebrow: "Step 2",
+    title: "Go deeper if you want to understand more before deciding",
+    body: "Below is the rest of the material for anyone who wants a deeper look at product logic, timing, fit, and what the process looks like from here.",
+  },
+  de: {
+    eyebrow: "Schritt 2",
+    title: "Geh tiefer, wenn du vor deiner Entscheidung mehr verstehen willst",
+    body: "Unten findest du das restliche Material, wenn du tiefer in Produktlogik, Timing, Passung und den weiteren Ablauf einsteigen möchtest.",
+  },
+  fr: {
+    eyebrow: "Étape 2",
+    title: "Allez plus loin si vous voulez en comprendre davantage avant de décider",
+    body: "Vous trouverez ci-dessous le reste du contenu si vous souhaitez approfondir la logique du produit, le timing, l’adéquation et la suite du processus.",
+  },
+  it: {
+    eyebrow: "Fase 2",
+    title: "Approfondisci se vuoi capire di più prima di decidere",
+    body: "Qui sotto trovi il resto del materiale se vuoi approfondire la logica del prodotto, il momento, la compatibilità e come prosegue il processo.",
+  },
+};
+
 const sectionMotion = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -2291,6 +2428,103 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     }
   };
 
+  const applicationSection = (
+    <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
+      <motion.div {...sectionMotion} className="container-narrow">
+        <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
+          <h3 className="text-lg font-semibold tracking-tight">{applicationDecisionByLang[lang].title}</h3>
+          <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
+            {applicationDecisionByLang[lang].body}
+          </p>
+          <ul className="mt-5 space-y-3">
+            {applicationDecisionByLang[lang].checks.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
+                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
+          <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {afterApplicationByLang[lang].items.map((item, index) => (
+              <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  {index + 1}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-subtle md:text-[15px]">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 text-center md:mt-14">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+            {formIntroByLang[lang].eyebrow}
+          </p>
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{page.form.title}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-subtle">
+            {formIntroByLang[lang].note}
+          </p>
+          <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
+            {conversionAssistByLang[lang].items.map((item) => (
+              <div key={item} className="rounded-2xl border border-border/70 bg-card px-4 py-4 shadow-sm">
+                <p className="text-sm leading-6 text-foreground/85">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {submitted ? (
+          <div className="mx-auto mt-10 max-w-2xl rounded-[1.75rem] border border-border/80 bg-card p-10 text-center shadow-sm">
+            <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
+              <Users2 className="h-6 w-6" />
+            </div>
+            <h3 className="mt-5 text-xl font-semibold tracking-tight md:text-2xl">{page.form.successTitle}</h3>
+            <p className="mt-3 text-sm leading-7 text-subtle md:text-base">{page.form.successBody}</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label={page.form.name}><Input required value={formData.name} onChange={(e) => updateField("name", e.target.value)} className="h-12 rounded-xl" /></Field>
+              <Field label={page.form.email}><Input required type="email" value={formData.email} onChange={(e) => updateField("email", e.target.value)} className="h-12 rounded-xl" /></Field>
+              <Field label={page.form.phone}><Input required value={formData.phone} onChange={(e) => updateField("phone", e.target.value)} className="h-12 rounded-xl" /></Field>
+              <Field label={page.form.company}><Input value={formData.company} onChange={(e) => updateField("company", e.target.value)} className="h-12 rounded-xl" /></Field>
+              <Field label={page.form.interest}>
+                <Select value={formData.interest} onValueChange={(value) => updateField("interest", value)}>
+                  <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder={page.form.interest} /></SelectTrigger>
+                  <SelectContent>{page.form.interestOptions.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
+                </Select>
+              </Field>
+              <Field label={page.form.readiness}>
+                <Select value={formData.readiness} onValueChange={(value) => updateField("readiness", value)}>
+                  <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder={page.form.readiness} /></SelectTrigger>
+                  <SelectContent>{page.form.readinessOptions.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
+                </Select>
+              </Field>
+            </div>
+
+            <div className="mt-5">
+              <Field label={page.form.background}>
+                <Textarea required value={formData.background} onChange={(e) => updateField("background", e.target.value)} className="min-h-[144px] rounded-xl" />
+              </Field>
+            </div>
+
+            <div className="mt-8 flex justify-end">
+              <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
+                {submitting ? submittingLabelByLang[lang] : page.form.submit}
+              </button>
+            </div>
+            {errorMessage ? <p className="mt-4 text-sm text-destructive">{errorMessage}</p> : null}
+          </form>
+        )}
+      </motion.div>
+    </section>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <section className="bg-hero section-padding pb-16 md:pb-24">
@@ -2323,6 +2557,34 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 </a>
                 <a href="#partner-economics" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
               </div>
+              <div className="mt-8 max-w-2xl rounded-[1.5rem] border border-border/80 bg-card/90 p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  {conversionAssistByLang[lang].eyebrow}
+                </p>
+                <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
+                  {conversionAssistByLang[lang].title}
+                </p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {conversionAssistByLang[lang].items.map((item) => (
+                    <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
+                      <p className="text-sm leading-6 text-foreground/85">{item}</p>
+                    </div>
+                  ))}
+                </div>
+                <a
+                  href="#partner-application"
+                  className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+                  onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                    pathname: location.pathname,
+                    search: location.search,
+                    details: {
+                      placement: "hero-fast-track",
+                    },
+                  })}
+                >
+                  {conversionAssistByLang[lang].cta}
+                </a>
+              </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="grid gap-4">
@@ -2339,47 +2601,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 );
               })}
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {sectionNavByLang[lang].title}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {sectionNavByLang[lang].items.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 pb-2 md:px-6 md:pb-4">
-        <div className="container-wide">
-          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {flowSummaryByLang[lang].title}
-            </p>
-            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-              {flowSummaryByLang[lang].items.map((item, index) => (
-                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {index + 1}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -2481,7 +2702,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section className="section-padding">
+      <section className="px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{proofLayerByLang[lang].title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{proofLayerByLang[lang].body}</p>
@@ -2493,7 +2714,96 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section id="partner-reasons" className="section-padding">
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xl font-semibold tracking-tight text-foreground">
+                  {partnerMidPageCtaByLang[lang].title}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-subtle md:text-base">
+                  {partnerMidPageCtaByLang[lang].body}
+                </p>
+              </div>
+              <a
+                href="#partner-application"
+                className="btn-primary whitespace-nowrap text-center"
+                onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                  pathname: location.pathname,
+                  search: location.search,
+                  details: {
+                    placement: "mid-page-bridge",
+                  },
+                })}
+              >
+                {partnerMidPageCtaByLang[lang].cta}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {applicationSection}
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {partnerDeepDiveByLang[lang].eyebrow}
+            </p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
+              {partnerDeepDiveByLang[lang].title}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
+              {partnerDeepDiveByLang[lang].body}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {sectionNavByLang[lang].title}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {sectionNavByLang[lang].items.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-6 md:px-6 md:py-8">
+        <div className="container-wide">
+          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {flowSummaryByLang[lang].title}
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {flowSummaryByLang[lang].items.map((item, index) => (
+                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {index + 1}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="partner-reasons" className="px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.reasons.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.reasons.body}</p>
@@ -2508,7 +2818,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section className="section-padding bg-section-alt">
+      <section className="bg-section-alt px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{whyZinzinoByLang[lang].title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{whyZinzinoByLang[lang].body}</p>
@@ -2520,7 +2830,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section id="partner-fit" className="section-padding bg-section-alt">
+      <section id="partner-fit" className="bg-section-alt px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.fit.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.fit.body}</p>
@@ -2542,7 +2852,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section id="partner-steps" className="section-padding">
+      <section id="partner-steps" className="px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className="container-wide">
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.steps.title}</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{page.steps.body}</p>
@@ -2557,94 +2867,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               </div>
             ))}
           </div>
-        </motion.div>
-      </section>
-
-      <section id="partner-application" className="section-padding bg-section-alt pb-28 md:pb-24">
-        <motion.div {...sectionMotion} className="container-narrow">
-          <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/80 bg-card p-6 text-left shadow-sm md:p-8">
-            <h3 className="text-lg font-semibold tracking-tight">{applicationDecisionByLang[lang].title}</h3>
-            <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">
-              {applicationDecisionByLang[lang].body}
-            </p>
-            <ul className="mt-5 space-y-3">
-              {applicationDecisionByLang[lang].checks.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm leading-7 text-subtle md:text-[15px]">
-                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mx-auto mb-8 max-w-3xl rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
-            <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
-            <div className="mt-5 grid gap-4 md:grid-cols-3">
-              {afterApplicationByLang[lang].items.map((item, index) => (
-                <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {index + 1}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-subtle md:text-[15px]">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {formIntroByLang[lang].eyebrow}
-            </p>
-            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{page.form.title}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-subtle">
-              {formIntroByLang[lang].note}
-            </p>
-          </div>
-
-          {submitted ? (
-            <div className="mx-auto mt-10 max-w-2xl rounded-[1.75rem] border border-border/80 bg-card p-10 text-center shadow-sm">
-              <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                <Users2 className="h-6 w-6" />
-              </div>
-              <h3 className="mt-5 text-xl font-semibold tracking-tight md:text-2xl">{page.form.successTitle}</h3>
-              <p className="mt-3 text-sm leading-7 text-subtle md:text-base">{page.form.successBody}</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-10">
-              <div className="grid gap-5 md:grid-cols-2">
-                <Field label={page.form.name}><Input required value={formData.name} onChange={(e) => updateField("name", e.target.value)} className="h-12 rounded-xl" /></Field>
-                <Field label={page.form.email}><Input required type="email" value={formData.email} onChange={(e) => updateField("email", e.target.value)} className="h-12 rounded-xl" /></Field>
-                <Field label={page.form.phone}><Input required value={formData.phone} onChange={(e) => updateField("phone", e.target.value)} className="h-12 rounded-xl" /></Field>
-                <Field label={page.form.company}><Input value={formData.company} onChange={(e) => updateField("company", e.target.value)} className="h-12 rounded-xl" /></Field>
-                <Field label={page.form.interest}>
-                  <Select value={formData.interest} onValueChange={(value) => updateField("interest", value)}>
-                    <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder={page.form.interest} /></SelectTrigger>
-                    <SelectContent>{page.form.interestOptions.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
-                  </Select>
-                </Field>
-                <Field label={page.form.readiness}>
-                  <Select value={formData.readiness} onValueChange={(value) => updateField("readiness", value)}>
-                    <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder={page.form.readiness} /></SelectTrigger>
-                    <SelectContent>{page.form.readinessOptions.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
-                  </Select>
-                </Field>
-              </div>
-
-              <div className="mt-5">
-                <Field label={page.form.background}>
-                  <Textarea required value={formData.background} onChange={(e) => updateField("background", e.target.value)} className="min-h-[144px] rounded-xl" />
-                </Field>
-              </div>
-
-              <div className="mt-8 flex justify-end">
-                <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
-                  {submitting ? submittingLabelByLang[lang] : page.form.submit}
-                </button>
-              </div>
-              {errorMessage ? <p className="mt-4 text-sm text-destructive">{errorMessage}</p> : null}
-            </form>
-          )}
         </motion.div>
       </section>
 
