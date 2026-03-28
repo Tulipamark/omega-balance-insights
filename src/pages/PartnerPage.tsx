@@ -2506,56 +2506,65 @@ const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items:
   },
 };
 
-const marketSignalUrl = "https://www.mckinsey.com/industries/consumer-packaged-goods/our-insights/future-of-wellness-trends";
+const measurableHealthSignalUrl = "https://www.cdc.gov/biomonitoring/about/what-is-biomonitoring.html";
+const marketTrendSignalUrl = "https://www.mckinsey.com/industries/consumer-packaged-goods/our-insights/future-of-wellness-trends";
 
-const marketSignalByLang: Record<Lang, { eyebrow: string; title: string; body: string; cta: string }> = {
+const marketSignalByLang: Record<Lang, { eyebrow: string; title: string; body: string; measurableCta: string; marketCta: string }> = {
   sv: {
     eyebrow: "Extern signal",
     title: "Det här är inte bara vår egen tes",
-    body: "McKinsey beskriver wellness som en global marknad på ungefär 2 biljoner dollar och lyfter samtidigt fram ett växande intresse för mer personlig, mätbar hälsa. Det stärker bilden av att testbaserad hälsa kan bli en betydligt större kategori framåt.",
-    cta: "Läs McKinseys Future of Wellness 2025",
+    body: "McKinsey beskriver wellness som en mycket stor global marknad och pekar på växande intresse för mer personlig och mätbar hälsa. Samtidigt använder aktörer som CDC biomonitoring som ett etablerat sätt att mäta vad som faktiskt finns i kroppen. Tillsammans stärker det bilden av att testbaserad hälsa kan bli en betydligt större kategori framåt.",
+    measurableCta: "Se källa om mätbar hälsa (CDC)",
+    marketCta: "Se källa om marknadstrend (McKinsey)",
   },
   no: {
     eyebrow: "Ekstern signal",
     title: "Dette er ikke bare vår egen tese",
-    body: "McKinsey beskriver wellness som et globalt marked på rundt 2 billioner dollar og peker samtidig på økende interesse for mer personlig og målbar helse. Det styrker bildet av at testbasert helse kan bli en langt større kategori fremover.",
-    cta: "Les McKinseys Future of Wellness 2025",
+    body: "McKinsey beskriver wellness som et svært stort globalt marked og peker på økende interesse for mer personlig og målbar helse. Samtidig bruker aktører som CDC biomonitoring som en etablert måte å måle hva som faktisk finnes i kroppen på. Til sammen styrker det bildet av at testbasert helse kan bli en langt større kategori fremover.",
+    measurableCta: "Se kilde om målbar helse (CDC)",
+    marketCta: "Se kilde om markedstrend (McKinsey)",
   },
   da: {
     eyebrow: "Ekstern signal",
     title: "Det her er ikke kun vores egen tese",
-    body: "McKinsey beskriver wellness som et globalt marked på omkring 2 billioner dollar og peger samtidig på stigende interesse for mere personlig og målbar sundhed. Det styrker billedet af, at testbaseret sundhed kan blive en markant større kategori fremover.",
-    cta: "Læs McKinseys Future of Wellness 2025",
+    body: "McKinsey beskriver wellness som et meget stort globalt marked og peger på stigende interesse for mere personlig og målbar sundhed. Samtidig bruger aktører som CDC biomonitoring som en etableret måde at måle, hvad der faktisk findes i kroppen. Tilsammen styrker det billedet af, at testbaseret sundhed kan blive en markant større kategori fremover.",
+    measurableCta: "Se kilde om målbar sundhed (CDC)",
+    marketCta: "Se kilde om markedstrend (McKinsey)",
   },
   fi: {
     eyebrow: "Ulkoinen signaali",
     title: "Tämä ei ole vain meidän oma näkemyksemme",
-    body: "McKinsey kuvaa wellnessin noin 2 biljoonan dollarin globaaliksi markkinaksi ja nostaa samalla esiin kasvavan kiinnostuksen henkilökohtaisempaan ja mitattavampaan terveyteen. Se vahvistaa kuvaa siitä, että testipohjaisesta terveydestä voi tulla selvästi suurempi kategoria tulevaisuudessa.",
-    cta: "Lue McKinseyn Future of Wellness 2025",
+    body: "McKinsey kuvaa wellnessin erittäin suureksi globaaliksi markkinaksi ja nostaa esiin kasvavan kiinnostuksen henkilökohtaisempaan ja mitattavampaan terveyteen. Samaan aikaan toimijat kuten CDC käyttävät biomonitorointia vakiintuneena tapana mitata, mitä kehossa todella on. Yhdessä tämä vahvistaa kuvaa siitä, että testipohjaisesta terveydestä voi tulla selvästi suurempi kategoria tulevaisuudessa.",
+    measurableCta: "Katso lähde mitattavasta terveydestä (CDC)",
+    marketCta: "Katso lähde markkinatrendistä (McKinsey)",
   },
   en: {
     eyebrow: "External signal",
     title: "This is not only our own thesis",
-    body: "McKinsey describes wellness as a roughly $2 trillion global market and also points to rising demand for more personal and measurable health. That supports the view that test-based health could become a much larger category over time.",
-    cta: "Read McKinsey’s Future of Wellness 2025",
+    body: "McKinsey describes wellness as a very large global market and points to rising demand for more personal and measurable health. At the same time, organizations such as CDC use biomonitoring as an established way to measure what is actually present in the body. Together, that supports the view that test-based health could become a much larger category over time.",
+    measurableCta: "See source on measurable health (CDC)",
+    marketCta: "See source on market trend (McKinsey)",
   },
   de: {
     eyebrow: "Externe Einordnung",
     title: "Das ist nicht nur unsere eigene These",
-    body: "McKinsey beschreibt Wellness als einen globalen Markt von rund 2 Billionen US-Dollar und verweist zugleich auf das wachsende Interesse an persönlicherer und messbarer Gesundheit. Das stützt die Sicht, dass testbasierte Gesundheit langfristig zu einer deutlich größeren Kategorie werden kann.",
-    cta: "McKinseys Future of Wellness 2025 lesen",
+    body: "McKinsey beschreibt Wellness als einen sehr großen globalen Markt und verweist auf das wachsende Interesse an persönlicherer und messbarer Gesundheit. Gleichzeitig nutzen Akteure wie die CDC Biomonitoring als etablierten Weg, um zu messen, was sich tatsächlich im Körper befindet. Zusammen stützt das die Sicht, dass testbasierte Gesundheit langfristig zu einer deutlich größeren Kategorie werden kann.",
+    measurableCta: "Quelle zu messbarer Gesundheit ansehen (CDC)",
+    marketCta: "Quelle zum Markttrend ansehen (McKinsey)",
   },
   fr: {
     eyebrow: "Signal externe",
     title: "Ce n’est pas seulement notre propre thèse",
-    body: "McKinsey décrit le wellness comme un marché mondial d’environ 2 000 milliards de dollars et souligne en parallèle l’intérêt croissant pour une santé plus personnelle et plus mesurable. Cela renforce l’idée que la santé fondée sur le test peut devenir une catégorie bien plus importante à l’avenir.",
-    cta: "Lire le Future of Wellness 2025 de McKinsey",
+    body: "McKinsey décrit le wellness comme un marché mondial très important et souligne l’intérêt croissant pour une santé plus personnelle et plus mesurable. Dans le même temps, des acteurs comme le CDC utilisent le biomonitoring comme une manière établie de mesurer ce qui est réellement présent dans le corps. Ensemble, cela renforce l’idée que la santé fondée sur le test peut devenir une catégorie bien plus importante à l’avenir.",
+    measurableCta: "Voir une source sur la santé mesurable (CDC)",
+    marketCta: "Voir une source sur la tendance marché (McKinsey)",
   },
   it: {
     eyebrow: "Segnale esterno",
     title: "Non è solo una nostra tesi",
-    body: "McKinsey descrive il wellness come un mercato globale da circa 2 trilioni di dollari e segnala anche un interesse crescente per una salute più personale e più misurabile. Questo rafforza l’idea che la salute basata sul test possa diventare una categoria molto più grande nel tempo.",
-    cta: "Leggi il Future of Wellness 2025 di McKinsey",
+    body: "McKinsey descrive il wellness come un mercato globale molto grande e segnala un interesse crescente per una salute più personale e più misurabile. Allo stesso tempo, soggetti come il CDC usano il biomonitoring come modo consolidato per misurare ciò che è realmente presente nel corpo. Insieme, questi segnali rafforzano l’idea che la salute basata sul test possa diventare una categoria molto più grande nel tempo.",
+    measurableCta: "Vedi fonte sulla salute misurabile (CDC)",
+    marketCta: "Vedi fonte sul trend di mercato (McKinsey)",
   },
 };
 
@@ -3156,14 +3165,24 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                   <p className="mt-3 text-sm leading-7 text-subtle">
                     {marketSignalByLang[lang].body}
                   </p>
-                  <a
-                    href={marketSignalUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
-                  >
-                    {marketSignalByLang[lang].cta}
-                  </a>
+                  <div className="mt-4 flex flex-col items-start gap-2">
+                    <a
+                      href={measurableHealthSignalUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+                    >
+                      {marketSignalByLang[lang].measurableCta}
+                    </a>
+                    <a
+                      href={marketTrendSignalUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
+                    >
+                      {marketSignalByLang[lang].marketCta}
+                    </a>
+                  </div>
                 </div>
               </div>
               <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 grid gap-4 lg:grid-cols-3">
