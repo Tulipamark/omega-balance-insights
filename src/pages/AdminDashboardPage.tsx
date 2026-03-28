@@ -29,12 +29,21 @@ import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type {
   AdminPartnerRow,
   ConfidenceLevel,
+  FunnelEvent,
+  GrowthCompassRow,
+  KpiFunnelEventDay,
   Lead,
   LeadAttributionContext,
   OnboardPartnerFromLeadResponse,
   PartnerLeadPriority,
   ReferralTouchpoint,
 } from "@/lib/omega-types";
+
+const EMPTY_GROWTH_COMPASS_ROWS: GrowthCompassRow[] = [];
+const EMPTY_FUNNEL_EVENT_ROWS: KpiFunnelEventDay[] = [];
+const EMPTY_FUNNEL_EVENT_TIMELINE: FunnelEvent[] = [];
+const EMPTY_PARTNER_ROWS: AdminPartnerRow[] = [];
+const EMPTY_PARTNER_APPLICATIONS: Lead[] = [];
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
@@ -1085,36 +1094,38 @@ const AdminDashboardPage = () => {
   );
   const selectedProjectionSummary =
     growthProjectionSummaries.find((scenario) => scenario.name === selectedProjectionScenarioName) || null;
-
-  if (!isDemo && !isSupabaseConfigured) {
-    return <Navigate to="/dashboard/login" replace />;
-  }
-
-  if (!currentSection) {
-    return <Navigate to="/dashboard/admin/overview" replace />;
-  }
-
   const data = dashboardQuery.data;
   const latestFunnelDay = data?.kpis?.funnelDaily?.[0] || null;
   const pipeline = data?.kpis?.partnerPipeline || null;
   const producingPartners = data?.kpis?.duplication?.filter((row) => row.has_generated_leads).length || 0;
   const latestKnownCustomers = latestFunnelDay?.customers ?? 0;
-  const growthCompassRows = data?.growthCompass || [];
+  const growthCompassRows = useMemo(() => data?.growthCompass ?? EMPTY_GROWTH_COMPASS_ROWS, [data?.growthCompass]);
+  const funnelEventRows = useMemo(
+    () => data?.kpis?.funnelEventsDaily ?? EMPTY_FUNNEL_EVENT_ROWS,
+    [data?.kpis?.funnelEventsDaily],
+  );
+  const recentFunnelEvents = useMemo(() => data?.recentFunnelEvents ?? EMPTY_FUNNEL_EVENT_TIMELINE, [data?.recentFunnelEvents]);
+  const funnelEventTimeline = useMemo(
+    () => data?.funnelEventTimeline ?? EMPTY_FUNNEL_EVENT_TIMELINE,
+    [data?.funnelEventTimeline],
+  );
+  const partnerRows = useMemo(() => data?.partners ?? EMPTY_PARTNER_ROWS, [data?.partners]);
+  const partnerApplications = useMemo(
+    () => data?.partnerApplications ?? EMPTY_PARTNER_APPLICATIONS,
+    [data?.partnerApplications],
+  );
   const partnerFunnelInsights = useMemo(() => (data ? buildPartnerFunnelInsights(data) : null), [data]);
-  const funnelEventRows = data?.kpis?.funnelEventsDaily || [];
-  const recentFunnelEvents = data?.recentFunnelEvents || [];
-  const funnelEventTimeline = data?.funnelEventTimeline || [];
   const funnelTimingInsights = useMemo(
     () => buildFunnelStageTimingInsights(funnelEventTimeline),
     [funnelEventTimeline],
   );
   const partnerLifecycleTimingInsights = useMemo(
     () => buildPartnerLifecycleTimingInsights({
-      partnerApplications: data?.partnerApplications || [],
-      partners: data?.partners || [],
-      growthCompass: data?.growthCompass || [],
+      partnerApplications,
+      partners: partnerRows,
+      growthCompass: growthCompassRows,
     }),
-    [data?.growthCompass, data?.partnerApplications, data?.partners],
+    [growthCompassRows, partnerApplications, partnerRows],
   );
   const funnelEventSummary = useMemo(() => {
     const countFor = (eventNames: string[]) =>
@@ -1336,17 +1347,17 @@ const AdminDashboardPage = () => {
   const selectedLeadCoreSupportPlan = selectedLead ? getCoreSupportPlan(selectedLead) : null;
   const selectedLeadAttribution = selectedLead ? getLeadAttribution(selectedLead) : null;
   const partnerNameById = useMemo(
-    () => new Map((data?.partners || []).map((partner) => [partner.partnerId, partner.partnerName])),
-    [data?.partners],
+    () => new Map(partnerRows.map((partner) => [partner.partnerId, partner.partnerName])),
+    [partnerRows],
   );
   const partnersWithSetupNoActivity = useMemo(() => {
-    if (!data?.partners?.length || !growthCompassRows.length) {
+    if (!partnerRows.length || !growthCompassRows.length) {
       return [];
     }
 
     const growthByPartnerId = new Map(growthCompassRows.map((row) => [row.partnerId, row]));
 
-    return data.partners
+    return partnerRows
       .map((partner) => ({
         partner,
         growth: growthByPartnerId.get(partner.partnerId) || null,
@@ -1357,13 +1368,13 @@ const AdminDashboardPage = () => {
         const bTime = new Date(b.partner.verifiedAt || b.partner.createdAt).getTime();
         return aTime - bTime;
       });
-  }, [data?.partners, growthCompassRows]);
+  }, [growthCompassRows, partnerRows]);
   const partnersMovingTowardDuplication = useMemo(() => {
-    if (!data?.partners?.length || !growthCompassRows.length) {
+    if (!partnerRows.length || !growthCompassRows.length) {
       return [];
     }
 
-    const partnerById = new Map((data.partners || []).map((partner) => [partner.partnerId, partner]));
+    const partnerById = new Map(partnerRows.map((partner) => [partner.partnerId, partner]));
     const priorityByStatus = new Map([
       ["leader-track", 3],
       ["duplicating", 2],
@@ -1384,9 +1395,9 @@ const AdminDashboardPage = () => {
 
         return b.row.score - a.row.score;
       });
-  }, [data?.partners, growthCompassRows]);
+  }, [growthCompassRows, partnerRows]);
   const activationDecisionSummary = useMemo(() => {
-    const partnerById = new Map((data?.partners || []).map((partner) => [partner.partnerId, partner]));
+    const partnerById = new Map(partnerRows.map((partner) => [partner.partnerId, partner]));
 
     const awaitingSetup = growthCompassRows
       .filter((row) => {
@@ -1447,7 +1458,7 @@ const AdminDashboardPage = () => {
         readyButInactive[0]?.growth ||
         null,
     };
-  }, [data?.partners, growthCompassRows, partnersMovingTowardDuplication, partnersWithSetupNoActivity]);
+  }, [growthCompassRows, partnerRows, partnersMovingTowardDuplication, partnersWithSetupNoActivity]);
   const topPartnerActivationList = useMemo(() => {
     const setupRows = activationDecisionSummary.awaitingSetup
       .slice(0, 2)
@@ -1491,28 +1502,30 @@ const AdminDashboardPage = () => {
     return [...setupRows, ...inactiveRows, ...momentumRows].slice(0, 6);
   }, [activationDecisionSummary]);
   const leadsReadyButNotOnboarded = useMemo(() => {
-    if (!data?.partnerApplications?.length) {
+    if (!partnerApplications.length) {
       return [];
     }
 
-    return data.partnerApplications
+    return partnerApplications
       .filter((lead) => lead.status !== "active" && getLeadReviewReady(lead))
       .sort((a, b) => new Date(a.updated_at || a.created_at).getTime() - new Date(b.updated_at || b.created_at).getTime());
-  }, [data?.partnerApplications]);
-  const sortedPartnerApplications = data
-    ? [...data.partnerApplications].sort((a, b) => {
+  }, [partnerApplications]);
+  const sortedPartnerApplications = useMemo(
+    () =>
+      [...partnerApplications].sort((a, b) => {
         const scoreDiff = getApplicationQueueScore(b) - getApplicationQueueScore(a);
         if (scoreDiff !== 0) {
           return scoreDiff;
         }
 
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      })
-    : [];
+      }),
+    [partnerApplications],
+  );
   const onboardingDecisionSummary = useMemo(() => {
-    const applications = data?.partnerApplications || [];
+    const applications = partnerApplications;
     const growthByPartnerName = new Map(growthCompassRows.map((row) => [row.partnerName.toLowerCase(), row]));
-    const partnerByEmail = new Map((data?.partners || []).map((partner) => [partner.email.toLowerCase(), partner]));
+    const partnerByEmail = new Map(partnerRows.map((partner) => [partner.email.toLowerCase(), partner]));
 
     const needsReview = applications.filter((lead) => {
       const hasInternalReview = getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0;
@@ -1595,9 +1608,9 @@ const AdminDashboardPage = () => {
       topPriorityLead,
       actionQueue,
     };
-  }, [data?.partnerApplications, data?.partners, growthCompassRows, sortedPartnerApplications]);
+  }, [growthCompassRows, partnerApplications, partnerRows, sortedPartnerApplications]);
   const candidateTeamReadinessSummary = useMemo(() => {
-    const candidates = (data?.partnerApplications || []).filter((lead) => lead.status !== "active");
+    const candidates = partnerApplications.filter((lead) => lead.status !== "active");
     const internalReviewReady = candidates.filter(
       (lead) => getLeadPartnerPriority(lead) !== null || getLeadAdminNote(lead).trim().length > 0,
     );
@@ -1639,7 +1652,7 @@ const AdminDashboardPage = () => {
       topBlocker: blockerEntries[0] || null,
       blockerEntries,
     };
-  }, [data?.partnerApplications]);
+  }, [partnerApplications]);
   const topApplicationFocusList = useMemo(() => {
     return sortedPartnerApplications
       .filter((lead) => getLeadUrgencyLabel(lead) !== "Kan vänta")
@@ -1656,8 +1669,8 @@ const AdminDashboardPage = () => {
       return [];
     }
 
-    const applicationLookup = new Map(data.partnerApplications.map((lead) => [lead.name, lead]));
-    const partnerLookup = new Map(data.partners.map((partner) => [partner.partnerName, partner]));
+    const applicationLookup = new Map(partnerApplications.map((lead) => [lead.name, lead]));
+    const partnerLookup = new Map(partnerRows.map((partner) => [partner.partnerName, partner]));
 
     return partnerFunnelInsights.blockers.map((blocker) => ({
       ...blocker,
@@ -1670,7 +1683,7 @@ const AdminDashboardPage = () => {
         .filter((partner): partner is AdminPartnerRow => Boolean(partner))
         .slice(0, 3),
     }));
-  }, [data, partnerFunnelInsights]);
+  }, [data, partnerApplications, partnerFunnelInsights, partnerRows]);
   const overviewPrioritySummary = useMemo(() => {
     const priorities = [
       onboardingDecisionSummary.actionQueue[0]
@@ -1719,6 +1732,14 @@ const AdminDashboardPage = () => {
       headline: priorities[0] || null,
     };
   }, [activationDecisionSummary.actionQueue, adminStuckLists, onboardingDecisionSummary.actionQueue, trafficActionSummary.actionQueue]);
+
+  if (!isDemo && !isSupabaseConfigured) {
+    return <Navigate to="/dashboard/login" replace />;
+  }
+
+  if (!currentSection) {
+    return <Navigate to="/dashboard/admin/overview" replace />;
+  }
   const selectedLeadBlockers = selectedLead
     ? [
         ...(partnerPriority !== "none" || adminNote.trim() ? [] : ["Sätt prioritet eller intern bedömning"]),
