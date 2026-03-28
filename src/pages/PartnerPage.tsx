@@ -1505,8 +1505,8 @@ const heroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
 
 const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]>> = {
   sv: {
-    title: "Varför kan det här vara värt att bygga?",
-    body: "Vi tror att en stark partnermodell behöver vila på verklig produktrelevans, återkommande kundvärde, en seriös affärslogik och en kategori som blir mer intressant över tid.",
+    title: "Vad som gör modellen hållbar över tid",
+    body: "Det här blocket är för dig som vill förstå vad som gör modellen mer långsiktig än många kortsiktiga hälsoupplägg.",
     cards: [
       {
         title: "Mätning före antaganden",
@@ -1527,8 +1527,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   en: {
-    title: "Why could this be worth building?",
-    body: "We believe a strong partner model should rest on real product relevance, recurring customer value, sound business logic, and a category that becomes more interesting over time.",
+    title: "What makes the model durable over time",
+    body: "This section is for people who want to understand what can make the model more durable than many short-term health setups.",
     cards: [
       {
         title: "Measurement before assumptions",
@@ -1549,8 +1549,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   no: {
-    title: "Hvorfor kan dette være verdt å bygge?",
-    body: "Vi tror at en sterk partnermodell må hvile på reell produktrelevans, tilbakevendende kundeverdi, en seriøs forretningslogikk og en kategori som blir mer interessant over tid.",
+    title: "Hva som gjør modellen holdbar over tid",
+    body: "Denne delen er for deg som vil forstå hva som kan gjøre modellen mer langsiktig enn mange kortsiktige helseopplegg.",
     cards: [
       {
         title: "Måling før antakelser",
@@ -1571,8 +1571,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   da: {
-    title: "Hvorfor kan dette være værd at bygge?",
-    body: "Vi mener, at en stærk partnermodel skal hvile på reel produktrelevans, tilbagevendende kundeværdi, en seriøs forretningslogik og en kategori, der bliver mere interessant over tid.",
+    title: "Hvad der gør modellen holdbar over tid",
+    body: "Denne del er til dig, der vil forstå, hvad der kan gøre modellen mere langsigtet end mange kortsigtede sundhedsoplæg.",
     cards: [
       {
         title: "Måling før antagelser",
@@ -1593,8 +1593,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   fi: {
-    title: "Miksi tämä voisi olla rakentamisen arvoinen?",
-    body: "Uskomme, että vahvan partnermallin pitää perustua todelliseen tuoteosuvuuteen, toistuvaan asiakasarvoon, järkevään liiketoimintalogiikkaan ja kategoriaan, joka muuttuu ajan myötä kiinnostavammaksi.",
+    title: "Mikä tekee mallista kestävän ajan yli",
+    body: "Tämä osio on sinulle, joka haluat ymmärtää, mikä voi tehdä mallista pitkäjänteisemmän kuin monet lyhytkestoiset terveysratkaisut.",
     cards: [
       {
         title: "Mittaaminen ennen oletuksia",
@@ -1615,8 +1615,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   de: {
-    title: "Warum könnte sich der Aufbau lohnen?",
-    body: "Wir glauben, dass ein starkes Partnermodell auf echter Produktrelevanz, wiederkehrendem Kundennutzen, solider Geschäftslogik und einer Kategorie beruhen muss, die mit der Zeit an Bedeutung gewinnt.",
+    title: "Was das Modell auf Dauer tragfähig macht",
+    body: "Dieser Abschnitt ist für alle, die verstehen möchten, was das Modell langfristig belastbarer machen kann als viele kurzfristige Gesundheitskonzepte.",
     cards: [
       {
         title: "Messung statt Vermutung",
@@ -1637,8 +1637,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   fr: {
-    title: "Pourquoi cela peut-il valoir la peine d'être construit ?",
-    body: "Nous pensons qu'un modèle partenaire solide doit reposer sur une vraie pertinence produit, une valeur client récurrente, une logique économique sérieuse et une catégorie qui gagne en intérêt avec le temps.",
+    title: "Ce qui rend le modèle durable dans le temps",
+    body: "Cette section s'adresse à ceux qui veulent comprendre ce qui peut rendre le modèle plus durable que beaucoup d'approches santé à court terme.",
     cards: [
       {
         title: "La mesure avant les suppositions",
@@ -1659,8 +1659,8 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
     ],
   },
   it: {
-    title: "Perché potrebbe valere la pena costruirlo?",
-    body: "Pensiamo che un modello partner solido debba poggiare su una reale rilevanza del prodotto, su un valore cliente ricorrente, su una logica di business seria e su una categoria destinata a diventare più interessante nel tempo.",
+    title: "Cosa rende il modello solido nel tempo",
+    body: "Questa sezione è per chi vuole capire cosa può rendere il modello più duraturo rispetto a molti percorsi salute di breve periodo.",
     cards: [
       {
         title: "Misurazione prima delle supposizioni",
@@ -3371,31 +3371,50 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               <p className="mt-2 max-w-2xl text-sm leading-7 text-foreground/80 md:text-base">
                 {economicsTraditionalBodyByLang[lang] ?? economicsTraditionalBodyByLang.en}
               </p>
-              <div className="mt-5 grid gap-3 md:grid-cols-[repeat(4,minmax(0,1fr))]">
+              <div className="mt-5 space-y-3 md:hidden">
                 {page.economics.steps.map((step, index) => (
-                  <div key={step.label} className="flex items-center gap-3 md:contents">
-                    <div className="relative flex-1 rounded-2xl border border-border/70 bg-card px-5 py-6">
+                  <div key={step.label}>
+                    <div className="rounded-2xl border border-border/70 bg-card px-5 py-6 shadow-sm">
                       <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
                       <p className="mt-3 font-serif text-2xl font-semibold tracking-tight md:text-3xl">{step.value}</p>
                     </div>
                     {index < page.economics.steps.length - 1 ? (
-                      <>
-                        <div className="flex items-center justify-center md:hidden">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                            <ArrowDown className="h-3.5 w-3.5" />
-                            {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
-                          </div>
+                      <div className="mt-3 flex justify-center">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                          <ArrowDown className="h-3.5 w-3.5" />
+                          {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
                         </div>
-                        <div className="hidden items-center justify-center md:flex">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                            <ArrowRight className="h-3.5 w-3.5" />
-                            {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
-                          </div>
-                        </div>
-                      </>
+                      </div>
                     ) : null}
                   </div>
                 ))}
+              </div>
+              <div className="relative mt-8 hidden min-h-[23rem] md:block">
+                {page.economics.steps.map((step, index) => {
+                  const left = index * 23;
+                  const bottom = index * 72;
+
+                  return (
+                    <div key={step.label}>
+                      <div
+                        className="absolute w-[12.5rem] rounded-2xl border border-border/70 bg-card px-5 py-6 shadow-sm lg:w-[13.5rem]"
+                        style={{ left: `${left}%`, bottom: `${bottom}px` }}
+                      >
+                        <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
+                        <p className="mt-3 font-serif text-2xl font-semibold tracking-tight lg:text-3xl">{step.value}</p>
+                      </div>
+                      {index < page.economics.steps.length - 1 ? (
+                        <div
+                          className="absolute flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground"
+                          style={{ left: `calc(${left}% + 11.5rem)`, bottom: `${bottom + 34}px` }}
+                        >
+                          <ArrowRight className="h-3.5 w-3.5" />
+                          {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">

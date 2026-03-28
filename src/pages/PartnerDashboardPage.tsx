@@ -659,6 +659,98 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   };
 }
 
+function getPartnerLaunchDay(createdAt: string) {
+  const createdTime = new Date(createdAt).getTime();
+  if (Number.isNaN(createdTime)) {
+    return 1;
+  }
+
+  const diffMs = Date.now() - createdTime;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  return Math.min(120, Math.max(1, diffDays + 1));
+}
+
+function buildFastStartJourney(data: PartnerDashboardData, legalAccepted: boolean) {
+  const customerSignals = data.customers.length + data.leads.filter((lead) => lead.type === "customer_lead").length;
+  const partnerSignals = data.metrics.directPartners + data.partnerLeads.length;
+  const zzLinksReady = hasRequiredZzLinks(data);
+  const launchDay = getPartnerLaunchDay(data.partner.created_at);
+  const daysLeft = Math.max(0, 120 - launchDay);
+  const ownFoundationReady = legalAccepted && zzLinksReady && data.partner.referral_code.length > 0;
+  const firstCustomersReached = customerSignals > 0;
+  const twoStarted = data.metrics.directPartners >= 2 || partnerSignals >= 2;
+  const firstLineMoving = data.metrics.directPartners >= 2 && (data.team.length >= 2 || customerSignals + partnerSignals >= 4);
+
+  const steps = [
+    {
+      id: "foundation",
+      title: "Steg 1: Kom igång själv",
+      description: "Lägg grunden först. Då blir resten enklare att upprepa.",
+      target: "Legal, länkar och din egen Omega-länk ska vara på plats.",
+      reward: "Bra jobbat. Nu har du din egen grund på plats.",
+      done: ownFoundationReady,
+    },
+    {
+      id: "customers",
+      title: "Steg 2: Få dina första kunder",
+      description: "Skapa första riktiga rörelsen med din länk och några tydliga kundsignaler.",
+      target: firstCustomersReached
+        ? `${customerSignals} kundsignaler skapade hittills.`
+        : "Målet är att få in din första kundsignal och börja bygga en liten stabil kundbas.",
+      reward: "Snyggt. Nu har du bevis på att modellen går att sätta i rörelse.",
+      done: firstCustomersReached,
+    },
+    {
+      id: "start-two",
+      title: "Steg 3: Hjälp två personer att komma igång",
+      description: "Nu börjar dupliceringen. Nästa nivå är att du inte bara bygger själv.",
+      target: twoStarted
+        ? `${Math.max(data.metrics.directPartners, partnerSignals)} partnerstarter eller partnersignaler finns redan.`
+        : "Målet är att hjälpa två personer till en första tydlig start via ditt flöde.",
+      reward: "Bra där. Nu bygger du inte bara själv, du börjar bygga vidare genom andra.",
+      done: twoStarted,
+    },
+    {
+      id: "activate-two",
+      title: "Steg 4: Hjälp dina två att få fart",
+      description: "Nu gäller det att hjälpa de första vidare så att arbetet kan upprepas utan att allt hänger på dig.",
+      target: firstLineMoving
+        ? "Det finns tydliga first-line-signaler att bygga vidare på."
+        : "Målet är att dina två första inte bara startar, utan börjar få egen rörelse.",
+      reward: "Starkt jobbat. Nu har du byggt en riktig startmotor, inte bara en engångsinsats.",
+      done: firstLineMoving,
+    },
+  ];
+
+  const currentStepIndex = steps.findIndex((step) => !step.done);
+
+  return {
+    launchDay,
+    daysLeft,
+    completedSteps: steps.filter((step) => step.done).length,
+    totalSteps: steps.length,
+    currentTitle: currentStepIndex === -1 ? "Fast Start genomförd" : steps[currentStepIndex].title,
+    currentFocus:
+      currentStepIndex === -1
+        ? "Nu handlar det om att upprepa det som fungerar och hjälpa fler i din första linje framåt."
+        : steps[currentStepIndex].description,
+    momentumMessage:
+      currentStepIndex <= 0
+        ? "En sak i taget. Grunden först, tempo sedan."
+        : currentStepIndex === 1
+          ? "Bra jobbat. Nu har du en grund att bygga riktiga kundsignaler ovanpå."
+          : currentStepIndex === 2
+            ? "Nu börjar det bli en verksamhet, inte bara en egen aktivitet."
+            : currentStepIndex === 3
+              ? "Nu flyttas fokus från din egen fart till hur väl du hjälper andra i gång."
+              : "Snyggt jobbat. Nu kan du börja bygga vidare med mycket bättre rytm.",
+    steps: steps.map((step, index) => ({
+      ...step,
+      status: step.done ? "done" : currentStepIndex === index ? "current" : "locked",
+    })),
+  };
+}
+
 const PartnerDashboardPage = () => {
   const { section } = useParams<{ section?: string }>();
   const [searchParams] = useSearchParams();
@@ -731,6 +823,7 @@ const PartnerDashboardPage = () => {
   const data = partnerQuery.data;
   const legalAccepted = hasAcceptedPortalLegal(accessQuery.data?.portalUser);
   const journey = data ? buildPartnerFirst30Days(data, legalAccepted) : null;
+  const fastStartJourney = data ? buildFastStartJourney(data, legalAccepted) : null;
   const viewingAsAdmin = accessQuery.data?.portalUser?.role === "admin";
   const legalActionHref = viewingAsAdmin ? "/dashboard/admin/legal-preview" : "/dashboard/partner/legal";
   const showOverview = currentSection === "overview";
@@ -1015,28 +1108,30 @@ const PartnerDashboardPage = () => {
 
           {showOverview && journey ? (
             <DashboardSection
-              title="Dina första 30 dagar"
-              description="Börja här. Resten av sidan finns längre ner när du behöver mer stöd och överblick."
+              title="Din Fast Start"
+              description="Dina första 120 dagar ska kännas som en guidande partnerresa, inte som hela kompplanen på en gång."
             >
               <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr_1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Status nu</p>
-                  <p className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">{journey.stageLabel}</p>
-                  <p className="mt-2 text-sm leading-6 text-subtle">{journey.summary}</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Lanseringsperiod</p>
+                  <p className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">
+                    Dag {fastStartJourney?.launchDay ?? 1} av 120
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">{fastStartJourney?.currentFocus ?? journey.summary}</p>
                   <div className="mt-4 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Bra jobbat hittills</p>
-                    <p className="mt-2 text-sm text-foreground">{journey.encouragement}</p>
+                    <p className="mt-2 text-sm text-foreground">{fastStartJourney?.momentumMessage ?? journey.encouragement}</p>
                   </div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Klara steg</p>
                       <p className="mt-2 text-2xl font-semibold text-foreground">
-                        {journey.checklist.filter((item) => item.done).length} / {journey.checklist.length}
+                        {fastStartJourney?.completedSteps ?? journey.checklist.filter((item) => item.done).length} / {fastStartJourney?.totalSteps ?? journey.checklist.length}
                       </p>
                     </div>
                     <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa milstolpe</p>
-                      <p className="mt-2 text-sm text-foreground">{journey.nextMilestone}</p>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nuvarande fokus</p>
+                      <p className="mt-2 text-sm text-foreground">{fastStartJourney?.currentTitle ?? journey.nextMilestone}</p>
                     </div>
                   </div>
                 </div>
@@ -1085,6 +1180,58 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
               </div>
+
+              {fastStartJourney ? (
+                <div className="mt-4 rounded-[1.2rem] border border-border/70 bg-white p-4 shadow-card">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Stegvis väg framåt</p>
+                      <p className="mt-2 text-lg font-semibold text-foreground">En sak i taget. När ett steg är klart öppnas nästa nivå.</p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        Vi visar inte allt på en gång. Fokus är att du ska förstå vad som är viktigast nu och känna momentum när du går vidare.
+                      </p>
+                    </div>
+                    <div className="rounded-[1rem] border border-border/70 bg-secondary/20 px-4 py-3">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Tid kvar i Fast Start</p>
+                      <p className="mt-2 text-2xl font-semibold text-foreground">{fastStartJourney.daysLeft} dagar</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 xl:grid-cols-4">
+                    {fastStartJourney.steps.map((step) => (
+                      <div
+                        key={step.id}
+                        className={`rounded-[1rem] border p-4 ${
+                          step.status === "done"
+                            ? "border-emerald-300/70 bg-emerald-50"
+                            : step.status === "current"
+                              ? "border-primary/40 bg-secondary/25"
+                              : "border-border/70 bg-muted/30"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-sm font-medium text-foreground">{step.title}</p>
+                          <Badge
+                            variant={step.status === "done" ? "default" : step.status === "current" ? "secondary" : "outline"}
+                            className="rounded-full px-3 py-1"
+                          >
+                            {step.status === "done" ? "Klar" : step.status === "current" ? "Pågår nu" : "Nästa nivå"}
+                          </Badge>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-subtle">{step.description}</p>
+                        <div className="mt-3 rounded-[0.9rem] border border-border/70 bg-white/80 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Detta är målet</p>
+                          <p className="mt-2 text-sm text-foreground">{step.target}</p>
+                        </div>
+                        <div className="mt-3 rounded-[0.9rem] border border-border/70 bg-white/80 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">När det är klart</p>
+                          <p className="mt-2 text-sm text-foreground">{step.reward}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
               <div className="mt-4 grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
@@ -1268,7 +1415,7 @@ const PartnerDashboardPage = () => {
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Länken du delar</p>
                   <p className="mt-2 break-all font-medium text-foreground">{partnerLink}</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Använd den här länken i första hand. Vi skickar vidare till rått Zinzino-länk i bakgrunden.
+                    Använd den här länken i första hand. Vi skickar vidare till rätt Zinzino-länk i bakgrunden.
                   </p>
                 </div>
                 <Button
