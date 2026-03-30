@@ -11,7 +11,7 @@ export function DataTable({
   emptyState: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border/70">
+    <div className="overflow-x-auto rounded-2xl border border-border/70">
       <Table>
         <TableHeader className="bg-secondary/60">
           <TableRow>

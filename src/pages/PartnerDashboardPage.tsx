@@ -1268,8 +1268,8 @@ const PartnerDashboardPage = () => {
               title="Din Fast Start"
               description="Dina första 120 dagar ska kännas som en guidande partnerresa, inte som hela kompplanen på en gång."
             >
-              <div className="grid gap-4 xl:grid-cols-[1.3fr_0.8fr_0.9fr_0.9fr]">
-                <div className="rounded-[1.2rem] border border-primary/20 bg-white p-5 shadow-card">
+              <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr] xl:grid-cols-12">
+                <div className="rounded-[1.2rem] border border-primary/20 bg-white p-5 shadow-card lg:col-span-1 xl:col-span-6">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
                   <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
                     {firstActionEngine?.actionTitle ?? primaryActionCard?.title ?? journey.nextBestAction}
@@ -1280,7 +1280,7 @@ const PartnerDashboardPage = () => {
                   <div className="mt-4">
                     <Button
                       type="button"
-                      className="h-11 rounded-xl px-5 text-sm shadow-sm"
+                      className="h-11 w-full rounded-xl px-5 text-sm shadow-sm sm:w-auto"
                       onClick={() => {
                         void navigator.clipboard.writeText(partnerLink);
                         markActionStarted();
@@ -1289,6 +1289,7 @@ const PartnerDashboardPage = () => {
                       <Copy className="mr-2 h-4 w-4" />
                       {firstActionEngine?.actionLabel ?? "Kopiera min länk"}
                     </Button>
+                    <p className="mt-3 text-sm text-subtle">Börja med 1 person du redan pratar med. Det räcker för att få systemet i rörelse.</p>
                   </div>
                   <div className="mt-4 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Skicka till</p>
@@ -1350,7 +1351,7 @@ const PartnerDashboardPage = () => {
                   </details>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-4">
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/25 p-4 lg:col-span-1 xl:col-span-2">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Din status</p>
                   <p className="mt-3 text-lg font-semibold text-foreground">{firstActionEngine?.statusTitle ?? fastStartJourney?.currentTitle}</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.statusBody ?? fastStartJourney?.currentFocus ?? journey.summary}</p>
@@ -1364,10 +1365,10 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det här händer just nu"}</p>
                   <div className="mt-3 space-y-3">
-                    <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                    <div className={`rounded-[1rem] border p-3.5 ${actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0) ? "border-amber-300/70 bg-amber-50/70" : "border-border/70 bg-secondary/20"}`}>
                       <p className="text-sm font-medium text-foreground">
                         {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
                           ? "Väntar på första signal..."
@@ -1389,7 +1390,7 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "Nästa nivå"}</p>
                   <p className="mt-3 text-lg font-semibold text-foreground">
                     {firstActionEngine?.level === 3 ? "Nu är du redo för duplication" : "Ett steg till öppnar nästa nivå"}
@@ -1429,7 +1430,7 @@ const PartnerDashboardPage = () => {
                     </div>
                   </div>
 
-                  <div className="mt-4 grid gap-3 xl:grid-cols-4">
+                  <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                     {fastStartJourney.steps.map((step) => (
                       <div
                         key={step.id}
@@ -1465,7 +1466,7 @@ const PartnerDashboardPage = () => {
                 </div>
               ) : null}
 
-              <div className="mt-4 grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+              <div className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Progress mot första resultat</p>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -1592,7 +1593,7 @@ const PartnerDashboardPage = () => {
               title="Snabbåtgärder"
               description="Tre snabba vägar när du vill agera direkt."
             >
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Dela Omega-länken</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
@@ -1642,7 +1643,7 @@ const PartnerDashboardPage = () => {
               title="Din resa"
               description="Du behöver inte kunna allt från start. Här ser du vägen framåt, steg för steg, så att du vet vad som är viktigast nu och vad som kommer senare."
             >
-              <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+              <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-5">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nu</p>
                   <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Kom igång</p>
@@ -1809,7 +1810,7 @@ const PartnerDashboardPage = () => {
           ) : null}
 
           {showOverview ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <MetricCard label="Mina leads" value={data.metrics.leads} helper="Alla leads där du är attribuerad partner." icon={<Link2 className="h-5 w-5" />} />
               <MetricCard label="Partnerleads" value={data.metrics.partnerLeads} helper="Nya intresseanmälningar för partnerskap." icon={<UserPlus2 className="h-5 w-5" />} />
               <MetricCard label="Mina kunder" value={data.metrics.customers} helper="Kunder som hittills kopplats till dig." icon={<Users className="h-5 w-5" />} />
@@ -1818,9 +1819,9 @@ const PartnerDashboardPage = () => {
           ) : null}
 
           {showLeads ? (
-            <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
               <DashboardSection title="Mina leads" description="Både kundleads och partnerleads sparas med din attribution.">
-                <div className="mb-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {leadQueueSummary.map((item) => (
                     <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
@@ -1966,7 +1967,7 @@ const PartnerDashboardPage = () => {
               title="Var din trafik svarar"
               description="Här ser du var din trafik faktiskt visar liv just nu. Det hjälper dig förstå vilka marknader som svarar på din länk."
             >
-              <div className="grid gap-4 xl:grid-cols-[0.9fr_0.9fr_1.2fr]">
+              <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[0.9fr_0.9fr_1.2fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/20 p-4">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
                   <div className="mt-3 space-y-2">
@@ -1993,7 +1994,7 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                <div className="rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card lg:col-span-2 xl:col-span-1">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
                   <div className="mt-4">
                     <DataTable
@@ -2044,10 +2045,10 @@ const PartnerDashboardPage = () => {
           ) : null}
 
           {showLeads || showNetwork ? (
-            <div className="grid gap-8 xl:grid-cols-2">
+            <div className="grid gap-8 lg:grid-cols-2">
               {showLeads ? (
                 <DashboardSection title="Mina partnerleads" description="Här ser du partnerintresse och vad du bör göra härnäst.">
-                <div className="mb-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {partnerLeadQueueSummary.map((item) => (
                     <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
