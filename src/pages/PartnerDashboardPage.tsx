@@ -1379,6 +1379,11 @@ const PartnerDashboardPage = () => {
                           ? "Du är nära första resultatet."
                           : firstActionEngine?.liveMeta ?? "Du är nära ditt första resultat"}
                       </p>
+                      {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0) ? (
+                        <div className="mt-3 rounded-[0.85rem] border border-amber-300/70 bg-white/80 px-3 py-2 text-xs text-amber-950">
+                          Din del är gjord. Nästa win är att någon klickar eller svarar.
+                        </div>
+                      ) : null}
                     </div>
                     {followUpTargets[0] ? (
                       <div className="rounded-[1rem] border border-border/70 bg-white/90 p-3.5">
