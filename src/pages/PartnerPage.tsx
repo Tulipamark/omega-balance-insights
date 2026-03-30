@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowRight, BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
+import { ArrowDown, BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import FooterSection from "@/components/FooterSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -1306,6 +1306,17 @@ const economicsSplitNoteByLang: Record<Lang, string> = {
   de: "Vereinfachtes Schaubild dafür, wie ein eingesparter Spielraum verteilt werden kann, wenn externe Zwischenstufen entfallen. Dies ist keine offizielle Auszahlungstabelle.",
   fr: "Illustration pédagogique simplifiée de la manière dont une réserve économisée peut être répartie lorsque les intermédiaires externes sont supprimés. Ce n’est pas un tableau de rémunération officiel.",
   it: "Schema semplificato per mostrare come uno spazio economico risparmiato possa essere condiviso quando i livelli intermedi esterni vengono rimossi. Non è una tabella payout ufficiale.",
+};
+
+const economicsConclusionByLang: Record<Lang, string> = {
+  sv: "Po\u00e4ngen \u00e4r inte ett l\u00e4gre slutpris. Po\u00e4ngen \u00e4r att samma v\u00e4rde kan f\u00f6rdelas annorlunda.",
+  no: "Poenget er ikke en lavere sluttpris. Poenget er at den samme verdien kan fordeles annerledes.",
+  da: "Pointen er ikke en lavere slutpris. Pointen er, at den samme v\u00e6rdi kan fordeles anderledes.",
+  fi: "Pointti ei ole alempi loppuhinta. Pointti on, ett\u00e4 sama arvo voidaan jakaa eri tavalla.",
+  en: "The point is not a lower end price. The point is that the same value can be distributed differently.",
+  de: "Der Punkt ist nicht ein niedrigerer Endpreis. Der Punkt ist, dass derselbe Wert anders verteilt werden kann.",
+  fr: "L'id\u00e9e n'est pas un prix final plus bas. L'id\u00e9e est que la m\u00eame valeur peut \u00eatre r\u00e9partie autrement.",
+  it: "Il punto non \u00e8 un prezzo finale pi\u00f9 basso. Il punto \u00e8 che lo stesso valore pu\u00f2 essere distribuito in modo diverso.",
 };
 
 const heroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
@@ -2779,7 +2790,7 @@ const finalConversionAssistOverridesByLang: Partial<Record<Lang, { eyebrow: stri
 };
 
 const finalEconomicsModelBodyOverridesByLang: Partial<Record<Lang, string>> = {
-  sv: "När färre externa led tar marginal finns mer utrymme kvar i modellen. Det är en del av logiken bakom varför partnerintäkter kan finnas.",
+  sv: "Kunden behöver inte betala mindre. Poängen är att samma slutpris kan fördelas annorlunda när färre externa led tar marginal.",
   no: "Når færre eksterne ledd tar margin, blir det mer rom igjen i modellen. Det er en del av logikken bak hvorfor partnerinntekter kan finnes.",
   da: "Når færre eksterne led tager margin, er der mere rum tilbage i modellen. Det er en del af logikken bag, at partnerindtægter kan eksistere.",
   fi: "Kun ulkoisia väliportaita on vähemmän ottamassa marginaalia, malliin jää enemmän liikkumavaraa. Se on osa logiikkaa sen takana, miksi partnerituloja voi syntyä.",
@@ -3359,109 +3370,90 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.economics.title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.economics.body}</p>
           <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-4 md:p-5">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold tracking-tight text-foreground">
-                  {economicsTraditionalLabelByLang[lang] ?? economicsTraditionalLabelByLang.en}
+            <div className="grid gap-5 lg:grid-cols-2">
+              <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold tracking-tight text-foreground">
+                    {economicsTraditionalLabelByLang[lang] ?? economicsTraditionalLabelByLang.en}
+                  </p>
+                  <span className="rounded-full border border-border/70 bg-card px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-foreground/80 md:text-base">
+                  {economicsTraditionalBodyByLang[lang] ?? economicsTraditionalBodyByLang.en}
                 </p>
-                <span className="rounded-full border border-border/70 bg-card px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                  {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
-                </span>
-              </div>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-foreground/80 md:text-base">
-                {economicsTraditionalBodyByLang[lang] ?? economicsTraditionalBodyByLang.en}
-              </p>
-              <div className="mt-5 space-y-3 md:hidden">
-                {page.economics.steps.map((step, index) => (
-                  <div key={step.label}>
-                    <div className="rounded-2xl border border-border/70 bg-card px-5 py-6 shadow-sm">
-                      <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
-                      <p className="mt-3 font-serif text-2xl font-semibold tracking-tight md:text-3xl">{step.value}</p>
-                    </div>
-                    {index < page.economics.steps.length - 1 ? (
-                      <div className="mt-3 flex justify-center">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                          <ArrowDown className="h-3.5 w-3.5" />
-                          {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-              <div className="relative mt-8 hidden min-h-[23rem] md:block">
-                {page.economics.steps.map((step, index) => {
-                  const left = index * 23;
-                  const bottom = index * 72;
-
-                  return (
+                <div className="mt-5 space-y-3">
+                  {page.economics.steps.map((step, index) => (
                     <div key={step.label}>
-                      <div
-                        className="absolute w-[12.5rem] rounded-2xl border border-border/70 bg-card px-5 py-6 shadow-sm lg:w-[13.5rem]"
-                        style={{ left: `${left}%`, bottom: `${bottom}px` }}
-                      >
+                      <div className="rounded-2xl border border-border/70 bg-card px-5 py-5 shadow-sm">
                         <p className="text-xs font-medium uppercase tracking-[0.08em] text-subtle">{step.label}</p>
-                        <p className="mt-3 font-serif text-2xl font-semibold tracking-tight lg:text-3xl">{step.value}</p>
+                        <p className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl">{step.value}</p>
                       </div>
                       {index < page.economics.steps.length - 1 ? (
-                        <div
-                          className="absolute flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground"
-                          style={{ left: `calc(${left}% + 11.5rem)`, bottom: `${bottom + 34}px` }}
-                        >
-                          <ArrowRight className="h-3.5 w-3.5" />
-                          {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                        <div className="mt-3 flex justify-center">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-dashed border-border/70 bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                            <ArrowDown className="h-3.5 w-3.5" />
+                            {economicsIncreaseLabelByLang[lang] ?? economicsIncreaseLabelByLang.en}
+                          </div>
                         </div>
                       ) : null}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-              <div className="rounded-2xl border border-border/70 bg-secondary/35 px-5 py-5">
+
+              <div className="rounded-[1.5rem] border border-border/70 bg-secondary/30 p-5">
                 <p className="text-sm font-semibold tracking-tight text-foreground">
                   {economicsDirectLabelByLang[lang] ?? economicsDirectLabelByLang.en}
                 </p>
                 <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">
                   {economicsDirectBodyByLang[lang] ?? economicsDirectBodyByLang.en}
                 </p>
-                <div className="mt-4 rounded-2xl border border-border/70 bg-card px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{page.economics.modelLabel}</p>
+                <div className="mt-5 rounded-2xl border border-border/70 bg-card px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {page.economics.modelLabel}
+                  </p>
                   <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">{page.economics.modelBody}</p>
                 </div>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-background px-5 py-5">
-                <p className="text-sm font-semibold tracking-tight text-foreground">
-                  {economicsSplitTitleByLang[lang] ?? economicsSplitTitleByLang.en}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">
-                  {economicsSplitBodyByLang[lang] ?? economicsSplitBodyByLang.en}
-                </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                      {economicsSplitCompanyLabelByLang[lang] ?? economicsSplitCompanyLabelByLang.en}
-                    </p>
-                    <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
-                      {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
-                    </p>
+                <div className="mt-4 rounded-2xl border border-border/70 bg-background px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    {economicsSplitTitleByLang[lang] ?? economicsSplitTitleByLang.en}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-foreground/85 md:text-base">
+                    {economicsSplitBodyByLang[lang] ?? economicsSplitBodyByLang.en}
+                  </p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                        {economicsSplitCompanyLabelByLang[lang] ?? economicsSplitCompanyLabelByLang.en}
+                      </p>
+                      <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
+                        {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                        {economicsSplitPartnerLabelByLang[lang] ?? economicsSplitPartnerLabelByLang.en}
+                      </p>
+                      <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
+                        {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
+                      </p>
+                    </div>
                   </div>
-                  <div className="rounded-2xl border border-border/70 bg-secondary/20 px-4 py-4 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                      {economicsSplitPartnerLabelByLang[lang] ?? economicsSplitPartnerLabelByLang.en}
-                    </p>
-                    <p className="mt-2 font-serif text-3xl font-semibold tracking-tight text-foreground">
-                      {economicsSplitValueByLang[lang] ?? economicsSplitValueByLang.en}
-                    </p>
-                  </div>
+                  <p className="mt-4 text-xs leading-6 text-muted-foreground">
+                    {economicsSplitNoteByLang[lang] ?? economicsSplitNoteByLang.en}
+                  </p>
                 </div>
-                <p className="mt-4 text-xs leading-6 text-muted-foreground">
-                  {economicsSplitNoteByLang[lang] ?? economicsSplitNoteByLang.en}
-                </p>
               </div>
             </div>
-            <div className="mt-5 border-t border-border/70 pt-4">
-              <p className="text-xs leading-6 text-muted-foreground md:text-sm">
+
+            <div className="mt-6 rounded-2xl border border-border/70 bg-background px-5 py-5">
+              <p className="text-base font-semibold tracking-tight text-foreground md:text-lg">
+                {economicsConclusionByLang[lang] ?? economicsConclusionByLang.en}
+              </p>
+              <p className="mt-3 text-sm leading-7 text-foreground/85 md:text-base">{page.economics.modelBody}</p>
+              <p className="mt-4 text-xs leading-6 text-muted-foreground md:text-sm">
                 <span className="font-medium text-foreground/85">{page.economics.calloutTitle}</span>{" "}
                 {page.economics.calloutBody} {page.economics.note}
               </p>
