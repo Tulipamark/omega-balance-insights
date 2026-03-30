@@ -1171,6 +1171,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
         mockVisits,
         mockOutboundClicks,
       ),
+      marketInsights: buildMarketInsights(mockVisits),
       kpis: {
         funnelDaily: buildMockKpiFunnelDaily(mockVisits, mockLeads, mockCustomers, mockOrders),
         funnelEventsDaily: buildMockKpiFunnelEventsDaily(mockFunnelEvents),
@@ -1255,6 +1256,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       visits || [],
       ((outboundClicks as OutboundClickSignal[] | null) || []),
     ),
+    marketInsights: buildMarketInsights((visits as ReferralVisit[] | null) || []),
     kpis: {
       funnelDaily: (funnelResponse.data as KpiFunnelDay[] | null) || [],
       funnelEventsDaily: (funnelEventsDailyResponse.data as KpiFunnelEventDay[] | null) || [],
@@ -1408,6 +1410,46 @@ function hasCompletePartnerZzLinks(links: {
     links.zinzino_shop_url &&
     links.zinzino_partner_url,
   );
+}
+
+function buildMarketInsights(visits: ReferralVisit[]) {
+  const topBucket = (getLabel: (visit: ReferralVisit) => string | null) => {
+    const buckets = new Map<string, number>();
+
+    visits.forEach((visit) => {
+      const label = getLabel(visit);
+      if (!label) {
+        return;
+      }
+
+      buckets.set(label, (buckets.get(label) || 0) + 1);
+    });
+
+    return [...buckets.entries()]
+      .map(([label, count]) => ({ label, visits: count }))
+      .sort((a, b) => b.visits - a.visits || a.label.localeCompare(b.label))
+      .slice(0, 8);
+  };
+
+  return {
+    topCountries: topBucket((visit) => visit.geo_country || visit.geo_country_code || null),
+    topCities: topBucket((visit) => {
+      if (!visit.geo_city && !visit.geo_country_code) {
+        return null;
+      }
+
+      return [visit.geo_city, visit.geo_country_code].filter(Boolean).join(", ");
+    }),
+    recentLocations: sortNewest(visits)
+      .filter((visit) => visit.geo_country || visit.geo_city)
+      .slice(0, 12)
+      .map((visit) => ({
+        created_at: visit.created_at,
+        country: visit.geo_country || visit.geo_country_code || null,
+        city: visit.geo_city || null,
+        referral_code: visit.referral_code || null,
+      })),
+  };
 }
 
 function derivePartnerRecordState(

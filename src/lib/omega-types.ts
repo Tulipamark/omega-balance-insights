@@ -219,6 +219,12 @@ export interface ReferralVisit {
   utm_campaign?: string | null;
   user_agent?: string | null;
   ip_hash?: string | null;
+  geo_country?: string | null;
+  geo_country_code?: string | null;
+  geo_region?: string | null;
+  geo_city?: string | null;
+  geo_timezone?: string | null;
+  geo_source?: string | null;
   created_at: string;
 }
 
@@ -442,6 +448,11 @@ export interface AdminDashboardData {
   growthCompass: GrowthCompassRow[];
   recentFunnelEvents?: FunnelEvent[];
   funnelEventTimeline?: FunnelEvent[];
+  marketInsights?: {
+    topCountries: { label: string; visits: number }[];
+    topCities: { label: string; visits: number }[];
+    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+  };
 }
 
 export interface PortalAccessState {

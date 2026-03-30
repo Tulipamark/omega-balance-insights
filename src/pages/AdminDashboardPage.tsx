@@ -2496,6 +2496,59 @@ const AdminDashboardPage = () => {
                     emptyState="Ingen källdata än."
                   />
                 </DashboardSection>
+
+                <DashboardSection
+                  title="Levande marknader"
+                  description="Översikt över vilka länder och städer som faktiskt visar liv i referral-trafiken just nu."
+                >
+                  <div className="mb-4 grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
+                      <div className="mt-3 space-y-2">
+                        {(data.marketInsights?.topCountries || []).map((row) => (
+                          <div key={`country-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                            <span className="truncate text-foreground">{row.label}</span>
+                            <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                          </div>
+                        ))}
+                        {!data.marketInsights?.topCountries?.length ? <p className="text-sm text-subtle">Ingen geodata än.</p> : null}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppstäder</p>
+                      <div className="mt-3 space-y-2">
+                        {(data.marketInsights?.topCities || []).map((row) => (
+                          <div key={`city-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                            <span className="truncate text-foreground">{row.label}</span>
+                            <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                          </div>
+                        ))}
+                        {!data.marketInsights?.topCities?.length ? <p className="text-sm text-subtle">Ingen stadsdata än.</p> : null}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Hur du ska läsa detta</p>
+                      <div className="mt-3 space-y-2 text-sm text-subtle">
+                        <p>Land är oftast pålitligare än stad.</p>
+                        <p>Stad ska ses som signal, inte exakt sanning.</p>
+                        <p>När flera besök börjar komma från samma marknad är det ett tecken på att något faktiskt lever där.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <DataTable
+                    columns={["Senast", "Land", "Stad", "Referral"]} 
+                    rows={(data.marketInsights?.recentLocations || []).map((row) => [
+                      <span key={`${row.created_at}-${row.referral_code}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-country`}>{row.country || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-city`}>{row.city || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-ref`}>{row.referral_code || "-"}</span>,
+                    ])}
+                    emptyState="Ingen geodata registrerad än."
+                  />
+                </DashboardSection>
               </div> : null}
 
               {showOverview || showPartners ? <DashboardSection
