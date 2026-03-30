@@ -306,6 +306,11 @@ export interface AdminPartnerRow {
   zzLinks: PartnerZzLinks;
   createdAt: string;
   verifiedAt?: string | null;
+  marketInsights?: {
+    topCountries: { label: string; visits: number }[];
+    topCities: { label: string; visits: number }[];
+    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+  };
 }
 
 export interface TeamRow {
@@ -492,4 +497,9 @@ export interface PartnerDashboardData {
   customers: Customer[];
   partnerLeads: Lead[];
   team: TeamRow[];
+  marketInsights?: {
+    topCountries: { label: string; visits: number }[];
+    topCities: { label: string; visits: number }[];
+    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+  };
 }

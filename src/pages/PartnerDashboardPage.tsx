@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Copy, Link2, UserPlus2, Users } from "lucide-react";
+import { CheckCircle2, Copy, Link2, UserPlus2, Users } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +24,10 @@ import { hasAcceptedPortalLegal } from "@/lib/portal-legal";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+}
+
+function formatWholeNumber(value: number) {
+  return new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(value);
 }
 
 function getLeadStatusLabel(status: Lead["status"]) {
@@ -751,6 +755,141 @@ function buildFastStartJourney(data: PartnerDashboardData, legalAccepted: boolea
   };
 }
 
+function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boolean) {
+  const visits = data.metrics.clicks;
+  const customerSignals = data.leads.length + data.customers.length;
+  const partnerSignals = data.partnerLeads.length;
+  const resultSignals = customerSignals + partnerSignals;
+  const duplicationReady = resultSignals > 0 || data.metrics.directPartners > 0;
+  const linksReady = hasRequiredZzLinks(data);
+  const foundationReady = legalAccepted && linksReady && data.partner.referral_code.length > 0;
+
+  if (!foundationReady) {
+    return {
+      level: 1,
+      statusTitle: "Level 1 – Aktivering",
+      statusBody: "Du har inte hela grunden på plats än. Fixa den först så blir resten mycket enklare.",
+      nextGoal: "Nästa mål: få grunden helt klar",
+      actionTitle: "Få grunden klar nu",
+      actionBody: "Godkänn legal och lägg in dina länkar innan du börjar driva rörelse.",
+      actionLabel: !legalAccepted ? "Öppna legal" : "Öppna länkar",
+      actionMode: !legalAccepted ? ("legal" as const) : ("links" as const),
+      helper: [
+        "Gör klart legal först",
+        "Lägg in test-, shop- och partnerlänk",
+        "Se till att du själv kan stå för det du delar",
+      ],
+      liveTitle: "Det här händer just nu",
+      liveBody: "Så fort grunden är klar kan systemet börja jobba åt dig.",
+      liveMeta: "Du är nära första riktiga start",
+      nextLevelTitle: "Nästa steg",
+      nextLevelBody: "När grunden är klar låser du upp första aktiveringen.",
+      momentum: "Du är här nu. Få grunden klar och gå vidare.",
+      shareMode: "setup" as const,
+    };
+  }
+
+  if (visits === 0) {
+    return {
+      level: 1,
+      statusTitle: "Level 1 – Aktivering",
+      statusBody: "Du har kommit igång. Nu behöver du skapa första rörelsen.",
+      nextGoal: "Nästa mål: första signal",
+      actionTitle: "Skicka din länk till 1 person nu",
+      actionBody: "Börja litet. En skickad länk är bättre än att fundera för länge.",
+      actionLabel: "Kopiera min länk",
+      actionMode: "copy-link" as const,
+      helper: [
+        "någon du redan pratar med",
+        "någon som bryr sig om hälsa",
+        "någon du litar på",
+      ],
+      liveTitle: "Det här händer just nu",
+      liveBody: "Så fort någon använder din länk ser du första signalen här.",
+      liveMeta: "Du är ett klick från att få systemet i rörelse",
+      nextLevelTitle: "Nästa steg",
+      nextLevelBody: "När du får din första signal låser du upp nästa nivå.",
+      momentum: "Du har varit aktiv idag",
+      shareMode: "start" as const,
+    };
+  }
+
+  if (resultSignals === 0) {
+    return {
+      level: 2,
+      statusTitle: "Level 2 – Första signal",
+      statusBody: "Din länk används. Nu gäller det att bygga vidare medan tempot finns kvar.",
+      nextGoal: "Nästa mål: första resultat",
+      actionTitle: "Skicka din länk till 1 person till",
+      actionBody: "Du har redan rörelse. Nu vill vi få den att upprepa sig snabbt.",
+      actionLabel: "Kopiera min länk",
+      actionMode: "copy-link" as const,
+      helper: [
+        "någon som redan visat lite intresse",
+        "någon som brukar svara dig",
+        "någon som vill förstå sin hälsa bättre",
+      ],
+      liveTitle: "Det här händer just nu",
+      liveBody: visits === 1 ? "1 person har klickat på din länk." : `${visits} personer har klickat på din länk.`,
+      liveMeta: "Du är nära ditt första resultat",
+      nextLevelTitle: "Nästa nivå",
+      nextLevelBody: "När du får ditt första lead eller partnerintresse öppnas nästa steg.",
+      momentum: visits > 1 ? `Du har skapat ${visits} signaler hittills` : "Du har fått första signalen",
+      shareMode: "build" as const,
+    };
+  }
+
+  if (!duplicationReady || data.metrics.directPartners === 0) {
+    return {
+      level: 3,
+      statusTitle: "Level 3 – Första resultat",
+      statusBody: "Du har fått din första riktiga signal. Nu är det dags att skapa nästa lilla vinst.",
+      nextGoal: "Nästa mål: första kund eller första partnerkontakt",
+      actionTitle: "Skicka din länk till 1 person som kan vilja göra samma resa",
+      actionBody: "Nu får du börja använda samma enkla system för att hitta första duplication-signalen.",
+      actionLabel: "Bjud in partner",
+      actionMode: "copy-link" as const,
+      helper: [
+        "någon som gillar struktur",
+        "någon som vill bygga stegvis",
+        "någon som skulle uppskatta att slippa jaga folk",
+      ],
+      liveTitle: "Det här händer just nu",
+      liveBody: partnerSignals > 0
+        ? `Du har ${partnerSignals} partnerintresse${partnerSignals > 1 ? "n" : ""} i rörelse.`
+        : `Du har ${customerSignals} kundsignal${customerSignals > 1 ? "er" : ""} i rörelse.`,
+      liveMeta: "Nu är du redo att bjuda in din första partner",
+      nextLevelTitle: "Nästa nivå",
+      nextLevelBody: "När du får första partnerkontakt eller första kund låser du upp nästa dupliceringssteg.",
+      momentum: "Bra jobbat. Nu bygger du på ett riktigt resultat.",
+      shareMode: "duplicate" as const,
+    };
+  }
+
+  return {
+    level: 4,
+    statusTitle: "Level 4 – Duplication",
+    statusBody: "Nu är du igång på riktigt. Fokus ligger på att hjälpa andra göra samma resa som du.",
+    nextGoal: "Nästa mål: fler signaler från first line",
+    actionTitle: "Hjälp en partner till sin första signal idag",
+    actionBody: "Nu vinner du genom att hjälpa någon annan få fart, inte genom att bara producera mer själv.",
+    actionLabel: "Öppna leads",
+    actionMode: "leads" as const,
+    helper: [
+      "välj en partner nära dig",
+      "landa i ett enda nästa steg",
+      "skapa rörelse innan ni pratar teori",
+    ],
+    liveTitle: "Det här händer just nu",
+    liveBody: "Det finns redan signaler i systemet. Nu gäller det att hålla rytmen levande.",
+    liveMeta: "Systemet jobbar bäst när du upprepar det som redan fungerar",
+    nextLevelTitle: "Nästa nivå",
+    nextLevelBody: "Nästa steg är att få fler i första linjen att uppleva samma enkla start.",
+    momentum: "Du har varit aktiv idag",
+    shareMode: "support" as const,
+  };
+}
+
 const PartnerDashboardPage = () => {
   const { section } = useParams<{ section?: string }>();
   const [searchParams] = useSearchParams();
@@ -763,6 +902,7 @@ const PartnerDashboardPage = () => {
   const [zzPartnerUrl, setZzPartnerUrl] = useState("");
   const [zzConsultationUrl, setZzConsultationUrl] = useState("");
   const [zzLinkStatus, setZzLinkStatus] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [leadFilter, setLeadFilter] = useState<"all" | "urgent" | "active" | "new">("all");
   const [partnerLeadFilter, setPartnerLeadFilter] = useState<"all" | "urgent" | "active" | "new">("all");
   const partnerQuery = useQuery({
@@ -795,7 +935,7 @@ const PartnerDashboardPage = () => {
   });
 
   const currentSection =
-    section === "leads" || section === "network" || section === "overview" || section === "links" || section === "customers"
+    section === "leads" || section === "network" || section === "overview" || section === "links" || section === "customers" || section === "journey"
       ? section
       : section
         ? null
@@ -808,6 +948,7 @@ const PartnerDashboardPage = () => {
       { label: "Länkar", href: "/dashboard/partner/links", icon: Link2 },
       { label: "Kunder", href: "/dashboard/partner/customers", icon: Users },
       { label: "Kontakter", href: "/dashboard/partner/network", icon: dashboardIcons.network },
+      { label: "Din resa", href: "/dashboard/partner/journey", icon: dashboardIcons.dashboard },
     ],
     [],
   );
@@ -824,6 +965,7 @@ const PartnerDashboardPage = () => {
   const legalAccepted = hasAcceptedPortalLegal(accessQuery.data?.portalUser);
   const journey = data ? buildPartnerFirst30Days(data, legalAccepted) : null;
   const fastStartJourney = data ? buildFastStartJourney(data, legalAccepted) : null;
+  const firstActionEngine = data ? buildFirstActionEngine(data, legalAccepted) : null;
   const viewingAsAdmin = accessQuery.data?.portalUser?.role === "admin";
   const legalActionHref = viewingAsAdmin ? "/dashboard/admin/legal-preview" : "/dashboard/partner/legal";
   const showOverview = currentSection === "overview";
@@ -831,7 +973,13 @@ const PartnerDashboardPage = () => {
   const showLinks = currentSection === "links";
   const showCustomers = currentSection === "customers";
   const showNetwork = currentSection === "network";
+  const showJourney = currentSection === "journey";
   const partnerLink = data ? `${window.location.origin}/?ref=${data.partner.referral_code}` : "";
+  const shareText = firstActionEngine?.shareMode === "duplicate"
+    ? `Jag testar ett nytt digitalt upplägg som gör det enklare att komma igång stegvis. Kika här när du har två minuter: ${partnerLink}`
+    : `Jag testar ett nytt upplägg för mätbar hälsa och ville skicka länken till dig. Kika här när du har två minuter: ${partnerLink}`;
+  const smsShareHref = `sms:?&body=${encodeURIComponent(shareText)}`;
+  const whatsappShareHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
   const firstResultProgress = data ? getFirstResultProgress(data) : [];
   const firstResultFocus = data ? buildFirstResultFocus(data) : null;
   const weeklyPlan = data ? buildWeeklyPlan(data) : null;
@@ -989,6 +1137,12 @@ const PartnerDashboardPage = () => {
     setZzLinksOpen(true);
   };
 
+  const markActionStarted = (
+    message = "Bra. Du är igång.\n\nDin länk är nu aktiv.\n\nNästa steg är första signal.\n\nVill du ta nästa steg direkt: skicka den till 1 person du redan har kontakt med.",
+  ) => {
+    setActionFeedback(message);
+  };
+
   const renderActionButton = (mode: "copy-link" | "links" | "leads" | "legal", label: string) => {
     if (mode === "copy-link") {
       return (
@@ -996,7 +1150,10 @@ const PartnerDashboardPage = () => {
           type="button"
           variant="outline"
           className="h-8 rounded-lg px-3 text-sm"
-          onClick={() => navigator.clipboard.writeText(partnerLink)}
+          onClick={() => {
+            void navigator.clipboard.writeText(partnerLink);
+            markActionStarted();
+          }}
         >
           <Copy className="mr-2 h-3.5 w-3.5" />
           {label}
@@ -1111,72 +1268,147 @@ const PartnerDashboardPage = () => {
               title="Din Fast Start"
               description="Dina första 120 dagar ska kännas som en guidande partnerresa, inte som hela kompplanen på en gång."
             >
-              <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr_1fr]">
-                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Lanseringsperiod</p>
-                  <p className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">
-                    Dag {fastStartJourney?.launchDay ?? 1} av 120
+              <div className="grid gap-4 xl:grid-cols-[1.3fr_0.8fr_0.9fr_0.9fr]">
+                <div className="rounded-[1.2rem] border border-primary/20 bg-white p-5 shadow-card">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                    {firstActionEngine?.actionTitle ?? primaryActionCard?.title ?? journey.nextBestAction}
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-subtle">{fastStartJourney?.currentFocus ?? journey.summary}</p>
-                  <div className="mt-4 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Bra jobbat hittills</p>
-                    <p className="mt-2 text-sm text-foreground">{fastStartJourney?.momentumMessage ?? journey.encouragement}</p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    {firstActionEngine?.actionBody ?? primaryActionCard?.description ?? journey.summary}
+                  </p>
+                  <div className="mt-4">
+                    <Button
+                      type="button"
+                      className="h-11 rounded-xl px-5 text-sm shadow-sm"
+                      onClick={() => {
+                        void navigator.clipboard.writeText(partnerLink);
+                        markActionStarted();
+                      }}
+                    >
+                      <Copy className="mr-2 h-4 w-4" />
+                      {firstActionEngine?.actionLabel ?? "Kopiera min länk"}
+                    </Button>
                   </div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Klara steg</p>
-                      <p className="mt-2 text-2xl font-semibold text-foreground">
-                        {fastStartJourney?.completedSteps ?? journey.checklist.filter((item) => item.done).length} / {fastStartJourney?.totalSteps ?? journey.checklist.length}
+                  <div className="mt-4 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Skicka till</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {(firstActionEngine?.helper ?? []).map((item) => (
+                        <Badge key={item} variant="outline" className="rounded-full px-3 py-1 text-xs">
+                          {item}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={`mt-4 rounded-[1rem] border p-3.5 transition-all ${actionFeedback ? "border-emerald-300/70 bg-emerald-50 shadow-sm" : "border-border/70 bg-white/80"}`}>
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Startpunkt</p>
+                      <Badge variant={actionFeedback ? "default" : "outline"} className="rounded-full px-3 py-1">
+                        {actionFeedback ? "Steg 1 klart" : "Väntar"}
+                      </Badge>
+                    </div>
+                    <div className="mt-3 flex items-start gap-3">
+                      <div className={`mt-0.5 shrink-0 rounded-full ${actionFeedback ? "text-emerald-600" : "text-muted-foreground"}`}>
+                        <CheckCircle2 className={`h-5 w-5 ${actionFeedback ? "" : "opacity-45"}`} />
+                      </div>
+                      <div className="space-y-2">
+                      {(actionFeedback ?? "När du kopierar eller delar länken får du direkt kvitto på att du faktiskt har startat något.").split("\n\n").map((line) => (
+                        <p key={line} className={`text-sm ${line === "Bra. Du är igång." ? "font-medium text-foreground" : "text-subtle"}`}>
+                          {line}
+                        </p>
+                      ))}
+                      </div>
+                    </div>
+                  </div>
+                  <details className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                    <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
+                      Fler sätt att dela
+                    </summary>
+                    <div className="mt-3 flex flex-wrap gap-2.5">
+                      <Button asChild type="button" variant="outline" className="h-9 rounded-lg px-4 text-sm">
+                        <a href={smsShareHref} onClick={() => markActionStarted()}>
+                          Dela via SMS
+                        </a>
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-9 rounded-lg px-4 text-sm"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(shareText);
+                          markActionStarted("Bra. Du är igång.\n\nDitt meddelande är nu klart att klistra in i Messenger.\n\nNästa steg är första signal.\n\nSkicka det till 1 person du redan har kontakt med.");
+                        }}
+                      >
+                        Dela via Messenger
+                      </Button>
+                      <Button asChild type="button" variant="outline" className="h-9 rounded-lg px-4 text-sm">
+                        <a href={whatsappShareHref} target="_blank" rel="noreferrer" onClick={() => markActionStarted()}>
+                          Dela via WhatsApp
+                        </a>
+                      </Button>
+                    </div>
+                  </details>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Din status</p>
+                  <p className="mt-3 text-lg font-semibold text-foreground">{firstActionEngine?.statusTitle ?? fastStartJourney?.currentTitle}</p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.statusBody ?? fastStartJourney?.currentFocus ?? journey.summary}</p>
+                  <div className="mt-4 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Momentum</p>
+                    <p className="mt-2 text-sm text-foreground">{firstActionEngine?.momentum ?? fastStartJourney?.momentumMessage ?? journey.encouragement}</p>
+                  </div>
+                  <div className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa mål</p>
+                    <p className="mt-2 text-sm text-foreground">{firstActionEngine?.nextGoal ?? journey.nextMilestone}</p>
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det här händer just nu"}</p>
+                  <div className="mt-3 space-y-3">
+                    <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
+                      <p className="text-sm font-medium text-foreground">
+                        {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
+                          ? "Väntar på första signal..."
+                          : firstActionEngine?.liveBody ?? "Så fort första signalen kommer syns den här."}
+                      </p>
+                      <p className="mt-2 text-xs text-subtle">
+                        {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
+                          ? "Du är nära första resultatet."
+                          : firstActionEngine?.liveMeta ?? "Du är nära ditt första resultat"}
                       </p>
                     </div>
-                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nuvarande fokus</p>
-                      <p className="mt-2 text-sm text-foreground">{fastStartJourney?.currentTitle ?? journey.nextMilestone}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Viktigaste nästa steg</p>
-                  <p className="mt-3 text-lg font-semibold text-foreground">{primaryActionCard?.title ?? journey.nextBestAction}</p>
-                  <p className="mt-2 text-sm leading-6 text-subtle">
-                    {primaryActionCard?.description ?? journey.summary}
-                  </p>
-                  <div className="mt-3 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
-                    <p className="mt-2 text-sm text-foreground">
-                      {primaryActionCard?.detail || journey.nextBestAction}
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    {primaryActionCard ? renderActionButton(primaryActionCard.mode, primaryActionCard.label) : null}
-                  </div>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Följ upp nu</p>
-                  <div className="mt-3 space-y-3">
-                    {followUpTargets.length ? (
-                      followUpTargets.map((target) => (
-                        <div key={target.key} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
-                          <div className="flex items-center justify-between gap-3">
-                            <p className="text-sm font-medium text-foreground">{target.name}</p>
-                            <Badge variant="outline" className="rounded-full px-3 py-1">
-                              {target.label}
-                            </Badge>
-                          </div>
-                          <p className="mt-2 text-xs text-subtle">{target.status}</p>
-                          <p className="mt-2 text-sm text-foreground">{target.action}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
-                        <p className="text-sm font-medium text-foreground">Ingen uppföljning ännu</p>
-                        <p className="mt-2 text-sm leading-6 text-subtle">
-                          När du får in din första signal visas den här först, så att du direkt ser vem som behöver dig nu.
-                        </p>
+                    {followUpTargets[0] ? (
+                      <div className="rounded-[1rem] border border-border/70 bg-white/90 p-3.5">
+                        <p className="text-sm font-medium text-foreground">{followUpTargets[0].name}</p>
+                        <p className="mt-2 text-xs text-subtle">{followUpTargets[0].status}</p>
+                        <p className="mt-2 text-sm text-foreground">{followUpTargets[0].action}</p>
                       </div>
-                    )}
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "Nästa nivå"}</p>
+                  <p className="mt-3 text-lg font-semibold text-foreground">
+                    {firstActionEngine?.level === 3 ? "Nu är du redo för duplication" : "Ett steg till öppnar nästa nivå"}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.nextLevelBody ?? journey.nextBestAction}</p>
+                  <div className="mt-4">
+                    {firstActionEngine?.level === 3 ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-9 rounded-lg px-4 text-sm"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(shareText);
+                          markActionStarted("Bra jobbat. Nu har du en partnerinbjudan klar att skicka.");
+                        }}
+                      >
+                        Bjud in partner
+                      </Button>
+                    ) : primaryActionCard ? renderActionButton(primaryActionCard.mode, primaryActionCard.label) : null}
                   </div>
                 </div>
               </div>
@@ -1401,6 +1633,102 @@ const PartnerDashboardPage = () => {
                     <Link to="/dashboard/partner/leads">öppna mina leads</Link>
                   </Button>
                 </div>
+              </div>
+            </DashboardSection>
+          ) : null}
+
+          {showJourney ? (
+            <DashboardSection
+              title="Din resa"
+              description="Du behöver inte kunna allt från start. Här ser du vägen framåt, steg för steg, så att du vet vad som är viktigast nu och vad som kommer senare."
+            >
+              <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-5">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nu</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Kom igång</p>
+                  <p className="mt-2 text-sm leading-6 text-subtle">
+                    Det här är första fasen. Målet är att få grunden på plats och skapa första rörelsen utan att tänka på allt annat samtidigt.
+                  </p>
+                  <div className="mt-4 space-y-2.5">
+                    {[
+                      "få ordning på dina länkar",
+                      "förstå vad du delar",
+                      "skicka din länk första gången",
+                      "få första signalen",
+                    ].map((item) => (
+                      <div key={item} className="rounded-[1rem] border border-border/70 bg-white/80 px-3.5 py-3">
+                        <p className="text-sm text-foreground">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 rounded-[1rem] border border-emerald-300/70 bg-emerald-50 p-3.5">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Status</p>
+                    <p className="mt-2 text-sm font-medium text-foreground">Pågår nu</p>
+                    <p className="mt-2 text-sm text-subtle">Det här steget låser upp första riktiga resultatet.</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-4">
+                  {[
+                    {
+                      eyebrow: "Öppnas snart",
+                      title: "Första resultat",
+                      body: "När du fått första signalen handlar nästa fas om att skapa första riktiga utfallet och upprepa det som fungerade.",
+                      items: [
+                        "få första lead eller kundsignal",
+                        "se vad som faktiskt fungerar",
+                        "upprepa samma beteende en gång till",
+                        "bygga tro på att systemet fungerar",
+                      ],
+                      note: "Det här steget gör att du går från aktivitet till resultat.",
+                    },
+                    {
+                      eyebrow: "Nästa nivå",
+                      title: "Börja duplicera",
+                      body: "När du själv fått rörelse är nästa steg att hjälpa någon annan komma igång på samma sätt.",
+                      items: [
+                        "bjuda in rätt person",
+                        "hjälpa någon till sitt första steg",
+                        "skapa första signalen i din närmaste linje",
+                        "bygga något som går att upprepa",
+                      ],
+                      note: "Det här är där systemet börjar växa genom andra, inte bara genom dig.",
+                    },
+                    {
+                      eyebrow: "Senare",
+                      title: "Bygg vidare",
+                      body: "Senare öppnas mer av affären och modellen upp, i takt med att det faktiskt blir relevant för dig.",
+                      items: [
+                        "kundmotor",
+                        "teamrytmer",
+                        "fler nivåer",
+                        "kompplan och djupare förståelse",
+                        "hur du bygger långsiktigt utan att göra allt själv",
+                      ],
+                      note: "Du behöver inte bära allt nu. Det här öppnas när du är redo.",
+                    },
+                  ].map((card) => (
+                    <div key={card.title} className="rounded-[1.2rem] border border-border/70 bg-white p-5 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{card.eyebrow}</p>
+                      <p className="mt-3 text-xl font-semibold tracking-tight text-foreground">{card.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">{card.body}</p>
+                      <div className="mt-4 space-y-2.5">
+                        {card.items.map((item) => (
+                          <div key={item} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
+                            <p className="text-sm text-foreground">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-4 text-sm font-medium text-foreground/85">{card.note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-[1.2rem] border border-border/70 bg-white/95 p-5 shadow-card">
+                <p className="text-sm leading-7 text-subtle">
+                  Du behöver inte ta alla steg i huvudet samtidigt. Det viktiga är att ta rätt nästa steg nu.
+                </p>
               </div>
             </DashboardSection>
           ) : null}
@@ -1631,6 +1959,59 @@ const PartnerDashboardPage = () => {
                 </DashboardSection>
               ) : null}
             </div>
+          ) : null}
+
+          {showOverview ? (
+            <DashboardSection
+              title="Var din trafik svarar"
+              description="Här ser du var din trafik faktiskt visar liv just nu. Det hjälper dig förstå vilka marknader som svarar på din länk."
+            >
+              <div className="grid gap-4 xl:grid-cols-[0.9fr_0.9fr_1.2fr]">
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
+                  <div className="mt-3 space-y-2">
+                    {(data.marketInsights?.topCountries || []).map((row) => (
+                      <div key={`partner-country-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="truncate text-foreground">{row.label}</span>
+                        <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                      </div>
+                    ))}
+                    {!data.marketInsights?.topCountries?.length ? <p className="text-sm text-subtle">Ingen marknadssignal än.</p> : null}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppstäder</p>
+                  <div className="mt-3 space-y-2">
+                    {(data.marketInsights?.topCities || []).map((row) => (
+                      <div key={`partner-city-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="truncate text-foreground">{row.label}</span>
+                        <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                      </div>
+                    ))}
+                    {!data.marketInsights?.topCities?.length ? <p className="text-sm text-subtle">Ingen stadsdata än.</p> : null}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
+                  <div className="mt-4">
+                    <DataTable
+                      columns={["Senast", "Land", "Stad"]}
+                      rows={(data.marketInsights?.recentLocations || []).map((row) => [
+                        <span key={`${row.created_at}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
+                        <span key={`${row.created_at}-country`}>{row.country || "-"}</span>,
+                        <span key={`${row.created_at}-city`}>{row.city || "-"}</span>,
+                      ])}
+                      emptyState="Ingen geodata registrerad för din trafik ännu."
+                    />
+                  </div>
+                  <div className="mt-4 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5 text-sm text-subtle">
+                    Land är oftast säkrare än stad. Se stad som signal, inte exakt sanning.
+                  </div>
+                </div>
+              </div>
+            </DashboardSection>
           ) : null}
 
           {showCustomers ? (

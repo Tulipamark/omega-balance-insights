@@ -3440,9 +3440,9 @@ const AdminDashboardPage = () => {
       <Dialog open={Boolean(selectedPartnerForLinks)} onOpenChange={(open) => !open && closeZzLinksDialog()}>
         <DialogContent className="max-w-2xl rounded-[1.75rem] border-border/70 bg-white/95 p-6 shadow-card md:p-7">
           <DialogHeader>
-            <DialogTitle>ZZ-länkar för partner</DialogTitle>
+            <DialogTitle>ZZ-länkar och marknadssignaler</DialogTitle>
             <DialogDescription>
-              Här lägger du in partnerns riktiga Zinzino-länkar. Just nu använder vi test-, shop- och partnerlänken bakom Omega-länken.
+              Här lägger du in partnerns riktiga Zinzino-länkar och ser vilka marknader som faktiskt visar liv på just den referral-koden.
             </DialogDescription>
           </DialogHeader>
 
@@ -3454,6 +3454,59 @@ const AdminDashboardPage = () => {
                 <p className="mt-2 text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   Referral-kod: {selectedPartnerForLinks.referralCode}
                 </p>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-3">
+                <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
+                  <div className="mt-3 space-y-2">
+                    {(selectedPartnerForLinks.marketInsights?.topCountries || []).map((row) => (
+                      <div key={`partner-country-${selectedPartnerForLinks.partnerId}-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="truncate text-foreground">{row.label}</span>
+                        <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                      </div>
+                    ))}
+                    {!selectedPartnerForLinks.marketInsights?.topCountries?.length ? <p className="text-sm text-subtle">Ingen marknadssignal än.</p> : null}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppstäder</p>
+                  <div className="mt-3 space-y-2">
+                    {(selectedPartnerForLinks.marketInsights?.topCities || []).map((row) => (
+                      <div key={`partner-city-${selectedPartnerForLinks.partnerId}-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="truncate text-foreground">{row.label}</span>
+                        <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                      </div>
+                    ))}
+                    {!selectedPartnerForLinks.marketInsights?.topCities?.length ? <p className="text-sm text-subtle">Ingen stadsdata än.</p> : null}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Hur du läser detta</p>
+                  <div className="mt-3 space-y-2 text-sm text-subtle">
+                    <p>Det här visar bara trafik för partnerns egen referral-kod.</p>
+                    <p>Land är oftast säkrare än stad.</p>
+                    <p>Flera träffar från samma marknad är ett starkare tecken än enstaka klick.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/70 bg-white/85 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
+                <div className="mt-4">
+                  <DataTable
+                    columns={["Senast", "Land", "Stad", "Referral"]}
+                    rows={(selectedPartnerForLinks.marketInsights?.recentLocations || []).map((row) => [
+                      <span key={`${row.created_at}-${row.referral_code}-partner-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-country`}>{row.country || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-city`}>{row.city || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-ref`}>{row.referral_code || "-"}</span>,
+                    ])}
+                    emptyState="Ingen geodata registrerad för denna partner ännu."
+                  />
+                </div>
               </div>
 
               <div className="grid gap-4">

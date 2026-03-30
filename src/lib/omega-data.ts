@@ -673,6 +673,7 @@ function buildAdminPartnerRows(
   users: AppUser[],
   performance: ReturnType<typeof buildPartnerPerformance>,
   relationships: PartnerRelationship[],
+  visits: ReferralVisit[],
   partnerRecords: Array<{
     id: string;
     user_id: string;
@@ -714,6 +715,7 @@ function buildAdminPartnerRows(
             partner: partnerRecord?.zinzino_partner_url || null,
             consultation: partnerRecord?.consultation_url || null,
           },
+          marketInsights: buildPartnerMarketInsights(partner.referral_code, visits),
           createdAt: partner.created_at,
           verifiedAt: partnerRecord?.verified_at || null,
         };
@@ -1156,7 +1158,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       leadsPerPartner: performance,
       customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
       partnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")),
-      partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships, mockPartnerRecords),
+      partners: buildAdminPartnerRows(mockUsers, performance, mockRelationships, mockVisits, mockPartnerRecords),
       networkOverview: buildTeamRows(mockUsers, mockRelationships),
       recentLeads: sortNewest(mockLeads).slice(0, 6),
       recentPartnerApplications: sortNewest(mockLeads.filter((lead) => lead.type === "partner_lead")).slice(0, 6),
@@ -1229,6 +1231,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       users || [],
       performance,
       relationships || [],
+      (visits as ReferralVisit[] | null) || [],
       ((partnerRecords as Array<{
         id: string;
         user_id: string;
@@ -1305,6 +1308,7 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
       customers,
       partnerLeads,
       team,
+      marketInsights: buildMarketInsights(mockVisits.filter((visit) => visit.referral_code === partner.referral_code)),
     };
   }
 
@@ -1375,6 +1379,7 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
     customers: sortNewest(customers || []),
     partnerLeads: sortedLeads.filter((lead) => lead.type === "partner_lead"),
     team,
+    marketInsights: buildMarketInsights((visits as ReferralVisit[] | null) || []),
   };
 }
 
@@ -1450,6 +1455,18 @@ function buildMarketInsights(visits: ReferralVisit[]) {
         referral_code: visit.referral_code || null,
       })),
   };
+}
+
+function buildPartnerMarketInsights(referralCode: string | null | undefined, visits: ReferralVisit[]) {
+  if (!referralCode) {
+    return {
+      topCountries: [],
+      topCities: [],
+      recentLocations: [],
+    };
+  }
+
+  return buildMarketInsights(visits.filter((visit) => visit.referral_code === referralCode));
 }
 
 function derivePartnerRecordState(

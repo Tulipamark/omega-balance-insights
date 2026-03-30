@@ -234,9 +234,9 @@ export const sv: Copy = {
   },
   cookie: {
     title: "Cookies och samtycke",
-    message: "Vi använder nödvändig lokal lagring och cookies för referral-länkar, sessioner och grundläggande funktion. Valfri trafikmätning aktiveras först efter ditt samtycke.",
-    necessary: "Nödvändigt för referral, session och grundfunktion.",
-    optional: "Valfritt för sidvisningar och förbättring av flöden.",
+    message: "Vi använder nödvändig lagring för att sidan ska fungera, bland annat för referral-länkar och sessioner. Om du samtycker använder vi även valfri mätning för att förstå hur sidan används och göra upplevelsen bättre över tid.",
+    necessary: "Nödvändigt: krävs för att sidan ska fungera.",
+    optional: "Valfritt: hjälper oss att förbättra sidan.",
     accept: "Acceptera valfri mätning",
     decline: "Bara nödvändigt",
   },
