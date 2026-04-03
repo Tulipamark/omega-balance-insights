@@ -22,7 +22,7 @@
     --secondary-foreground: 210 30% 12%;
 
     --muted: 210 15% 95%;
-    --muted-foreground: 210 10% 50%;
+    --muted-foreground: 210 12% 40%;
 
     --accent: 172 25% 92%;
     --accent-foreground: 172 40% 28%;
@@ -39,7 +39,7 @@
     /* Custom tokens */
     --hero-bg: 210 20% 97%;
     --section-alt: 210 15% 96%;
-    --text-subtle: 210 10% 55%;
+    --text-subtle: 210 12% 42%;
     --badge-bg: 172 30% 94%;
     --badge-text: 172 40% 30%;
     --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(172 20% 96%) 100%);

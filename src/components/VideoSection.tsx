@@ -25,8 +25,13 @@ const transcriptLabelByLang: Record<Lang, string> = {
 };
 
 const DEFAULT_VIDEO_SRC = "/avatar-video.mp4";
+const localizedVideoLanguages = new Set<Lang>(["en", "no"]);
 
 function getLocalizedVideoSrc(lang: Lang) {
+  if (!localizedVideoLanguages.has(lang)) {
+    return DEFAULT_VIDEO_SRC;
+  }
+
   return `/videos/avatar-video-${lang}.mp4`;
 }
 
