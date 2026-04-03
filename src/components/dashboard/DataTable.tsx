@@ -11,8 +11,8 @@ export function DataTable({
   emptyState: string;
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border/70">
-      <Table>
+    <div className="w-full overflow-x-auto rounded-2xl border border-border/70">
+      <Table className="min-w-[40rem]">
         <TableHeader className="bg-secondary/60">
           <TableRow>
             {columns.map((column) => (

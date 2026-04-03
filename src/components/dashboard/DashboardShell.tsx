@@ -90,18 +90,18 @@ export function DashboardShell({ title, subtitle, roleLabel, navigation, childre
 
       <SidebarInset className="bg-[radial-gradient(circle_at_top_right,_rgba(117,181,170,0.15),_transparent_30%),linear-gradient(180deg,_#f7fbfa_0%,_#f4f7f8_55%,_#f9fbfb_100%)]">
         <header className="sticky top-0 z-20 border-b border-border/70 bg-background/85 backdrop-blur">
-          <div className="flex items-center gap-3 px-5 py-4 md:px-8">
+          <div className="flex flex-wrap items-center gap-3 px-3 py-3 sm:px-5 sm:py-4 md:px-8">
             <SidebarTrigger />
-            <div>
+            <div className="min-w-0">
               <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{roleLabel}</p>
-              <h1 className="font-serif text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
+              <h1 className="font-serif text-lg font-semibold tracking-tight text-foreground sm:text-2xl">{title}</h1>
             </div>
           </div>
         </header>
 
-        <div className="px-5 py-8 md:px-8 md:py-10">
-          <div className="mb-8 max-w-3xl">
-            <p className="text-lg leading-8 text-subtle">{subtitle}</p>
+        <div className="px-3 py-4 sm:px-5 sm:py-8 md:px-8 md:py-10">
+          <div className="mb-5 max-w-3xl md:mb-8">
+            <p className="text-sm leading-6 text-subtle sm:text-lg sm:leading-8">{subtitle}</p>
           </div>
           {children}
         </div>
@@ -122,9 +122,9 @@ export function DashboardSection({
   className?: string;
 }) {
   return (
-    <section className={cn("rounded-[1.75rem] border border-border/70 bg-white/90 p-6 shadow-card md:p-7", className)}>
-      <div className="mb-5">
-        <h2 className="font-serif text-2xl font-semibold tracking-tight text-foreground">{title}</h2>
+    <section className={cn("rounded-xl border border-border/70 bg-white/90 p-3 shadow-card sm:rounded-[1.5rem] sm:p-6 md:rounded-[1.75rem] md:p-7", className)}>
+      <div className="mb-4 sm:mb-5">
+        <h2 className="font-serif text-lg font-semibold tracking-tight text-foreground sm:text-2xl">{title}</h2>
         <p className="mt-2 text-sm leading-6 text-subtle">{description}</p>
       </div>
       {children}

@@ -69,13 +69,13 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const heroCopy = funnelHeroCopy[lang];
 
   return (
-    <section className="bg-hero px-4 pb-12 pt-8 md:px-6 md:pb-14 md:pt-10">
+    <section className="bg-hero px-4 pb-10 pt-6 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
       <div className="container-wide mx-auto">
-        <div className="mb-8 flex items-center justify-between gap-4 md:mb-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
           <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
             OmegaBalance
           </a>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
             <Link
               to="/dashboard/login"
               className="inline-flex whitespace-nowrap text-xs font-medium text-subtle transition-colors hover:text-foreground sm:text-sm"
@@ -98,15 +98,15 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="mx-auto max-w-5xl text-center"
         >
-          <span className="badge-accent inline-block rounded-full px-4 py-1.5 text-sm font-medium tracking-wide">
+          <span className="badge-accent inline-block rounded-full px-3 py-1.5 text-xs font-medium tracking-wide sm:px-4 sm:text-sm">
             {copy.hero.badge}
           </span>
 
-          <h1 className="mx-auto mt-5 max-w-4xl whitespace-pre-line text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+          <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line text-[2.1rem] font-semibold leading-[1.05] tracking-tight sm:text-4xl md:mt-5 md:text-6xl">
             {heroCopy.headline}
           </h1>
 
-          <p className="mx-auto mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">
+          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl">
             {heroCopy.supporting}
           </p>
 
@@ -114,7 +114,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             <VideoSection lang={lang} embedded showTranscript={false} showHeader={false} />
           </div>
 
-          <div className="mx-auto mt-10 flex max-w-md flex-col gap-3">
+          <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:mt-10">
             <TrackedOutboundButton
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}

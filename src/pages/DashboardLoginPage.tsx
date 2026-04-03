@@ -118,22 +118,22 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
   }
 
   return (
-    <div className="min-h-screen bg-hero px-6 py-10 md:px-10 md:py-14">
-      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-        <section className="rounded-[2rem] border border-border/70 bg-white/90 p-8 shadow-elevated md:p-10">
+    <div className="min-h-screen bg-hero px-4 py-8 sm:px-5 sm:py-10 md:px-10 md:py-14">
+      <div className="mx-auto grid max-w-6xl gap-6 sm:gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="rounded-[1.5rem] border border-border/70 bg-white/90 p-5 shadow-elevated sm:p-6 md:rounded-[2rem] md:p-10">
           <p className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium">
             OmegaBalance Backoffice
           </p>
-          <h1 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+          <h1 className="mt-5 font-serif text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:mt-6 md:text-5xl">
             {introTitle}
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-subtle">
+          <p className="mt-4 max-w-xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:mt-5">
             {introText}
           </p>
 
-          <div className="mt-8 space-y-4">
+          <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
             {featureList.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
+              <div key={item} className="flex items-start gap-3 rounded-xl border border-border/70 bg-secondary/40 p-3 sm:rounded-2xl sm:p-4">
                 <ShieldCheck className="mt-1 h-5 w-5 text-primary" />
                 <p className="text-sm leading-6 text-foreground/85">{item}</p>
               </div>
@@ -141,11 +141,11 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-border/70 bg-card p-8 shadow-elevated md:p-10">
+        <section className="rounded-[1.5rem] border border-border/70 bg-card p-5 shadow-elevated sm:p-6 md:rounded-[2rem] md:p-10">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.18em] text-muted-foreground">Åtkomst</p>
-              <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight">
+              <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight sm:text-3xl">
                 {isAdminVariant ? "Adminåtkomst" : "Logga in"}
               </h2>
             </div>
@@ -155,7 +155,7 @@ const DashboardLoginPage = ({ variant = "partner" }: DashboardLoginPageProps) =>
           </div>
 
           {isSupabaseConfigured ? (
-            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4 sm:mt-8">
               {reasonMessage ? (
                 <div className="rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
                   {reasonMessage}

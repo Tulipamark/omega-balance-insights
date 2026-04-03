@@ -11,7 +11,7 @@ const TrustSection = ({ lang }: TrustSectionProps) => {
   const trustItems = trustItemsByLang[lang];
 
   return (
-    <section className="bg-section-alt px-4 py-10 md:px-6">
+    <section className="bg-section-alt px-4 py-8 sm:py-10 md:px-6">
       <div className="container-narrow mx-auto">
         <div className="grid gap-4 md:grid-cols-3 md:gap-6">
           {trustItems.map((item, index) => (
@@ -21,9 +21,9 @@ const TrustSection = ({ lang }: TrustSectionProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="rounded-2xl border border-border/70 bg-card px-6 py-5 text-center shadow-card"
+              className="rounded-xl border border-border/70 bg-card px-4 py-4 text-center shadow-card sm:rounded-2xl sm:px-6 sm:py-5"
             >
-              <span className="inline-flex items-center gap-2 text-base font-medium text-foreground">
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-foreground sm:text-base">
                 <Check className="h-4 w-4 text-primary" />
                 {item}
               </span>

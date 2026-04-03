@@ -33,9 +33,9 @@ function formatWholeNumber(value: number) {
 function getLeadStatusLabel(status: Lead["status"]) {
   switch (status) {
     case "new":
-      return "Behöver kontakt";
+      return "BehÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver kontakt";
     case "qualified":
-      return "Följ upp nu";
+      return "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp nu";
     case "active":
       return "Aktiv dialog";
     case "inactive":
@@ -71,21 +71,21 @@ function getLeadPriorityScore(lead: Lead) {
 function getLeadNextAction(lead: Lead) {
   switch (lead.status) {
     case "new":
-      return "Ta första kontakt i dag.";
+      return "Ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakt i dag.";
     case "qualified":
-      return "Följ upp medan signalen fortfarande är varm.";
+      return "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp medan signalen fortfarande ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r varm.";
     case "active":
       return lead.type === "partner_lead"
-        ? "Håll dialogen levande och försök boka nästa steg."
-        : "För dialogen vidare mot test, order eller tydligt beslut.";
+        ? "HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll dialogen levande och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶k boka nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg."
+        : "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r dialogen vidare mot test, order eller tydligt beslut.";
     case "inactive":
-      return "Parkera tillfälligt och ta ny kontakt vid rätt läge.";
+      return "Parkera tillfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lligt och ta ny kontakt vid rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ge.";
     case "won":
-      return "Bygg vidare på det som fungerade och skapa nästa resultat.";
+      return "Bygg vidare pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ det som fungerade och skapa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta resultat.";
     case "lost":
-      return "Lägg ingen energi här just nu.";
+      return "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg ingen energi hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r just nu.";
     default:
-      return "Bestäm nästa tydliga steg.";
+      return "BestÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤m nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta tydliga steg.";
   }
 }
 
@@ -114,7 +114,7 @@ function getLeadSituationLabel(lead: Lead) {
     case "won":
       return "Klar";
     case "lost":
-      return "Stängd";
+      return "StÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngd";
     default:
       return "Oklar";
   }
@@ -136,11 +136,11 @@ function getLeadUrgencyLabel(lead: Lead) {
   switch (lead.status) {
     case "new":
     case "qualified":
-      return "Hög";
+      return "HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶g";
     case "active":
       return "Nu";
     case "inactive":
-      return "Låg";
+      return "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥g";
     case "won":
     case "lost":
       return "Klar";
@@ -167,36 +167,36 @@ function hasRequiredZzLinks(data: PartnerDashboardData) {
 function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: boolean) {
   if (!legalAccepted) {
     return {
-      title: "Bekräfta grunden",
-      description: "Godkänn portalvillkor och integritet innan du går vidare.",
+      title: "BekrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤fta grunden",
+      description: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nn portalvillkor och integritet innan du gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r vidare.",
       mode: "legal" as const,
-      label: "Öppna legal",
+      label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna legal",
     };
   }
 
   if (!hasRequiredZzLinks(data)) {
     return {
-      title: "Lägg in dina ZZ-länkar",
-      description: "Test-, shop- och partnerlänk behöver finnas på plats innan du börjar arbeta externt.",
+      title: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
+      description: "Test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver finnas pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats innan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar arbeta externt.",
       mode: "links" as const,
-      label: "Öppna länkar",
+      label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
     };
   }
 
   if (data.leads.length === 0 && data.partnerLeads.length === 0 && data.customers.length === 0 && data.metrics.directPartners === 0) {
     return {
-      title: "Skapa första signalen",
-      description: "När grunden är klar är nästa steg att dela Omega-länken och få in första rörelsen.",
+      title: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen",
+      description: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg att dela Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ in fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen.",
       mode: "copy-link" as const,
-      label: "Kopiera Omega-länk",
+      label: "Kopiera Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
     };
   }
 
   return {
     title: "Arbeta vidare i leads",
-    description: "Du har redan signaler i gång. Fortsätt där arbetet faktiskt rör sig just nu.",
+    description: "Du har redan signaler i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. FortsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r arbetet faktiskt rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r sig just nu.",
     mode: "leads" as const,
-    label: "Öppna leads",
+    label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna leads",
   };
 }
 
@@ -209,48 +209,48 @@ function buildFirstResultFocus(data: PartnerDashboardData) {
 
   if (data.metrics.directPartners > 0) {
     return {
-      title: "Hjälp första linjen igång",
-      reason: "Du har redan skapat egen rörelse. Nu blir nästa hävstång att hjälpa någon nära dig till sin första signal.",
-      action: "Välj en partner i första linjen och hjälp den personen till ett första tydligt steg denna vecka.",
+      title: "HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng",
+      reason: "Du har redan skapat egen rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse. Nu blir nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤vstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra dig till sin fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal.",
+      action: "VÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lj en partner i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp den personen till ett fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydligt steg denna vecka.",
     };
   }
 
   if (firstResultReached) {
     return {
-      title: "Bygg på första resultatet",
-      reason: "Nu gäller det att upprepa det som fungerade medan tempot fortfarande finns kvar.",
-      action: "Fokusera på ett andra resultat i samma riktning i stället för att sprida dig för brett.",
+      title: "Bygg pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultatet",
+      reason: "Nu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ller det att upprepa det som fungerade medan tempot fortfarande finns kvar.",
+      action: "Fokusera pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett andra resultat i samma riktning i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att sprida dig fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r brett.",
     };
   }
 
   if (activeLead) {
     return {
-      title: "Driv aktiv dialog framåt",
-      reason: "Det finns redan rörelse. Det viktiga nu är att hålla tempot uppe tills du får ett tydligt utfall.",
+      title: "Driv aktiv dialog framÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t",
+      reason: "Det finns redan rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse. Det viktiga nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥lla tempot uppe tills du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r ett tydligt utfall.",
       action: getLeadNextAction(activeLead),
     };
   }
 
   if (warmLead) {
     return {
-      title: "Följ upp varm lead nu",
-      reason: "Det här är läget där första resultat ofta avgörs.",
-      action: `Ta nästa kontakt med ${warmLead.name} medan signalen fortfarande är varm.`,
+      title: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp varm lead nu",
+      reason: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤get dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat ofta avgÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rs.",
+      action: `Ta nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta kontakt med ${warmLead.name} medan signalen fortfarande ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r varm.`,
     };
   }
 
   if (newLead) {
     return {
-      title: "Ta första kontakt i dag",
-      reason: "Ett nytt lead är mest värdefullt tidigt, innan tempot sjunker.",
-      action: `Börja med ${newLead.name} och ta första kontakt i dag.`,
+      title: "Ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakt i dag",
+      reason: "Ett nytt lead ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r mest vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rdefullt tidigt, innan tempot sjunker.",
+      action: `BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja med ${newLead.name} och ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakt i dag.`,
     };
   }
 
   return {
-    title: "Skapa första signalen",
-    reason: "Du behöver första rörelsen i systemet innan något annat blir viktigt.",
-    action: "Dela din Omega-länk och försök få in ett första kund- eller partnerlead.",
+    title: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen",
+    reason: "Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen i systemet innan nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥got annat blir viktigt.",
+    action: "Dela din Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶k fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ in ett fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kund- eller partnerlead.",
   };
 }
 
@@ -262,65 +262,65 @@ function buildWeeklyPlan(data: PartnerDashboardData) {
 
   if (data.metrics.directPartners > 0) {
     return {
-      title: "Den här veckan",
+      title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
       items: [
-        "Välj en person i första linjen som du aktivt hjälper framåt.",
-        "Sätt ett enda tydligt mål för den personen denna vecka.",
-        "Följ upp utfallet innan du sprider fokus vidare.",
+        "VÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lj en person i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen som du aktivt hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper framÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t.",
+        "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt ett enda tydligt mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r den personen denna vecka.",
+        "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp utfallet innan du sprider fokus vidare.",
       ],
     };
   }
 
   if (data.customers.length > 0 || data.metrics.directPartners > 0) {
     return {
-      title: "Den här veckan",
+      title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
       items: [
-        "Upprepa samma aktivitet som gav ditt första resultat.",
-        "Fokusera på ett andra resultat innan du breddar för mycket.",
-        "Skydda tempot genom att följa upp det som redan är igång.",
+        "Upprepa samma aktivitet som gav ditt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat.",
+        "Fokusera pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett andra resultat innan du breddar fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r mycket.",
+        "Skydda tempot genom att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lja upp det som redan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng.",
       ],
     };
   }
 
   if (activeLead) {
     return {
-      title: "Den här veckan",
+      title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
       items: [
         `Driv dialogen med ${activeLead.name} till ett tydligt utfall.`,
-        "Låt inte aktiv rörelse bli stående utan nästa steg.",
-        "Prioritera färre samtal med högre kvalitet framför fler lösa kontakter.",
+        "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t inte aktiv rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse bli stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ende utan nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg.",
+        "Prioritera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rre samtal med hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶gre kvalitet framfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fler lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶sa kontakter.",
       ],
     };
   }
 
   if (warmLead) {
     return {
-      title: "Den här veckan",
+      title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
       items: [
-        `Följ upp ${warmLead.name} medan signalen fortfarande är varm.`,
-        "Försök få ett tydligt besked i stället för att lämna dialogen öppen.",
-        "Skriv kort vad nästa steg är direkt efter kontakten.",
+        `FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp ${warmLead.name} medan signalen fortfarande ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r varm.`,
+        "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶k fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett tydligt besked i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤mna dialogen ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppen.",
+        "Skriv kort vad nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r direkt efter kontakten.",
       ],
     };
   }
 
   if (newLead) {
     return {
-      title: "Den här veckan",
+      title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
       items: [
-        `Ta första kontakt med ${newLead.name}.`,
-        "Skapa ett enkelt tempo: kontakt först, funderingar sen.",
-        "Fokusera på att få ett första svar, inte på att göra allt perfekt.",
+        `Ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakt med ${newLead.name}.`,
+        "Skapa ett enkelt tempo: kontakt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst, funderingar sen.",
+        "Fokusera pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta svar, inte pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra allt perfekt.",
       ],
     };
   }
 
   return {
-    title: "Den här veckan",
+    title: "Den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r veckan",
     items: [
-      "Dela din Omega-länk i ett sammanhang där du faktiskt får respons.",
-      "Sikta på en första tydlig signal, inte maximal räckvidd.",
-      "När första leaden kommer in, följ upp snabbt samma dag.",
+      "Dela din Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk i ett sammanhang dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du faktiskt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r respons.",
+      "Sikta pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ en fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydlig signal, inte maximal rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ckvidd.",
+      "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta leaden kommer in, fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp snabbt samma dag.",
     ],
   };
 }
@@ -332,32 +332,32 @@ function buildPracticalWorkSuggestions(data: PartnerDashboardData) {
 
   if (data.metrics.directPartners > 0) {
     return {
-      title: "Praktiskt arbetssätt",
+      title: "Praktiskt arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt",
       items: [
-        "Ta ett kort avstämningssamtal med din närmaste partner och hjälp personen att välja en enda nästa aktivitet.",
-        "Bjud hellre in till ett gemensamt Zoom-call än att försöka förklara allt själv i långa meddelanden.",
-        "Be personen börja nära sitt eget nätverk och följ upp direkt efter första kontakterna.",
+        "Ta ett kort avstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤mningssamtal med din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste partner och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp personen att vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lja en enda nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta aktivitet.",
+        "Bjud hellre in till ett gemensamt Zoom-call ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ka fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklara allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv i lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥nga meddelanden.",
+        "Be personen bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra sitt eget nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tverk och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp direkt efter fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakterna.",
       ],
     };
   }
 
   if (firstResultReached || hasWarmDialog) {
     return {
-      title: "Praktiskt arbetssätt",
+      title: "Praktiskt arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt",
       items: [
-        "Följ upp medan dialogen fortfarande lever och försök få ett tydligt nästa steg i stället för lösa svar.",
-        "När intresse finns, bjud hellre vidare till samtal eller Zoom än att skriva längre och längre förklaringar.",
-        "Skriv kort efter varje kontakt vad som ska hända härnäst, så att tempot inte tappas bort.",
+        "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp medan dialogen fortfarande lever och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶k fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett tydligt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶sa svar.",
+        "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r intresse finns, bjud hellre vidare till samtal eller Zoom ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att skriva lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngre och lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngre fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklaringar.",
+        "Skriv kort efter varje kontakt vad som ska hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nda hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤st, sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att tempot inte tappas bort.",
       ],
     };
   }
 
   return {
-    title: "Praktiskt arbetssätt",
+    title: "Praktiskt arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt",
     items: [
-      "Börja nära. Välj några personliga kontakter där det redan finns förtroende, i stället för att skriva till alla.",
-      "Använd sociala medier för att väcka nyfikenhet och fortsätt sedan i dialog med dem som faktiskt svarar.",
-      "När någon visar intresse, bjud vidare till samtal eller Zoom i stället för att försöka bära hela förklaringen själv.",
+      "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra. VÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lj nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra personliga kontakter dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det redan finns fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rtroende, i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skriva till alla.",
+      "AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd sociala medier fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤cka nyfikenhet och fortsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt sedan i dialog med dem som faktiskt svarar.",
+      "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon visar intresse, bjud vidare till samtal eller Zoom i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ka bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra hela fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklaringen sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv.",
     ],
   };
 }
@@ -371,30 +371,30 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
 
   if (hasDirectPartner) {
     return {
-      title: "Så duplicerar du vidare",
-      description: "Nu handlar det inte bara om din egen aktivitet, utan om att hjälpa första linjen att arbeta på samma sätt.",
+      title: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ duplicerar du vidare",
+      description: "Nu handlar det inte bara om din egen aktivitet, utan om att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen att arbeta pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ samma sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt.",
       cards: [
         {
           title: "Personliga kontakter",
-          summary: "Be partnern börja nära sitt eget nätverk där förtroende redan finns.",
-          action: "Låt personen välja några namn i sin närhet innan ni breddar vidare.",
+          summary: "Be partnern bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra sitt eget nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tverk dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rtroende redan finns.",
+          action: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t personen vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lja nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra namn i sin nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rhet innan ni breddar vidare.",
         },
         {
           title: "Sociala medier",
-          summary: "Använd sociala medier för att öppna dörrar, inte för att bära hela förklaringen.",
-          action: "Be partnern följa upp dem som faktiskt svarar i stället för att jaga räckvidd.",
+          summary: "AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd sociala medier fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppna dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rrar, inte fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra hela fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklaringen.",
+          action: "Be partnern fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lja upp dem som faktiskt svarar i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att jaga rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ckvidd.",
         },
         {
           title: "Zoom eller samtal",
-          summary: "När intresset är tydligt ska ni snabbare vidare till gemensamt samtal eller Zoom.",
-          action: "Bjud hellre in till ett nästa steg än att förklara allt i text.",
+          summary: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r intresset ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r tydligt ska ni snabbare vidare till gemensamt samtal eller Zoom.",
+          action: "Bjud hellre in till ett nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklara allt i text.",
         },
         {
-          title: hasSponsor ? "Stöd uppåt och nedåt" : "Stöd från Omega Balance-teamet",
+          title: hasSponsor ? "StÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t och nedÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t" : "StÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet",
           summary: hasSponsor
-            ? `Du hjälper nedåt och tar samtidigt hjälp av ${data.sponsor?.name} uppåt när det behövs.`
-            : "Du hjälper din första linje vidare och tar samtidigt stöd direkt från Omega Balance-teamet när det behövs.",
-          action: "Håll stödet nära nästa aktivitet, inte som allmän pepp eller teori.",
+            ? `Du hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper nedÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t och tar samtidigt hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp av ${data.sponsor?.name} uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶vs.`
+            : "Du hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linje vidare och tar samtidigt stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d direkt frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶vs.",
+          action: "HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta aktivitet, inte som allmÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n pepp eller teori.",
         },
       ],
     };
@@ -402,60 +402,60 @@ function buildDuplicationPlaybook(data: PartnerDashboardData) {
 
   if (firstResultReached || hasWarmDialog) {
     return {
-      title: "Så bygger du vidare",
-      description: "Du har redan rörelse. Nästa steg är att göra arbetssättet tydligt och upprepningsbart.",
+      title: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ bygger du vidare",
+      description: "Du har redan rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse. NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttet tydligt och upprepningsbart.",
       cards: [
         {
           title: "Personliga kontakter",
-          summary: "Börja med personer där du naturligt kan ta nästa kontakt utan att det känns krystat.",
-          action: "Välj hellre några relevanta kontakter än att skriva till många samtidigt.",
+          summary: "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja med personer dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du naturligt kan ta nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta kontakt utan att det kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nns krystat.",
+          action: "VÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lj hellre nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra relevanta kontakter ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att skriva till mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥nga samtidigt.",
         },
         {
           title: "Sociala medier",
-          summary: "Låt sociala medier väcka nyfikenhet, men ta dialogen vidare där riktig respons finns.",
-          action: "Svara snabbt där någon visar intresse i stället för att sprida energin för brett.",
+          summary: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t sociala medier vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤cka nyfikenhet, men ta dialogen vidare dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r riktig respons finns.",
+          action: "Svara snabbt dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon visar intresse i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att sprida energin fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r brett.",
         },
         {
           title: "Zoom eller samtal",
-          summary: "När frågorna blir fler än ett par meddelanden är det oftast dags för samtal.",
-          action: "Flytta dialogen till Zoom eller telefon när du märker att intresset är på riktigt.",
+          summary: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gorna blir fler ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n ett par meddelanden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det oftast dags fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r samtal.",
+          action: "Flytta dialogen till Zoom eller telefon nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rker att intresset ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ riktigt.",
         },
         {
-          title: hasSponsor ? "Ta hjälp uppåt" : "Ta stöd från Omega Balance-teamet",
+          title: hasSponsor ? "Ta hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t" : "Ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet",
           summary: hasSponsor
-            ? `Du behöver inte bära allt själv. Ta hjälp av ${data.sponsor?.name} eller din up-line när du kör fast.`
-            : "Du behöver inte bära allt själv. Ta stöd av Omega Balance-teamet när du kör fast eller vill göra nästa steg tydligare.",
-          action: "Be om hjälp när det kan öka kvaliteten i ett samtal eller nästa steg.",
+            ? `Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv. Ta hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp av ${data.sponsor?.name} eller din up-line nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast.`
+            : "Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv. Ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d av Omega Balance-teamet nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast eller vill gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg tydligare.",
+          action: "Be om hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det kan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ka kvaliteten i ett samtal eller nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg.",
         },
       ],
     };
   }
 
   return {
-    title: "Så kommer du igång",
-    description: "Det första arbetssättet ska vara enkelt nog att upprepa och tydligt nog att kännas naturligt.",
+    title: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ kommer du igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng",
+    description: "Det fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttet ska vara enkelt nog att upprepa och tydligt nog att kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnas naturligt.",
     cards: [
       {
         title: "Personliga kontakter",
-        summary: "Börja nära med några personer där det redan finns förtroende.",
-        action: "Tänk familj, vänner, tidigare kollegor eller andra du kan kontakta utan att det känns konstlat.",
+        summary: "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra med nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra personer dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det redan finns fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rtroende.",
+        action: "TÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk familj, vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nner, tidigare kollegor eller andra du kan kontakta utan att det kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nns konstlat.",
       },
       {
         title: "Sociala medier",
-        summary: "Använd sociala medier för att skapa nyfikenhet, inte för att jaga alla samtidigt.",
-        action: "Lägg energi på dem som svarar eller visar verkligt intresse.",
+        summary: "AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd sociala medier fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skapa nyfikenhet, inte fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att jaga alla samtidigt.",
+        action: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg energi pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ dem som svarar eller visar verkligt intresse.",
       },
       {
         title: "Zoom eller samtal",
-        summary: "Du behöver inte förklara allt själv i text från början.",
-        action: "När intresse finns, bjud vidare till ett samtal eller Zoom i stället för att skriva längre meddelanden.",
+        summary: "Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklara allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv i text frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjan.",
+        action: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r intresse finns, bjud vidare till ett samtal eller Zoom i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skriva lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngre meddelanden.",
       },
       {
-        title: hasSponsor ? "Ta hjälp uppåt" : "Stöd från Omega Balance-teamet",
+        title: hasSponsor ? "Ta hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t" : "StÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet",
         summary: hasSponsor
-          ? "När du kör fast är nästa steg ofta att ta hjälp av din up-line."
-          : "När du kör fast är nästa steg ofta att ta stöd direkt från Omega Balance-teamet i stället för att tveka för länge själv.",
-        action: "Be om hjälp när du har en verklig kontakt i gång eller vill göra nästa steg tydligare.",
+          ? "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ofta att ta hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp av din up-line."
+          : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ofta att ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d direkt frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att tveka fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nge sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv.",
+        action: "Be om hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du har en verklig kontakt i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng eller vill gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg tydligare.",
       },
     ],
   };
@@ -468,13 +468,13 @@ function buildDuplicationRhythm(data: PartnerDashboardData) {
 
   if (!hasDirectPartner) {
     return {
-      title: "Duplicering börjar så här",
+      title: "Duplicering bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r",
       items: [
-        "Bygg först din egen rytm tills du vet vad som faktiskt fungerar i praktiken.",
-        "Spara kort vad du säger i första kontakt, hur du följer upp och när du bjuder vidare till samtal eller Zoom.",
+        "Bygg fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst din egen rytm tills du vet vad som faktiskt fungerar i praktiken.",
+        "Spara kort vad du sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ger i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kontakt, hur du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ljer upp och nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du bjuder vidare till samtal eller Zoom.",
         hasSponsor
-          ? "När något börjar fungera, stäm av med din up-line hur samma arbetssätt kan göras enklare att upprepa."
-          : "När något börjar fungera, håll arbetssättet enkelt nog att upprepa innan du försöker bredda det.",
+          ? "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥got bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar fungera, stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤m av med din up-line hur samma arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt kan gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ras enklare att upprepa."
+          : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥got bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar fungera, hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll arbetssÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttet enkelt nog att upprepa innan du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ker bredda det.",
       ],
     };
   }
@@ -483,12 +483,12 @@ function buildDuplicationRhythm(data: PartnerDashboardData) {
     title: "Din dupliceringsrytm",
     items: [
       nearestDownline
-        ? `Fokusera denna vecka på att hjälpa ${nearestDownline.partnerName} till ett enda tydligt nästa steg.`
-        : "Fokusera denna vecka på din närmaste first line och håll stödet nära nästa aktivitet.",
-      "Använd gemensamt samtal eller Zoom när det höjer kvaliteten, i stället för att skriva längre förklaringar i efterhand.",
+        ? `Fokusera denna vecka pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa ${nearestDownline.partnerName} till ett enda tydligt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg.`
+        : "Fokusera denna vecka pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste first line och hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta aktivitet.",
+      "AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd gemensamt samtal eller Zoom nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶jer kvaliteten, i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skriva lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngre fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rklaringar i efterhand.",
       hasSponsor
-        ? `När ni kör fast, lyft läget kort till ${data.sponsor?.name} med vad som redan är gjort och vad nästa hinder faktiskt är.`
-        : "När ni kör fast, lyft bara det som behöver nästa nivå av stöd och håll resten nära vardagsarbetet.",
+        ? `NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ni kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast, lyft lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤get kort till ${data.sponsor?.name} med vad som redan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r gjort och vad nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta hinder faktiskt ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r.`
+        : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ni kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fast, lyft bara det som behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ av stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d och hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll resten nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra vardagsarbetet.",
     ],
   };
 }
@@ -500,7 +500,7 @@ function buildLeadQueueSummary(leads: Lead[]) {
   const done = leads.filter((lead) => lead.status === "won").length;
 
   return [
-    { label: "Brådskande nu", value: urgent },
+    { label: "BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande nu", value: urgent },
     { label: "Aktiva dialoger", value: active },
     { label: "Nya", value: newLeads },
     { label: "Klart", value: done },
@@ -513,9 +513,9 @@ function buildLeadExecutionSummary(leads: Lead[]) {
   const activeDialogs = leads.filter((lead) => lead.status === "active").length;
 
   return [
-    { label: "Ta i dag", value: takeToday, note: "Nya kontakter som bör få första svar snabbt." },
-    { label: "Följ upp nu", value: followUpNow, note: "Varmare dialoger som inte bär tappa fart." },
-    { label: "Håll levande", value: activeDialogs, note: "Aktiva samtal som behöver nästa steg, inte bara väntan." },
+    { label: "Ta i dag", value: takeToday, note: "Nya kontakter som bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta svar snabbt." },
+    { label: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lj upp nu", value: followUpNow, note: "Varmare dialoger som inte bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r tappa fart." },
+    { label: "HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll levande", value: activeDialogs, note: "Aktiva samtal som behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg, inte bara vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ntan." },
   ];
 }
 
@@ -529,25 +529,25 @@ function getFirstResultProgress(data: PartnerDashboardData) {
 
   return [
     {
-      label: "Första aktivitet",
-      description: "Ett lead eller en första signal har skapats.",
+      label: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta aktivitet",
+      description: "Ett lead eller en fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal har skapats.",
       done: hasLead,
       current: !hasLead,
     },
     {
       label: "Respons",
-      description: "En dialog har kommit igång och är redo för tydlig uppföljning.",
+      description: "En dialog har kommit igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng och ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r redo fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r tydlig uppfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ljning.",
       done: hasResponse,
       current: hasLead && !hasResponse,
     },
     {
-      label: "Första resultat",
+      label: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
       description: "En kundsignal eller tydlig partnerreaktion finns.",
       done: hasResult,
       current: hasResponse && !hasResult,
     },
     {
-      label: "Nästa fas",
+      label: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta fas",
       description: "Nu handlar det om att upprepa det som fungerar och skapa stabil rytm.",
       done: hasResult,
       current: false,
@@ -563,36 +563,36 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   const zzLinksReady = hasRequiredZzLinks(data);
 
   const checklist = [
-    { label: "Godkänn portalvillkor och integritet", done: legalAccepted },
-    { label: "Lägg in dina tre ZZ-länkar", done: zzLinksReady },
-    { label: "Dela din referral-länk", done: data.partner.referral_code.length > 0 },
-    { label: "Skapa första kundsignal", done: customerLeads > 0 || customers > 0 },
-    { label: "Skapa första partnerintresse", done: partnerLeads > 0 },
-    { label: "Få första direkta partnerkontakt", done: directPartners > 0 },
+    { label: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nn portalvillkor och integritet", done: legalAccepted },
+    { label: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina tre ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar", done: zzLinksReady },
+    { label: "Dela din referral-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk", done: data.partner.referral_code.length > 0 },
+    { label: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kundsignal", done: customerLeads > 0 || customers > 0 },
+    { label: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnerintresse", done: partnerLeads > 0 },
+    { label: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta direkta partnerkontakt", done: directPartners > 0 },
   ];
 
   const completedMilestones = checklist.filter((item) => item.done).length;
   const encouragement =
     completedMilestones === 0
-      ? "Du är här och tittar in i portalen. Det i sig är en bra början."
+      ? "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r och tittar in i portalen. Det i sig ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r en bra bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjan."
       : completedMilestones === 1
-        ? "Bra start. Du har redan tagit första riktiga steget."
+        ? "Bra start. Du har redan tagit fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga steget."
         : completedMilestones === 2
-          ? "Snyggt jobbat. Du bygger faktiskt grunden, inte bara tänker på den."
+          ? "Snyggt jobbat. Du bygger faktiskt grunden, inte bara tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nker pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ den."
           : completedMilestones === 3
-            ? "Det här börjar ta form på riktigt. Du har redan flera viktiga bitar på plats."
+            ? "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar ta form pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ riktigt. Du har redan flera viktiga bitar pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats."
             : completedMilestones === 4
-              ? "Starkt. Du har kommit förbi startsträckan och börjar skapa riktig rörelse."
+              ? "Starkt. Du har kommit fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rbi startstrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ckan och bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar skapa riktig rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse."
               : completedMilestones === 5
-                ? "Riktigt bra jobbat. Nu märks det att du bygger något som kan upprepas."
-                : "Mycket fint jobbat. Du har tagit dig långt och bygger nu vidare från en stark grund.";
+                ? "Riktigt bra jobbat. Nu mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rks det att du bygger nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥got som kan upprepas."
+                : "Mycket fint jobbat. Du har tagit dig lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ngt och bygger nu vidare frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n en stark grund.";
 
   if (!legalAccepted) {
     return {
-      stageLabel: "Bekräfta grunden",
-      summary: "Innan du arbetar vidare i portalen behöver villkor och integritet vara godkända.",
-      nextMilestone: "Godkända portalvillkor och integritet",
-      nextBestAction: "Läs igenom dokumenten, bekräfta att du förstått upplägget och slutför godkännandet.",
+      stageLabel: "BekrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤fta grunden",
+      summary: "Innan du arbetar vidare i portalen behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver villkor och integritet vara godkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nda.",
+      nextMilestone: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nda portalvillkor och integritet",
+      nextBestAction: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤s igenom dokumenten, bekrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤fta att du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt upplÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gget och slutfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r godkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnandet.",
       encouragement,
       checklist,
     };
@@ -600,10 +600,10 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   if (!zzLinksReady) {
     return {
-      stageLabel: "Lägg grunden",
-      summary: "Innan du driver trafik eller följer upp leads behöver test-, shop- och partnerlänken finnas på plats.",
+      stageLabel: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg grunden",
+      summary: "Innan du driver trafik eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ljer upp leads behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken finnas pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats.",
       nextMilestone: "Tre Zinzino-destinationer sparade",
-      nextBestAction: "Gå till Länkar och lägg in dina tre personliga ZZ-länkar innan du börjar arbeta externt.",
+      nextBestAction: "GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ till LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar och lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina tre personliga ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar innan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar arbeta externt.",
       encouragement,
       checklist,
     };
@@ -611,10 +611,10 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   if (customers === 0 && customerLeads === 0 && partnerLeads === 0 && directPartners === 0) {
     return {
-      stageLabel: "Kom igång",
-      summary: "Fokus just nu är att skapa första riktiga rörelsen, inte att göra allt samtidigt.",
-      nextMilestone: "Första kundsignal eller första partnerintresse",
-      nextBestAction: "Dela din länk och fokusera på att få din första kund eller ditt första partnerlead.",
+      stageLabel: "Kom igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng",
+      summary: "Fokus just nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen, inte att gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra allt samtidigt.",
+      nextMilestone: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kundsignal eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnerintresse",
+      nextBestAction: "Dela din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk och fokusera pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kund eller ditt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnerlead.",
       encouragement,
       checklist,
     };
@@ -622,10 +622,10 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   if (customers === 0 && customerLeads <= 1 && partnerLeads <= 1 && directPartners === 0) {
     return {
-      stageLabel: "Första resultat",
-      summary: "Du har börjat röra dig. Nu gäller det att visa att det inte bara var ett enstaka försök.",
+      stageLabel: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
+      summary: "Du har bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjat rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra dig. Nu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ller det att visa att det inte bara var ett enstaka fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶k.",
       nextMilestone: "Ett andra resultat i samma riktning",
-      nextBestAction: "Upprepa det som gav första signalen och håll fokus på samma typ av aktivitet några dagar till.",
+      nextBestAction: "Upprepa det som gav fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen och hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ll fokus pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ samma typ av aktivitet nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra dagar till.",
       encouragement,
       checklist,
     };
@@ -634,9 +634,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   if (directPartners === 0) {
     return {
       stageLabel: "Bygg upprepad aktivitet",
-      summary: "Du har flera signaler igång, men allt bygger fortfarande mest på din egen aktivitet.",
-      nextMilestone: "Första direkta partnerkontakt eller tydlig first-line-signal",
-      nextBestAction: "Fortsätt skapa kund- och partnerintresse, men börja styra fokus mot att få in din första direkta partnerkontakt.",
+      summary: "Du har flera signaler igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng, men allt bygger fortfarande mest pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din egen aktivitet.",
+      nextMilestone: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta direkta partnerkontakt eller tydlig first-line-signal",
+      nextBestAction: "FortsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt skapa kund- och partnerintresse, men bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja styra fokus mot att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ in din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta direkta partnerkontakt.",
       encouragement,
       checklist,
     };
@@ -645,9 +645,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   if (directPartners > 0 && partnerLeads + customerLeads + customers < 4) {
     return {
       stageLabel: "Aktivera first line",
-      summary: "Du är inte längre helt själv i flödet. Nästa steg är att hjälpa första linjen att börja röra sig.",
-      nextMilestone: "Första tydliga signalen från first line",
-      nextBestAction: "Hjälp din första partner att få sitt första lead eller sin första kundsignal i stället för att bara producera själv.",
+      summary: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r inte lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ngre helt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv i flÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det. NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen att bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra sig.",
+      nextMilestone: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydliga signalen frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n first line",
+      nextBestAction: "HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partner att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ sitt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta lead eller sin fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kundsignal i stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤llet fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att bara producera sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv.",
       encouragement,
       checklist,
     };
@@ -655,9 +655,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   return {
     stageLabel: "Tidig duplicering",
-    summary: "Det finns tidiga signaler på att arbetet börjar upprepa sig genom andra. Nu handlar det om stabilitet, inte bara fart.",
-    nextMilestone: "Fler återkommande signaler från first line",
-    nextBestAction: "Skydda det som fungerar och hjälp fler i första linjen att upprepa samma beteende.",
+    summary: "Det finns tidiga signaler pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att arbetet bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar upprepa sig genom andra. Nu handlar det om stabilitet, inte bara fart.",
+    nextMilestone: "Fler ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥terkommande signaler frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n first line",
+    nextBestAction: "Skydda det som fungerar och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp fler i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen att upprepa samma beteende.",
     encouragement,
     checklist,
   };
@@ -688,40 +688,40 @@ function buildFastStartJourney(data: PartnerDashboardData, legalAccepted: boolea
   const steps = [
     {
       id: "foundation",
-      title: "Steg 1: Kom igång själv",
-      description: "Lägg grunden först. Då blir resten enklare att upprepa.",
-      target: "Legal, länkar och din egen Omega-länk ska vara på plats.",
-      reward: "Bra jobbat. Nu har du din egen grund på plats.",
+      title: "Steg 1: Kom igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv",
+      description: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg grunden fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst. DÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ blir resten enklare att upprepa.",
+      target: "Legal, lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar och din egen Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ska vara pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats.",
+      reward: "Bra jobbat. Nu har du din egen grund pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats.",
       done: ownFoundationReady,
     },
     {
       id: "customers",
-      title: "Steg 2: Få dina första kunder",
-      description: "Skapa första riktiga rörelsen med din länk och några tydliga kundsignaler.",
+      title: "Steg 2: FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ dina fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kunder",
+      description: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen med din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk och nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gra tydliga kundsignaler.",
       target: firstCustomersReached
         ? `${customerSignals} kundsignaler skapade hittills.`
-        : "Målet är att få in din första kundsignal och börja bygga en liten stabil kundbas.",
-      reward: "Snyggt. Nu har du bevis på att modellen går att sätta i rörelse.",
+        : "MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥let ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ in din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kundsignal och bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja bygga en liten stabil kundbas.",
+      reward: "Snyggt. Nu har du bevis pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att modellen gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r att sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tta i rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.",
       done: firstCustomersReached,
     },
     {
       id: "start-two",
-      title: "Steg 3: Hjälp två personer att komma igång",
-      description: "Nu börjar dupliceringen. Nästa nivå är att du inte bara bygger själv.",
+      title: "Steg 3: HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp tvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ personer att komma igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng",
+      description: "Nu bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar dupliceringen. NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att du inte bara bygger sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv.",
       target: twoStarted
         ? `${Math.max(data.metrics.directPartners, partnerSignals)} partnerstarter eller partnersignaler finns redan.`
-        : "Målet är att hjälpa två personer till en första tydlig start via ditt flöde.",
-      reward: "Bra där. Nu bygger du inte bara själv, du börjar bygga vidare genom andra.",
+        : "MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥let ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa tvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ personer till en fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydlig start via ditt flÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶de.",
+      reward: "Bra dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r. Nu bygger du inte bara sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv, du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar bygga vidare genom andra.",
       done: twoStarted,
     },
     {
       id: "activate-two",
-      title: "Steg 4: Hjälp dina två att få fart",
-      description: "Nu gäller det att hjälpa de första vidare så att arbetet kan upprepas utan att allt hänger på dig.",
+      title: "Steg 4: HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp dina tvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fart",
+      description: "Nu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ller det att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa de fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta vidare sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att arbetet kan upprepas utan att allt hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nger pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ dig.",
       target: firstLineMoving
-        ? "Det finns tydliga first-line-signaler att bygga vidare på."
-        : "Målet är att dina två första inte bara startar, utan börjar få egen rörelse.",
-      reward: "Starkt jobbat. Nu har du byggt en riktig startmotor, inte bara en engångsinsats.",
+        ? "Det finns tydliga first-line-signaler att bygga vidare pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥."
+        : "MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥let ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att dina tvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta inte bara startar, utan bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ egen rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.",
+      reward: "Starkt jobbat. Nu har du byggt en riktig startmotor, inte bara en engÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ngsinsats.",
       done: firstLineMoving,
     },
   ];
@@ -733,21 +733,21 @@ function buildFastStartJourney(data: PartnerDashboardData, legalAccepted: boolea
     daysLeft,
     completedSteps: steps.filter((step) => step.done).length,
     totalSteps: steps.length,
-    currentTitle: currentStepIndex === -1 ? "Fast Start genomförd" : steps[currentStepIndex].title,
+    currentTitle: currentStepIndex === -1 ? "Fast Start genomfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rd" : steps[currentStepIndex].title,
     currentFocus:
       currentStepIndex === -1
-        ? "Nu handlar det om att upprepa det som fungerar och hjälpa fler i din första linje framåt."
+        ? "Nu handlar det om att upprepa det som fungerar och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa fler i din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linje framÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t."
         : steps[currentStepIndex].description,
     momentumMessage:
       currentStepIndex <= 0
-        ? "En sak i taget. Grunden först, tempo sedan."
+        ? "En sak i taget. Grunden fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst, tempo sedan."
         : currentStepIndex === 1
-          ? "Bra jobbat. Nu har du en grund att bygga riktiga kundsignaler ovanpå."
+          ? "Bra jobbat. Nu har du en grund att bygga riktiga kundsignaler ovanpÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥."
           : currentStepIndex === 2
-            ? "Nu börjar det bli en verksamhet, inte bara en egen aktivitet."
+            ? "Nu bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar det bli en verksamhet, inte bara en egen aktivitet."
             : currentStepIndex === 3
-              ? "Nu flyttas fokus från din egen fart till hur väl du hjälper andra i gång."
-              : "Snyggt jobbat. Nu kan du börja bygga vidare med mycket bättre rytm.",
+              ? "Nu flyttas fokus frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n din egen fart till hur vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤l du hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper andra i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng."
+              : "Snyggt jobbat. Nu kan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja bygga vidare med mycket bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttre rytm.",
     steps: steps.map((step, index) => ({
       ...step,
       status: step.done ? "done" : currentStepIndex === index ? "current" : "locked",
@@ -767,24 +767,24 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (!foundationReady) {
     return {
       level: 1,
-      statusTitle: "Level 1 – Aktivering",
-      statusBody: "Du har inte hela grunden på plats än. Fixa den först så blir resten mycket enklare.",
-      nextGoal: "Nästa mål: få grunden helt klar",
-      actionTitle: "Få grunden klar nu",
-      actionBody: "Godkänn legal och lägg in dina länkar innan du börjar driva rörelse.",
-      actionLabel: !legalAccepted ? "Öppna legal" : "Öppna länkar",
+      statusTitle: "Level 1 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Aktivering",
+      statusBody: "Du har inte hela grunden pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n. Fixa den fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ blir resten mycket enklare.",
+      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden helt klar",
+      actionTitle: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden klar nu",
+      actionBody: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nn legal och lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar innan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar driva rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.",
+      actionLabel: !legalAccepted ? "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna legal" : "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
       actionMode: !legalAccepted ? ("legal" as const) : ("links" as const),
       helper: [
-        "Gör klart legal först",
-        "Lägg in test-, shop- och partnerlänk",
-        "Se till att du själv kan stå för det du delar",
+        "GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r klart legal fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst",
+        "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
+        "Se till att du sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv kan stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r det du delar",
       ],
-      liveTitle: "Det här händer just nu",
-      liveBody: "Så fort grunden är klar kan systemet börja jobba åt dig.",
-      liveMeta: "Du är nära första riktiga start",
-      nextLevelTitle: "Nästa steg",
-      nextLevelBody: "När grunden är klar låser du upp första aktiveringen.",
-      momentum: "Du är här nu. Få grunden klar och gå vidare.",
+      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
+      liveBody: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fort grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar kan systemet bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja jobba ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t dig.",
+      liveMeta: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga start",
+      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
+      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser du upp fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta aktiveringen.",
+      momentum: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nu. FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden klar och gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ vidare.",
       shareMode: "setup" as const,
     };
   }
@@ -792,23 +792,23 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (visits === 0) {
     return {
       level: 1,
-      statusTitle: "Level 1 – Aktivering",
-      statusBody: "Du har kommit igång. Nu behöver du skapa första rörelsen.",
-      nextGoal: "Nästa mål: första signal",
-      actionTitle: "Skicka din länk till 1 person nu",
-      actionBody: "Börja litet. En skickad länk är bättre än att fundera för länge.",
-      actionLabel: "Kopiera min länk",
+      statusTitle: "Level 1 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Aktivering",
+      statusBody: "Du har kommit igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. Nu behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver du skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen.",
+      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal",
+      actionTitle: "Skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk till 1 person nu",
+      actionBody: "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja litet. En skickad lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttre ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att fundera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nge.",
+      actionLabel: "Kopiera min lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
       actionMode: "copy-link" as const,
       helper: [
-        "någon du redan pratar med",
-        "någon som bryr sig om hälsa",
-        "någon du litar på",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon du redan pratar med",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som bryr sig om hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lsa",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon du litar pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
       ],
-      liveTitle: "Det här händer just nu",
-      liveBody: "Så fort någon använder din länk ser du första signalen här.",
-      liveMeta: "Du är ett klick från att få systemet i rörelse",
-      nextLevelTitle: "Nästa steg",
-      nextLevelBody: "När du får din första signal låser du upp nästa nivå.",
+      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
+      liveBody: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fort nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ser du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r.",
+      liveMeta: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ett klick frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ systemet i rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse",
+      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
+      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser du upp nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥.",
       momentum: "Du har varit aktiv idag",
       shareMode: "start" as const,
     };
@@ -817,24 +817,24 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (resultSignals === 0) {
     return {
       level: 2,
-      statusTitle: "Level 2 – Första signal",
-      statusBody: "Din länk används. Nu gäller det att bygga vidare medan tempot finns kvar.",
-      nextGoal: "Nästa mål: första resultat",
-      actionTitle: "Skicka din länk till 1 person till",
-      actionBody: "Du har redan rörelse. Nu vill vi få den att upprepa sig snabbt.",
-      actionLabel: "Kopiera min länk",
+      statusTitle: "Level 2 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal",
+      statusBody: "Din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nds. Nu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ller det att bygga vidare medan tempot finns kvar.",
+      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
+      actionTitle: "Skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk till 1 person till",
+      actionBody: "Du har redan rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse. Nu vill vi fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ den att upprepa sig snabbt.",
+      actionLabel: "Kopiera min lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
       actionMode: "copy-link" as const,
       helper: [
-        "någon som redan visat lite intresse",
-        "någon som brukar svara dig",
-        "någon som vill förstå sin hälsa bättre",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som redan visat lite intresse",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som brukar svara dig",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som vill fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ sin hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lsa bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttre",
       ],
-      liveTitle: "Det här händer just nu",
-      liveBody: visits === 1 ? "1 person har klickat på din länk." : `${visits} personer har klickat på din länk.`,
-      liveMeta: "Du är nära ditt första resultat",
-      nextLevelTitle: "Nästa nivå",
-      nextLevelBody: "När du får ditt första lead eller partnerintresse öppnas nästa steg.",
-      momentum: visits > 1 ? `Du har skapat ${visits} signaler hittills` : "Du har fått första signalen",
+      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
+      liveBody: visits === 1 ? "1 person har klickat pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk." : `${visits} personer har klickat pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk.`,
+      liveMeta: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra ditt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
+      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
+      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r ditt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta lead eller partnerintresse ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppnas nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg.",
+      momentum: visits > 1 ? `Du har skapat ${visits} signaler hittills` : "Du har fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen",
       shareMode: "build" as const,
     };
   }
@@ -842,49 +842,49 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (!duplicationReady || data.metrics.directPartners === 0) {
     return {
       level: 3,
-      statusTitle: "Level 3 – Första resultat",
-      statusBody: "Du har fått din första riktiga signal. Nu är det dags att skapa nästa lilla vinst.",
-      nextGoal: "Nästa mål: första kund eller första partnerkontakt",
-      actionTitle: "Skicka din länk till 1 person som kan vilja göra samma resa",
-      actionBody: "Nu får du börja använda samma enkla system för att hitta första duplication-signalen.",
+      statusTitle: "Level 3 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
+      statusBody: "Du har fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga signal. Nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det dags att skapa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta lilla vinst.",
+      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kund eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnerkontakt",
+      actionTitle: "Skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk till 1 person som kan vilja gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra samma resa",
+      actionBody: "Nu fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nda samma enkla system fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att hitta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta duplication-signalen.",
       actionLabel: "Bjud in partner",
       actionMode: "copy-link" as const,
       helper: [
-        "någon som gillar struktur",
-        "någon som vill bygga stegvis",
-        "någon som skulle uppskatta att slippa jaga folk",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som gillar struktur",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som vill bygga stegvis",
+        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som skulle uppskatta att slippa jaga folk",
       ],
-      liveTitle: "Det här händer just nu",
+      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
       liveBody: partnerSignals > 0
-        ? `Du har ${partnerSignals} partnerintresse${partnerSignals > 1 ? "n" : ""} i rörelse.`
-        : `Du har ${customerSignals} kundsignal${customerSignals > 1 ? "er" : ""} i rörelse.`,
-      liveMeta: "Nu är du redo att bjuda in din första partner",
-      nextLevelTitle: "Nästa nivå",
-      nextLevelBody: "När du får första partnerkontakt eller första kund låser du upp nästa dupliceringssteg.",
-      momentum: "Bra jobbat. Nu bygger du på ett riktigt resultat.",
+        ? `Du har ${partnerSignals} partnerintresse${partnerSignals > 1 ? "n" : ""} i rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.`
+        : `Du har ${customerSignals} kundsignal${customerSignals > 1 ? "er" : ""} i rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.`,
+      liveMeta: "Nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du redo att bjuda in din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partner",
+      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
+      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnerkontakt eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kund lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser du upp nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta dupliceringssteg.",
+      momentum: "Bra jobbat. Nu bygger du pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ett riktigt resultat.",
       shareMode: "duplicate" as const,
     };
   }
 
   return {
     level: 4,
-    statusTitle: "Level 4 – Duplication",
-    statusBody: "Nu är du igång på riktigt. Fokus ligger på att hjälpa andra göra samma resa som du.",
-    nextGoal: "Nästa mål: fler signaler från first line",
-    actionTitle: "Hjälp en partner till sin första signal idag",
-    actionBody: "Nu vinner du genom att hjälpa någon annan få fart, inte genom att bara producera mer själv.",
-    actionLabel: "Öppna leads",
+    statusTitle: "Level 4 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Duplication",
+    statusBody: "Nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ riktigt. Fokus ligger pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa andra gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra samma resa som du.",
+    nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fler signaler frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n first line",
+    actionTitle: "HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp en partner till sin fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal idag",
+    actionBody: "Nu vinner du genom att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon annan fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fart, inte genom att bara producera mer sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv.",
+    actionLabel: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna leads",
     actionMode: "leads" as const,
     helper: [
-      "välj en partner nära dig",
-      "landa i ett enda nästa steg",
-      "skapa rörelse innan ni pratar teori",
+      "vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lj en partner nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra dig",
+      "landa i ett enda nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
+      "skapa rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse innan ni pratar teori",
     ],
-    liveTitle: "Det här händer just nu",
-    liveBody: "Det finns redan signaler i systemet. Nu gäller det att hålla rytmen levande.",
-    liveMeta: "Systemet jobbar bäst när du upprepar det som redan fungerar",
-    nextLevelTitle: "Nästa nivå",
-    nextLevelBody: "Nästa steg är att få fler i första linjen att uppleva samma enkla start.",
+    liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
+    liveBody: "Det finns redan signaler i systemet. Nu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ller det att hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥lla rytmen levande.",
+    liveMeta: "Systemet jobbar bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤st nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du upprepar det som redan fungerar",
+    nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
+    nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fler i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen att uppleva samma enkla start.",
     momentum: "Du har varit aktiv idag",
     shareMode: "support" as const,
   };
@@ -925,12 +925,12 @@ const PartnerDashboardPage = () => {
           })
         : Promise.reject(new Error("Ingen partnerdata hittades.")),
     onSuccess: async () => {
-      setZzLinkStatus("Dina ZZ-länkar är sparade.");
+      setZzLinkStatus("Dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r sparade.");
       await queryClient.invalidateQueries({ queryKey: ["partner-dashboard", partnerId] });
       await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: (error) => {
-      setZzLinkStatus(error instanceof Error ? error.message : "Kunde inte spara dina ZZ-länkar.");
+      setZzLinkStatus(error instanceof Error ? error.message : "Kunde inte spara dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar.");
     },
   });
 
@@ -943,9 +943,9 @@ const PartnerDashboardPage = () => {
 
   const navigation = useMemo(
     () => [
-      { label: "Översikt", href: "/dashboard/partner/overview", icon: dashboardIcons.dashboard },
+      { label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“versikt", href: "/dashboard/partner/overview", icon: dashboardIcons.dashboard },
       { label: "Leads", href: "/dashboard/partner/leads", icon: dashboardIcons.leads },
-      { label: "Länkar", href: "/dashboard/partner/links", icon: Link2 },
+      { label: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar", href: "/dashboard/partner/links", icon: Link2 },
       { label: "Kunder", href: "/dashboard/partner/customers", icon: Users },
       { label: "Kontakter", href: "/dashboard/partner/network", icon: dashboardIcons.network },
       { label: "Din resa", href: "/dashboard/partner/journey", icon: dashboardIcons.dashboard },
@@ -975,9 +975,13 @@ const PartnerDashboardPage = () => {
   const showNetwork = currentSection === "network";
   const showJourney = currentSection === "journey";
   const partnerLink = data ? `${window.location.origin}/?ref=${data.partner.referral_code}` : "";
-  const shareText = firstActionEngine?.shareMode === "duplicate"
-    ? `Jag testar ett nytt digitalt upplägg som gör det enklare att komma igång stegvis. Kika här när du har två minuter: ${partnerLink}`
-    : `Jag testar ett nytt upplägg för mätbar hälsa och ville skicka länken till dig. Kika här när du har två minuter: ${partnerLink}`;
+  const customerShareText = partnerLink
+    ? `Hej! Jag testar just nu ett enkelt uppl\u00e4gg f\u00f6r m\u00e4tbar h\u00e4lsa. Om du vill kan du kika h\u00e4r n\u00e4r du har tv\u00e5 minuter: ${partnerLink}`
+    : "";
+  const partnerShareText = partnerLink
+    ? `Hej! Jag testar just nu ett digitalt uppl\u00e4gg d\u00e4r man kan bygga stegvis utan att beh\u00f6va g\u00f6ra allt sj\u00e4lv fr\u00e5n start. Kika g\u00e4rna h\u00e4r n\u00e4r du har tv\u00e5 minuter om du vill se vad det handlar om: ${partnerLink}`
+    : "";
+  const shareText = firstActionEngine?.shareMode === "duplicate" ? partnerShareText : customerShareText;
   const smsShareHref = `sms:?&body=${encodeURIComponent(shareText)}`;
   const whatsappShareHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
   const firstResultProgress = data ? getFirstResultProgress(data) : [];
@@ -1032,26 +1036,26 @@ const PartnerDashboardPage = () => {
         data.team[0]
           ? {
               key: `downline-${data.team[0].partnerId}`,
-              title: `Hjälp ${data.team[0].partnerName} vidare`,
-              summary: "Din närmaste first line ger störst hävstång just nu om du håller stödet nära nästa aktivitet.",
-              action: "Ta ett kort avstämningssamtal och landa i ett enda tydligt nästa steg denna vecka.",
+              title: `HjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp ${data.team[0].partnerName} vidare`,
+              summary: "Din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste first line ger stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤vstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng just nu om du hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ller stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta aktivitet.",
+              action: "Ta ett kort avstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤mningssamtal och landa i ett enda tydligt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg denna vecka.",
             }
           : null,
         {
           key: "up-line-support",
-          title: data.sponsor ? `Ta stöd av ${data.sponsor.name}` : "Ta stöd av Omega Balance-teamet",
+          title: data.sponsor ? `Ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d av ${data.sponsor.name}` : "Ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d av Omega Balance-teamet",
           summary: data.sponsor
-            ? "När dialog eller uppföljning fastnar blir nästa steg ofta lättare om du tar stöd uppåt tidigt."
-            : "När du ligger nära toppen behöver du inte bära allt själv. Ta stöd uppåt så fort nästa steg blir oklart.",
-          action: "Be om hjälp i skarpa lägen, helst kopplat till en verklig kontakt eller ett konkret nästa steg.",
+            ? "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r dialog eller uppfÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ljning fastnar blir nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ofta lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttare om du tar stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t tidigt."
+            : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du ligger nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra toppen behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver du inte bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv. Ta stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fort nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg blir oklart.",
+          action: "Be om hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp i skarpa lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gen, helst kopplat till en verklig kontakt eller ett konkret nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg.",
         },
         {
           key: "duplicate-rhythm",
           title: "Skydda dupliceringsrytmen",
-          summary: "Duplicering börjar när du hjälper någon annan till sitt första tydliga resultat, inte bara när du själv producerar mer.",
+          summary: "Duplicering bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon annan till sitt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydliga resultat, inte bara nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv producerar mer.",
           action: data.team.length
-            ? "Fokusera på en person i taget i din first line tills ni fått första tydliga signalen där."
-            : "När din första direkta partner kommer in, hjälp den personen igång innan du försöker bredda för mycket.",
+            ? "Fokusera pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ en person i taget i din first line tills ni fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydliga signalen dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r."
+            : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta direkta partner kommer in, hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp den personen igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng innan du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ker bredda fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r mycket.",
         },
       ].filter(Boolean) as Array<{
         key: string;
@@ -1062,10 +1066,10 @@ const PartnerDashboardPage = () => {
     : [];
   const primaryActionCard = startAction || firstResultFocus
     ? {
-        title: firstResultFocus?.title ?? startAction?.title ?? "Nästa steg",
+        title: firstResultFocus?.title ?? startAction?.title ?? "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
         description: firstResultFocus?.reason ?? startAction?.description ?? journey?.nextBestAction ?? "",
         detail: firstResultFocus?.action ?? journey?.nextBestAction ?? startAction?.description ?? "",
-        label: startAction?.label ?? "Öppna leads",
+        label: startAction?.label ?? "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna leads",
         mode: startAction?.mode ?? ("leads" as const),
       }
     : null;
@@ -1075,7 +1079,7 @@ const PartnerDashboardPage = () => {
           key: lead.id,
           name: lead.name,
           label: lead.type === "partner_lead" ? "Partnerlead" : "Kundlead",
-          status: `${getLeadStatusLabel(lead.status)} • ${getLeadSituationLabel(lead)}`,
+          status: `${getLeadStatusLabel(lead.status)} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ ${getLeadSituationLabel(lead)}`,
           action: getLeadNextAction(lead),
         }))
       : data.team[0]
@@ -1085,7 +1089,7 @@ const PartnerDashboardPage = () => {
               name: data.team[0].partnerName,
               label: "Direkt partnerkontakt",
               status: "First line",
-              action: "Ta en kort avstämning och hjälp personen till ett enda tydligt nästa steg denna vecka.",
+              action: "Ta en kort avstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤mning och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp personen till ett enda tydligt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg denna vecka.",
             },
           ]
         : []
@@ -1138,7 +1142,7 @@ const PartnerDashboardPage = () => {
   };
 
   const markActionStarted = (
-    message = "Bra. Du är igång.\n\nDin länk är nu aktiv.\n\nNästa steg är första signal.\n\nVill du ta nästa steg direkt: skicka den till 1 person du redan har kontakt med.",
+    message = "Bra. Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng.\n\nDin lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nu aktiv.\n\nNÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal.\n\nVill du ta nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg direkt: skicka den till 1 person du redan har kontakt med.",
   ) => {
     setActionFeedback(message);
   };
@@ -1187,7 +1191,7 @@ const PartnerDashboardPage = () => {
   return (
     <DashboardShell
       title="Partnerdashboard"
-      subtitle="Din egen vy över referral-länk, leads, kunder och direkta partnerkontakter. Bara det som hör till dig visas här."
+      subtitle="Din egen vy \u00f6ver referral-l\u00e4nk, leads, kunder och direkta partnerkontakter. Bara det som h\u00f6r till dig visas h\u00e4r."
       roleLabel={isDemo ? "Partnerdemo" : "Partner"}
       navigation={navigation}
       onSignOut={isDemo ? undefined : () => void signOutPortalUser()}
@@ -1195,15 +1199,15 @@ const PartnerDashboardPage = () => {
       <Dialog open={zzLinksOpen} onOpenChange={setZzLinksOpen}>
         <DialogContent className="max-w-2xl rounded-[1.75rem] border-border/70 bg-white/95 p-6 shadow-card md:p-7">
             <DialogHeader>
-              <DialogTitle>Mina ZZ-länkar</DialogTitle>
+              <DialogTitle>Mina ZZ-l\u00e4nkar</DialogTitle>
               <DialogDescription>
-                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop- och partnerlänken i flödet.
+                L\u00e4gg in dina riktiga Zinzino-l\u00e4nkar h\u00e4r. Just nu anv\u00e4nder vi test-, shop- och partnerl\u00e4nken i fl\u00f6det.
               </DialogDescription>
             </DialogHeader>
 
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="partner-zz-test">Testlänk</Label>
+                <Label htmlFor="partner-zz-test">Testl\u00e4nk</Label>
               <Input
                 id="partner-zz-test"
                 value={zzTestUrl}
@@ -1214,7 +1218,7 @@ const PartnerDashboardPage = () => {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="partner-zz-shop">Shoplänk</Label>
+              <Label htmlFor="partner-zz-shop">Shopl\u00e4nk</Label>
               <Input
                 id="partner-zz-shop"
                 value={zzShopUrl}
@@ -1225,7 +1229,7 @@ const PartnerDashboardPage = () => {
             </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="partner-zz-partner">Partnerlänk</Label>
+                <Label htmlFor="partner-zz-partner">Partnerl\u00e4nk</Label>
                 <Input
                   id="partner-zz-partner"
                   value={zzPartnerUrl}
@@ -1239,14 +1243,14 @@ const PartnerDashboardPage = () => {
 
           <DialogFooter className="mt-3 flex-col items-stretch gap-3 sm:flex-row sm:justify-between">
             <div className="text-sm text-subtle">
-              {zzLinkStatus ? zzLinkStatus : "Du kan uppdatera länkarna själv när dina Zinzino-destinationer ändras."}
+              {zzLinkStatus ? zzLinkStatus : "Du kan uppdatera l\u00e4nkarna sj\u00e4lv n\u00e4r dina Zinzino-destinationer \u00e4ndras."}
             </div>
             <div className="flex gap-3">
               <Button type="button" variant="outline" onClick={() => setZzLinksOpen(false)}>
-                Stäng
+                St\u00e4ng
               </Button>
               <Button type="button" onClick={() => zzLinksMutation.mutate()} disabled={zzLinksMutation.isPending}>
-                {zzLinksMutation.isPending ? "Sparar..." : "Spara länkar"}
+                {zzLinksMutation.isPending ? "Sparar..." : "Spara l\u00e4nkar"}
               </Button>
             </div>
           </DialogFooter>
@@ -1259,18 +1263,18 @@ const PartnerDashboardPage = () => {
         <div className="space-y-8">
           {viewingAsAdmin ? (
             <div className="rounded-[1.5rem] border border-amber-300/70 bg-amber-50 px-5 py-4 text-sm text-amber-950 shadow-card">
-              Du tittar på partnervyn som admin. Den här sidan används för att granska partnerupplevelsen, inte för att ändra adminbehörighet.
+              Du tittar p\u00e5 partnervyn som admin. Den h\u00e4r sidan anv\u00e4nds f\u00f6r att granska partnerupplevelsen, inte f\u00f6r att \u00e4ndra adminbeh\u00f6righet.
             </div>
           ) : null}
 
           {showOverview && journey ? (
             <DashboardSection
               title="Din Fast Start"
-              description="Dina första 120 dagar ska kännas som en guidande partnerresa, inte som hela kompplanen på en gång."
+              description="Dina f\u00f6rsta 120 dagar ska k\u00e4nnas som en guidande partnerresa, inte som hela kompplanen p\u00e5 en g\u00e5ng."
             >
               <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr] xl:grid-cols-12">
                 <div className="rounded-[1.2rem] border border-primary/20 bg-white p-5 shadow-card lg:col-span-1 xl:col-span-6">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">G\u00f6r detta nu</p>
                   <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
                     {firstActionEngine?.actionTitle ?? primaryActionCard?.title ?? journey.nextBestAction}
                   </p>
@@ -1287,9 +1291,9 @@ const PartnerDashboardPage = () => {
                       }}
                     >
                       <Copy className="mr-2 h-4 w-4" />
-                      {firstActionEngine?.actionLabel ?? "Kopiera min länk"}
+                      {firstActionEngine?.actionLabel ?? "Kopiera min l\u00e4nk"}
                     </Button>
-                    <p className="mt-3 text-sm text-subtle">Börja med 1 person du redan pratar med. Det räcker för att få systemet i rörelse.</p>
+                    <p className="mt-3 text-sm text-subtle">B\u00f6rja med 1 person du redan har kontakt med.</p>
                   </div>
                   <div className="mt-4 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Skicka till</p>
@@ -1305,7 +1309,7 @@ const PartnerDashboardPage = () => {
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Startpunkt</p>
                       <Badge variant={actionFeedback ? "default" : "outline"} className="rounded-full px-3 py-1">
-                        {actionFeedback ? "Steg 1 klart" : "Väntar"}
+                        {actionFeedback ? "Steg 1 klart" : "V\u00e4ntar"}
                       </Badge>
                     </div>
                     <div className="mt-3 flex items-start gap-3">
@@ -1313,8 +1317,8 @@ const PartnerDashboardPage = () => {
                         <CheckCircle2 className={`h-5 w-5 ${actionFeedback ? "" : "opacity-45"}`} />
                       </div>
                       <div className="space-y-2">
-                      {(actionFeedback ?? "När du kopierar eller delar länken får du direkt kvitto på att du faktiskt har startat något.").split("\n\n").map((line) => (
-                        <p key={line} className={`text-sm ${line === "Bra. Du är igång." ? "font-medium text-foreground" : "text-subtle"}`}>
+                      {(actionFeedback ?? "N\u00e4r du kopierar eller delar l\u00e4nken f\u00e5r du direkt kvitto p\u00e5 att du faktiskt har startat n\u00e5got.").split("\n\n").map((line) => (
+                        <p key={line} className={`text-sm ${line === "Bra. Du \u00e4r ig\u00e5ng." ? "font-medium text-foreground" : "text-subtle"}`}> 
                           {line}
                         </p>
                       ))}
@@ -1323,7 +1327,7 @@ const PartnerDashboardPage = () => {
                   </div>
                   <details className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
                     <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
-                      Fler sätt att dela
+                      Fler s\u00e4tt att dela
                     </summary>
                     <div className="mt-3 flex flex-wrap gap-2.5">
                       <Button asChild type="button" variant="outline" className="h-9 rounded-lg px-4 text-sm">
@@ -1337,7 +1341,7 @@ const PartnerDashboardPage = () => {
                         className="h-9 rounded-lg px-4 text-sm"
                         onClick={() => {
                           void navigator.clipboard.writeText(shareText);
-                          markActionStarted("Bra. Du är igång.\n\nDitt meddelande är nu klart att klistra in i Messenger.\n\nNästa steg är första signal.\n\nSkicka det till 1 person du redan har kontakt med.");
+                          markActionStarted("Bra. Du \u00e4r ig\u00e5ng.\n\nDitt meddelande \u00e4r nu klart att klistra in i Messenger.\n\nN\u00e4sta steg \u00e4r f\u00f6rsta signal.\n\nSkicka det till 1 person du redan har kontakt med.");
                         }}
                       >
                         Dela via Messenger
@@ -1349,6 +1353,54 @@ const PartnerDashboardPage = () => {
                       </Button>
                     </div>
                   </details>
+                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">F\u00e4rdig kundtext</p>
+                          <p className="mt-1 text-sm font-medium text-foreground">N\u00e4r du vill skicka l\u00e4nken till n\u00e5gon som kan vara nyfiken p\u00e5 testet</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-8 rounded-lg px-3 text-sm"
+                          onClick={() => {
+                            void navigator.clipboard.writeText(customerShareText);
+                            markActionStarted("Bra. Du \u00e4r ig\u00e5ng.\n\nDin kundtext \u00e4r nu kopierad.\n\nN\u00e4sta steg \u00e4r f\u00f6rsta signal.\n\nSkicka den till 1 person du redan har kontakt med.");
+                          }}
+                        >
+                          <Copy className="mr-2 h-3.5 w-3.5" />
+                          Kopiera
+                        </Button>
+                      </div>
+                      <div className="mt-3 rounded-[0.9rem] border border-border/60 bg-secondary/20 p-3 text-sm leading-6 text-foreground/85">
+                        {customerShareText}
+                      </div>
+                    </div>
+                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">F\u00e4rdig partnertext</p>
+                          <p className="mt-1 text-sm font-medium text-foreground">N\u00e4r du vill visa modellen f\u00f6r n\u00e5gon som kan vilja bygga vidare</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-8 rounded-lg px-3 text-sm"
+                          onClick={() => {
+                            void navigator.clipboard.writeText(partnerShareText);
+                            markActionStarted("Bra. Du \u00e4r ig\u00e5ng.\n\nDin partnertext \u00e4r nu kopierad.\n\nN\u00e4sta steg \u00e4r f\u00f6rsta signal.\n\nSkicka den till 1 person du redan har kontakt med.");
+                          }}
+                        >
+                          <Copy className="mr-2 h-3.5 w-3.5" />
+                          Kopiera
+                        </Button>
+                      </div>
+                      <div className="mt-3 rounded-[0.9rem] border border-border/60 bg-secondary/20 p-3 text-sm leading-6 text-foreground/85">
+                        {partnerShareText}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/25 p-4 lg:col-span-1 xl:col-span-2">
@@ -1360,28 +1412,28 @@ const PartnerDashboardPage = () => {
                     <p className="mt-2 text-sm text-foreground">{firstActionEngine?.momentum ?? fastStartJourney?.momentumMessage ?? journey.encouragement}</p>
                   </div>
                   <div className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa mål</p>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">N\u00e4sta m\u00e5l</p>
                     <p className="mt-2 text-sm text-foreground">{firstActionEngine?.nextGoal ?? journey.nextMilestone}</p>
                   </div>
                 </div>
 
                 <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det här händer just nu"}</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det h\u00e4r h\u00e4nder just nu"}</p>
                   <div className="mt-3 space-y-3">
                     <div className={`rounded-[1rem] border p-3.5 ${actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0) ? "border-amber-300/70 bg-amber-50/70" : "border-border/70 bg-secondary/20"}`}>
                       <p className="text-sm font-medium text-foreground">
                         {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
-                          ? "Väntar på första signal..."
-                          : firstActionEngine?.liveBody ?? "Så fort första signalen kommer syns den här."}
+                          ? "V\u00e4ntar p\u00e5 f\u00f6rsta signal..."
+                          : firstActionEngine?.liveBody ?? "S\u00e5 fort f\u00f6rsta signalen kommer syns den h\u00e4r."}
                       </p>
                       <p className="mt-2 text-xs text-subtle">
                         {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
-                          ? "Du är nära första resultatet."
-                          : firstActionEngine?.liveMeta ?? "Du är nära ditt första resultat"}
+                          ? "Du \u00e4r n\u00e4ra f\u00f6rsta resultatet."
+                          : firstActionEngine?.liveMeta ?? "Du \u00e4r n\u00e4ra ditt f\u00f6rsta resultat"}
                       </p>
                       {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0) ? (
                         <div className="mt-3 rounded-[0.85rem] border border-amber-300/70 bg-white/80 px-3 py-2 text-xs text-amber-950">
-                          Din del är gjord. Nästa win är att någon klickar eller svarar.
+                          Din del \u00e4r gjord. N\u00e4sta win \u00e4r att n\u00e5gon klickar eller svarar.
                         </div>
                       ) : null}
                     </div>
@@ -1396,9 +1448,9 @@ const PartnerDashboardPage = () => {
                 </div>
 
                 <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "Nästa nivå"}</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "N\u00e4sta niv\u00e5"}</p>
                   <p className="mt-3 text-lg font-semibold text-foreground">
-                    {firstActionEngine?.level === 3 ? "Nu är du redo för duplication" : "Ett steg till öppnar nästa nivå"}
+                    {firstActionEngine?.level === 3 ? "Nu \u00e4r du redo f\u00f6r duplication" : "Ett steg till \u00f6ppnar n\u00e4sta niv\u00e5"}
                   </p>
                   <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.nextLevelBody ?? journey.nextBestAction}</p>
                   <div className="mt-4">
@@ -1423,10 +1475,10 @@ const PartnerDashboardPage = () => {
                 <div className="mt-4 rounded-[1.2rem] border border-border/70 bg-white p-4 shadow-card">
                   <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Stegvis väg framåt</p>
-                      <p className="mt-2 text-lg font-semibold text-foreground">En sak i taget. När ett steg är klart öppnas nästa nivå.</p>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Stegvis vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤g framÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t</p>
+                      <p className="mt-2 text-lg font-semibold text-foreground">En sak i taget. NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ett steg ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klart ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppnas nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥.</p>
                       <p className="mt-2 text-sm leading-6 text-subtle">
-                        Vi visar inte allt på en gång. Fokus är att du ska förstå vad som är viktigast nu och känna momentum när du går vidare.
+                        Vi visar inte allt pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ en gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. Fokus ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att du ska fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ vad som ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r viktigast nu och kÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nna momentum nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r vidare.
                       </p>
                     </div>
                     <div className="rounded-[1rem] border border-border/70 bg-secondary/20 px-4 py-3">
@@ -1453,16 +1505,16 @@ const PartnerDashboardPage = () => {
                             variant={step.status === "done" ? "default" : step.status === "current" ? "secondary" : "outline"}
                             className="rounded-full px-3 py-1"
                           >
-                            {step.status === "done" ? "Klar" : step.status === "current" ? "Pågår nu" : "Nästa nivå"}
+                            {step.status === "done" ? "Klar" : step.status === "current" ? "PÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r nu" : "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥"}
                           </Badge>
                         </div>
                         <p className="mt-3 text-sm leading-6 text-subtle">{step.description}</p>
                         <div className="mt-3 rounded-[0.9rem] border border-border/70 bg-white/80 p-3">
-                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Detta är målet</p>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Detta ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥let</p>
                           <p className="mt-2 text-sm text-foreground">{step.target}</p>
                         </div>
                         <div className="mt-3 rounded-[0.9rem] border border-border/70 bg-white/80 p-3">
-                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">När det är klart</p>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r det ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klart</p>
                           <p className="mt-2 text-sm text-foreground">{step.reward}</p>
                         </div>
                       </div>
@@ -1473,7 +1525,7 @@ const PartnerDashboardPage = () => {
 
               <div className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-white p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Progress mot första resultat</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Progress mot fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat</p>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Klara steg</p>
@@ -1510,7 +1562,7 @@ const PartnerDashboardPage = () => {
 
                   <details className="rounded-[1.2rem] border border-border/70 bg-white p-4 shadow-card">
                     <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
-                      Visa mer stöd och överblick
+                      Visa mer stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d och ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶verblick
                     </summary>
                     <div className="mt-4 grid gap-4">
                       <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
@@ -1545,7 +1597,7 @@ const PartnerDashboardPage = () => {
 
                       {firstLineFocusQueue.length ? (
                         <div className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5">
-                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Stöd för första linjen</p>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">StÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶d fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta linjen</p>
                           <div className="mt-3 space-y-3">
                             {firstLineFocusQueue.map((item) => (
                               <div key={item.key} className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
@@ -1595,14 +1647,14 @@ const PartnerDashboardPage = () => {
 
           {showOverview ? (
             <DashboardSection
-              title="Snabbåtgärder"
-              description="Tre snabba vägar när du vill agera direkt."
+              title="SnabbÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tgÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rder"
+              description="Tre snabba vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gar nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du vill agera direkt."
             >
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Dela Omega-länken</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Dela Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    När grunden är klar är detta länken du använder för att skapa ny rörelse.
+                    NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r detta lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken du anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skapa ny rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.
                   </p>
                   <Button
                     type="button"
@@ -1611,14 +1663,14 @@ const PartnerDashboardPage = () => {
                     onClick={() => navigator.clipboard.writeText(partnerLink)}
                   >
                     <Copy className="mr-2 h-3.5 w-3.5 shrink-0" />
-                    Kopiera länk
+                    Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
                   </Button>
                 </div>
 
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Se ZZ-länkar</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Se ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Börja här om dina test-, shop- eller partnerlänkar saknas.
+                    BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r om dina test-, shop- eller partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar saknas.
                   </p>
                   <Button
                     type="button"
@@ -1626,17 +1678,17 @@ const PartnerDashboardPage = () => {
                     className="mt-3 inline-flex h-8 max-w-full self-start whitespace-normal rounded-lg px-3 text-sm leading-tight"
                     onClick={openZzLinksDialog}
                   >
-                    Redigera mina länkar
+                    Redigera mina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar
                   </Button>
                 </div>
 
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Arbeta med leads</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Gå hit när du redan har signaler i gäng och vill följa upp dem vidare.
+                    GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ hit nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du redan har signaler i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ng och vill fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lja upp dem vidare.
                   </p>
                   <Button asChild type="button" variant="outline" className="mt-3 inline-flex h-8 max-w-full self-start whitespace-normal rounded-lg px-3 text-sm leading-tight">
-                    <Link to="/dashboard/partner/leads">öppna mina leads</Link>
+                    <Link to="/dashboard/partner/leads">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppna mina leads</Link>
                   </Button>
                 </div>
               </div>
@@ -1646,21 +1698,21 @@ const PartnerDashboardPage = () => {
           {showJourney ? (
             <DashboardSection
               title="Din resa"
-              description="Du behöver inte kunna allt från start. Här ser du vägen framåt, steg för steg, så att du vet vad som är viktigast nu och vad som kommer senare."
+              description="Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte kunna allt frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n start. HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ser du vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gen framÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t, steg fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r steg, sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att du vet vad som ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r viktigast nu och vad som kommer senare."
             >
               <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/30 p-5">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nu</p>
-                  <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Kom igång</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Kom igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Det här är första fasen. Målet är att få grunden på plats och skapa första rörelsen utan att tänka på allt annat samtidigt.
+                    Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta fasen. MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥let ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats och skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen utan att tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nka pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ allt annat samtidigt.
                   </p>
                   <div className="mt-4 space-y-2.5">
                     {[
-                      "få ordning på dina länkar",
-                      "förstå vad du delar",
-                      "skicka din länk första gången",
-                      "få första signalen",
+                      "fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ordning pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ dina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
+                      "fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ vad du delar",
+                      "skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ngen",
+                      "fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen",
                     ].map((item) => (
                       <div key={item} className="rounded-[1rem] border border-border/70 bg-white/80 px-3.5 py-3">
                         <p className="text-sm text-foreground">{item}</p>
@@ -1669,49 +1721,49 @@ const PartnerDashboardPage = () => {
                   </div>
                   <div className="mt-4 rounded-[1rem] border border-emerald-300/70 bg-emerald-50 p-3.5">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Status</p>
-                    <p className="mt-2 text-sm font-medium text-foreground">Pågår nu</p>
-                    <p className="mt-2 text-sm text-subtle">Det här steget låser upp första riktiga resultatet.</p>
+                    <p className="mt-2 text-sm font-medium text-foreground">PÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r nu</p>
+                    <p className="mt-2 text-sm text-subtle">Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r steget lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser upp fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga resultatet.</p>
                   </div>
                 </div>
 
                 <div className="grid gap-4">
                   {[
                     {
-                      eyebrow: "Öppnas snart",
-                      title: "Första resultat",
-                      body: "När du fått första signalen handlar nästa fas om att skapa första riktiga utfallet och upprepa det som fungerade.",
+                      eyebrow: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppnas snart",
+                      title: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat",
+                      body: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen handlar nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta fas om att skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga utfallet och upprepa det som fungerade.",
                       items: [
-                        "få första lead eller kundsignal",
+                        "fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta lead eller kundsignal",
                         "se vad som faktiskt fungerar",
-                        "upprepa samma beteende en gång till",
-                        "bygga tro på att systemet fungerar",
+                        "upprepa samma beteende en gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng till",
+                        "bygga tro pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att systemet fungerar",
                       ],
-                      note: "Det här steget gör att du går från aktivitet till resultat.",
+                      note: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r steget gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att du gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n aktivitet till resultat.",
                     },
                     {
-                      eyebrow: "Nästa nivå",
-                      title: "Börja duplicera",
-                      body: "När du själv fått rörelse är nästa steg att hjälpa någon annan komma igång på samma sätt.",
+                      eyebrow: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
+                      title: "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja duplicera",
+                      body: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon annan komma igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ samma sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt.",
                       items: [
-                        "bjuda in rätt person",
-                        "hjälpa någon till sitt första steg",
-                        "skapa första signalen i din närmaste linje",
-                        "bygga något som går att upprepa",
+                        "bjuda in rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt person",
+                        "hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon till sitt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta steg",
+                        "skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen i din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste linje",
+                        "bygga nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥got som gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r att upprepa",
                       ],
-                      note: "Det här är där systemet börjar växa genom andra, inte bara genom dig.",
+                      note: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r systemet bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤xa genom andra, inte bara genom dig.",
                     },
                     {
                       eyebrow: "Senare",
                       title: "Bygg vidare",
-                      body: "Senare öppnas mer av affären och modellen upp, i takt med att det faktiskt blir relevant för dig.",
+                      body: "Senare ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppnas mer av affÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ren och modellen upp, i takt med att det faktiskt blir relevant fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r dig.",
                       items: [
                         "kundmotor",
                         "teamrytmer",
-                        "fler nivåer",
-                        "kompplan och djupare förståelse",
-                        "hur du bygger långsiktigt utan att göra allt själv",
+                        "fler nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥er",
+                        "kompplan och djupare fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥else",
+                        "hur du bygger lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ngsiktigt utan att gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra allt sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv",
                       ],
-                      note: "Du behöver inte bära allt nu. Det här öppnas när du är redo.",
+                      note: "Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra allt nu. Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ppnas nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r redo.",
                     },
                   ].map((card) => (
                     <div key={card.title} className="rounded-[1.2rem] border border-border/70 bg-white p-5 shadow-card">
@@ -1733,7 +1785,7 @@ const PartnerDashboardPage = () => {
 
               <div className="mt-4 rounded-[1.2rem] border border-border/70 bg-white/95 p-5 shadow-card">
                 <p className="text-sm leading-7 text-subtle">
-                  Du behöver inte ta alla steg i huvudet samtidigt. Det viktiga är att ta rätt nästa steg nu.
+                  Du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver inte ta alla steg i huvudet samtidigt. Det viktiga ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r att ta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg nu.
                 </p>
               </div>
             </DashboardSection>
@@ -1741,15 +1793,15 @@ const PartnerDashboardPage = () => {
 
           {showLinks ? (
             <DashboardSection
-              title="Min Omega-länk"
-              description="Länken du normalt delar vidare."
+              title="Min Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk"
+              description="LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken du normalt delar vidare."
             >
               <div className="flex flex-col gap-4 rounded-[1.2rem] border border-border/70 bg-secondary/40 p-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Länken du delar</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken du delar</p>
                   <p className="mt-2 break-all font-medium text-foreground">{partnerLink}</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Använd den här länken i första hand. Vi skickar vidare till rätt Zinzino-länk i bakgrunden.
+                    AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta hand. Vi skickar vidare till rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt Zinzino-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk i bakgrunden.
                   </p>
                 </div>
                 <Button
@@ -1759,7 +1811,7 @@ const PartnerDashboardPage = () => {
                   onClick={() => navigator.clipboard.writeText(partnerLink)}
                 >
                   <Copy className="mr-2 h-3.5 w-3.5" />
-                  Kopiera länk
+                  Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
                 </Button>
               </div>
             </DashboardSection>
@@ -1767,23 +1819,23 @@ const PartnerDashboardPage = () => {
 
           {showLinks ? (
             <DashboardSection
-              title="Mina ZZ-länkar"
-              description="Dina personliga destinationslänkar till Zinzino."
+              title="Mina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar"
+              description="Dina personliga destinationslÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar till Zinzino."
             >
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-border/70 bg-secondary/30 p-4">
                 <p className="text-sm leading-6 text-subtle">
-                  Lägg in och uppdatera dina egna test-, shop- och partnerlänkar här.
+                  LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in och uppdatera dina egna test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r.
                 </p>
                 <Button type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm" onClick={openZzLinksDialog}>
-                  Redigera mina länkar
+                  Redigera mina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar
                 </Button>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 {[
-                  { label: "Testlänk", value: data.zzLinks.test },
-                  { label: "Shoplänk", value: data.zzLinks.shop },
-                  { label: "Partnerlänk", value: data.zzLinks.partner },
+                  { label: "TestlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk", value: data.zzLinks.test },
+                  { label: "ShoplÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk", value: data.zzLinks.shop },
+                  { label: "PartnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk", value: data.zzLinks.partner },
                 ].map((linkItem) => (
                   <div key={linkItem.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{linkItem.label}</p>
@@ -1791,7 +1843,7 @@ const PartnerDashboardPage = () => {
                       <>
                         <p className="mt-3 break-all text-sm text-foreground">{linkItem.value}</p>
                         <p className="mt-2 text-xs leading-5 text-subtle">
-                          Detta är din bakomliggande Zinzino-länk. Dela normalt din Omega-länk ovan och använd denna när du behöver gå direkt.
+                          Detta ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r din bakomliggande Zinzino-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk. Dela normalt din Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ovan och anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd denna nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ direkt.
                         </p>
                         <Button
                           type="button"
@@ -1800,12 +1852,12 @@ const PartnerDashboardPage = () => {
                           onClick={() => navigator.clipboard.writeText(linkItem.value as string)}
                         >
                           <Copy className="mr-2 h-3.5 w-3.5" />
-                          Kopiera länk
+                          Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
                         </Button>
                       </>
                     ) : (
                       <p className="mt-3 text-sm leading-6 text-subtle">
-                        Ingen länk sparad ännu. Lägg in den via knappen ovan.
+                        Ingen lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk sparad ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in den via knappen ovan.
                       </p>
                     )}
                   </div>
@@ -1816,8 +1868,8 @@ const PartnerDashboardPage = () => {
 
           {showOverview ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <MetricCard label="Mina leads" value={data.metrics.leads} helper="Alla leads där du är attribuerad partner." icon={<Link2 className="h-5 w-5" />} />
-              <MetricCard label="Partnerleads" value={data.metrics.partnerLeads} helper="Nya intresseanmälningar för partnerskap." icon={<UserPlus2 className="h-5 w-5" />} />
+              <MetricCard label="Mina leads" value={data.metrics.leads} helper="Alla leads dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r attribuerad partner." icon={<Link2 className="h-5 w-5" />} />
+              <MetricCard label="Partnerleads" value={data.metrics.partnerLeads} helper="Nya intresseanmÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lningar fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r partnerskap." icon={<UserPlus2 className="h-5 w-5" />} />
               <MetricCard label="Mina kunder" value={data.metrics.customers} helper="Kunder som hittills kopplats till dig." icon={<Users className="h-5 w-5" />} />
               <MetricCard label="Direkta kontakter" value={data.metrics.directPartners} helper="Direkta partnerkontakter som kommit in via dig." icon={<Users className="h-5 w-5" />} />
             </div>
@@ -1825,7 +1877,7 @@ const PartnerDashboardPage = () => {
 
           {showLeads ? (
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-              <DashboardSection title="Mina leads" description="Både kundleads och partnerleads sparas med din attribution.">
+              <DashboardSection title="Mina leads" description="BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥de kundleads och partnerleads sparas med din attribution.">
                 <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {leadQueueSummary.map((item) => (
                     <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
@@ -1846,7 +1898,7 @@ const PartnerDashboardPage = () => {
                 <div className="mb-4 flex flex-wrap gap-2">
                   {[
                     { value: "all", label: "Alla" },
-                    { value: "urgent", label: "Brådskande" },
+                    { value: "urgent", label: "BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande" },
                     { value: "active", label: "Aktiva" },
                     { value: "new", label: "Nya" },
                   ].map((option) => (
@@ -1862,7 +1914,7 @@ const PartnerDashboardPage = () => {
                   ))}
                 </div>
                 <DataTable
-                  columns={["Namn", "Typ", "Läge", "Brådskande", "Nästa steg", "Senast aktiv"]}
+                  columns={["Namn", "Typ", "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ge", "BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande", "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg", "Senast aktiv"]}
                   rows={sortedFilteredLeads.map((lead) => [
                     <div key={`${lead.id}-lead`}>
                       <p className="font-medium text-foreground">{lead.name}</p>
@@ -1886,7 +1938,7 @@ const PartnerDashboardPage = () => {
                   emptyState="Inga leads matchar filtret just nu."
                 />
                 <div className="mt-5 rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta först bland kundleads</p>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst bland kundleads</p>
                   <div className="mt-3 space-y-3">
                     {prioritizedCustomerLeads.length ? (
                       prioritizedCustomerLeads.map((lead, index) => (
@@ -1904,14 +1956,14 @@ const PartnerDashboardPage = () => {
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-subtle">Inga kundleads ännu. Fokusera först på att skapa första kundsignalen.</p>
+                      <p className="text-sm text-subtle">Inga kundleads ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. Fokusera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta kundsignalen.</p>
                     )}
                   </div>
                 </div>
               </DashboardSection>
 
               {showLeads ? (
-                <DashboardSection title="Först att följa upp" description="Systemet lyfter de leads som just nu är mest relevanta för att få första rörelse eller första resultat.">
+                <DashboardSection title="FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶lja upp" description="Systemet lyfter de leads som just nu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r mest relevanta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta resultat.">
                   <div className="rounded-[1.2rem] border border-border/70 bg-accent/50 p-4">
                     <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Prioriterade leads</p>
                     <div className="mt-4 space-y-3">
@@ -1935,20 +1987,20 @@ const PartnerDashboardPage = () => {
                                 {getLeadSituationLabel(lead)}
                               </Badge>
                               <Badge variant={getLeadUrgencyVariant(lead)} className="rounded-full px-3 py-1">
-                                Brådskande: {getLeadUrgencyLabel(lead)}
+                                BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande: {getLeadUrgencyLabel(lead)}
                               </Badge>
                             </div>
                             <p className="mt-3 text-sm text-foreground">{getLeadNextAction(lead)}</p>
                             <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-subtle">
                               <span>{lead.type === "partner_lead" ? "Partnerlead" : "Kundlead"}</span>
-                          <span>•</span>
+                          <span>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢</span>
                               <span>{formatDate(lead.updated_at || lead.created_at)}</span>
                             </div>
                           </div>
                         ))
                       ) : (
                         <div className="rounded-[1rem] border border-border/70 bg-white/85 p-3.5">
-                          <p className="text-sm text-subtle">Inga prioriterade leads ännu. Fokusera först på att skapa din första signal.</p>
+                          <p className="text-sm text-subtle">Inga prioriterade leads ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. Fokusera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att skapa din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal.</p>
                           <Button
                             type="button"
                             variant="outline"
@@ -1956,7 +2008,7 @@ const PartnerDashboardPage = () => {
                             onClick={() => navigator.clipboard.writeText(partnerLink)}
                           >
                             <Copy className="mr-2 h-3.5 w-3.5" />
-                            Kopiera Omega-länken
+                            Kopiera Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken
                           </Button>
                         </div>
                       )}
@@ -1970,11 +2022,11 @@ const PartnerDashboardPage = () => {
           {showOverview ? (
             <DashboardSection
               title="Var din trafik svarar"
-              description="Här ser du var din trafik faktiskt visar liv just nu. Det hjälper dig förstå vilka marknader som svarar på din länk."
+              description="HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ser du var din trafik faktiskt visar liv just nu. Det hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper dig fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ vilka marknader som svarar pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk."
             >
               <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[0.9fr_0.9fr_1.2fr]">
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">TopplÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder</p>
                   <div className="mt-3 space-y-2">
                     {(data.marketInsights?.topCountries || []).map((row) => (
                       <div key={`partner-country-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
@@ -1982,12 +2034,12 @@ const PartnerDashboardPage = () => {
                         <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
                       </div>
                     ))}
-                    {!data.marketInsights?.topCountries?.length ? <p className="text-sm text-subtle">Ingen marknadssignal än.</p> : null}
+                    {!data.marketInsights?.topCountries?.length ? <p className="text-sm text-subtle">Ingen marknadssignal ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n.</p> : null}
                   </div>
                 </div>
 
                 <div className="rounded-[1.2rem] border border-border/70 bg-secondary/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppstäder</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">ToppstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤der</p>
                   <div className="mt-3 space-y-2">
                     {(data.marketInsights?.topCities || []).map((row) => (
                       <div key={`partner-city-${row.label}`} className="flex items-center justify-between gap-3 text-sm">
@@ -1995,12 +2047,12 @@ const PartnerDashboardPage = () => {
                         <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
                       </div>
                     ))}
-                    {!data.marketInsights?.topCities?.length ? <p className="text-sm text-subtle">Ingen stadsdata än.</p> : null}
+                    {!data.marketInsights?.topCities?.length ? <p className="text-sm text-subtle">Ingen stadsdata ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n.</p> : null}
                   </div>
                 </div>
 
                 <div className="rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card lg:col-span-2 xl:col-span-1">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geotrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ffar</p>
                   <div className="mt-4">
                     <DataTable
                       columns={["Senast", "Land", "Stad"]}
@@ -2009,11 +2061,11 @@ const PartnerDashboardPage = () => {
                         <span key={`${row.created_at}-country`}>{row.country || "-"}</span>,
                         <span key={`${row.created_at}-city`}>{row.city || "-"}</span>,
                       ])}
-                      emptyState="Ingen geodata registrerad för din trafik ännu."
+                      emptyState="Ingen geodata registrerad fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r din trafik ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu."
                     />
                   </div>
                   <div className="mt-4 rounded-[1rem] border border-border/70 bg-secondary/20 p-3.5 text-sm text-subtle">
-                    Land är oftast säkrare än stad. Se stad som signal, inte exakt sanning.
+                    Land ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r oftast sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤krare ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n stad. Se stad som signal, inte exakt sanning.
                   </div>
                 </div>
               </div>
@@ -2021,14 +2073,14 @@ const PartnerDashboardPage = () => {
           ) : null}
 
           {showCustomers ? (
-            <DashboardSection title="Kundsignaler" description="Kundrelationer som hittills kopplats till dig via systemet. Detta är inte officiell ZZ-utbetalning eller kompensation.">
+            <DashboardSection title="Kundsignaler" description="Kundrelationer som hittills kopplats till dig via systemet. Detta ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r inte officiell ZZ-utbetalning eller kompensation.">
               <div className="rounded-[1.2rem] border border-border/70 bg-accent/50 p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Attribuerade kunder</p>
                 <p className="mt-3 font-serif text-4xl font-semibold tracking-tight text-foreground">
                   {new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(data.customers.length)}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-subtle">
-                  Tidiga kommersiella signaler runt ditt flöde, inte payout eller bonus.
+                  Tidiga kommersiella signaler runt ditt flÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶de, inte payout eller bonus.
                 </p>
               </div>
 
@@ -2043,7 +2095,7 @@ const PartnerDashboardPage = () => {
                     <span key={`${customer.id}-status`} className="capitalize">{customer.status}</span>,
                     <span key={`${customer.id}-created`}>{formatDate(customer.created_at)}</span>,
                   ])}
-                  emptyState="Inga attribuerade kunder ännu."
+                  emptyState="Inga attribuerade kunder ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu."
                 />
               </div>
             </DashboardSection>
@@ -2052,7 +2104,7 @@ const PartnerDashboardPage = () => {
           {showLeads || showNetwork ? (
             <div className="grid gap-8 lg:grid-cols-2">
               {showLeads ? (
-                <DashboardSection title="Mina partnerleads" description="Här ser du partnerintresse och vad du bör göra härnäst.">
+                <DashboardSection title="Mina partnerleads" description="HÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ser du partnerintresse och vad du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ra hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤st.">
                 <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {partnerLeadQueueSummary.map((item) => (
                     <div key={item.label} className="rounded-[1rem] border border-border/70 bg-secondary/20 px-3.5 py-3">
@@ -2073,7 +2125,7 @@ const PartnerDashboardPage = () => {
                 <div className="mb-4 flex flex-wrap gap-2">
                     {[
                       { value: "all", label: "Alla" },
-                      { value: "urgent", label: "Brådskande" },
+                      { value: "urgent", label: "BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande" },
                       { value: "active", label: "Aktiva" },
                       { value: "new", label: "Nya" },
                     ].map((option) => (
@@ -2089,7 +2141,7 @@ const PartnerDashboardPage = () => {
                     ))}
                   </div>
                   <DataTable
-                    columns={["Sökande", "Källa", "Läge", "Brådskande", "Nästa steg", "Senast aktiv"]}
+                    columns={["SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶kande", "KÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lla", "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ge", "BrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥dskande", "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg", "Senast aktiv"]}
                     rows={sortedFilteredPartnerLeads.map((lead) => [
                       <div key={`${lead.id}-partner`}>
                         <p className="font-medium text-foreground">{lead.name}</p>
@@ -2111,7 +2163,7 @@ const PartnerDashboardPage = () => {
                     emptyState="Inga partnerleads matchar filtret just nu."
                   />
                   <div className="mt-5 rounded-[1.2rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta först bland partnerleads</p>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ta fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst bland partnerleads</p>
                     <div className="mt-3 space-y-3">
                       {prioritizedPartnerLeads.length ? (
                         prioritizedPartnerLeads.map((lead, index) => (
@@ -2129,7 +2181,7 @@ const PartnerDashboardPage = () => {
                           </div>
                         ))
                       ) : (
-                        <p className="text-sm text-subtle">Inga partnerleads ännu. Fokusera först på att skapa första partnersignalen.</p>
+                        <p className="text-sm text-subtle">Inga partnerleads ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. Fokusera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta partnersignalen.</p>
                       )}
                     </div>
                   </div>
@@ -2137,38 +2189,38 @@ const PartnerDashboardPage = () => {
               ) : null}
 
               {showNetwork ? (
-                <DashboardSection title="Direkta partnerkontakter" description="Personer du har bjudit in eller fått in i ditt närmaste partnerled. Själva placeringen och ranken hanteras i Zinzino.">
+                <DashboardSection title="Direkta partnerkontakter" description="Personer du har bjudit in eller fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tt in i ditt nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste partnerled. SjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lva placeringen och ranken hanteras i Zinzino.">
                   <div className="mb-4 grid gap-3 lg:grid-cols-2">
                     <div className="rounded-[1.1rem] border border-border/70 bg-secondary/20 p-4">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Vem hjälper dig nu</p>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Vem hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lper dig nu</p>
                       {data.sponsor ? (
                         <>
                           <p className="mt-3 text-sm font-medium text-foreground">{data.sponsor.name}</p>
                           <p className="mt-1 text-sm text-subtle">{data.sponsor.email}</p>
                           <p className="mt-3 text-sm leading-6 text-subtle">
-                            Om du fastnar i nästa steg ska du i första hand ta hjälp av din närmaste up-line.
+                            Om du fastnar i nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg ska du i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta hand ta hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp av din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste up-line.
                           </p>
                         </>
                       ) : (
                         <p className="mt-3 text-sm leading-6 text-subtle">
-                          Du ligger nära toppen i den här modellen. Det betyder att stödet uppåt främst kommer direkt från Omega Balance-teamet.
+                          Du ligger nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra toppen i den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r modellen. Det betyder att stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det uppÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤mst kommer direkt frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n Omega Balance-teamet.
                         </p>
                       )}
                     </div>
 
                     <div className="rounded-[1.1rem] border border-border/70 bg-secondary/20 p-4">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Vem ska du hjälpa nu</p>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Vem ska du hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa nu</p>
                       {data.team.length ? (
                         <>
                           <p className="mt-3 text-sm font-medium text-foreground">{data.team[0].partnerName}</p>
                           <p className="mt-1 text-sm text-subtle">{data.team[0].email}</p>
                           <p className="mt-3 text-sm leading-6 text-subtle">
-                            Börja med din närmaste downline och hjälp den personen till sitt första tydliga steg innan du breddar stödet.
+                            BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja med din nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rmaste downline och hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lp den personen till sitt fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta tydliga steg innan du breddar stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶det.
                           </p>
                         </>
                       ) : (
                         <p className="mt-3 text-sm leading-6 text-subtle">
-                          När du får in din första direkta partner börjar dupliceringen här. Då är nästa steg att hjälpa den personen igång.
+                          NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r in din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta direkta partner bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar dupliceringen hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r. DÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg att hjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lpa den personen igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng.
                         </p>
                       )}
                     </div>
@@ -2203,18 +2255,18 @@ const PartnerDashboardPage = () => {
                   ) : null}
 
                   <DataTable
-                    columns={["Partner", "Nivå", "Tillagd"]}
+                    columns={["Partner", "NivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥", "Tillagd"]}
                     rows={data.team.map((member) => [
                       <div key={`${member.partnerId}-member`}>
                         <p className="font-medium text-foreground">{member.partnerName}</p>
                         <p className="text-xs text-subtle">{member.email}</p>
                       </div>,
                       <Badge key={`${member.partnerId}-level`} variant="secondary" className="rounded-full px-3 py-1">
-                        Nivå {member.level}
+                        NivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ {member.level}
                       </Badge>,
                       <span key={`${member.partnerId}-joined`}>{formatDate(member.createdAt)}</span>,
                     ])}
-                    emptyState="Inga direkta partnerkontakter ännu."
+                    emptyState="Inga direkta partnerkontakter ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu."
                   />
                 </DashboardSection>
               ) : null}

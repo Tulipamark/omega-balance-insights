@@ -277,9 +277,9 @@ const ContactPage = () => {
       intro={copy.intro}
       backLabel={copy.backLabel}
     >
-      <section className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-card md:p-8">
-        <h2 className="text-2xl font-semibold tracking-tight">{copy.detailsTitle}</h2>
-        <p className="mt-4 text-base leading-8 text-subtle">
+      <section className="rounded-[1.5rem] border border-border/80 bg-card p-5 shadow-card sm:p-6 md:rounded-[1.75rem] md:p-8">
+        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{copy.detailsTitle}</h2>
+        <p className="mt-3 text-base leading-7 text-subtle sm:mt-4 sm:leading-8">
           {copy.emailPrefix}:{" "}
           <a href="mailto:hello@insidebalance.eu" className="font-medium text-foreground underline underline-offset-4">
             hello@insidebalance.eu
@@ -287,21 +287,21 @@ const ContactPage = () => {
         </p>
       </section>
 
-      <section className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-card md:p-8">
-        <h2 className="text-2xl font-semibold tracking-tight">{copy.responseTitle}</h2>
-        <p className="mt-4 text-base leading-8 text-subtle">
+      <section className="rounded-[1.5rem] border border-border/80 bg-card p-5 shadow-card sm:p-6 md:rounded-[1.75rem] md:p-8">
+        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{copy.responseTitle}</h2>
+        <p className="mt-3 text-base leading-7 text-subtle sm:mt-4 sm:leading-8">
           {copy.responseBody}
         </p>
       </section>
 
-      <section className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-card md:p-8">
-        <h2 className="text-2xl font-semibold tracking-tight">{copy.formTitle}</h2>
+      <section className="rounded-[1.5rem] border border-border/80 bg-card p-5 shadow-card sm:p-6 md:rounded-[1.75rem] md:p-8">
+        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{copy.formTitle}</h2>
         {submitted ? (
-          <p className="mt-4 text-base leading-8 text-subtle">
+          <p className="mt-3 text-base leading-7 text-subtle sm:mt-4 sm:leading-8">
             {copy.successBody}
           </p>
         ) : (
-          <form className="mt-6 space-y-5" onSubmit={(event) => void handleSubmit(event)}>
+          <form className="mt-5 space-y-5 sm:mt-6" onSubmit={(event) => void handleSubmit(event)}>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-foreground">{copy.name}</span>
               <Input required value={formData.name} onChange={(event) => {

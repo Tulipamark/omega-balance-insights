@@ -1,5 +1,5 @@
 ﻿import { Activity, ArrowRightLeft, BadgeCheck, Copy, MousePointerClick, Network, TrendingUp, Users } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { onboardPartnerFromLead, updatePartnerLeadReview } from "@/lib/api";
@@ -9,6 +9,7 @@ import { GrowthCompassCard } from "@/components/GrowthCompassCard";
 import { DashboardSection, DashboardShell, dashboardIcons } from "@/components/dashboard/DashboardShell";
 import { DataTable } from "@/components/dashboard/DataTable";
 import { MetricCard } from "@/components/dashboard/MetricCard";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   Dialog,
   DialogContent,
@@ -881,6 +882,37 @@ function getCoreSupportPlan(lead: Lead) {
       "När rytmen sitter kan närmare stöd från Omega Balance-teamet bli relevant som stödlager.",
     ],
   };
+}
+
+function MobileCardList({
+  items,
+  emptyState,
+}: {
+  items: { key: string; title: ReactNode; subtitle?: ReactNode; rows: { label: string; value: ReactNode }[] }[];
+  emptyState: string;
+}) {
+  if (!items.length) {
+    return <div className="rounded-xl border border-border/70 bg-secondary/20 p-3 text-sm text-subtle">{emptyState}</div>;
+  }
+
+  return (
+    <div className="space-y-3 md:hidden">
+      {items.map((item) => (
+        <div key={item.key} className="rounded-xl border border-border/70 bg-white/95 p-3 shadow-card">
+          <div className="text-sm font-medium text-foreground">{item.title}</div>
+          {item.subtitle ? <div className="mt-1 text-xs text-subtle">{item.subtitle}</div> : null}
+          <div className="mt-3 space-y-2">
+            {item.rows.map((row) => (
+              <div key={`${item.key}-${String(row.label)}`} className="grid gap-1 text-sm">
+                <span className="text-xs uppercase tracking-[0.12em] text-subtle">{row.label}</span>
+                <span className="text-foreground">{row.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function DataTruthBadges({ isDemo, interpretive = false, projected = false }: { isDemo: boolean; interpretive?: boolean; projected?: boolean }) {
@@ -2196,24 +2228,191 @@ const AdminDashboardPage = () => {
                   </div>
                 </DashboardSection> : null}
 
-              {showOverview || showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+              {showTraffic ? <DashboardSection
+                title="Trafik i korthet"
+                description="Kompakt mobilöversikt över det viktigaste just nu, utan att du behöver läsa hela datalagret."
+                className="md:hidden"
+              >
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkaste källa</p>
+                    <p className="mt-2 text-base font-semibold text-foreground">{trafficActionSummary.strongestSource?.source || "-"}</p>
+                    <p className="mt-2 text-sm text-subtle">
+                      {trafficActionSummary.strongestSource
+                        ? `${formatWholeNumber(trafficActionSummary.strongestSource.formDriven)} nådde formulär.`
+                        : "Ingen källa sticker ut än."}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Störst friktion</p>
+                    <p className="mt-2 text-base font-semibold text-foreground">{trafficActionSummary.frictionSource?.source || "-"}</p>
+                    <p className="mt-2 text-sm text-subtle">
+                      {trafficActionSummary.frictionSource?.recommendation || "Ingen tydlig flaskhals än."}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Starkaste landning</p>
+                    <p className="mt-2 text-base font-semibold text-foreground">{trafficActionSummary.strongestLanding?.[0] || "-"}</p>
+                    <p className="mt-2 text-sm text-subtle">
+                      {trafficActionSummary.strongestLanding
+                        ? `${formatWholeNumber(trafficActionSummary.strongestLanding[1])} attribuerade besök.`
+                        : "Ingen landning sticker ut än."}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Levande marknad</p>
+                    <p className="mt-2 text-base font-semibold text-foreground">{data.marketInsights?.topCountries?.[0]?.label || "-"}</p>
+                    <p className="mt-2 text-sm text-subtle">
+                      {data.marketInsights?.topCountries?.[0]
+                        ? `${formatWholeNumber(data.marketInsights.topCountries[0].visits)} besök från landet.`
+                        : "Ingen geodata än."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-xl border border-border/70 bg-white/95 px-3 py-1 shadow-card">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="funnel">
+                      <AccordionTrigger className="py-4 text-sm font-medium hover:no-underline">
+                        Tratten just nu
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-4">
+                        <div className="space-y-3">
+                          {(data.kpis.funnelDaily || []).slice(0, 3).map((row) => (
+                            <div key={row.day} className="rounded-xl border border-border/70 bg-secondary/20 p-3 text-sm">
+                              <div className="font-medium text-foreground">{formatDate(row.day)}</div>
+                              <div className="mt-2 grid grid-cols-2 gap-2 text-subtle">
+                                <span>Besök: {row.visits}</span>
+                                <span>Klick: {row.outbound_clicks}</span>
+                                <span>Leads: {row.customer_leads}</span>
+                                <span>Kunder: {row.customers}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="sources">
+                      <AccordionTrigger className="py-4 text-sm font-medium hover:no-underline">
+                        Källor och landningar
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-3 pb-4">
+                        <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Topplänkar</p>
+                          <div className="mt-2 space-y-2 text-sm">
+                            {trafficSourceSummary.topSources.slice(0, 3).map(([source, visits]) => (
+                              <div key={`mobile-source-${source}`} className="flex items-center justify-between gap-3">
+                                <span className="truncate text-foreground">{source}</span>
+                                <span className="font-medium text-foreground">{formatWholeNumber(visits)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Topplandningar</p>
+                          <div className="mt-2 space-y-2 text-sm">
+                            {trafficSourceSummary.topLandingPages.slice(0, 3).map(([landingPage, visits]) => (
+                              <div key={`mobile-landing-${landingPage}`} className="flex items-center justify-between gap-3">
+                                <span className="truncate text-foreground">{landingPage}</span>
+                                <span className="font-medium text-foreground">{formatWholeNumber(visits)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="markets">
+                      <AccordionTrigger className="py-4 text-sm font-medium hover:no-underline">
+                        Marknader
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-3 pb-4">
+                        <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppländer</p>
+                          <div className="mt-2 space-y-2 text-sm">
+                            {(data.marketInsights?.topCountries || []).slice(0, 3).map((row) => (
+                              <div key={`mobile-country-${row.label}`} className="flex items-center justify-between gap-3">
+                                <span className="truncate text-foreground">{row.label}</span>
+                                <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-border/70 bg-secondary/20 p-3">
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppstäder</p>
+                          <div className="mt-2 space-y-2 text-sm">
+                            {(data.marketInsights?.topCities || []).slice(0, 3).map((row) => (
+                              <div key={`mobile-city-${row.label}`} className="flex items-center justify-between gap-3">
+                                <span className="truncate text-foreground">{row.label}</span>
+                                <span className="font-medium text-foreground">{formatWholeNumber(row.visits)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="duplication">
+                      <AccordionTrigger className="py-4 text-sm font-medium hover:no-underline">
+                        Duplicering
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-3 pb-4">
+                        {(data.kpis.duplication || []).slice(0, 3).map((row) => (
+                          <div key={`mobile-dup-${row.partner_id}`} className="rounded-xl border border-border/70 bg-secondary/20 p-3 text-sm">
+                            <div className="font-medium text-foreground">{row.partner_name}</div>
+                            <div className="mt-2 grid grid-cols-2 gap-2 text-subtle">
+                              <span>Besök: {row.visits}</span>
+                              <span>Klick: {row.outbound_clicks}</span>
+                              <span>Leads: {row.total_leads}</span>
+                              <span>Kunder: {row.customers}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </DashboardSection> : null}
+
+              {showOverview || showTraffic ? <div className={showTraffic && !showOverview ? "hidden md:grid md:gap-8 lg:grid-cols-2" : "grid gap-8 lg:grid-cols-2"}>
                 {showTraffic ? <DashboardSection
                   title="Tratten just nu"
                   description="Daglig överblick över attribuerade besök, klick vidare, kundleads och kända kunder."
                 >
-                  <DataTable
-                    columns={["Dag", "Besök", "Klick", "Kundleads", "Kända kunder", "Besök till klick", "Lead till kund"]}
-                    rows={(data.kpis.funnelDaily || []).slice(0, 7).map((row) => [
-                      <span key={`${row.day}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
-                      <span key={`${row.day}-visits`}>{row.visits}</span>,
-                      <span key={`${row.day}-clicks`}>{row.outbound_clicks}</span>,
-                      <span key={`${row.day}-leads`}>{row.customer_leads}</span>,
-                      <span key={`${row.day}-customers`}>{row.customers}</span>,
-                      <span key={`${row.day}-visit-to-click`}>{formatPercent(row.visit_to_click_pct)}</span>,
-                      <span key={`${row.day}-lead-to-customer`}>{formatPercent(row.lead_to_customer_pct)}</span>,
-                    ])}
+                  <MobileCardList
+                    items={(data.kpis.funnelDaily || []).slice(0, 7).map((row) => ({
+                      key: row.day,
+                      title: formatDate(row.day),
+                      rows: [
+                        { label: "Besök", value: row.visits },
+                        { label: "Klick", value: row.outbound_clicks },
+                        { label: "Kundleads", value: row.customer_leads },
+                        { label: "Kända kunder", value: row.customers },
+                        { label: "Besök till klick", value: formatPercent(row.visit_to_click_pct) },
+                        { label: "Lead till kund", value: formatPercent(row.lead_to_customer_pct) },
+                      ],
+                    }))}
                     emptyState="Ingen funneldata än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Dag", "Besök", "Klick", "Kundleads", "Kända kunder", "Besök till klick", "Lead till kund"]}
+                      rows={(data.kpis.funnelDaily || []).slice(0, 7).map((row) => [
+                        <span key={`${row.day}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
+                        <span key={`${row.day}-visits`}>{row.visits}</span>,
+                        <span key={`${row.day}-clicks`}>{row.outbound_clicks}</span>,
+                        <span key={`${row.day}-leads`}>{row.customer_leads}</span>,
+                        <span key={`${row.day}-customers`}>{row.customers}</span>,
+                        <span key={`${row.day}-visit-to-click`}>{formatPercent(row.visit_to_click_pct)}</span>,
+                        <span key={`${row.day}-lead-to-customer`}>{formatPercent(row.lead_to_customer_pct)}</span>,
+                      ])}
+                      emptyState="Ingen funneldata än."
+                    />
+                  </div>
                 </DashboardSection> : null}
 
                 {showOverview ? <DashboardSection
@@ -2245,21 +2444,34 @@ const AdminDashboardPage = () => {
                 </DashboardSection> : null}
               </div> : null}
 
-              {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+              {showTraffic ? <div className="hidden md:grid md:gap-8 lg:grid-cols-2">
                 <DashboardSection
                   title="Event per steg"
                   description="Daglig överblick över mikroevent så att ni kan se var rörelsen avtar innan lead eller onboarding."
                 >
                   <DataTruthBadges isDemo={isDemo} />
-                  <DataTable
-                    columns={["Dag", "Event", "Antal"]}
-                    rows={funnelEventRows.slice(0, 10).map((row) => [
-                      <span key={`${row.day}-${row.event_name}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
-                      <span key={`${row.day}-${row.event_name}-name`}>{getFunnelEventLabel(row.event_name)}</span>,
-                      <span key={`${row.day}-${row.event_name}-events`}>{formatWholeNumber(row.events)}</span>,
-                    ])}
+                  <MobileCardList
+                    items={funnelEventRows.slice(0, 10).map((row) => ({
+                      key: `${row.day}-${row.event_name}`,
+                      title: getFunnelEventLabel(row.event_name),
+                      rows: [
+                        { label: "Dag", value: formatDate(row.day) },
+                        { label: "Antal", value: formatWholeNumber(row.events) },
+                      ],
+                    }))}
                     emptyState="Ingen eventdata än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Dag", "Event", "Antal"]}
+                      rows={funnelEventRows.slice(0, 10).map((row) => [
+                        <span key={`${row.day}-${row.event_name}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
+                        <span key={`${row.day}-${row.event_name}-name`}>{getFunnelEventLabel(row.event_name)}</span>,
+                        <span key={`${row.day}-${row.event_name}-events`}>{formatWholeNumber(row.events)}</span>,
+                      ])}
+                      emptyState="Ingen eventdata än."
+                    />
+                  </div>
                 </DashboardSection>
 
                 <DashboardSection
@@ -2267,23 +2479,38 @@ const AdminDashboardPage = () => {
                   description="Snabb logg över de senaste interaktionerna som nått eventlagret."
                 >
                   <DataTruthBadges isDemo={isDemo} />
-                  <DataTable
-                    columns={["Tid", "Event", "Sida", "Referral", "Detalj"]}
-                    rows={recentFunnelEvents.slice(0, 10).map((event) => [
-                      <span key={`${event.id}-time`} className="font-medium text-foreground">{formatDate(event.created_at)}</span>,
-                      <span key={`${event.id}-name`}>{getFunnelEventLabel(event.event_name)}</span>,
-                      <span key={`${event.id}-path`} className="max-w-[180px] truncate">{event.page_path}</span>,
-                      <span key={`${event.id}-ref`}>{event.referral_code || "Direkt"}</span>,
-                      <span key={`${event.id}-details`} className="max-w-[220px] truncate text-subtle">
-                        {formatFunnelEventDetails(event.details)}
-                      </span>,
-                    ])}
+                  <MobileCardList
+                    items={recentFunnelEvents.slice(0, 10).map((event) => ({
+                      key: event.id,
+                      title: getFunnelEventLabel(event.event_name),
+                      rows: [
+                        { label: "Tid", value: formatDate(event.created_at) },
+                        { label: "Sida", value: event.page_path },
+                        { label: "Referral", value: event.referral_code || "Direkt" },
+                        { label: "Detalj", value: formatFunnelEventDetails(event.details) },
+                      ],
+                    }))}
                     emptyState="Inga funnel-events loggade än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Tid", "Event", "Sida", "Referral", "Detalj"]}
+                      rows={recentFunnelEvents.slice(0, 10).map((event) => [
+                        <span key={`${event.id}-time`} className="font-medium text-foreground">{formatDate(event.created_at)}</span>,
+                        <span key={`${event.id}-name`}>{getFunnelEventLabel(event.event_name)}</span>,
+                        <span key={`${event.id}-path`} className="max-w-[180px] truncate">{event.page_path}</span>,
+                        <span key={`${event.id}-ref`}>{event.referral_code || "Direkt"}</span>,
+                        <span key={`${event.id}-details`} className="max-w-[220px] truncate text-subtle">
+                          {formatFunnelEventDetails(event.details)}
+                        </span>,
+                      ])}
+                      emptyState="Inga funnel-events loggade än."
+                    />
+                  </div>
                 </DashboardSection>
               </div> : null}
 
-              {showTraffic ? <div className="grid gap-8 xl:grid-cols-2">
+              {showTraffic ? <div className="hidden md:grid md:gap-8 lg:grid-cols-2">
                 <DashboardSection
                   title="Trafikbeslut just nu"
                   description="Tolkning av var traction faktiskt fungerar, var den fastnar och vad admin bör göra härnäst."
@@ -2328,16 +2555,30 @@ const AdminDashboardPage = () => {
                   </div>
 
                   <div className="mt-6">
-                    <DataTable
-                      columns={["Källa", "Prioritet", "Signal", "Nästa steg"]}
-                      rows={trafficActionSummary.actionQueue.map((item) => [
-                        <span key={`${item.source}-source`} className="font-medium text-foreground">{item.source}</span>,
-                        <span key={`${item.source}-priority`}>{item.priority}</span>,
-                        <span key={`${item.source}-summary`} className="max-w-[220px] truncate text-subtle">{item.summary}</span>,
-                        <span key={`${item.source}-next`} className="max-w-[320px] truncate text-subtle">{item.nextStep}</span>,
-                      ])}
+                    <MobileCardList
+                      items={trafficActionSummary.actionQueue.map((item) => ({
+                        key: item.source,
+                        title: item.source,
+                        rows: [
+                          { label: "Prioritet", value: item.priority },
+                          { label: "Signal", value: item.summary },
+                          { label: "Nästa steg", value: item.nextStep },
+                        ],
+                      }))}
                       emptyState="Ingen trafik att prioritera än."
                     />
+                    <div className="hidden md:block">
+                      <DataTable
+                        columns={["Källa", "Prioritet", "Signal", "Nästa steg"]}
+                        rows={trafficActionSummary.actionQueue.map((item) => [
+                          <span key={`${item.source}-source`} className="font-medium text-foreground">{item.source}</span>,
+                          <span key={`${item.source}-priority`}>{item.priority}</span>,
+                          <span key={`${item.source}-summary`} className="max-w-[220px] truncate text-subtle">{item.summary}</span>,
+                          <span key={`${item.source}-next`} className="max-w-[320px] truncate text-subtle">{item.nextStep}</span>,
+                        ])}
+                        emptyState="Ingen trafik att prioritera än."
+                      />
+                    </div>
                   </div>
                 </DashboardSection>
 
@@ -2360,14 +2601,24 @@ const AdminDashboardPage = () => {
                       icon={<TrendingUp className="h-5 w-5" />}
                     />
                   </div>
-                  <DataTable
-                    columns={["Sida", "Sidvisningar"]}
-                    rows={funnelEventSummary.topViewedPages.map(([pagePath, views]) => [
-                      <span key={`${pagePath}-path`} className="font-medium text-foreground">{pagePath}</span>,
-                      <span key={`${pagePath}-views`}>{formatWholeNumber(views)}</span>,
-                    ])}
+                  <MobileCardList
+                    items={funnelEventSummary.topViewedPages.map(([pagePath, views]) => ({
+                      key: pagePath,
+                      title: pagePath,
+                      rows: [{ label: "Sidvisningar", value: formatWholeNumber(views) }],
+                    }))}
                     emptyState="Inga sidvisningar loggade än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Sida", "Sidvisningar"]}
+                      rows={funnelEventSummary.topViewedPages.map(([pagePath, views]) => [
+                        <span key={`${pagePath}-path`} className="font-medium text-foreground">{pagePath}</span>,
+                        <span key={`${pagePath}-views`}>{formatWholeNumber(views)}</span>,
+                      ])}
+                      emptyState="Inga sidvisningar loggade än."
+                    />
+                  </div>
                 </DashboardSection>
 
                 <DashboardSection
@@ -2376,43 +2627,84 @@ const AdminDashboardPage = () => {
                 >
                   <DataTruthBadges isDemo={isDemo} />
                   <div className="mb-4">
-                    <DataTable
-                      columns={["Källa", "Sessioner", "Bara surf", "CTA", "Form"]}
-                      rows={sessionSourceSummary.map((row) => [
-                        <span key={`${row.source}-source`} className="font-medium text-foreground">{row.source}</span>,
-                        <span key={`${row.source}-sessions`}>{formatWholeNumber(row.sessions)}</span>,
-                        <span key={`${row.source}-surf`}>{formatWholeNumber(row.surfOnly)}</span>,
-                        <span key={`${row.source}-cta`}>{formatWholeNumber(row.ctaDriven)}</span>,
-                        <span key={`${row.source}-form`}>{formatWholeNumber(row.formDriven)}</span>,
-                      ])}
+                    <MobileCardList
+                      items={sessionSourceSummary.map((row) => ({
+                        key: row.source,
+                        title: row.source,
+                        rows: [
+                          { label: "Sessioner", value: formatWholeNumber(row.sessions) },
+                          { label: "Bara surf", value: formatWholeNumber(row.surfOnly) },
+                          { label: "CTA", value: formatWholeNumber(row.ctaDriven) },
+                          { label: "Form", value: formatWholeNumber(row.formDriven) },
+                        ],
+                      }))}
                       emptyState="Ingen källsummering än."
                     />
+                    <div className="hidden md:block">
+                      <DataTable
+                        columns={["Källa", "Sessioner", "Bara surf", "CTA", "Form"]}
+                        rows={sessionSourceSummary.map((row) => [
+                          <span key={`${row.source}-source`} className="font-medium text-foreground">{row.source}</span>,
+                          <span key={`${row.source}-sessions`}>{formatWholeNumber(row.sessions)}</span>,
+                          <span key={`${row.source}-surf`}>{formatWholeNumber(row.surfOnly)}</span>,
+                          <span key={`${row.source}-cta`}>{formatWholeNumber(row.ctaDriven)}</span>,
+                          <span key={`${row.source}-form`}>{formatWholeNumber(row.formDriven)}</span>,
+                        ])}
+                        emptyState="Ingen källsummering än."
+                      />
+                    </div>
                   </div>
-                  <DataTable
-                    columns={["Start", "Källa", "Landning", "Sidor", "Nästa steg", "Spår"]}
-                    rows={sessionJourneySummary.map((session) => [
-                      <div key={`${session.sessionId}-start`}>
-                        <p className="font-medium text-foreground">{formatDate(session.firstSeenAt)}</p>
-                        <p className="text-xs text-subtle">{session.referralCode || "Direkt"}</p>
-                      </div>,
-                      <span key={`${session.sessionId}-source`}>{session.source || "Direkt"}</span>,
-                      <span key={`${session.sessionId}-landing`} className="max-w-[180px] truncate">{session.landingPage}</span>,
-                      <span key={`${session.sessionId}-pages`}>{formatWholeNumber(session.pageViews)}</span>,
-                      <div key={`${session.sessionId}-next`} className="text-sm text-subtle">
-                        {session.submittedForm
-                          ? "Form skickad"
-                          : session.reachedForm
-                            ? "Form påbörjad"
-                            : session.ctaClicks > 0
-                              ? `${formatWholeNumber(session.ctaClicks)} CTA-klick`
-                              : "Bara surf"}
-                      </div>,
-                      <span key={`${session.sessionId}-trail`} className="max-w-[260px] truncate text-subtle">
-                        {session.pageTrail.length ? session.pageTrail.join(" -> ") : "-"}
-                      </span>,
-                    ])}
+                  <MobileCardList
+                    items={sessionJourneySummary.map((session) => ({
+                      key: session.sessionId,
+                      title: formatDate(session.firstSeenAt),
+                      subtitle: session.referralCode || "Direkt",
+                      rows: [
+                        { label: "Källa", value: session.source || "Direkt" },
+                        { label: "Landning", value: session.landingPage },
+                        { label: "Sidor", value: formatWholeNumber(session.pageViews) },
+                        {
+                          label: "Nästa steg",
+                          value: session.submittedForm
+                            ? "Form skickad"
+                            : session.reachedForm
+                              ? "Form påbörjad"
+                              : session.ctaClicks > 0
+                                ? `${formatWholeNumber(session.ctaClicks)} CTA-klick`
+                                : "Bara surf",
+                        },
+                        { label: "Spår", value: session.pageTrail.length ? session.pageTrail.join(" -> ") : "-" },
+                      ],
+                    }))}
                     emptyState="Inga sessionsresor loggade än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Start", "Källa", "Landning", "Sidor", "Nästa steg", "Spår"]}
+                      rows={sessionJourneySummary.map((session) => [
+                        <div key={`${session.sessionId}-start`}>
+                          <p className="font-medium text-foreground">{formatDate(session.firstSeenAt)}</p>
+                          <p className="text-xs text-subtle">{session.referralCode || "Direkt"}</p>
+                        </div>,
+                        <span key={`${session.sessionId}-source`}>{session.source || "Direkt"}</span>,
+                        <span key={`${session.sessionId}-landing`} className="max-w-[180px] truncate">{session.landingPage}</span>,
+                        <span key={`${session.sessionId}-pages`}>{formatWholeNumber(session.pageViews)}</span>,
+                        <div key={`${session.sessionId}-next`} className="text-sm text-subtle">
+                          {session.submittedForm
+                            ? "Form skickad"
+                            : session.reachedForm
+                              ? "Form påbörjad"
+                              : session.ctaClicks > 0
+                                ? `${formatWholeNumber(session.ctaClicks)} CTA-klick`
+                                : "Bara surf"}
+                        </div>,
+                        <span key={`${session.sessionId}-trail`} className="max-w-[260px] truncate text-subtle">
+                          {session.pageTrail.length ? session.pageTrail.join(" -> ") : "-"}
+                        </span>,
+                      ])}
+                      emptyState="Inga sessionsresor loggade än."
+                    />
+                  </div>
                 </DashboardSection>
 
                 <DashboardSection
@@ -2420,22 +2712,40 @@ const AdminDashboardPage = () => {
                   description="Vilka partners som faktiskt börjar skapa eget attribuerat inflöde och kända resultat."
                 >
                   <DataTruthBadges isDemo={isDemo} />
-                  <DataTable
-                    columns={["Partner", "Besök", "Klick", "Leads", "Kundleads", "Partnerleads", "Kända kunder"]}
-                    rows={(data.kpis.duplication || []).slice(0, 8).map((row) => [
-                      <div key={`${row.partner_id}-name`}>
-                        <p className="font-medium text-foreground">{row.partner_name}</p>
-                        <p className="text-xs text-subtle">{row.email}</p>
-                      </div>,
-                      <span key={`${row.partner_id}-visits`}>{row.visits}</span>,
-                      <span key={`${row.partner_id}-clicks`}>{row.outbound_clicks}</span>,
-                      <span key={`${row.partner_id}-leads`}>{row.total_leads}</span>,
-                      <span key={`${row.partner_id}-customer-leads`}>{row.customer_leads}</span>,
-                      <span key={`${row.partner_id}-partner-leads`}>{row.partner_leads}</span>,
-                      <span key={`${row.partner_id}-customers`}>{row.customers}</span>,
-                    ])}
+                  <MobileCardList
+                    items={(data.kpis.duplication || []).slice(0, 8).map((row) => ({
+                      key: String(row.partner_id),
+                      title: row.partner_name,
+                      subtitle: row.email,
+                      rows: [
+                        { label: "Besök", value: String(row.visits) },
+                        { label: "Klick", value: String(row.outbound_clicks) },
+                        { label: "Leads", value: String(row.total_leads) },
+                        { label: "Kundleads", value: String(row.customer_leads) },
+                        { label: "Partnerleads", value: String(row.partner_leads) },
+                        { label: "Kända kunder", value: String(row.customers) },
+                      ],
+                    }))}
                     emptyState="Ingen dupliceringsdata än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Partner", "Besök", "Klick", "Leads", "Kundleads", "Partnerleads", "Kända kunder"]}
+                      rows={(data.kpis.duplication || []).slice(0, 8).map((row) => [
+                        <div key={`${row.partner_id}-name`}>
+                          <p className="font-medium text-foreground">{row.partner_name}</p>
+                          <p className="text-xs text-subtle">{row.email}</p>
+                        </div>,
+                        <span key={`${row.partner_id}-visits`}>{row.visits}</span>,
+                        <span key={`${row.partner_id}-clicks`}>{row.outbound_clicks}</span>,
+                        <span key={`${row.partner_id}-leads`}>{row.total_leads}</span>,
+                        <span key={`${row.partner_id}-customer-leads`}>{row.customer_leads}</span>,
+                        <span key={`${row.partner_id}-partner-leads`}>{row.partner_leads}</span>,
+                        <span key={`${row.partner_id}-customers`}>{row.customers}</span>,
+                      ])}
+                      emptyState="Ingen dupliceringsdata än."
+                    />
+                  </div>
                 </DashboardSection>
 
                 <DashboardSection
@@ -2483,18 +2793,34 @@ const AdminDashboardPage = () => {
                       </div>
                     </div>
                   </div>
-                  <DataTable
-                    columns={["Dag", "Källa", "Medium", "Kampanj", "Landningssida", "Besök"]}
-                    rows={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => [
-                      <span key={`${row.day}-${row.source}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
-                      <span key={`${row.day}-${row.source}-source`}>{row.source}</span>,
-                      <span key={`${row.day}-${row.source}-medium`}>{row.medium}</span>,
-                      <span key={`${row.day}-${row.source}-campaign`}>{row.campaign}</span>,
-                      <span key={`${row.day}-${row.source}-landing`}>{row.landing_page}</span>,
-                      <span key={`${row.day}-${row.source}-visits`}>{row.visits}</span>,
-                    ])}
+                  <MobileCardList
+                    items={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => ({
+                      key: `${row.day}-${row.source}-${row.medium}`,
+                      title: formatDate(row.day),
+                      rows: [
+                        { label: "Källa", value: row.source },
+                        { label: "Medium", value: row.medium },
+                        { label: "Kampanj", value: row.campaign },
+                        { label: "Landningssida", value: row.landing_page },
+                        { label: "Besök", value: String(row.visits) },
+                      ],
+                    }))}
                     emptyState="Ingen källdata än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Dag", "Källa", "Medium", "Kampanj", "Landningssida", "Besök"]}
+                      rows={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => [
+                        <span key={`${row.day}-${row.source}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
+                        <span key={`${row.day}-${row.source}-source`}>{row.source}</span>,
+                        <span key={`${row.day}-${row.source}-medium`}>{row.medium}</span>,
+                        <span key={`${row.day}-${row.source}-campaign`}>{row.campaign}</span>,
+                        <span key={`${row.day}-${row.source}-landing`}>{row.landing_page}</span>,
+                        <span key={`${row.day}-${row.source}-visits`}>{row.visits}</span>,
+                      ])}
+                      emptyState="Ingen källdata än."
+                    />
+                  </div>
                 </DashboardSection>
 
                 <DashboardSection
@@ -2538,16 +2864,30 @@ const AdminDashboardPage = () => {
                     </div>
                   </div>
 
-                  <DataTable
-                    columns={["Senast", "Land", "Stad", "Referral"]} 
-                    rows={(data.marketInsights?.recentLocations || []).map((row) => [
-                      <span key={`${row.created_at}-${row.referral_code}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
-                      <span key={`${row.created_at}-${row.referral_code}-country`}>{row.country || "-"}</span>,
-                      <span key={`${row.created_at}-${row.referral_code}-city`}>{row.city || "-"}</span>,
-                      <span key={`${row.created_at}-${row.referral_code}-ref`}>{row.referral_code || "-"}</span>,
-                    ])}
+                  <MobileCardList
+                    items={(data.marketInsights?.recentLocations || []).map((row) => ({
+                      key: `${row.created_at}-${row.referral_code}-${row.city}`,
+                      title: formatDate(row.created_at),
+                      rows: [
+                        { label: "Land", value: row.country || "-" },
+                        { label: "Stad", value: row.city || "-" },
+                        { label: "Referral", value: row.referral_code || "-" },
+                      ],
+                    }))}
                     emptyState="Ingen geodata registrerad än."
                   />
+                  <div className="hidden md:block">
+                    <DataTable
+                      columns={["Senast", "Land", "Stad", "Referral"]} 
+                      rows={(data.marketInsights?.recentLocations || []).map((row) => [
+                        <span key={`${row.created_at}-${row.referral_code}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-country`}>{row.country || "-"}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-city`}>{row.city || "-"}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-ref`}>{row.referral_code || "-"}</span>,
+                      ])}
+                      emptyState="Ingen geodata registrerad än."
+                    />
+                  </div>
                 </DashboardSection>
               </div> : null}
 
