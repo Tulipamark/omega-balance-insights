@@ -1272,10 +1272,10 @@ const PartnerDashboardPage = () => {
               title="Din Fast Start"
               description="Dina f\u00f6rsta 120 dagar ska k\u00e4nnas som en guidande partnerresa, inte som hela kompplanen p\u00e5 en g\u00e5ng."
             >
-              <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr] xl:grid-cols-12">
-                <div className="rounded-[1.2rem] border border-primary/20 bg-white p-5 shadow-card lg:col-span-1 xl:col-span-6">
+              <div className="grid gap-4 xl:grid-cols-12">
+                <div className="rounded-[1.2rem] border border-primary/20 bg-white p-4 shadow-card sm:p-5 xl:col-span-6">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">G\u00f6r detta nu</p>
-                  <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                  <p className="mt-3 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
                     {firstActionEngine?.actionTitle ?? primaryActionCard?.title ?? journey.nextBestAction}
                   </p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
@@ -1353,7 +1353,60 @@ const PartnerDashboardPage = () => {
                       </Button>
                     </div>
                   </details>
-                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                  <details className="mt-3 rounded-[1rem] border border-border/70 bg-white/80 p-3.5 md:hidden">
+                    <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
+                      F\u00e4rdiga texter att skicka
+                    </summary>
+                    <div className="mt-3 grid gap-3">
+                      <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">F\u00e4rdig kundtext</p>
+                            <p className="mt-1 text-sm font-medium text-foreground">N\u00e4r du vill skicka l\u00e4nken till n\u00e5gon som kan vara nyfiken p\u00e5 testet</p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-8 rounded-lg px-3 text-sm"
+                            onClick={() => {
+                              void navigator.clipboard.writeText(customerShareText);
+                              markActionStarted("Bra. Du \u00e4r ig\u00e5ng.\n\nDin kundtext \u00e4r nu kopierad.\n\nN\u00e4sta steg \u00e4r f\u00f6rsta signal.\n\nSkicka den till 1 person du redan har kontakt med.");
+                            }}
+                          >
+                            <Copy className="mr-2 h-3.5 w-3.5" />
+                            Kopiera
+                          </Button>
+                        </div>
+                        <div className="mt-3 rounded-[0.9rem] border border-border/60 bg-secondary/20 p-3 text-sm leading-6 text-foreground/85">
+                          {customerShareText}
+                        </div>
+                      </div>
+                      <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">F\u00e4rdig partnertext</p>
+                            <p className="mt-1 text-sm font-medium text-foreground">N\u00e4r du vill visa modellen f\u00f6r n\u00e5gon som kan vilja bygga vidare</p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-8 rounded-lg px-3 text-sm"
+                            onClick={() => {
+                              void navigator.clipboard.writeText(partnerShareText);
+                              markActionStarted("Bra. Du \u00e4r ig\u00e5ng.\n\nDin partnertext \u00e4r nu kopierad.\n\nN\u00e4sta steg \u00e4r f\u00f6rsta signal.\n\nSkicka den till 1 person du redan har kontakt med.");
+                            }}
+                          >
+                            <Copy className="mr-2 h-3.5 w-3.5" />
+                            Kopiera
+                          </Button>
+                        </div>
+                        <div className="mt-3 rounded-[0.9rem] border border-border/60 bg-secondary/20 p-3 text-sm leading-6 text-foreground/85">
+                          {partnerShareText}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <div className="mt-3 hidden gap-3 md:grid lg:grid-cols-2">
                     <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
                       <div className="flex items-center justify-between gap-3">
                         <div>
@@ -1403,7 +1456,40 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/25 p-4 lg:col-span-1 xl:col-span-2">
+                <details className="rounded-[1.2rem] border border-border/70 bg-secondary/25 p-4 xl:hidden">
+                  <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
+                    Mer \u00f6verblick
+                  </summary>
+                  <div className="mt-4 grid gap-4">
+                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Din status</p>
+                      <p className="mt-2 text-base font-semibold text-foreground">{firstActionEngine?.statusTitle ?? fastStartJourney?.currentTitle}</p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.statusBody ?? fastStartJourney?.currentFocus ?? journey.summary}</p>
+                    </div>
+                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det h\u00e4r h\u00e4nder just nu"}</p>
+                      <p className="mt-2 text-sm font-medium text-foreground">
+                        {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
+                          ? "V\u00e4ntar p\u00e5 f\u00f6rsta signal..."
+                          : firstActionEngine?.liveBody ?? "S\u00e5 fort f\u00f6rsta signalen kommer syns den h\u00e4r."}
+                      </p>
+                      <p className="mt-2 text-xs text-subtle">
+                        {actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0)
+                          ? "Du \u00e4r n\u00e4ra f\u00f6rsta resultatet."
+                          : firstActionEngine?.liveMeta ?? "Du \u00e4r n\u00e4ra ditt f\u00f6rsta resultat"}
+                      </p>
+                    </div>
+                    <div className="rounded-[1rem] border border-border/70 bg-white/80 p-3.5">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "N\u00e4sta niv\u00e5"}</p>
+                      <p className="mt-2 text-base font-semibold text-foreground">
+                        {firstActionEngine?.level === 3 ? "Nu \u00e4r du redo f\u00f6r duplication" : "Ett steg till \u00f6ppnar n\u00e4sta niv\u00e5"}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.nextLevelBody ?? journey.nextBestAction}</p>
+                    </div>
+                  </div>
+                </details>
+
+                <div className="hidden rounded-[1.2rem] border border-border/70 bg-secondary/25 p-4 xl:col-span-2 xl:block">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Din status</p>
                   <p className="mt-3 text-lg font-semibold text-foreground">{firstActionEngine?.statusTitle ?? fastStartJourney?.currentTitle}</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">{firstActionEngine?.statusBody ?? fastStartJourney?.currentFocus ?? journey.summary}</p>
@@ -1417,7 +1503,7 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
+                <div className="hidden rounded-[1.2rem] border border-border/70 bg-white/90 p-4 xl:col-span-2 xl:block">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.liveTitle ?? "Det h\u00e4r h\u00e4nder just nu"}</p>
                   <div className="mt-3 space-y-3">
                     <div className={`rounded-[1rem] border p-3.5 ${actionFeedback && (!data.metrics.clicks || data.metrics.clicks === 0) ? "border-amber-300/70 bg-amber-50/70" : "border-border/70 bg-secondary/20"}`}>
@@ -1447,7 +1533,7 @@ const PartnerDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="rounded-[1.2rem] border border-border/70 bg-white/90 p-4 lg:col-span-1 xl:col-span-2">
+                <div className="hidden rounded-[1.2rem] border border-border/70 bg-white/90 p-4 xl:col-span-2 xl:block">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{firstActionEngine?.nextLevelTitle ?? "N\u00e4sta niv\u00e5"}</p>
                   <p className="mt-3 text-lg font-semibold text-foreground">
                     {firstActionEngine?.level === 3 ? "Nu \u00e4r du redo f\u00f6r duplication" : "Ett steg till \u00f6ppnar n\u00e4sta niv\u00e5"}
