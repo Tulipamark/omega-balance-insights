@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, BarChart3, CheckCircle2, CircleDollarSign, FlaskConical, Users2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -602,7 +602,7 @@ const proofLayerByLang: Record<Lang, { title: string; body: string; cards: { tit
 const whyZinzinoByLang: Record<Lang, { title: string; body: string; cards: { title: string; text: string }[] }> = {
   sv: {
     title: "Varför Zinzino i grunden",
-    body: "Vi lyfter inte Zinzino för att det bara finns en partnerplan, utan för att flera viktiga delar redan finns på plats. Det gör modellen lättare att bygga vidare på än om allt skulle skapas från noll.",
+    body: "F\u00f6r m\u00e5nga \u00e4r steget till eget st\u00f6rre \u00e4n viljan. Inte f\u00f6r att driv saknas, utan f\u00f6r att tr\u00f6skeln k\u00e4nns h\u00f6g. H\u00e4r finns redan produkt, logistik och grundstruktur p\u00e5 plats. Det g\u00f6r att du kan fokusera mer p\u00e5 att f\u00f6rst\u00e5 modellen, komma i r\u00f6relse och bygga stegvis.",
     cards: [
       {
         title: "Etablerad internationell struktur",
@@ -871,9 +871,9 @@ const baseContent: Pick<Record<Lang, PartnerPageContent>, "sv" | "en"> = {
         "Bara nyfiken",
       ],
       readinessOptions: ["Utforskar", "Vill testa", "Redo att köra"],
-      submit: "Skicka partneransökan",
-      successTitle: "Tack, din ansökan är mottagen.",
-      successBody: "Vi går igenom dina svar och hör av oss om nästa steg om det finns en rimlig match.",
+      submit: "Skicka intresseanm\u00e4lan",
+      successTitle: "Tack. Din intresseanm\u00e4lan \u00e4r mottagen.",
+      successBody: "Vi g\u00e5r nu igenom din anm\u00e4lan och \u00e5terkommer med n\u00e4sta steg.",
     },
     sticky: {
       text: "Utforska en modern partnermodell inom mätbar hälsa",

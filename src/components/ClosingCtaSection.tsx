@@ -64,6 +64,14 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
               trackingEventName="closing_cta_clicked"
               trackingDetails={{ placement: "closing-section" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
+              {...(lang === "sv"
+                ? {
+                    confirmTitle: "Du går nu vidare till Zinzino",
+                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                    confirmConfirmLabel: "OK, gå vidare",
+                    confirmCancelLabel: "Stanna kvar",
+                  }
+                : {})}
             >
               {primaryCtaByLang[lang] ?? copy.hero.primaryCta}
             </TrackedOutboundButton>

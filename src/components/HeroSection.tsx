@@ -97,6 +97,14 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
                 trackingEventName="hero_primary_cta_clicked"
                 trackingDetails={{ placement: "hero" }}
                 errorMessages={{ generic: genericError }}
+                {...(lang === "sv"
+                  ? {
+                      confirmTitle: "Du går nu vidare till Zinzino",
+                      confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                      confirmConfirmLabel: "OK, gå vidare",
+                      confirmCancelLabel: "Stanna kvar",
+                    }
+                  : {})}
               >
                 {copy.primaryCta}
               </TrackedOutboundButton>

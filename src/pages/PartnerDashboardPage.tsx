@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { CheckCircle2, Copy, Link2, UserPlus2, Users } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
@@ -796,7 +796,7 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
       statusBody: "Du har kommit igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. Nu behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver du skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen.",
       nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal",
       actionTitle: "Skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk till 1 person nu",
-      actionBody: "BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja litet. En skickad lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ttre ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n att fundera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nge.",
+      actionBody: "Din l\u00e4nk \u00e4r redo. B\u00f6rja med att dela den med 1 person du redan har kontakt med.",
       actionLabel: "Kopiera min lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
       actionMode: "copy-link" as const,
       helper: [

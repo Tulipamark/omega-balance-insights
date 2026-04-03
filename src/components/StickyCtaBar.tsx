@@ -65,6 +65,14 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
               trackingEventName="sticky_cta_clicked"
               trackingDetails={{ placement: "sticky-bar" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
+              {...(lang === "sv"
+                ? {
+                    confirmTitle: "Du går nu vidare till Zinzino",
+                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                    confirmConfirmLabel: "OK, gå vidare",
+                    confirmCancelLabel: "Stanna kvar",
+                  }
+                : {})}
             >
               {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
             </TrackedOutboundButton>

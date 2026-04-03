@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { t, type Lang } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
@@ -47,7 +47,7 @@ const genericErrorByLang: Record<Lang, string> = {
 };
 
 const fallbackPrimaryCtaByLang: Partial<Record<Lang, string>> = {
-  sv: "Gör testet nu",
+  sv: "G\u00e5 vidare till testet",
 };
 
 const fallbackSecondaryCtaByLang: Partial<Record<Lang, string>> = {
@@ -123,6 +123,14 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               trackingEventName="hero_primary_cta_clicked"
               trackingDetails={{ placement: "hero" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
+              {...(lang === "sv"
+                ? {
+                    confirmTitle: "Du går nu vidare till Zinzino",
+                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                    confirmConfirmLabel: "OK, gå vidare",
+                    confirmCancelLabel: "Stanna kvar",
+                  }
+                : {})}
             >
               {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
             </TrackedOutboundButton>

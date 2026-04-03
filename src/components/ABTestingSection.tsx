@@ -62,6 +62,14 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
                 className="btn-primary min-w-[240px] text-center"
                 pendingLabel={pendingLabel}
                 errorMessages={{ generic: genericError }}
+                {...(lang === "sv"
+                  ? {
+                      confirmTitle: "Du går nu vidare till Zinzino",
+                      confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                      confirmConfirmLabel: "OK, gå vidare",
+                      confirmCancelLabel: "Stanna kvar",
+                    }
+                  : {})}
               >
                 {cta}
               </TrackedOutboundButton>
