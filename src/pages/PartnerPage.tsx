@@ -2579,7 +2579,7 @@ const marketSignalByLang: Record<Lang, { eyebrow: string; title: string; body: s
   },
 };
 
-const commercialHeroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
+const commercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageContent["hero"]>>> = {
   sv: {
     title: "Bygg partnerverksamhet med ett färdigt system för trafik, leads och uppföljning",
     body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll. Du ansöker till ett arbetssätt som gör vägen från intresse till verklig partnerdialog tydligare, enklare och mer strukturerad.",
