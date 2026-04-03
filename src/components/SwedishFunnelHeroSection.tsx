@@ -69,22 +69,22 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const heroCopy = funnelHeroCopy[lang];
 
   return (
-    <section className="bg-hero px-4 pb-10 pt-6 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
+    <section className="bg-hero px-4 pb-12 pt-5 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
       <div className="container-wide mx-auto">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
-          <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+        <div className="mb-5 flex items-center justify-between gap-3 md:mb-10">
+          <a href={`/${lang}`} className="font-serif text-lg font-semibold tracking-tight text-foreground sm:text-xl">
             OmegaBalance
           </a>
-          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
             <Link
               to="/dashboard/login"
-              className="inline-flex whitespace-nowrap text-xs font-medium text-subtle transition-colors hover:text-foreground sm:text-sm"
+              className="hidden whitespace-nowrap text-sm font-medium text-subtle transition-colors hover:text-foreground sm:inline-flex"
             >
               {signInLabelByLang[lang] ?? "Sign in"}
             </Link>
             <Link
               to={`/${lang}/partners`}
-              className="inline-flex whitespace-nowrap rounded-full border border-border bg-card/90 px-3 py-2 text-xs font-medium text-foreground shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
+              className="inline-flex whitespace-nowrap rounded-full border border-border bg-card/90 px-4 py-2.5 text-sm font-medium text-foreground shadow-card transition-colors hover:bg-card"
             >
               {copy.hero.partnerCta}
             </Link>
@@ -98,27 +98,27 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="mx-auto max-w-5xl text-center"
         >
-          <span className="badge-accent inline-block rounded-full px-3 py-1.5 text-xs font-medium tracking-wide sm:px-4 sm:text-sm">
+          <span className="badge-accent inline-block rounded-full px-4 py-2 text-sm font-medium tracking-wide">
             {copy.hero.badge}
           </span>
 
-          <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line text-[2.1rem] font-semibold leading-[1.05] tracking-tight sm:text-4xl md:mt-5 md:text-6xl">
+          <h1 className="mx-auto mt-5 max-w-4xl whitespace-pre-line text-[2.35rem] font-semibold leading-[1.02] tracking-tight sm:text-4xl md:mt-5 md:text-6xl">
             {heroCopy.headline}
           </h1>
 
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl">
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-subtle md:text-xl">
             {heroCopy.supporting}
           </p>
 
-          <div className="mt-7">
+          <div className="mt-6 sm:mt-7">
             <VideoSection lang={lang} embedded showTranscript={false} showHeader={false} />
           </div>
 
-          <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:mt-10">
+          <div className="mx-auto mt-7 flex max-w-md flex-col gap-3 sm:mt-10">
             <TrackedOutboundButton
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
-              className="btn-primary w-full text-center"
+              className="btn-primary w-full px-6 py-3.5 text-base text-center"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="hero_primary_cta_clicked"
               trackingDetails={{ placement: "hero" }}
@@ -136,7 +136,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             </TrackedOutboundButton>
             <a
               href="#how-it-works"
-              className="btn-secondary text-center"
+              className="btn-secondary px-6 py-3.5 text-base text-center"
               onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
                 details: { placement: "hero" },
               })}
@@ -145,10 +145,10 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             </a>
           </div>
 
-          <p className="mx-auto mt-4 max-w-2xl text-sm text-subtle">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-subtle">
             {heroCopy.trust}
           </p>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-subtle">
+          <p className="mx-auto mt-2 max-w-2xl text-base leading-7 text-subtle">
             {measuredResultTriggerByLang[lang]}
           </p>
         </motion.div>

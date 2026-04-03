@@ -21,10 +21,10 @@ const TrustSection = ({ lang }: TrustSectionProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="rounded-xl border border-border/70 bg-card px-4 py-4 text-center shadow-card sm:rounded-2xl sm:px-6 sm:py-5"
+              className="rounded-2xl border border-border/70 bg-card px-5 py-5 text-center shadow-card sm:px-6 sm:py-5"
             >
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-foreground sm:text-base">
-                <Check className="h-4 w-4 text-primary" />
+              <span className="inline-flex items-center gap-2 text-base font-medium text-foreground sm:text-base">
+                <Check className="h-5 w-5 text-primary" />
                 {item}
               </span>
             </motion.div>

@@ -105,8 +105,8 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
           transition={{ duration: 0.6 }}
           className="mb-10 text-center sm:mb-12 md:mb-16"
         >
-          <h2 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl md:mb-4 md:text-4xl">{copy.title}</h2>
-          <p className="mx-auto max-w-xl text-base leading-7 text-subtle sm:text-lg">{copy.body}</p>
+          <h2 className="mb-3 text-3xl font-semibold tracking-tight md:mb-4 md:text-4xl">{copy.title}</h2>
+          <p className="mx-auto max-w-xl text-lg leading-8 text-subtle">{copy.body}</p>
         </motion.div>
 
         <div className="grid gap-8 md:grid-cols-3 md:gap-10">
@@ -119,12 +119,12 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="text-center"
             >
-              <div className="mb-5 flex h-40 items-center justify-center rounded-2xl bg-accent p-5 sm:mb-6 sm:h-48 sm:p-6">
-                <img src={stepImages[i]} alt={step.title} className="h-24 w-24 object-contain sm:h-28 sm:w-28" />
+              <div className="mb-5 flex h-44 items-center justify-center rounded-2xl bg-accent p-6 sm:mb-6 sm:h-48 sm:p-6">
+                <img src={stepImages[i]} alt={step.title} className="h-28 w-28 object-contain sm:h-28 sm:w-28" />
               </div>
-              <span className="font-sans text-sm font-semibold tracking-widest text-primary">{step.numberLabel}</span>
-              <h3 className="mb-3 mt-2 font-sans text-xl font-semibold">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-subtle">{step.description}</p>
+              <span className="font-sans text-base font-semibold tracking-widest text-primary">{step.numberLabel}</span>
+              <h3 className="mb-3 mt-2 font-sans text-2xl font-semibold">{step.title}</h3>
+              <p className="text-base leading-7 text-subtle">{step.description}</p>
             </motion.div>
           ))}
         </div>
