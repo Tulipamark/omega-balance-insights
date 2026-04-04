@@ -167,36 +167,36 @@ function hasRequiredZzLinks(data: PartnerDashboardData) {
 function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: boolean) {
   if (!legalAccepted) {
     return {
-      title: "BekrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤fta grunden",
-      description: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nn portalvillkor och integritet innan du gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r vidare.",
+      title: "Bekr\u00e4fta grunden",
+      description: "Godk\u00e4nn portalvillkor och integritet innan du g\u00e5r vidare.",
       mode: "legal" as const,
-      label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna legal",
+      label: "\u00d6ppna legal",
     };
   }
 
   if (!hasRequiredZzLinks(data)) {
     return {
-      title: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
-      description: "Test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver finnas pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats innan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar arbeta externt.",
+      title: "L\u00e4gg in dina ZZ-l\u00e4nkar",
+      description: "Test-, shop- och partnerl\u00e4nk beh\u00f6ver finnas p\u00e5 plats innan du b\u00f6rjar arbeta externt.",
       mode: "links" as const,
-      label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
+      label: "\u00d6ppna l\u00e4nkar",
     };
   }
 
   if (data.leads.length === 0 && data.partnerLeads.length === 0 && data.customers.length === 0 && data.metrics.directPartners === 0) {
     return {
-      title: "Skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen",
-      description: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg att dela Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken och fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ in fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen.",
+      title: "Skapa f\u00f6rsta signalen",
+      description: "N\u00e4r grunden \u00e4r klar \u00e4r n\u00e4sta steg att dela Omega-l\u00e4nken och f\u00e5 in f\u00f6rsta r\u00f6relsen.",
       mode: "copy-link" as const,
-      label: "Kopiera Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
+      label: "Kopiera Omega-l\u00e4nk",
     };
   }
 
   return {
     title: "Arbeta vidare i leads",
-    description: "Du har redan signaler i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. FortsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r arbetet faktiskt rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r sig just nu.",
+    description: "Du har redan signaler i g\u00e5ng. Forts\u00e4tt d\u00e4r arbetet faktiskt r\u00f6r sig just nu.",
     mode: "leads" as const,
-    label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna leads",
+    label: "\u00d6ppna leads",
   };
 }
 
@@ -767,24 +767,24 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (!foundationReady) {
     return {
       level: 1,
-      statusTitle: "Level 1 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Aktivering",
-      statusBody: "Du har inte hela grunden pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ plats ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤n. Fixa den fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ blir resten mycket enklare.",
-      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden helt klar",
-      actionTitle: "FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden klar nu",
-      actionBody: "GodkÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nn legal och lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in dina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar innan du bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rjar driva rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.",
-      actionLabel: !legalAccepted ? "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna legal" : "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ppna lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar",
+      statusTitle: "Level 1 - Aktivering",
+      statusBody: "Du har inte hela grunden p\u00e5 plats \u00e4n. Fixa den f\u00f6rst s\u00e5 blir resten mycket enklare.",
+      nextGoal: "N\u00e4sta m\u00e5l: f\u00e5 grunden helt klar",
+      actionTitle: "F\u00e5 grunden klar nu",
+      actionBody: "Godk\u00e4nn legal och l\u00e4gg in dina l\u00e4nkar innan du b\u00f6rjar driva r\u00f6relse.",
+      actionLabel: !legalAccepted ? "\u00d6ppna legal" : "\u00d6ppna l\u00e4nkar",
       actionMode: !legalAccepted ? ("legal" as const) : ("links" as const),
       helper: [
-        "GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r klart legal fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst",
-        "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in test-, shop- och partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
-        "Se till att du sjÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lv kan stÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r det du delar",
+        "G\u00f6r klart legal f\u00f6rst",
+        "L\u00e4gg in test-, shop- och partnerl\u00e4nk",
+        "Se till att du sj\u00e4lv kan st\u00e5 f\u00f6r det du delar",
       ],
-      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
-      liveBody: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fort grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar kan systemet bÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja jobba ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥t dig.",
-      liveMeta: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤ra fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta riktiga start",
-      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
-      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser du upp fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta aktiveringen.",
-      momentum: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r nu. FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ grunden klar och gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ vidare.",
+      liveTitle: "Det h\u00e4r h\u00e4nder just nu",
+      liveBody: "S\u00e5 fort grunden \u00e4r klar kan systemet b\u00f6rja jobba \u00e5t dig.",
+      liveMeta: "Du \u00e4r n\u00e4ra f\u00f6rsta riktiga start",
+      nextLevelTitle: "N\u00e4sta steg",
+      nextLevelBody: "N\u00e4r grunden \u00e4r klar l\u00e5ser du upp f\u00f6rsta aktiveringen.",
+      momentum: "Du \u00e4r h\u00e4r nu. F\u00e5 grunden klar och g\u00e5 vidare.",
       shareMode: "setup" as const,
     };
   }
@@ -792,23 +792,23 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   if (visits === 0) {
     return {
       level: 1,
-      statusTitle: "Level 1 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Aktivering",
-      statusBody: "Du har kommit igÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ng. Nu behÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ver du skapa fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relsen.",
-      nextGoal: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥l: fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal",
-      actionTitle: "Skicka din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk till 1 person nu",
+      statusTitle: "Level 1 - Aktivering",
+      statusBody: "Du har kommit ig\u00e5ng. Nu beh\u00f6ver du skapa f\u00f6rsta r\u00f6relsen.",
+      nextGoal: "N\u00e4sta m\u00e5l: f\u00f6rsta signal",
+      actionTitle: "Skicka din l\u00e4nk till 1 person nu",
       actionBody: "Din l\u00e4nk \u00e4r redo. B\u00f6rja med att dela den med 1 person du redan har kontakt med.",
-      actionLabel: "Kopiera min lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk",
+      actionLabel: "Kopiera min l\u00e4nk",
       actionMode: "copy-link" as const,
       helper: [
-        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon du redan pratar med",
-        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon som bryr sig om hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lsa",
-        "nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon du litar pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥",
+        "n\u00e5gon du redan pratar med",
+        "n\u00e5gon som bryr sig om h\u00e4lsa",
+        "n\u00e5gon du litar p\u00e5",
       ],
-      liveTitle: "Det hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder just nu",
-      liveBody: "SÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ fort nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥gon anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder din lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk ser du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signalen hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r.",
-      liveMeta: "Du ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r ett klick frÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥n att fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ systemet i rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse",
-      nextLevelTitle: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta steg",
-      nextLevelBody: "NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥r din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ser du upp nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤sta nivÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥.",
+      liveTitle: "Det h\u00e4r h\u00e4nder just nu",
+      liveBody: "S\u00e5 fort n\u00e5gon anv\u00e4nder din l\u00e4nk ser du f\u00f6rsta signalen h\u00e4r.",
+      liveMeta: "Du \u00e4r ett klick fr\u00e5n att f\u00e5 systemet i r\u00f6relse",
+      nextLevelTitle: "N\u00e4sta steg",
+      nextLevelBody: "N\u00e4r du f\u00e5r din f\u00f6rsta signal l\u00e5ser du upp n\u00e4sta niv\u00e5.",
       momentum: "Du har varit aktiv idag",
       shareMode: "start" as const,
     };
@@ -925,12 +925,12 @@ const PartnerDashboardPage = () => {
           })
         : Promise.reject(new Error("Ingen partnerdata hittades.")),
     onSuccess: async () => {
-      setZzLinkStatus("Dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r sparade.");
+      setZzLinkStatus("Dina ZZ-l\u00e4nkar \u00e4r sparade.");
       await queryClient.invalidateQueries({ queryKey: ["partner-dashboard", partnerId] });
       await queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: (error) => {
-      setZzLinkStatus(error instanceof Error ? error.message : "Kunde inte spara dina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar.");
+      setZzLinkStatus(error instanceof Error ? error.message : "Kunde inte spara dina ZZ-l\u00e4nkar.");
     },
   });
 
@@ -943,9 +943,9 @@ const PartnerDashboardPage = () => {
 
   const navigation = useMemo(
     () => [
-      { label: "ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“versikt", href: "/dashboard/partner/overview", icon: dashboardIcons.dashboard },
+      { label: "\u00d6versikt", href: "/dashboard/partner/overview", icon: dashboardIcons.dashboard },
       { label: "Leads", href: "/dashboard/partner/leads", icon: dashboardIcons.leads },
-      { label: "LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar", href: "/dashboard/partner/links", icon: Link2 },
+      { label: "L\u00e4nkar", href: "/dashboard/partner/links", icon: Link2 },
       { label: "Kunder", href: "/dashboard/partner/customers", icon: Users },
       { label: "Kontakter", href: "/dashboard/partner/network", icon: dashboardIcons.network },
       { label: "Din resa", href: "/dashboard/partner/journey", icon: dashboardIcons.dashboard },
@@ -1733,14 +1733,14 @@ const PartnerDashboardPage = () => {
 
           {showOverview ? (
             <DashboardSection
-              title="SnabbÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥tgÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤rder"
-              description="Tre snabba vÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gar nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r du vill agera direkt."
+              title="Snabb\u00e5tg\u00e4rder"
+              description="Tre snabba v\u00e4gar n\u00e4r du vill agera direkt."
             >
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Dela Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Dela Omega-l\u00e4nken</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    NÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r grunden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r klar ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r detta lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken du anvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nder fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶r att skapa ny rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶relse.
+                    N\u00e4r grunden \u00e4r klar \u00e4r detta l\u00e4nken du anv\u00e4nder f\u00f6r att skapa ny r\u00f6relse.
                   </p>
                   <Button
                     type="button"
@@ -1749,14 +1749,14 @@ const PartnerDashboardPage = () => {
                     onClick={() => navigator.clipboard.writeText(partnerLink)}
                   >
                     <Copy className="mr-2 h-3.5 w-3.5 shrink-0" />
-                    Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
+                    Kopiera l\u00e4nk
                   </Button>
                 </div>
 
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Se ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Se ZZ-l\u00e4nkar</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rja hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r om dina test-, shop- eller partnerlÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar saknas.
+                    B\u00f6rja h\u00e4r om dina test-, shop- eller partnerl\u00e4nkar saknas.
                   </p>
                   <Button
                     type="button"
@@ -1764,7 +1764,7 @@ const PartnerDashboardPage = () => {
                     className="mt-3 inline-flex h-8 max-w-full self-start whitespace-normal rounded-lg px-3 text-sm leading-tight"
                     onClick={openZzLinksDialog}
                   >
-                    Redigera mina lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar
+                    Redigera mina l\u00e4nkar
                   </Button>
                 </div>
 
@@ -1887,7 +1887,7 @@ const PartnerDashboardPage = () => {
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken du delar</p>
                   <p className="mt-2 break-all font-medium text-foreground">{partnerLink}</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    AnvÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nd den hÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤r lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken i fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta hand. Vi skickar vidare till rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤tt Zinzino-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk i bakgrunden.
+                    Anv\u00e4nd den h\u00e4r l\u00e4nken i f\u00f6rsta hand. Vi skickar vidare till r\u00e4tt Zinzino-l\u00e4nk i bakgrunden.
                   </p>
                 </div>
                 <Button
@@ -1897,7 +1897,7 @@ const PartnerDashboardPage = () => {
                   onClick={() => navigator.clipboard.writeText(partnerLink)}
                 >
                   <Copy className="mr-2 h-3.5 w-3.5" />
-                  Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
+                  Kopiera l\u00e4nk
                 </Button>
               </div>
             </DashboardSection>
@@ -1905,7 +1905,7 @@ const PartnerDashboardPage = () => {
 
           {showLinks ? (
             <DashboardSection
-              title="Mina ZZ-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar"
+              title="Mina ZZ-l\u00e4nkar"
               description="Dina personliga destinationslÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nkar till Zinzino."
             >
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-border/70 bg-secondary/30 p-4">
@@ -1938,12 +1938,12 @@ const PartnerDashboardPage = () => {
                           onClick={() => navigator.clipboard.writeText(linkItem.value as string)}
                         >
                           <Copy className="mr-2 h-3.5 w-3.5" />
-                          Kopiera lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk
+                          Kopiera l\u00e4nk
                         </Button>
                       </>
                     ) : (
                       <p className="mt-3 text-sm leading-6 text-subtle">
-                        Ingen lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nk sparad ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. LÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤gg in den via knappen ovan.
+                        Ingen l\u00e4nk sparad \u00e4nnu. L\u00e4gg in den via knappen ovan.
                       </p>
                     )}
                   </div>
@@ -2086,7 +2086,7 @@ const PartnerDashboardPage = () => {
                         ))
                       ) : (
                         <div className="rounded-[1rem] border border-border/70 bg-white/85 p-3.5">
-                          <p className="text-sm text-subtle">Inga prioriterade leads ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nnu. Fokusera fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rst pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ att skapa din fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rsta signal.</p>
+                          <p className="text-sm text-subtle">Inga prioriterade leads \u00e4nnu. Fokusera f\u00f6rst p\u00e5 att skapa din f\u00f6rsta signal.</p>
                           <Button
                             type="button"
                             variant="outline"
@@ -2094,7 +2094,7 @@ const PartnerDashboardPage = () => {
                             onClick={() => navigator.clipboard.writeText(partnerLink)}
                           >
                             <Copy className="mr-2 h-3.5 w-3.5" />
-                            Kopiera Omega-lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤nken
+                            Kopiera Omega-l\u00e4nken
                           </Button>
                         </div>
                       )}
