@@ -1,4 +1,4 @@
-import { Globe } from "lucide-react";
+﻿import { Globe } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Lang, languages, supportedLangs } from "@/lib/i18n";
@@ -8,7 +8,7 @@ interface LanguageSwitcherProps {
 }
 
 const ariaLabelByLang: Record<Lang, string> = {
-  sv: "Välj språk",
+  sv: "V\u00e4lj spr\u00e5k",
   no: "Velg språk",
   da: "Vælg sprog",
   fi: "Valitse kieli",
@@ -37,7 +37,7 @@ const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 px-4 py-2 text-sm font-medium text-foreground shadow-card backdrop-blur-sm transition-all hover:bg-card"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 px-3 py-2 text-sm font-medium text-foreground shadow-card backdrop-blur-sm transition-all hover:bg-card sm:px-4"
           aria-label={ariaLabelByLang[lang]}
         >
           <Globe className="h-4 w-4 text-primary" />

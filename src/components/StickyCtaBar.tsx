@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Lang, t } from "@/lib/i18n";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
@@ -10,7 +10,7 @@ interface StickyCtaBarProps {
 const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const pendingLabelByLang: Record<Lang, string> = {
-  sv: "Öppnar...",
+  sv: "\u00d6ppnar...",
   no: "Åpner...",
   da: "Åbner...",
   fi: "Avataan...",
@@ -21,7 +21,7 @@ const pendingLabelByLang: Record<Lang, string> = {
 };
 
 const genericErrorByLang: Record<Lang, string> = {
-  sv: "Länken kunde inte öppnas just nu.",
+  sv: "L\u00e4nken kunde inte \u00f6ppnas just nu.",
   no: "Lenken kunne ikke åpnes akkurat nå.",
   da: "Linket kunne ikke åbnes lige nu.",
   fi: "Linkkiä ei voitu avata juuri nyt.",
@@ -32,7 +32,7 @@ const genericErrorByLang: Record<Lang, string> = {
 };
 
 const fallbackPrimaryCtaByLang: Partial<Record<Lang, string>> = {
-  sv: "Gör testet nu",
+  sv: "G\u00e5 vidare till testet",
 };
 
 const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
@@ -53,23 +53,23 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 px-4 py-3 backdrop-blur-lg md:hidden"
+          className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 px-3 py-3 backdrop-blur-lg md:hidden"
         >
-          <div className="container-wide flex items-center justify-between gap-3">
+          <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{copy.sticky.text}</p>
             <TrackedOutboundButton
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
-              className="btn-primary w-full whitespace-nowrap px-6 py-3 text-sm sm:w-auto"
+              className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="sticky_cta_clicked"
               trackingDetails={{ placement: "sticky-bar" }}
               errorMessages={{ generic: genericErrorByLang[lang] }}
               {...(lang === "sv"
                 ? {
-                    confirmTitle: "Du går nu vidare till Zinzino",
-                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
-                    confirmConfirmLabel: "OK, gå vidare",
+                    confirmTitle: "Du g\u00e5r nu vidare till Zinzino",
+                    confirmDescription: "N\u00e4sta steg sker hos Zinzino, d\u00e4r best\u00e4llning och leverans hanteras.",
+                    confirmConfirmLabel: "OK, g\u00e5 vidare",
                     confirmCancelLabel: "Stanna kvar",
                   }
                 : {})}
