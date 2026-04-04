@@ -3107,9 +3107,9 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-hero section-padding pb-16 md:pb-24">
+      <section className="bg-hero section-padding pb-14 md:pb-24">
         <div className={heroShellClass}>
-          <div className="mb-12 flex items-center justify-between gap-4">
+          <div className="mb-8 flex items-center justify-between gap-3 md:mb-12 md:gap-4">
             <Link to={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               OmegaBalance
             </Link>
@@ -3117,14 +3117,14 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           </div>
 
           <div className="grid items-start gap-10">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="rounded-[2rem] border border-border/70 bg-card/70 px-6 py-8 shadow-sm backdrop-blur-sm md:px-8 md:py-10">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="rounded-[1.75rem] border border-border/70 bg-card/70 px-5 py-7 shadow-sm backdrop-blur-sm sm:rounded-[2rem] sm:px-6 sm:py-8 md:px-8 md:py-10">
               <span className="badge-accent inline-flex rounded-full px-4 py-1.5 text-sm font-medium shadow-sm">{page.hero.badge}</span>
-              <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">{page.hero.title}</h1>
-              <p className="mt-3 max-w-2xl text-lg leading-8 text-subtle md:text-xl">{page.hero.body}</p>
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <h1 className="mt-5 max-w-3xl text-[2.35rem] font-semibold leading-[1.05] tracking-tight sm:text-4xl md:mt-6 md:text-6xl">{page.hero.title}</h1>
+              <p className="mt-3 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl">{page.hero.body}</p>
+              <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
                 <a
                   href="#partner-application"
-                  className="btn-primary text-center"
+                  className="btn-primary w-full px-6 py-3.5 text-center text-base sm:w-auto"
                   onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
                     pathname: location.pathname,
                     search: location.search,
@@ -3135,17 +3135,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 >
                   {page.hero.primaryCta}
                 </a>
-                <a href="#partner-system" className="btn-secondary text-center">{page.hero.secondaryCta}</a>
+                <a href="#partner-system" className="btn-secondary w-full px-6 py-3.5 text-center text-base sm:w-auto">{page.hero.secondaryCta}</a>
               </div>
-              <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
-                <div className="rounded-[1.5rem] border border-border/80 bg-background/80 p-5 shadow-sm">
+              <div className="mt-7 grid gap-4 sm:mt-8 sm:gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
+                <div className="rounded-[1.35rem] border border-border/80 bg-background/80 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                     {conversionAssist.eyebrow}
                   </p>
                   <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
                     {conversionAssist.title}
                   </p>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                  <div className="mt-4 grid gap-3 xl:grid-cols-1 sm:max-xl:grid-cols-3">
                     {conversionAssist.items.map((item) => (
                       <div key={item} className="rounded-2xl border border-border/70 bg-card px-4 py-4">
                         <p className="text-sm leading-6 text-foreground/85">{item}</p>
@@ -3166,7 +3166,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                     {conversionAssist.cta}
                   </a>
                 </div>
-                <div className="rounded-[1.5rem] border border-border/80 bg-secondary/35 p-5 shadow-sm">
+                <div className="rounded-[1.35rem] border border-border/80 bg-secondary/35 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                     {marketSignalByLang[lang].eyebrow}
                   </p>
@@ -3544,12 +3544,12 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       <FooterSection lang={lang} />
 
       {showStickyCta ? (
-        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 px-4 py-3 backdrop-blur-lg md:hidden">
-          <div className="container-wide flex items-center justify-between gap-3">
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 px-3 py-3 backdrop-blur-lg md:hidden">
+          <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{page.sticky.text}</p>
             <a
               href="#partner-application"
-              className="btn-primary w-full whitespace-nowrap px-6 py-3 text-center text-sm sm:w-auto"
+              className="btn-primary w-full whitespace-nowrap px-5 py-3 text-center text-base sm:w-auto"
               onClick={() => void logFunnelEvent("partner_sticky_cta_clicked", {
                 pathname: location.pathname,
                 search: location.search,
