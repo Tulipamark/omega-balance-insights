@@ -1,13 +1,12 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { t, type Lang } from "@/lib/i18n";
 import { insightCopyByLang } from "@/lib/funnel-copy";
+import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface ClosingCtaSectionProps {
   lang: Lang;
 }
-
-const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const pendingLabelByLang: Record<Lang, string> = {
   sv: "\u00d6ppnar...",
@@ -49,17 +48,13 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl rounded-[1.75rem] border border-border/70 bg-card px-5 py-7 shadow-elevated sm:px-6 md:px-10 md:py-10"
         >
-          <h2 className="text-[2rem] font-semibold tracking-tight md:text-4xl">
-            {insightCopy.closingTitle}
-          </h2>
-          <p className="mt-4 text-base leading-7 text-subtle sm:text-lg sm:leading-8">
-            {insightCopy.closingBody}
-          </p>
+          <h2 className="text-[2rem] font-semibold tracking-tight md:text-4xl">{insightCopy.closingTitle}</h2>
+          <p className="mt-4 text-base leading-7 text-subtle sm:text-lg sm:leading-8">{insightCopy.closingBody}</p>
           <div className="mx-auto mt-6 max-w-sm">
             <TrackedOutboundButton
               lang={lang}
               destinationType="test"
-              fallbackHref={DEFAULT_ZINZINO_TEST_URL}
+              fallbackHref={getZinzinoTestUrl(lang)}
               className="btn-primary w-full px-6 py-3.5 text-base text-center"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="closing_cta_clicked"

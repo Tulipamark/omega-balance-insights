@@ -1,13 +1,12 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Lang, t } from "@/lib/i18n";
+import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface StickyCtaBarProps {
   lang: Lang;
 }
-
-const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const pendingLabelByLang: Record<Lang, string> = {
   sv: "\u00d6ppnar...",
@@ -60,7 +59,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
             <TrackedOutboundButton
               lang={lang}
               destinationType="test"
-              fallbackHref={DEFAULT_ZINZINO_TEST_URL}
+              fallbackHref={getZinzinoTestUrl(lang)}
               className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="sticky_cta_clicked"

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { t, type Lang } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { funnelHeroCopy } from "@/lib/funnel-copy";
+import { getZinzinoTestUrl } from "@/lib/zinzino";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import VideoSection from "@/components/VideoSection";
@@ -10,8 +11,6 @@ import VideoSection from "@/components/VideoSection";
 interface SwedishFunnelHeroSectionProps {
   lang: Lang;
 }
-
-const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const measuredResultTriggerByLang: Record<Lang, string> = {
   sv: "Många blir förvånade över sitt resultat.",
@@ -118,7 +117,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             <TrackedOutboundButton
               lang={lang}
               destinationType="test"
-              fallbackHref={DEFAULT_ZINZINO_TEST_URL}
+              fallbackHref={getZinzinoTestUrl(lang)}
               className="btn-primary w-full text-center"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="hero_primary_cta_clicked"

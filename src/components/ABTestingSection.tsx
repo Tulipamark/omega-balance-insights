@@ -1,12 +1,11 @@
 import { motion } from "framer-motion";
 import { Lang, t } from "@/lib/i18n";
+import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface ABTestingSectionProps {
   lang: Lang;
 }
-
-const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const pendingLabelByLang: Record<Lang, string> = {
   sv: "Öppnar...",
@@ -52,14 +51,12 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
           </div>
 
           <div className="mt-10 rounded-[1.75rem] border border-border/80 bg-card p-8 text-center shadow-card md:p-10">
-            <p className="font-serif text-2xl font-medium leading-tight text-foreground md:text-3xl">
-              {headline}
-            </p>
+            <p className="font-serif text-2xl font-medium leading-tight text-foreground md:text-3xl">{headline}</p>
             <div className="mt-8 flex justify-center">
               <TrackedOutboundButton
                 lang={lang}
                 destinationType="test"
-                fallbackHref={DEFAULT_ZINZINO_TEST_URL}
+                fallbackHref={getZinzinoTestUrl(lang)}
                 className="btn-primary min-w-[240px] text-center"
                 pendingLabel={pendingLabel}
                 errorMessages={{ generic: genericError }}
@@ -75,9 +72,7 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
                 {cta}
               </TrackedOutboundButton>
             </div>
-            <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-subtle">
-              {copy.ctasLabel}
-            </p>
+            <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-subtle">{copy.ctasLabel}</p>
           </div>
         </motion.div>
       </div>

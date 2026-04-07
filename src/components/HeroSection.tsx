@@ -3,14 +3,13 @@ import heroVisual from "@/assets/hero-visual.jpg";
 import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
+import { getZinzinoTestUrl } from "@/lib/zinzino";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
 interface HeroSectionProps {
   lang: Lang;
 }
-
-const DEFAULT_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000";
 
 const signInLabelByLang: Partial<Record<Lang, string>> = {
   sv: "Logga in",
@@ -92,7 +91,7 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
               <TrackedOutboundButton
                 lang={lang}
                 destinationType="test"
-                fallbackHref={DEFAULT_ZINZINO_TEST_URL}
+                fallbackHref={getZinzinoTestUrl(lang)}
                 className="btn-primary text-center"
                 pendingLabel={pendingLabel}
                 trackingEventName="hero_primary_cta_clicked"
