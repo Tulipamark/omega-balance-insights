@@ -10,12 +10,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import type { Lang } from "@/lib/i18n";
 import { trackClickAndGetRedirect } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import type { FunnelEventName } from "@/lib/omega-types";
 import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 
 type TrackedOutboundButtonProps = {
+  lang?: Lang;
   destinationType: "test" | "shop" | "partner" | "consultation";
   fallbackHref: string;
   className: string;
@@ -28,6 +30,57 @@ type TrackedOutboundButtonProps = {
   confirmDescription?: string;
   confirmConfirmLabel?: string;
   confirmCancelLabel?: string;
+};
+
+const confirmCopyByLang: Record<Lang, { title: string; description: string; confirmLabel: string; cancelLabel: string }> = {
+  sv: {
+    title: "Du går nu vidare till Zinzino",
+    description: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+    confirmLabel: "OK, gå vidare",
+    cancelLabel: "Stanna kvar",
+  },
+  no: {
+    title: "Du går nå videre til Zinzino",
+    description: "Neste steg skjer hos Zinzino, der bestilling og levering håndteres.",
+    confirmLabel: "OK, gå videre",
+    cancelLabel: "Bli her",
+  },
+  da: {
+    title: "Du går nu videre til Zinzino",
+    description: "Næste trin sker hos Zinzino, hvor bestilling og levering håndteres.",
+    confirmLabel: "OK, gå videre",
+    cancelLabel: "Bliv her",
+  },
+  fi: {
+    title: "Siirryt nyt Zinzinoon",
+    description: "Seuraava vaihe tapahtuu Zinzino-palvelussa, jossa tilaus ja toimitus hoidetaan.",
+    confirmLabel: "OK, jatka",
+    cancelLabel: "Pysy täällä",
+  },
+  en: {
+    title: "You are now continuing to Zinzino",
+    description: "The next step takes place at Zinzino, where ordering and delivery are handled.",
+    confirmLabel: "OK, continue",
+    cancelLabel: "Stay here",
+  },
+  de: {
+    title: "Du gehst jetzt weiter zu Zinzino",
+    description: "Der nächste Schritt findet bei Zinzino statt, wo Bestellung und Lieferung abgewickelt werden.",
+    confirmLabel: "OK, weiter",
+    cancelLabel: "Hier bleiben",
+  },
+  fr: {
+    title: "Vous allez maintenant vers Zinzino",
+    description: "La prochaine étape se déroule chez Zinzino, où la commande et la livraison sont gérées.",
+    confirmLabel: "OK, continuer",
+    cancelLabel: "Rester ici",
+  },
+  it: {
+    title: "Stai per proseguire verso Zinzino",
+    description: "Il passaggio successivo avviene su Zinzino, dove vengono gestiti ordine e consegna.",
+    confirmLabel: "OK, continua",
+    cancelLabel: "Resta qui",
+  },
 };
 
 const reasonCopy: Record<string, string> = {
@@ -47,6 +100,7 @@ const fallbackEligibleErrors = new Set([
 const genericErrorCopy = "L\u00e4nken kunde inte \u00f6ppnas just nu.";
 
 const TrackedOutboundButton = ({
+  lang,
   destinationType,
   fallbackHref,
   className,
@@ -64,6 +118,11 @@ const TrackedOutboundButton = ({
   const [pending, setPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const localizedConfirmCopy = lang ? confirmCopyByLang[lang] : null;
+  const effectiveConfirmTitle = confirmTitle ?? (destinationType === "test" ? localizedConfirmCopy?.title : undefined);
+  const effectiveConfirmDescription = confirmDescription ?? (destinationType === "test" ? localizedConfirmCopy?.description : undefined);
+  const effectiveConfirmLabel = confirmConfirmLabel === "OK" && localizedConfirmCopy ? localizedConfirmCopy.confirmLabel : confirmConfirmLabel;
+  const effectiveCancelLabel = confirmCancelLabel === "Avbryt" && localizedConfirmCopy ? localizedConfirmCopy.cancelLabel : confirmCancelLabel;
 
   const handleClick = async () => {
     if (pending) {
@@ -129,7 +188,7 @@ const TrackedOutboundButton = ({
       return;
     }
 
-    if (confirmTitle || confirmDescription) {
+    if (effectiveConfirmTitle || effectiveConfirmDescription) {
       setConfirmOpen(true);
       return;
     }
@@ -146,11 +205,11 @@ const TrackedOutboundButton = ({
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent className="max-w-md rounded-[1.5rem]">
           <AlertDialogHeader>
-            {confirmTitle ? <AlertDialogTitle>{confirmTitle}</AlertDialogTitle> : null}
-            {confirmDescription ? <AlertDialogDescription>{confirmDescription}</AlertDialogDescription> : null}
+            {effectiveConfirmTitle ? <AlertDialogTitle>{effectiveConfirmTitle}</AlertDialogTitle> : null}
+            {effectiveConfirmDescription ? <AlertDialogDescription>{effectiveConfirmDescription}</AlertDialogDescription> : null}
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{confirmCancelLabel}</AlertDialogCancel>
+            <AlertDialogCancel>{effectiveCancelLabel}</AlertDialogCancel>
             <AlertDialogAction
               onClick={(event) => {
                 event.preventDefault();
@@ -158,7 +217,7 @@ const TrackedOutboundButton = ({
                 void handleClick();
               }}
             >
-              {pending ? pendingLabel : confirmConfirmLabel}
+              {pending ? pendingLabel : effectiveConfirmLabel}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

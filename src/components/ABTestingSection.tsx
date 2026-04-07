@@ -57,6 +57,7 @@ const ABTestingSection = ({ lang }: ABTestingSectionProps) => {
             </p>
             <div className="mt-8 flex justify-center">
               <TrackedOutboundButton
+                lang={lang}
                 destinationType="test"
                 fallbackHref={DEFAULT_ZINZINO_TEST_URL}
                 className="btn-primary min-w-[240px] text-center"

@@ -57,6 +57,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
           </p>
           <div className="mx-auto mt-6 max-w-sm">
             <TrackedOutboundButton
+              lang={lang}
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full px-6 py-3.5 text-base text-center"

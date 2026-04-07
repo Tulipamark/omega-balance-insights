@@ -90,6 +90,7 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             <p className="text-lg md:text-xl text-subtle leading-relaxed max-w-lg mb-10">{copy.body}</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <TrackedOutboundButton
+                lang={lang}
                 destinationType="test"
                 fallbackHref={DEFAULT_ZINZINO_TEST_URL}
                 className="btn-primary text-center"

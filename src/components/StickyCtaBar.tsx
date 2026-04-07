@@ -58,6 +58,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
           <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{copy.sticky.text}</p>
             <TrackedOutboundButton
+              lang={lang}
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"

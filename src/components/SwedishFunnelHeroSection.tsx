@@ -116,6 +116,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
 
           <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:mt-10">
             <TrackedOutboundButton
+              lang={lang}
               destinationType="test"
               fallbackHref={DEFAULT_ZINZINO_TEST_URL}
               className="btn-primary w-full text-center"
