@@ -10,7 +10,8 @@ interface VideoSectionProps {
 }
 
 const transcriptByLang: Partial<Record<Lang, string>> = {
-  sv: "Många tror att de äter rätt. Men ändå känner de sig trötta eller har låg energi. Problemet är att det inte handlar om vad du äter utan vad kroppen faktiskt tar upp. Ett BalanceTest visar din fettsyraprofil. Du tar några droppar blod hemma och får ett konkret svar. Baserat på resultatet får du personliga rekommendationer. Ta reda på din balans. Det tar bara några minuter att komma igång.",
+  sv: "M\u00e5nga tror att de \u00e4ter r\u00e4tt. Men \u00e4nd\u00e5 k\u00e4nner de sig tr\u00f6tta eller har l\u00e5g energi. Problemet \u00e4r att det inte handlar om vad du \u00e4ter utan vad kroppen faktiskt tar upp. Ett BalanceTest visar din fettsyraprofil. Du tar n\u00e5gra droppar blod hemma och f\u00e5r ett konkret svar. Baserat p\u00e5 resultatet f\u00e5r du personliga rekommendationer. Ta reda p\u00e5 din balans. Det tar bara n\u00e5gra minuter att komma ig\u00e5ng.",
+  en: "Many people think they are eating well, yet still feel tired or low on energy. The issue is not only what you eat, but what your body actually absorbs. A BalanceTest shows your fatty acid profile. You take a few drops of blood at home and get a clear answer. Based on the result, you receive personal recommendations. Find out your balance. It only takes a few minutes to get started.",
 };
 
 const transcriptLabelByLang: Record<Lang, string> = {
@@ -26,6 +27,18 @@ const transcriptLabelByLang: Record<Lang, string> = {
 
 const DEFAULT_VIDEO_SRC = "/avatar-video.mp4";
 const localizedVideoLanguages = new Set<Lang>(["da", "de", "en", "fi", "fr", "it", "no"]);
+const videoFallbackByLang: Partial<Record<Lang, string>> = {
+  de: "/videos/avatar-video-en.mp4",
+  fi: "/videos/avatar-video-en.mp4",
+  fr: "/videos/avatar-video-en.mp4",
+  it: "/videos/avatar-video-en.mp4",
+};
+const transcriptFallbackByLang: Partial<Record<Lang, Lang>> = {
+  de: "en",
+  fi: "en",
+  fr: "en",
+  it: "en",
+};
 
 function getLocalizedVideoSrc(lang: Lang) {
   if (!localizedVideoLanguages.has(lang)) {
@@ -37,7 +50,11 @@ function getLocalizedVideoSrc(lang: Lang) {
 
 const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeader = true }: VideoSectionProps) => {
   const copy = t(lang).video;
-  const transcript = transcriptByLang[lang] || transcriptByLang[defaultLang];
+  const transcriptFallbackLang = transcriptFallbackByLang[lang];
+  const transcript =
+    transcriptByLang[lang] ||
+    (transcriptFallbackLang ? transcriptByLang[transcriptFallbackLang] : undefined) ||
+    transcriptByLang[defaultLang];
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const [videoSrc, setVideoSrc] = React.useState(() => getLocalizedVideoSrc(lang));
 
@@ -64,8 +81,9 @@ const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeade
   }, [lang, videoSrc]);
 
   const handleVideoError = React.useCallback(() => {
-    setVideoSrc((current) => (current === DEFAULT_VIDEO_SRC ? current : DEFAULT_VIDEO_SRC));
-  }, []);
+    const fallbackSrc = videoFallbackByLang[lang] ?? DEFAULT_VIDEO_SRC;
+    setVideoSrc((current) => (current === fallbackSrc ? current : fallbackSrc));
+  }, [lang]);
 
   const header = showHeader ? (
     <motion.div
