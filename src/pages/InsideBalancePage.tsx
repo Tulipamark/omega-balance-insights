@@ -31,6 +31,10 @@ type InsideBalanceCopy = {
   productsTitle: string;
   productsBody: string;
   products: ProductCard[];
+  primaryRouteTitle?: string;
+  primaryRouteBody?: string;
+  secondaryRouteTitle?: string;
+  secondaryRouteBody?: string;
   whyTitle: string;
   whyBody: string;
   trustTitle?: string;
@@ -64,58 +68,62 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     heroEyebrow: "InsideBalance",
     heroTitle: "H\u00e4lsotester som g\u00f6r det l\u00e4ttare att f\u00f6rst\u00e5 vad du faktiskt beh\u00f6ver",
     heroBody:
-      "InsideBalance samlar v\u00e5ra testsp\u00e5r p\u00e5 ett st\u00e4lle f\u00f6r dig som vill fatta mer genomt\u00e4nkta h\u00e4lsobeslut. B\u00f6rja med r\u00e4tt test, f\u00e5 ett tydligare nul\u00e4ge och ta n\u00e4sta steg med mer trygghet.",
-    heroPrimaryCta: "Se v\u00e5ra testsp\u00e5r",
+      "InsideBalance \u00e4r plattformen f\u00f6r dig som vill orientera dig tydligare bland h\u00e4lsotester och b\u00f6rja i r\u00e4tt \u00e4nde. H\u00e4r samlar vi v\u00e5ra testsp\u00e5r i en lugnare, mer genomt\u00e4nkt helhet.",
+    heroPrimaryCta: "Utforska testsp\u00e5ren",
     heroSecondaryCta: "B\u00f6rja med OmegaBalance",
     productsTitle: "V\u00e5ra testsp\u00e5r",
     productsBody:
-      "Varje sp\u00e5r fokuserar p\u00e5 ett omr\u00e5de d\u00e4r m\u00e4tbara resultat g\u00f6r det l\u00e4ttare att f\u00f6rst\u00e5 vad som \u00e4r relevant just nu.",
+      "Varje testsp\u00e5r fokuserar p\u00e5 ett omr\u00e5de. V\u00e4lj det som passar ditt nul\u00e4ge b\u00e4st.",
+    primaryRouteTitle: "B\u00f6rja h\u00e4r",
+    primaryRouteBody: "OmegaBalance \u00e4r det f\u00f6rsta sp\u00e5ret och den tydligaste starten i InsideBalance just nu.",
+    secondaryRouteTitle: "Kommer inom kort",
+    secondaryRouteBody: "GutBalance blir n\u00e4sta sp\u00e5r f\u00f6r dig som vill utforska mage, tarm och inre balans.",
     products: [
       {
         title: "OmegaBalance",
         eyebrow: "Tillg\u00e4nglig nu",
-        body: "Ett tydligt f\u00f6rsta testsp\u00e5r f\u00f6r dig som vill f\u00f6rst\u00e5 din omega-6/omega-3-balans och f\u00e5 en mer konkret riktning fram\u00e5t.",
-        fit: "Passar dig som vill b\u00f6rja med ett etablerat test, ett tydligare nul\u00e4ge och n\u00e4sta steg som g\u00e5r att agera p\u00e5.",
-        cta: "Utforska OmegaBalance",
+        body: "F\u00f6r dig som vill f\u00f6rst\u00e5 din omega-6/omega-3-balans och b\u00f6rja med ett etablerat testsp\u00e5r.",
+        fit: "Passar dig som vill komma ig\u00e5ng med ett tydligt f\u00f6rsta test och en mer konkret bild av ditt nul\u00e4ge.",
+        cta: "Till OmegaBalance",
         href: "/sv",
       },
       {
         title: "GutBalance",
         eyebrow: "N\u00e4sta sp\u00e5r",
-        body: "V\u00e5rt kommande testsp\u00e5r f\u00f6r mage, tarm och inre balans. Det byggs f\u00f6r att bli n\u00e4sta naturliga del i InsideBalance.",
-        fit: "Passar dig som \u00e4r nyfiken p\u00e5 ett framtida sp\u00e5r d\u00e4r testresultat ska kunna ge mer riktning \u00e4ven f\u00f6r magen.",
-        cta: "Se GutBalance",
+        body: "V\u00e5rt kommande testsp\u00e5r f\u00f6r mage, tarm och inre balans.",
+        fit: "Passar dig som \u00e4r nyfiken p\u00e5 ett framtida sp\u00e5r med samma lugna och testbaserade logik.",
+        cta: "Till GutBalance",
         href: "/sv/gut-balance",
         status: "Kommer snart",
       },
     ],
     whyTitle: "B\u00f6rja med att m\u00e4ta",
     whyBody:
-      "M\u00e5nga f\u00f6rs\u00f6ker f\u00f6rb\u00e4ttra h\u00e4lsan utan att f\u00f6rst veta nul\u00e4get. Ett test ger en tydligare startpunkt och g\u00f6r n\u00e4sta steg enklare att v\u00e4lja.",
-    trustTitle: "Seri\u00f6st, tydligt och byggt f\u00f6r att h\u00e5lla",
+      "M\u00e5nga f\u00f6rs\u00f6ker f\u00f6rb\u00e4ttra h\u00e4lsan innan de vet vad kroppen faktiskt visar. Ett test g\u00f6r det l\u00e4ttare att skilja mellan det som bara l\u00e5ter bra och det som faktiskt \u00e4r relevant f\u00f6r dig.",
+    trustTitle: "Tydligt, seri\u00f6st och byggt f\u00f6r att h\u00e5lla",
     trustBody:
-      "InsideBalance ska k\u00e4nnas lugnt och trov\u00e4rdigt. Vi bygger kring m\u00e4tbara tester, tydlig kommunikation och n\u00e4sta steg som g\u00e5r att f\u00f6rst\u00e5 utan att bli \u00f6verv\u00e4ldigande.",
+      "InsideBalance bygger p\u00e5 m\u00e4tbara tester och tydlig struktur. Det ska vara l\u00e4ttare att f\u00f6rst\u00e5 vad som \u00e4r relevant och orientera sig i sina val.",
     trustPoints: [
-      "Testbaserad utg\u00e5ngspunkt i st\u00e4llet f\u00f6r gissningar.",
-      "Tydliga produktsp\u00e5r med ett fokus i taget.",
-      "En lugnare upplevelse d\u00e4r f\u00f6rtroende \u00e4r viktigare \u00e4n hype.",
+      "Testbaserad grund i st\u00e4llet f\u00f6r allm\u00e4n gissning.",
+      "Tydliga sp\u00e5r d\u00e4r varje omr\u00e5de f\u00e5r ett eget fokus.",
+      "En lugnare upplevelse d\u00e4r seriositet g\u00e5r f\u00f6re hype.",
     ],
     howTitle: "S\u00e5 fungerar det",
     howSteps: [
-      { title: "V\u00e4lj sp\u00e5r", body: "B\u00f6rja med det omr\u00e5de som k\u00e4nns mest relevant just nu." },
-      { title: "G\u00f6r testet hemma", body: "Testen \u00e4r gjorda f\u00f6r att vara enkla att starta med utan on\u00f6dig friktion." },
-      { title: "F\u00e5 tydligare n\u00e4sta steg", body: "Du f\u00e5r ett b\u00e4ttre nul\u00e4ge att fatta beslut utifr\u00e5n." },
+      { title: "V\u00e4lj testsp\u00e5r", body: "B\u00f6rja med det omr\u00e5de som \u00e4r mest relevant f\u00f6r dig just nu." },
+      { title: "Genomf\u00f6r testet", body: "Testet \u00e4r gjort f\u00f6r att vara enkelt att komma ig\u00e5ng med hemma." },
+      { title: "Tolkar resultatet", body: "Du f\u00e5r ett tydligare underlag f\u00f6r att f\u00f6rst\u00e5 vad du vill g\u00f6ra vidare." },
     ],
-    whoTitle: "F\u00f6r dig som vill f\u00f6rst\u00e5 mer, inte bara gissa",
+    whoTitle: "F\u00f6r dig som vill ha mer klarhet",
     whoItems: [
-      "Du vill ha ett tydligare nul\u00e4ge innan du g\u00f6r f\u00f6r\u00e4ndringar.",
-      "Du vill fatta beslut utifr\u00e5n data i st\u00e4llet f\u00f6r magk\u00e4nsla.",
-      "Du vill b\u00f6rja enkelt, men smart.",
+      "Du vill f\u00f6rst\u00e5 ditt nul\u00e4ge innan du b\u00f6rjar \u00e4ndra p\u00e5 saker.",
+      "Du vill luta dig mot data snarare \u00e4n bara magk\u00e4nsla.",
+      "Du vill b\u00f6rja enkelt, men med en tydlig tanke bakom.",
     ],
     footerTitle: "InsideBalance",
     footerBody:
-      "InsideBalance \u00e4r plattformen bakom v\u00e5ra testsp\u00e5r. OmegaBalance och GutBalance \u00e4r tv\u00e5 tydliga v\u00e4gar in i samma helhet.",
-    footerCta: "G\u00e5 vidare till OmegaBalance",
+      "InsideBalance \u00e4r plattformen som samlar de h\u00e4r testomr\u00e5dena i en tydligare struktur. OmegaBalance och GutBalance bygger p\u00e5 samma helhetst\u00e4nk, men med olika fokus.",
+    footerCta: "Till OmegaBalance",
   },
   no: {
     navHome: "InsideBalance",
@@ -206,28 +214,63 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     navOmega: "OmegaBalance",
     navGut: "GutBalance",
     heroEyebrow: "InsideBalance",
-    heroTitle: "Test-based health with clearer next steps",
-    heroBody: "InsideBalance brings our health journeys together in one place. Start with the test that fits you best and move forward with more clarity.",
-    heroPrimaryCta: "Explore our tests",
-    heroSecondaryCta: "Go to OmegaBalance",
-    productsTitle: "Our test journeys",
-    productsBody: "Each journey focuses on one area where measurable results make it easier to understand what matters right now.",
+    heroTitle: "Health tests that make it easier to understand what you actually need",
+    heroBody:
+      "InsideBalance is a calmer way to navigate health testing. We bring together clearly defined test areas so it feels easier to start in the right place.",
+    heroPrimaryCta: "Explore the test areas",
+    heroSecondaryCta: "Start with OmegaBalance",
+    productsTitle: "Our focus areas",
+    productsBody: "Each area is built around one clear focus. Choose the one that fits your current situation best.",
+    primaryRouteTitle: "Start here",
+    primaryRouteBody: "OmegaBalance is the first area and the clearest place to begin in InsideBalance right now.",
+    secondaryRouteTitle: "Coming soon",
+    secondaryRouteBody: "GutBalance is the next area for people who want to explore gut health, digestion, and inner balance.",
     products: [
-      { title: "OmegaBalance", body: "For people who want to understand their omega-6/omega-3 balance and get a clearer next step.", cta: "Go to OmegaBalance", href: "/en" },
-      { title: "GutBalance", body: "Our next test journey for gut health, digestion, and inner balance.", cta: "Read about GutBalance", href: "/en/gut-balance", status: "Coming soon" },
+      {
+        title: "OmegaBalance",
+        eyebrow: "Available now",
+        body: "For people who want to understand their omega-6/omega-3 balance and begin with an established test area.",
+        fit: "A good fit if you want a clear first test and a more concrete picture of your current position.",
+        cta: "To OmegaBalance",
+        href: "/en",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Next area",
+        body: "Our upcoming area for gut health, digestion, and inner balance.",
+        fit: "A good fit if you are curious about a future area built on the same calm, test-based approach.",
+        cta: "To GutBalance",
+        href: "/en/gut-balance",
+        status: "Coming soon",
+      },
     ],
     whyTitle: "Start by measuring",
-    whyBody: "Many people try to improve their health before they truly understand their starting point. A test creates a clearer basis for action.",
+    whyBody:
+      "Many people try to improve their health before they know what their body is actually showing. Testing makes it easier to separate what only sounds good from what may be relevant for you.",
+    trustTitle: "Clear, serious, and built to hold up over time",
+    trustBody:
+      "InsideBalance is built on measurable tests and clear structure. It should feel easier to understand what is relevant and to orient yourself in your choices.",
+    trustPoints: [
+      "A test-based foundation instead of general guesswork.",
+      "Clear areas where each topic gets its own focus.",
+      "A calmer experience where credibility comes before hype.",
+    ],
     howTitle: "How it works",
     howSteps: [
-      { title: "Choose a journey", body: "Start with the area that feels most relevant right now." },
-      { title: "Take the test at home", body: "The tests are designed to be easy to begin without unnecessary friction." },
-      { title: "Get clearer next steps", body: "You get a better foundation for decisions that follow." },
+      { title: "Choose your test area", body: "Start with the area that feels most relevant to you right now." },
+      { title: "Complete the test", body: "The test is designed to be straightforward to start with at home." },
+      { title: "Understand the result", body: "You get a clearer basis for understanding what you want to do next." },
     ],
-    whoTitle: "For people who want to understand more, not just guess",
-    whoItems: ["You want a clearer starting point.", "You want to make decisions based on data.", "You want to start simply, but smartly."],
+    whoTitle: "For people who want more clarity",
+    whoItems: [
+      "You want to understand your current position before changing things.",
+      "You want to lean on data rather than instinct alone.",
+      "You want to start simply, but with a clear rationale behind it.",
+    ],
     footerTitle: "InsideBalance",
-    footerBody: "InsideBalance is the platform behind our test journeys. OmegaBalance and GutBalance are two clear ways into the same bigger picture.",
+    footerBody:
+      "InsideBalance is the platform that brings these test areas into a clearer structure. OmegaBalance and GutBalance follow the same overall thinking, but with different focus areas.",
+    footerCta: "To OmegaBalance",
   },
   de: {
     navHome: "InsideBalance",
@@ -315,10 +358,361 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
   },
 };
 
+const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
+  no: {
+    heroTitle: "Helsetester som gjør det lettere å forstå hva du faktisk trenger",
+    heroBody:
+      "InsideBalance er plattformen for deg som vil orientere deg tydeligere blant helsetester og begynne i riktig ende. Her samler vi testområdene i en roligere og mer gjennomtenkt helhet.",
+    heroPrimaryCta: "Utforsk testområdene",
+    heroSecondaryCta: "Start med OmegaBalance",
+    productsTitle: "Våre testområder",
+    productsBody: "Hvert testområde har ett tydelig fokus. Velg det som passer situasjonen din best.",
+    primaryRouteTitle: "Start her",
+    primaryRouteBody: "OmegaBalance er det første området og den tydeligste starten i InsideBalance akkurat nå.",
+    secondaryRouteTitle: "Kommer snart",
+    secondaryRouteBody: "GutBalance blir neste område for deg som vil utforske mage, tarm og indre balanse.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Tilgjengelig nå",
+        body: "For deg som vil forstå omega-6/omega-3-balansen din og begynne med et etablert testområde.",
+        fit: "Passer deg som vil komme i gang med en tydelig første test og et mer konkret bilde av utgangspunktet ditt.",
+        cta: "Til OmegaBalance",
+        href: "/no",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Neste område",
+        body: "Vårt kommende område for mage, tarm og indre balanse.",
+        fit: "Passer deg som er nysgjerrig på et fremtidig område bygget på den samme rolige og testbaserte logikken.",
+        cta: "Til GutBalance",
+        href: "/no/gut-balance",
+        status: "Kommer snart",
+      },
+    ],
+    whyTitle: "Begynn med å måle",
+    whyBody:
+      "Mange prøver å forbedre helsen før de vet hva kroppen faktisk viser. En test gjør det lettere å skille mellom det som bare høres bra ut og det som faktisk kan være relevant for deg.",
+    trustTitle: "Tydelig, seriøst og bygget for å vare",
+    trustBody:
+      "InsideBalance bygger på målbare tester og tydelig struktur. Det skal være lettere å forstå hva som er relevant og orientere seg i egne valg.",
+    trustPoints: [
+      "Et testbasert utgangspunkt i stedet for generell gjetting.",
+      "Tydelige områder der hvert tema får sitt eget fokus.",
+      "En roligere opplevelse der troverdighet går foran hype.",
+    ],
+    howTitle: "Slik fungerer det",
+    howSteps: [
+      { title: "Velg testområde", body: "Begynn med området som virker mest relevant for deg akkurat nå." },
+      { title: "Gjennomfør testen", body: "Testen er laget for å være enkel å komme i gang med hjemme." },
+      { title: "Forstå resultatet", body: "Du får et tydeligere grunnlag for å forstå hva du vil gjøre videre." },
+    ],
+    whoTitle: "For deg som vil ha mer klarhet",
+    whoItems: [
+      "Du vil forstå utgangspunktet ditt før du begynner å endre på ting.",
+      "Du vil støtte deg på data heller enn bare magefølelse.",
+      "Du vil starte enkelt, men med en tydelig tanke bak.",
+    ],
+    footerBody:
+      "InsideBalance er plattformen som samler disse testområdene i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhetstanke, men med ulikt fokus.",
+    footerCta: "Til OmegaBalance",
+  },
+  da: {
+    heroTitle: "Sundhedstests, der gør det lettere at forstå, hvad du faktisk har brug for",
+    heroBody:
+      "InsideBalance er platformen for dig, der vil orientere dig tydeligere blandt sundhedstests og begynde det rigtige sted. Her samler vi testområderne i en roligere og mere gennemtænkt helhed.",
+    heroPrimaryCta: "Udforsk testområderne",
+    heroSecondaryCta: "Start med OmegaBalance",
+    productsTitle: "Vores testområder",
+    productsBody: "Hvert testområde har ét tydeligt fokus. Vælg det, der passer bedst til din situation lige nu.",
+    primaryRouteTitle: "Start her",
+    primaryRouteBody: "OmegaBalance er det første område og det tydeligste sted at begynde i InsideBalance lige nu.",
+    secondaryRouteTitle: "Kommer snart",
+    secondaryRouteBody: "GutBalance bliver næste område for dig, der vil udforske mave, tarm og indre balance.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Tilgængelig nu",
+        body: "For dig, der vil forstå din omega-6/omega-3-balance og begynde med et etableret testområde.",
+        fit: "Passer dig, der vil i gang med en tydelig første test og et mere konkret billede af dit udgangspunkt.",
+        cta: "Til OmegaBalance",
+        href: "/da",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Næste område",
+        body: "Vores kommende område for mave, tarm og indre balance.",
+        fit: "Passer dig, der er nysgerrig på et fremtidigt område bygget på den samme rolige og testbaserede tilgang.",
+        cta: "Til GutBalance",
+        href: "/da/gut-balance",
+        status: "Kommer snart",
+      },
+    ],
+    whyTitle: "Start med at måle",
+    whyBody:
+      "Mange forsøger at forbedre sundheden, før de ved, hvad kroppen faktisk viser. En test gør det lettere at skelne mellem det, der bare lyder godt, og det, der faktisk kan være relevant for dig.",
+    trustTitle: "Tydeligt, seriøst og bygget til at holde",
+    trustBody:
+      "InsideBalance bygger på målbare tests og tydelig struktur. Det skal være lettere at forstå, hvad der er relevant, og orientere sig i sine valg.",
+    trustPoints: [
+      "En testbaseret start i stedet for generelle gætterier.",
+      "Tydelige områder, hvor hvert emne får sit eget fokus.",
+      "En roligere oplevelse, hvor troværdighed går foran hype.",
+    ],
+    howTitle: "Sådan fungerer det",
+    howSteps: [
+      { title: "Vælg testområde", body: "Begynd med det område, der virker mest relevant for dig lige nu." },
+      { title: "Gennemfør testen", body: "Testen er lavet til at være enkel at gå i gang med hjemme." },
+      { title: "Forstå resultatet", body: "Du får et tydeligere grundlag for at forstå, hvad du vil gøre videre." },
+    ],
+    whoTitle: "For dig, der vil have mere klarhed",
+    whoItems: [
+      "Du vil forstå dit udgangspunkt, før du ændrer på noget.",
+      "Du vil støtte dig mere på data end på mavefornemmelser alene.",
+      "Du vil begynde enkelt, men med en tydelig tanke bag.",
+    ],
+    footerBody:
+      "InsideBalance er platformen, der samler disse testområder i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhedstanke, men med forskelligt fokus.",
+    footerCta: "Til OmegaBalance",
+  },
+  fi: {
+    heroTitle: "Terveystestit, joiden avulla on helpompi ymmärtää mitä todella tarvitset",
+    heroBody:
+      "InsideBalance on alusta sinulle, joka haluat hahmottaa terveystestejä selkeämmin ja aloittaa oikeasta kohdasta. Täällä kokoamme testialueet rauhallisemmaksi ja harkitummaksi kokonaisuudeksi.",
+    heroPrimaryCta: "Tutustu testialueisiin",
+    heroSecondaryCta: "Aloita OmegaBalancesta",
+    productsTitle: "Testialueemme",
+    productsBody: "Jokaisella testialueella on yksi selkeä painopiste. Valitse se, joka sopii tämänhetkiseen tilanteeseesi parhaiten.",
+    primaryRouteTitle: "Aloita tästä",
+    primaryRouteBody: "OmegaBalance on ensimmäinen alue ja selkein paikka aloittaa InsideBalancessa juuri nyt.",
+    secondaryRouteTitle: "Tulossa pian",
+    secondaryRouteBody: "GutBalance on seuraava alue sinulle, joka haluat tutkia vatsan, suoliston ja sisäisen tasapainon teemoja.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Saatavilla nyt",
+        body: "Sinulle, joka haluat ymmärtää omega-6/omega-3-tasapainoasi ja aloittaa vakiintuneesta testialueesta.",
+        fit: "Sopii sinulle, jos haluat selkeän ensimmäisen testin ja konkreettisemman kuvan nykytilanteestasi.",
+        cta: "OmegaBalanceen",
+        href: "/fi",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Seuraava alue",
+        body: "Tuleva alueemme vatsan, suoliston ja sisäisen tasapainon tueksi.",
+        fit: "Sopii sinulle, jos olet kiinnostunut tulevasta alueesta, joka rakentuu saman rauhallisen ja testipohjaisen ajattelun varaan.",
+        cta: "GutBalanceen",
+        href: "/fi/gut-balance",
+        status: "Tulossa pian",
+      },
+    ],
+    whyTitle: "Aloita mittaamalla",
+    whyBody:
+      "Moni yrittää parantaa hyvinvointiaan ennen kuin tietää, mitä keho todella näyttää. Testi auttaa erottamaan sen, mikä vain kuulostaa hyvältä, siitä mikä voi oikeasti olla sinulle olennaista.",
+    trustTitle: "Selkeä, vakavasti otettava ja pitkäjänteisesti rakennettu",
+    trustBody:
+      "InsideBalance rakentuu mitattavien testien ja selkeän rakenteen varaan. Tavoitteena on, että olennaisen ymmärtäminen ja omissa valinnoissa suunnistaminen tuntuu helpommalta.",
+    trustPoints: [
+      "Testipohjainen lähtökohta yleisen arvailun sijaan.",
+      "Selkeät alueet, joissa jokaisella teemalla on oma painopisteensä.",
+      "Rauhallisempi kokemus, jossa uskottavuus menee hypen edelle.",
+    ],
+    howTitle: "Näin se toimii",
+    howSteps: [
+      { title: "Valitse testialue", body: "Aloita alueesta, joka tuntuu juuri nyt merkityksellisimmältä." },
+      { title: "Tee testi", body: "Testi on suunniteltu niin, että sen aloittaminen kotona on helppoa." },
+      { title: "Ymmärrä tulos", body: "Saat selkeämmän pohjan sille, miten haluat edetä." },
+    ],
+    whoTitle: "Sinulle, joka haluat enemmän selkeyttä",
+    whoItems: [
+      "Haluat ymmärtää lähtötilanteesi ennen kuin alat muuttaa asioita.",
+      "Haluat nojata dataan enemmän kuin pelkkään tuntumaan.",
+      "Haluat aloittaa yksinkertaisesti, mutta ajatuksella.",
+    ],
+    footerBody:
+      "InsideBalance on alusta, joka kokoaa nämä testialueet selkeämpään rakenteeseen. OmegaBalance ja GutBalance perustuvat samaan kokonaisajatteluun, mutta eri painotuksin.",
+    footerCta: "OmegaBalanceen",
+  },
+  de: {
+    heroTitle: "Gesundheitstests, die helfen klarer zu verstehen, was du tatsächlich brauchst",
+    heroBody:
+      "InsideBalance ist die Plattform für Menschen, die sich im Bereich Gesundheitstests besser orientieren und am richtigen Punkt beginnen möchten. Hier fassen wir die Testbereiche in einer ruhigeren und klareren Struktur zusammen.",
+    heroPrimaryCta: "Testbereiche entdecken",
+    heroSecondaryCta: "Mit OmegaBalance starten",
+    productsTitle: "Unsere Testbereiche",
+    productsBody: "Jeder Testbereich hat einen klaren Fokus. Wähle den Bereich, der am besten zu deiner aktuellen Situation passt.",
+    primaryRouteTitle: "Hier beginnen",
+    primaryRouteBody: "OmegaBalance ist der erste Bereich und im Moment der klarste Einstieg in InsideBalance.",
+    secondaryRouteTitle: "Demnächst",
+    secondaryRouteBody: "GutBalance ist der nächste Bereich für Menschen, die Darm, Verdauung und innere Balance genauer betrachten möchten.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Jetzt verfügbar",
+        body: "Für Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen und mit einem etablierten Testbereich beginnen möchten.",
+        fit: "Passend, wenn du mit einem klaren ersten Test und einem konkreteren Bild deiner Ausgangslage starten möchtest.",
+        cta: "Zu OmegaBalance",
+        href: "/de",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Nächster Bereich",
+        body: "Unser kommender Bereich rund um Darm, Verdauung und innere Balance.",
+        fit: "Passend, wenn du neugierig auf einen zukünftigen Bereich bist, der auf derselben ruhigen und testbasierten Logik aufbaut.",
+        cta: "Zu GutBalance",
+        href: "/de/gut-balance",
+        status: "Demnächst",
+      },
+    ],
+    whyTitle: "Mit Messen beginnen",
+    whyBody:
+      "Viele versuchen ihre Gesundheit zu verbessern, bevor sie wissen, was der eigene Körper tatsächlich zeigt. Ein Test hilft dabei, zwischen gut klingenden Ideen und wirklich relevanten Hinweisen zu unterscheiden.",
+    trustTitle: "Klar, seriös und langfristig gedacht",
+    trustBody:
+      "InsideBalance basiert auf messbaren Tests und klarer Struktur. Es soll leichter werden zu verstehen, was relevant ist und wie man sich in den eigenen Entscheidungen orientiert.",
+    trustPoints: [
+      "Eine testbasierte Grundlage statt allgemeiner Vermutung.",
+      "Klare Bereiche, in denen jedes Thema seinen eigenen Fokus hat.",
+      "Ein ruhigeres Erlebnis, bei dem Glaubwürdigkeit vor Hype steht.",
+    ],
+    howTitle: "So funktioniert es",
+    howSteps: [
+      { title: "Testbereich wählen", body: "Beginne mit dem Bereich, der für dich im Moment am relevantesten erscheint." },
+      { title: "Test durchführen", body: "Der Test ist so aufgebaut, dass du ihn leicht zu Hause beginnen kannst." },
+      { title: "Ergebnis einordnen", body: "Du bekommst eine klarere Grundlage, um zu verstehen, wie du weitergehen möchtest." },
+    ],
+    whoTitle: "Für Menschen, die mehr Klarheit möchten",
+    whoItems: [
+      "Du willst deine Ausgangslage verstehen, bevor du etwas veränderst.",
+      "Du willst dich stärker auf Daten stützen als nur auf Gefühl.",
+      "Du willst einfach anfangen, aber mit einem klaren Gedanken dahinter.",
+    ],
+    footerBody:
+      "InsideBalance ist die Plattform, die diese Testbereiche in einer klareren Struktur zusammenführt. OmegaBalance und GutBalance folgen demselben ganzheitlichen Ansatz, aber mit unterschiedlichem Fokus.",
+    footerCta: "Zu OmegaBalance",
+  },
+  fr: {
+    heroTitle: "Des tests de santé qui aident à mieux comprendre ce dont vous avez réellement besoin",
+    heroBody:
+      "InsideBalance est une plateforme pensée pour celles et ceux qui veulent s’orienter plus clairement parmi les tests de santé et commencer au bon endroit. Nous y réunissons différents domaines de test dans un cadre plus calme et plus cohérent.",
+    heroPrimaryCta: "Explorer les domaines de test",
+    heroSecondaryCta: "Commencer par OmegaBalance",
+    productsTitle: "Nos domaines de test",
+    productsBody: "Chaque domaine a un focus clair. Choisissez celui qui correspond le mieux à votre situation actuelle.",
+    primaryRouteTitle: "Commencer ici",
+    primaryRouteBody: "OmegaBalance est le premier domaine et le point d’entrée le plus clair dans InsideBalance aujourd’hui.",
+    secondaryRouteTitle: "Bientôt disponible",
+    secondaryRouteBody: "GutBalance sera le prochain domaine pour celles et ceux qui veulent explorer le ventre, l’intestin et l’équilibre intérieur.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Disponible maintenant",
+        body: "Pour celles et ceux qui veulent mieux comprendre leur équilibre oméga-6/oméga-3 et commencer par un domaine de test déjà établi.",
+        fit: "Adapté si vous voulez un premier test clair et une vision plus concrète de votre situation actuelle.",
+        cta: "Vers OmegaBalance",
+        href: "/fr",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Prochain domaine",
+        body: "Notre futur domaine autour du ventre, de l’intestin et de l’équilibre intérieur.",
+        fit: "Adapté si vous êtes curieux d’un futur domaine construit sur la même logique calme et fondée sur les tests.",
+        cta: "Vers GutBalance",
+        href: "/fr/gut-balance",
+        status: "Bientôt",
+      },
+    ],
+    whyTitle: "Commencer par mesurer",
+    whyBody:
+      "Beaucoup essaient d’améliorer leur santé avant de savoir ce que leur corps montre réellement. Un test aide à distinguer ce qui sonne bien de ce qui peut vraiment être pertinent pour vous.",
+    trustTitle: "Clair, sérieux et pensé pour durer",
+    trustBody:
+      "InsideBalance repose sur des tests mesurables et une structure claire. L’objectif est de rendre plus simple la compréhension de ce qui est pertinent et de mieux se repérer dans ses choix.",
+    trustPoints: [
+      "Une base fondée sur les tests plutôt que sur des suppositions générales.",
+      "Des domaines clairs où chaque sujet garde son propre focus.",
+      "Une expérience plus posée, où la crédibilité passe avant l’effet de mode.",
+    ],
+    howTitle: "Comment ça fonctionne",
+    howSteps: [
+      { title: "Choisir le domaine de test", body: "Commencez par le domaine qui vous paraît le plus pertinent aujourd’hui." },
+      { title: "Réaliser le test", body: "Le test est conçu pour être simple à démarrer chez vous." },
+      { title: "Comprendre le résultat", body: "Vous obtenez une base plus claire pour comprendre comment vous souhaitez avancer." },
+    ],
+    whoTitle: "Pour celles et ceux qui veulent plus de clarté",
+    whoItems: [
+      "Vous voulez comprendre votre situation de départ avant de changer quoi que ce soit.",
+      "Vous voulez vous appuyer davantage sur des données que sur la seule intuition.",
+      "Vous voulez commencer simplement, mais avec une vraie intention derrière.",
+    ],
+    footerBody:
+      "InsideBalance est la plateforme qui rassemble ces domaines de test dans une structure plus claire. OmegaBalance et GutBalance reposent sur la même vision d’ensemble, avec des focus différents.",
+    footerCta: "Vers OmegaBalance",
+  },
+  it: {
+    heroTitle: "Test di salute che aiutano a capire meglio ciò di cui hai davvero bisogno",
+    heroBody:
+      "InsideBalance è la piattaforma per chi vuole orientarsi con più chiarezza tra i test di salute e cominciare dal punto giusto. Qui raccogliamo le diverse aree di test in una struttura più calma e più coerente.",
+    heroPrimaryCta: "Esplora le aree di test",
+    heroSecondaryCta: "Inizia con OmegaBalance",
+    productsTitle: "Le nostre aree di test",
+    productsBody: "Ogni area ha un focus chiaro. Scegli quella che si adatta meglio alla tua situazione attuale.",
+    primaryRouteTitle: "Inizia qui",
+    primaryRouteBody: "OmegaBalance è la prima area e il punto di partenza più chiaro in InsideBalance in questo momento.",
+    secondaryRouteTitle: "In arrivo",
+    secondaryRouteBody: "GutBalance sarà la prossima area per chi vuole approfondire intestino, digestione ed equilibrio interno.",
+    products: [
+      {
+        title: "OmegaBalance",
+        eyebrow: "Disponibile ora",
+        body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3 e iniziare da un’area di test già consolidata.",
+        fit: "Adatta se vuoi partire con un primo test chiaro e con un quadro più concreto della tua situazione attuale.",
+        cta: "Vai a OmegaBalance",
+        href: "/it",
+      },
+      {
+        title: "GutBalance",
+        eyebrow: "Prossima area",
+        body: "La nostra futura area dedicata a intestino, digestione ed equilibrio interno.",
+        fit: "Adatta se sei curioso di un’area futura costruita sulla stessa logica calma e basata sui test.",
+        cta: "Vai a GutBalance",
+        href: "/it/gut-balance",
+        status: "In arrivo",
+      },
+    ],
+    whyTitle: "Inizia misurando",
+    whyBody:
+      "Molte persone cercano di migliorare la propria salute prima di sapere cosa il corpo sta davvero mostrando. Un test aiuta a distinguere ciò che suona bene da ciò che può essere davvero rilevante per te.",
+    trustTitle: "Chiaro, serio e costruito per durare",
+    trustBody:
+      "InsideBalance si basa su test misurabili e su una struttura chiara. L’obiettivo è rendere più facile capire cosa è rilevante e orientarsi meglio nelle proprie scelte.",
+    trustPoints: [
+      "Una base fondata sui test invece che su supposizioni generiche.",
+      "Aree chiare in cui ogni tema mantiene il proprio focus.",
+      "Un’esperienza più calma, in cui la credibilità viene prima dell’hype.",
+    ],
+    howTitle: "Come funziona",
+    howSteps: [
+      { title: "Scegli l’area di test", body: "Inizia dall’area che senti più rilevante per te in questo momento." },
+      { title: "Completa il test", body: "Il test è pensato per essere semplice da iniziare a casa." },
+      { title: "Comprendi il risultato", body: "Hai una base più chiara per capire come vuoi procedere." },
+    ],
+    whoTitle: "Per chi vuole più chiarezza",
+    whoItems: [
+      "Vuoi capire la tua situazione di partenza prima di cambiare qualcosa.",
+      "Vuoi affidarti più ai dati che al solo intuito.",
+      "Vuoi iniziare in modo semplice, ma con un’idea chiara dietro.",
+    ],
+    footerBody:
+      "InsideBalance è la piattaforma che riunisce queste aree di test in una struttura più chiara. OmegaBalance e GutBalance seguono la stessa visione d’insieme, ma con focus diversi.",
+    footerCta: "Vai a OmegaBalance",
+  },
+};
+
 const visualFramesByLang: Record<Lang, VisualFrameCopy> = {
   sv: {
     heroTitle: "M\u00e4tning med en lugnare riktning",
-    heroBody: "InsideBalance \u00e4r byggt f\u00f6r att g\u00f6ra h\u00e4lsotester mer begripliga, mer anv\u00e4ndbara och mindre \u00f6verv\u00e4ldigande. H\u00e4r ska tydlighet k\u00e4nnas lika viktig som information.",
+    heroBody: "InsideBalance g\u00f6r det l\u00e4ttare att f\u00f6rst\u00e5 sina testresultat och veta vad n\u00e4sta steg kan vara.",
     measurementLabel: "Efter testet",
     measurementTitle: "Insikt som blir till handling",
     measurementBody: "När du ser dina resultat tydligare blir nästa steg lättare att ta. Det är där våra testspår ska hjälpa, inte bara informera.",
@@ -358,13 +752,13 @@ const visualFramesByLang: Record<Lang, VisualFrameCopy> = {
   },
   en: {
     heroTitle: "Clarity that feels human",
-    heroBody: "A warm first contact makes it easier to understand that InsideBalance is not just about test data, but about direction and realistic next steps.",
+    heroBody: "InsideBalance is meant to make test results easier to take in and easier to use in real life.",
     measurementLabel: "After the test",
     measurementTitle: "Insight that becomes action",
-    measurementBody: "When your results become clearer, the next step becomes easier to take.",
+    measurementBody: "When your results are easier to understand, it also becomes easier to see what actually feels relevant.",
     connectionLabel: "Together",
     connectionTitle: "Conversations that feel natural",
-    connectionBody: "Good health decisions often feel easier to carry when they can be talked about in a warm everyday setting.",
+    connectionBody: "Health choices often feel easier to carry when they can be discussed in a warm, everyday setting.",
   },
   de: {
     heroTitle: "Klarheit, die menschlich wirkt",
@@ -398,6 +792,89 @@ const visualFramesByLang: Record<Lang, VisualFrameCopy> = {
   },
 };
 
+const visualFrameOverridesByLang: Partial<Record<Lang, VisualFrameCopy>> = {
+  sv: {
+    heroTitle: "Mätning med en lugnare riktning",
+    heroBody: "InsideBalance gör det lättare att förstå sina testresultat och veta vad nästa steg kan vara.",
+    measurementLabel: "Efter testet",
+    measurementTitle: "Insikt som blir till handling",
+    measurementBody: "När dina resultat blir tydligare blir det också lättare att se vad som faktiskt känns relevant.",
+    connectionLabel: "Tillsammans",
+    connectionTitle: "Samtal som känns naturliga",
+    connectionBody: "Hälsoval känns ofta lättare att bära när de går att prata om i en varm och vardaglig miljö.",
+  },
+  no: {
+    heroTitle: "Tydelighet som føles menneskelig",
+    heroBody: "InsideBalance skal gjøre testresultater lettere å ta inn og lettere å bruke i virkeligheten.",
+    measurementLabel: "Etter testen",
+    measurementTitle: "Innsikt som blir til handling",
+    measurementBody: "Når resultatene blir lettere å forstå, blir det også enklere å se hva som faktisk kjennes relevant.",
+    connectionLabel: "Sammen",
+    connectionTitle: "Samtaler som kjennes naturlige",
+    connectionBody: "Helsevalg føles ofte lettere å bære når de kan deles i en varm og hverdagslig situasjon.",
+  },
+  da: {
+    heroTitle: "Tydelighed der føles menneskelig",
+    heroBody: "InsideBalance skal gøre testresultater lettere at tage ind og lettere at bruge i virkeligheden.",
+    measurementLabel: "Efter testen",
+    measurementTitle: "Indsigt der bliver til handling",
+    measurementBody: "Når resultaterne er lettere at forstå, bliver det også nemmere at se, hvad der faktisk er relevant.",
+    connectionLabel: "Sammen",
+    connectionTitle: "Samtaler der føles naturlige",
+    connectionBody: "Sundhedsvalg føles ofte lettere at bære, når de kan deles i en varm og hverdagsnær ramme.",
+  },
+  fi: {
+    heroTitle: "Selkeyttä inhimillisellä tavalla",
+    heroBody: "InsideBalance tekee testituloksista helpompia ottaa vastaan ja helpompia käyttää arjessa.",
+    measurementLabel: "Testin jälkeen",
+    measurementTitle: "Oivallus muuttuu toiminnaksi",
+    measurementBody: "Kun tuloksia on helpompi ymmärtää, on myös helpompi nähdä mikä tuntuu oikeasti olennaiselta.",
+    connectionLabel: "Yhdessä",
+    connectionTitle: "Luontevia keskusteluja",
+    connectionBody: "Terveyteen liittyvät valinnat tuntuvat usein helpommilta, kun niistä voi puhua lämpimässä ja arkisessa ympäristössä.",
+  },
+  en: {
+    heroTitle: "Clarity that feels human",
+    heroBody: "InsideBalance is meant to make test results easier to take in and easier to use in real life.",
+    measurementLabel: "After the test",
+    measurementTitle: "Insight that becomes action",
+    measurementBody: "When your results are easier to understand, it also becomes easier to see what actually feels relevant.",
+    connectionLabel: "Together",
+    connectionTitle: "Conversations that feel natural",
+    connectionBody: "Health choices often feel easier to carry when they can be discussed in a warm, everyday setting.",
+  },
+  de: {
+    heroTitle: "Klarheit, die menschlich wirkt",
+    heroBody: "InsideBalance soll Testergebnisse leichter zugänglich und im Alltag leichter nutzbar machen.",
+    measurementLabel: "Nach dem Test",
+    measurementTitle: "Erkenntnis wird Handlung",
+    measurementBody: "Wenn Ergebnisse leichter zu verstehen sind, wird auch klarer, was wirklich relevant erscheint.",
+    connectionLabel: "Gemeinsam",
+    connectionTitle: "Gespräche, die natürlich wirken",
+    connectionBody: "Gesundheitsbezogene Entscheidungen lassen sich oft leichter tragen, wenn man sie in einer warmen Alltagssituation besprechen kann.",
+  },
+  fr: {
+    heroTitle: "Une clarté qui reste humaine",
+    heroBody: "InsideBalance est conçu pour rendre les résultats plus faciles à comprendre et plus simples à utiliser dans la vraie vie.",
+    measurementLabel: "Après le test",
+    measurementTitle: "Une compréhension qui devient action",
+    measurementBody: "Quand les résultats sont plus faciles à comprendre, il devient aussi plus simple de voir ce qui paraît vraiment pertinent.",
+    connectionLabel: "Ensemble",
+    connectionTitle: "Des échanges naturels",
+    connectionBody: "Les choix liés à la santé sont souvent plus faciles à porter lorsqu’ils peuvent être partagés dans un cadre chaleureux du quotidien.",
+  },
+  it: {
+    heroTitle: "Chiarezza con un tono umano",
+    heroBody: "InsideBalance è pensato per rendere i risultati più facili da comprendere e più semplici da usare nella vita reale.",
+    measurementLabel: "Dopo il test",
+    measurementTitle: "Un insight che diventa azione",
+    measurementBody: "Quando i risultati sono più facili da capire, diventa anche più semplice vedere ciò che appare davvero rilevante.",
+    connectionLabel: "Insieme",
+    connectionTitle: "Conversazioni naturali",
+    connectionBody: "Le scelte legate alla salute risultano spesso più facili da sostenere quando possono essere condivise in un contesto quotidiano e accogliente.",
+  },
+};
+
 function resolveLang(param?: string): Lang {
   return (isSupportedLang(param) ? param : defaultLang) as Lang;
 }
@@ -407,8 +884,20 @@ const localizedPath = (lang: Lang, base: string) => (lang === "sv" ? base : `/${
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? resolveLang(lang);
-  const copy = copyByLang[currentLang];
-  const visuals = visualFramesByLang[currentLang];
+  const baseCopy = copyByLang[currentLang];
+  const copyOverride = copyOverridesByLang[currentLang];
+  const copy: InsideBalanceCopy = copyOverride
+    ? {
+        ...baseCopy,
+        ...copyOverride,
+        products: copyOverride.products ?? baseCopy.products,
+        howSteps: copyOverride.howSteps ?? baseCopy.howSteps,
+        whoItems: copyOverride.whoItems ?? baseCopy.whoItems,
+        trustPoints: copyOverride.trustPoints ?? baseCopy.trustPoints,
+      }
+    : baseCopy;
+  const baseVisuals = visualFramesByLang[currentLang];
+  const visuals = visualFrameOverridesByLang[currentLang] ?? baseVisuals;
   const trustTitle = copy.trustTitle ?? "Serious, clear, and built to last";
   const trustBody =
     copy.trustBody ??
@@ -420,6 +909,12 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       "A calmer experience where trust matters more than hype.",
     ];
   const footerCta = copy.footerCta ?? copy.products[0]?.cta;
+  const primaryRouteTitle = copy.primaryRouteTitle ?? "Start here";
+  const primaryRouteBody =
+    copy.primaryRouteBody ?? "OmegaBalance is the first clear way into the platform and the strongest place to begin right now.";
+  const secondaryRouteTitle = copy.secondaryRouteTitle ?? "Next layer";
+  const secondaryRouteBody =
+    copy.secondaryRouteBody ?? "GutBalance is being built as the next product journey within the same InsideBalance structure.";
 
   return (
     <main className="min-h-screen bg-[#f6f2ea] text-foreground">
@@ -449,7 +944,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-foreground sm:text-5xl md:text-6xl">
                 {copy.heroTitle}
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-foreground/68">{copy.heroBody}</p>
+              <p className="mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/68 md:text-lg">{copy.heroBody}</p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a href="#products" className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_22px_50px_rgba(31,70,55,0.18)] transition hover:opacity-95">
                   {copy.heroPrimaryCta}
@@ -468,8 +963,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                   </div>
                   <div className="flex items-center p-6 md:p-9">
                     <div>
-                      <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">{visuals.heroTitle}</h2>
-                      <p className="mt-4 text-base leading-7 text-foreground/68">{visuals.heroBody}</p>
+                      <h2 className="mt-3 font-serif text-[1.85rem] font-semibold tracking-tight text-foreground md:text-[2.15rem]">{visuals.heroTitle}</h2>
+                      <p className="mt-4 text-[1.02rem] leading-7 text-foreground/68">{visuals.heroBody}</p>
                     </div>
                   </div>
                 </div>
@@ -478,18 +973,23 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               <div className="rounded-[1.75rem] border border-black/5 bg-white/82 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.06)]">
-                <p className="text-2xl font-semibold tracking-tight text-foreground">InsideBalance</p>
-                <p className="mt-3 text-sm leading-7 text-foreground/68">
-                  {copy.footerBody}
+                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{primaryRouteTitle}</p>
+                <p className="mt-3 text-[1.7rem] font-semibold tracking-tight text-foreground">OmegaBalance</p>
+                <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
+                  {primaryRouteBody}
                 </p>
+                <Link to={copy.products[0].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
+                  {copy.products[0].cta}
+                </Link>
               </div>
               <div className="rounded-[1.75rem] border border-[#d8d2c7] bg-[#ece6da] p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-                <p className="text-2xl font-semibold tracking-tight text-foreground">OmegaBalance</p>
-                <p className="mt-3 text-sm leading-7 text-foreground/68">
-                  {copy.products[0].body}
+                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{secondaryRouteTitle}</p>
+                <p className="mt-3 text-[1.7rem] font-semibold tracking-tight text-foreground">GutBalance</p>
+                <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
+                  {secondaryRouteBody}
                 </p>
-                <Link to={copy.products[0].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
-                  {copy.products[0].cta}
+                <Link to={copy.products[1].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
+                  {copy.products[1].cta}
                 </Link>
               </div>
             </div>
@@ -500,8 +1000,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <section id="products" className="px-4 py-14 md:px-6 md:py-20">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">{copy.productsTitle}</h2>
-            <p className="mt-4 text-lg leading-8 text-foreground/70">{copy.productsBody}</p>
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.productsTitle}</h2>
+            <p className="mt-4 text-[1.02rem] leading-8 text-foreground/70 md:text-[1.06rem]">{copy.productsBody}</p>
           </div>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -519,9 +1019,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                     </span>
                   ) : null}
                 </div>
-                <h3 className="mt-4 font-serif text-3xl font-semibold tracking-tight text-foreground">{product.title}</h3>
-                <p className="mt-4 max-w-xl text-base leading-7 text-foreground/68">{product.body}</p>
-                <p className="mt-4 max-w-xl text-sm leading-7 text-foreground/60">{product.fit}</p>
+                <h3 className="mt-4 font-serif text-[1.95rem] font-semibold tracking-tight text-foreground">{product.title}</h3>
+                <p className="mt-4 max-w-xl text-[1.02rem] leading-7 text-foreground/68">{product.body}</p>
+                <p className="mt-4 max-w-xl text-[0.98rem] leading-7 text-foreground/60">{product.fit}</p>
                 <Link to={product.href} className="mt-7 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-5 py-3 text-sm font-medium text-foreground transition hover:bg-white">
                   {product.cta}
                 </Link>
@@ -534,8 +1034,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <section className="px-4 py-14 md:px-6 md:py-20">
         <div className="container-wide mx-auto grid gap-6 lg:grid-cols-[1fr_1fr]">
           <div className="rounded-[2rem] border border-[#ddd5c7] bg-[#eee7da] p-9 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">{copy.whyTitle}</h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-foreground/68">{copy.whyBody}</p>
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.whyTitle}</h2>
+            <p className="mt-5 max-w-2xl text-[1.06rem] leading-8 text-foreground/68">{copy.whyBody}</p>
           </div>
           <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
             <div className="aspect-[16/11]">
@@ -543,8 +1043,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             </div>
             <div className="p-8 md:p-9">
               <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{visuals.measurementLabel}</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{visuals.measurementTitle}</h2>
-              <p className="mt-4 text-lg leading-8 text-foreground/68">{visuals.measurementBody}</p>
+              <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{visuals.measurementTitle}</h2>
+              <p className="mt-4 text-[1.06rem] leading-8 text-foreground/68">{visuals.measurementBody}</p>
             </div>
           </div>
         </div>
@@ -554,12 +1054,12 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-[#ece6da] p-8 md:p-10 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">{trustTitle}</h2>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-foreground/68">{trustBody}</p>
+              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{trustTitle}</h2>
+              <p className="mt-5 max-w-2xl text-[1.06rem] leading-8 text-foreground/68">{trustBody}</p>
             </div>
             <div className="space-y-4">
               {trustPoints.map((point) => (
-                <div key={point} className="rounded-2xl border border-black/5 bg-white/78 px-5 py-4 text-base leading-7 text-foreground/78">
+                <div key={point} className="rounded-2xl border border-black/5 bg-white/78 px-5 py-4 text-[1.01rem] leading-7 text-foreground/78">
                   {point}
                 </div>
               ))}
@@ -571,14 +1071,14 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <section className="px-4 py-14 md:px-6 md:py-20">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">{copy.howTitle}</h2>
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.howTitle}</h2>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {copy.howSteps.map((step, index) => (
               <article key={step.title} className="rounded-[1.75rem] border border-black/5 bg-white/88 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{index + 1}</p>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{step.title}</h3>
-                <p className="mt-4 text-base leading-7 text-foreground/68">{step.body}</p>
+                <h3 className="mt-3 text-[1.55rem] font-semibold tracking-tight text-foreground">{step.title}</h3>
+                <p className="mt-4 text-[1.01rem] leading-7 text-foreground/68">{step.body}</p>
               </article>
             ))}
           </div>
@@ -594,11 +1094,11 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           </div>
           <div className="rounded-[2rem] border border-black/5 bg-white/88 p-8 md:p-9 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{visuals.connectionLabel}</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{visuals.connectionTitle}</h2>
-            <p className="mt-4 text-lg leading-8 text-foreground/68">{visuals.connectionBody}</p>
+            <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{visuals.connectionTitle}</h2>
+            <p className="mt-4 text-[1.06rem] leading-8 text-foreground/68">{visuals.connectionBody}</p>
             <div className="mt-6 space-y-4">
               {copy.whoItems.map((item) => (
-                <div key={item} className="rounded-2xl border border-black/5 bg-[#faf7f1] px-4 py-3 text-base leading-7 text-foreground/78">
+                <div key={item} className="rounded-2xl border border-black/5 bg-[#faf7f1] px-4 py-3 text-[1.01rem] leading-7 text-foreground/78">
                   {item}
                 </div>
               ))}
@@ -610,8 +1110,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <footer className="border-t border-black/5 px-4 py-12 md:px-6">
         <div className="container-wide mx-auto flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="font-serif text-2xl font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
-            <p className="mt-3 text-base leading-7 text-foreground/66">{copy.footerBody}</p>
+            <p className="font-serif text-[1.7rem] font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
+            <p className="mt-3 text-[1.01rem] leading-7 text-foreground/66">{copy.footerBody}</p>
             {footerCta ? (
               <Link
                 to={copy.products[0].href}

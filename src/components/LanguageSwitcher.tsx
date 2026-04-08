@@ -25,11 +25,23 @@ const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
 
   const switchLanguage = (nextLang: Lang) => {
     const pathname = location.pathname;
-    const suffix = supportedLangs.some((code) => pathname === `/${code}` || pathname.startsWith(`/${code}/`))
-      ? pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${nextLang}`)
-      : `/${nextLang}`;
+    const hasLangPrefix = supportedLangs.some((code) => pathname === `/${code}` || pathname.startsWith(`/${code}/`));
 
-    navigate(`${suffix}${location.hash}`);
+    let nextPath: string;
+
+    if (hasLangPrefix) {
+      nextPath = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${nextLang}`);
+    } else if (pathname === "/inside-balance" || pathname.startsWith("/inside-balance/")) {
+      nextPath = pathname.replace(/^\/inside-balance/, `/${nextLang}/inside-balance`);
+    } else if (pathname === "/gut-balance" || pathname.startsWith("/gut-balance/")) {
+      nextPath = pathname.replace(/^\/gut-balance/, `/${nextLang}/gut-balance`);
+    } else if (pathname === "/" || pathname === "") {
+      nextPath = `/${nextLang}`;
+    } else {
+      nextPath = `/${nextLang}${pathname}`;
+    }
+
+    navigate(`${nextPath}${location.search}${location.hash}`);
   };
 
   return (

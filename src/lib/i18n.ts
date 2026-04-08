@@ -15,14 +15,14 @@ export const defaultLang: Lang = "sv";
 export const supportedLangs: Lang[] = ["sv", "no", "da", "fi", "en", "de", "fr", "it"];
 
 export const languages: { code: Lang; label: string; flag: string }[] = [
-  { code: "sv", label: "Svenska", flag: "🇸🇪" },
-  { code: "no", label: "Norsk", flag: "🇳🇴" },
-  { code: "da", label: "Dansk", flag: "🇩🇰" },
-  { code: "fi", label: "Suomi", flag: "🇫🇮" },
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "de", label: "Deutsch", flag: "🇩🇪" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
-  { code: "it", label: "Italiano", flag: "🇮🇹" },
+  { code: "sv", label: "Svenska", flag: "\uD83C\uDDF8\uD83C\uDDEA" },
+  { code: "no", label: "Norsk", flag: "\uD83C\uDDF3\uD83C\uDDF4" },
+  { code: "da", label: "Dansk", flag: "\uD83C\uDDE9\uD83C\uDDF0" },
+  { code: "fi", label: "Suomi", flag: "\uD83C\uDDEB\uD83C\uDDEE" },
+  { code: "en", label: "English", flag: "\uD83C\uDDEC\uD83C\uDDE7" },
+  { code: "de", label: "Deutsch", flag: "\uD83C\uDDE9\uD83C\uDDEA" },
+  { code: "fr", label: "Fran\u00e7ais", flag: "\uD83C\uDDEB\uD83C\uDDF7" },
+  { code: "it", label: "Italiano", flag: "\uD83C\uDDEE\uD83C\uDDF9" },
 ];
 
 const translations: Record<Lang, Copy> = { sv, no, da, fi, en, de, fr, it };
