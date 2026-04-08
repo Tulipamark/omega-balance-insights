@@ -13,6 +13,8 @@ import ContactPage from "./pages/ContactPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage.tsx";
+import InsideBalancePage from "./pages/InsideBalancePage.tsx";
+import GutBalancePage from "./pages/GutBalancePage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
@@ -45,9 +47,13 @@ const App = () => (
             <Route path="/integritet" element={<PrivacyPage />} />
             <Route path="/villkor" element={<TermsPage />} />
             <Route path="/kontakt" element={<ContactPage />} />
+            <Route path="/inside-balance" element={<InsideBalancePage lang={defaultLang} />} />
+            <Route path="/gut-balance" element={<GutBalancePage lang={defaultLang} />} />
             <Route path="/:lang/integritet" element={<PrivacyPage />} />
             <Route path="/:lang/villkor" element={<TermsPage />} />
             <Route path="/:lang/kontakt" element={<ContactPage />} />
+            <Route path="/:lang/inside-balance" element={<InsideBalancePage />} />
+            <Route path="/:lang/gut-balance" element={<GutBalancePage />} />
             <Route path="/dashboard" element={<DashboardIndexPage />} />
             <Route path="/dashboard/login" element={<DashboardLoginPage />} />
             <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
