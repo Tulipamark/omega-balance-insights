@@ -3106,7 +3106,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="brand-partner min-h-screen bg-background">
       <section className="bg-hero section-padding pb-14 md:pb-24">
         <div className={heroShellClass}>
           <div className="mb-8 flex items-center justify-between gap-3 md:mb-12 md:gap-4">

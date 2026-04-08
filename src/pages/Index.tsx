@@ -17,7 +17,7 @@ const Index = ({ lang: explicitLang }: IndexProps) => {
   const currentLang = explicitLang ?? ((isSupportedLang(lang) ? lang : defaultLang) as Lang);
 
   return (
-    <main className="min-h-screen bg-background pb-24 md:pb-0">
+    <main className="brand-omega min-h-screen bg-background pb-24 md:pb-0">
       <SwedishFunnelHeroSection lang={currentLang} />
       <TrustSection lang={currentLang} />
       <HowItWorksSection lang={currentLang} />

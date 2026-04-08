@@ -75,9 +75,9 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody:
       "Varje testsp\u00e5r fokuserar p\u00e5 ett omr\u00e5de. V\u00e4lj det som passar ditt nul\u00e4ge b\u00e4st.",
     primaryRouteTitle: "B\u00f6rja h\u00e4r",
-    primaryRouteBody: "OmegaBalance \u00e4r det f\u00f6rsta sp\u00e5ret och den tydligaste starten i InsideBalance just nu.",
+    primaryRouteBody: "Det tydligaste s\u00e4ttet att komma ig\u00e5ng i InsideBalance just nu.",
     secondaryRouteTitle: "Kommer inom kort",
-    secondaryRouteBody: "GutBalance blir n\u00e4sta sp\u00e5r f\u00f6r dig som vill utforska mage, tarm och inre balans.",
+    secondaryRouteBody: "F\u00f6r dig som senare vill utforska mage, tarm och inre balans.",
     products: [
       {
         title: "OmegaBalance",
@@ -222,9 +222,9 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsTitle: "Our focus areas",
     productsBody: "Each area is built around one clear focus. Choose the one that fits your current situation best.",
     primaryRouteTitle: "Start here",
-    primaryRouteBody: "OmegaBalance is the first area and the clearest place to begin in InsideBalance right now.",
+    primaryRouteBody: "The clearest way to get started in InsideBalance right now.",
     secondaryRouteTitle: "Coming soon",
-    secondaryRouteBody: "GutBalance is the next area for people who want to explore gut health, digestion, and inner balance.",
+    secondaryRouteBody: "For people who may later want to explore gut health, digestion, and inner balance.",
     products: [
       {
         title: "OmegaBalance",
@@ -236,9 +236,9 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Next area",
-        body: "Our upcoming area for gut health, digestion, and inner balance.",
-        fit: "A good fit if you are curious about a future area built on the same calm, test-based approach.",
+        eyebrow: "Coming soon",
+        body: "Our upcoming focus on gut health, digestion, and inner balance.",
+        fit: "A good fit if you are curious about a future offering built on the same calm, test-based approach.",
         cta: "To GutBalance",
         href: "/en/gut-balance",
         status: "Coming soon",
@@ -368,9 +368,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Våre testområder",
     productsBody: "Hvert testområde har ett tydelig fokus. Velg det som passer situasjonen din best.",
     primaryRouteTitle: "Start her",
-    primaryRouteBody: "OmegaBalance er det første området og den tydeligste starten i InsideBalance akkurat nå.",
+    primaryRouteBody: "Den tydeligste måten å komme i gang i InsideBalance akkurat nå.",
     secondaryRouteTitle: "Kommer snart",
-    secondaryRouteBody: "GutBalance blir neste område for deg som vil utforske mage, tarm og indre balanse.",
+    secondaryRouteBody: "For deg som senere vil utforske mage, tarm og indre balanse.",
     products: [
       {
         title: "OmegaBalance",
@@ -382,9 +382,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Neste område",
-        body: "Vårt kommende område for mage, tarm og indre balanse.",
-        fit: "Passer deg som er nysgjerrig på et fremtidig område bygget på den samme rolige og testbaserte logikken.",
+        eyebrow: "Kommer snart",
+        body: "Vår kommende satsing på mage, tarm og indre balanse.",
+        fit: "Passer deg som er nysgjerrig på noe nytt bygget på den samme rolige og testbaserte logikken.",
         cta: "Til GutBalance",
         href: "/no/gut-balance",
         status: "Kommer snart",
@@ -426,9 +426,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Vores testområder",
     productsBody: "Hvert testområde har ét tydeligt fokus. Vælg det, der passer bedst til din situation lige nu.",
     primaryRouteTitle: "Start her",
-    primaryRouteBody: "OmegaBalance er det første område og det tydeligste sted at begynde i InsideBalance lige nu.",
+    primaryRouteBody: "Den tydeligste måde at komme i gang i InsideBalance lige nu.",
     secondaryRouteTitle: "Kommer snart",
-    secondaryRouteBody: "GutBalance bliver næste område for dig, der vil udforske mave, tarm og indre balance.",
+    secondaryRouteBody: "For dig, der senere vil udforske mave, tarm og indre balance.",
     products: [
       {
         title: "OmegaBalance",
@@ -440,9 +440,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Næste område",
-        body: "Vores kommende område for mave, tarm og indre balance.",
-        fit: "Passer dig, der er nysgerrig på et fremtidigt område bygget på den samme rolige og testbaserede tilgang.",
+        eyebrow: "Kommer snart",
+        body: "Vores kommende fokus på mave, tarm og indre balance.",
+        fit: "Passer dig, der er nysgerrig på noget nyt bygget på den samme rolige og testbaserede tilgang.",
         cta: "Til GutBalance",
         href: "/da/gut-balance",
         status: "Kommer snart",
@@ -484,9 +484,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Testialueemme",
     productsBody: "Jokaisella testialueella on yksi selkeä painopiste. Valitse se, joka sopii tämänhetkiseen tilanteeseesi parhaiten.",
     primaryRouteTitle: "Aloita tästä",
-    primaryRouteBody: "OmegaBalance on ensimmäinen alue ja selkein paikka aloittaa InsideBalancessa juuri nyt.",
+    primaryRouteBody: "Selkein tapa päästä alkuun InsideBalancessa juuri nyt.",
     secondaryRouteTitle: "Tulossa pian",
-    secondaryRouteBody: "GutBalance on seuraava alue sinulle, joka haluat tutkia vatsan, suoliston ja sisäisen tasapainon teemoja.",
+    secondaryRouteBody: "Sinulle, joka haluat myöhemmin tutkia vatsan, suoliston ja sisäisen tasapainon teemoja.",
     products: [
       {
         title: "OmegaBalance",
@@ -498,9 +498,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Seuraava alue",
-        body: "Tuleva alueemme vatsan, suoliston ja sisäisen tasapainon tueksi.",
-        fit: "Sopii sinulle, jos olet kiinnostunut tulevasta alueesta, joka rakentuu saman rauhallisen ja testipohjaisen ajattelun varaan.",
+        eyebrow: "Tulossa pian",
+        body: "Tuleva painopisteemme vatsan, suoliston ja sisäisen tasapainon tueksi.",
+        fit: "Sopii sinulle, jos olet kiinnostunut tulevasta kokonaisuudesta, joka rakentuu saman rauhallisen ja testipohjaisen ajattelun varaan.",
         cta: "GutBalanceen",
         href: "/fi/gut-balance",
         status: "Tulossa pian",
@@ -542,9 +542,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Unsere Testbereiche",
     productsBody: "Jeder Testbereich hat einen klaren Fokus. Wähle den Bereich, der am besten zu deiner aktuellen Situation passt.",
     primaryRouteTitle: "Hier beginnen",
-    primaryRouteBody: "OmegaBalance ist der erste Bereich und im Moment der klarste Einstieg in InsideBalance.",
+    primaryRouteBody: "Der klarste Weg, um jetzt mit InsideBalance zu beginnen.",
     secondaryRouteTitle: "Demnächst",
-    secondaryRouteBody: "GutBalance ist der nächste Bereich für Menschen, die Darm, Verdauung und innere Balance genauer betrachten möchten.",
+    secondaryRouteBody: "Für Menschen, die sich später mit Darm, Verdauung und innerer Balance beschäftigen möchten.",
     products: [
       {
         title: "OmegaBalance",
@@ -556,9 +556,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Nächster Bereich",
-        body: "Unser kommender Bereich rund um Darm, Verdauung und innere Balance.",
-        fit: "Passend, wenn du neugierig auf einen zukünftigen Bereich bist, der auf derselben ruhigen und testbasierten Logik aufbaut.",
+        eyebrow: "Demnächst",
+        body: "Unser kommender Fokus rund um Darm, Verdauung und innere Balance.",
+        fit: "Passend, wenn du neugierig auf ein zukünftiges Angebot bist, das auf derselben ruhigen und testbasierten Logik aufbaut.",
         cta: "Zu GutBalance",
         href: "/de/gut-balance",
         status: "Demnächst",
@@ -600,9 +600,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Nos domaines de test",
     productsBody: "Chaque domaine a un focus clair. Choisissez celui qui correspond le mieux à votre situation actuelle.",
     primaryRouteTitle: "Commencer ici",
-    primaryRouteBody: "OmegaBalance est le premier domaine et le point d’entrée le plus clair dans InsideBalance aujourd’hui.",
+    primaryRouteBody: "La manière la plus claire de commencer avec InsideBalance aujourd’hui.",
     secondaryRouteTitle: "Bientôt disponible",
-    secondaryRouteBody: "GutBalance sera le prochain domaine pour celles et ceux qui veulent explorer le ventre, l’intestin et l’équilibre intérieur.",
+    secondaryRouteBody: "Pour celles et ceux qui voudront plus tard explorer le ventre, l’intestin et l’équilibre intérieur.",
     products: [
       {
         title: "OmegaBalance",
@@ -614,9 +614,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Prochain domaine",
-        body: "Notre futur domaine autour du ventre, de l’intestin et de l’équilibre intérieur.",
-        fit: "Adapté si vous êtes curieux d’un futur domaine construit sur la même logique calme et fondée sur les tests.",
+        eyebrow: "Bientôt",
+        body: "Notre prochain focus autour du ventre, de l’intestin et de l’équilibre intérieur.",
+        fit: "Adapté si vous êtes curieux d’une future proposition construite sur la même logique calme et fondée sur les tests.",
         cta: "Vers GutBalance",
         href: "/fr/gut-balance",
         status: "Bientôt",
@@ -658,9 +658,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     productsTitle: "Le nostre aree di test",
     productsBody: "Ogni area ha un focus chiaro. Scegli quella che si adatta meglio alla tua situazione attuale.",
     primaryRouteTitle: "Inizia qui",
-    primaryRouteBody: "OmegaBalance è la prima area e il punto di partenza più chiaro in InsideBalance in questo momento.",
+    primaryRouteBody: "Il modo più chiaro per iniziare con InsideBalance in questo momento.",
     secondaryRouteTitle: "In arrivo",
-    secondaryRouteBody: "GutBalance sarà la prossima area per chi vuole approfondire intestino, digestione ed equilibrio interno.",
+    secondaryRouteBody: "Per chi vorrà in seguito approfondire intestino, digestione ed equilibrio interno.",
     products: [
       {
         title: "OmegaBalance",
@@ -672,9 +672,9 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
       },
       {
         title: "GutBalance",
-        eyebrow: "Prossima area",
-        body: "La nostra futura area dedicata a intestino, digestione ed equilibrio interno.",
-        fit: "Adatta se sei curioso di un’area futura costruita sulla stessa logica calma e basata sui test.",
+        eyebrow: "In arrivo",
+        body: "Il nostro prossimo focus dedicato a intestino, digestione ed equilibrio interno.",
+        fit: "Adatta se sei curioso di una proposta futura costruita sulla stessa logica calma e basata sui test.",
         cta: "Vai a GutBalance",
         href: "/it/gut-balance",
         status: "In arrivo",
