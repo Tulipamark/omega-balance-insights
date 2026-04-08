@@ -28,6 +28,8 @@ function resolveLang(param?: string): Lang {
 }
 
 const localizedPath = (lang: Lang, base: string) => (lang === "sv" ? base : `/${lang}${base}`);
+const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
+const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
 
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
@@ -38,7 +40,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
     <main className="min-h-screen bg-[#f7f4ec] px-4 py-8 md:px-6 md:py-12">
       <div className="container-wide mx-auto">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <Link to={localizedPath(currentLang, "/inside-balance")} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+          <Link to={platformHomePath(currentLang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
             InsideBalance
           </Link>
           <LanguageSwitcher lang={currentLang} />
@@ -51,10 +53,10 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
           <h1 className="mt-5 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-6xl">{copy.title}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-foreground/72">{copy.body}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link to={localizedPath(currentLang, "/inside-balance")} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-elevated">
+            <Link to={platformHomePath(currentLang)} className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-elevated">
               {copy.primary}
             </Link>
-            <Link to={currentLang === "sv" ? "/sv" : `/${currentLang}`} className="inline-flex items-center justify-center rounded-full border border-border bg-card px-6 py-3.5 text-base font-medium text-foreground shadow-card">
+            <Link to={omegaBalancePath(currentLang)} className="inline-flex items-center justify-center rounded-full border border-border bg-card px-6 py-3.5 text-base font-medium text-foreground shadow-card">
               {copy.secondary}
             </Link>
           </div>

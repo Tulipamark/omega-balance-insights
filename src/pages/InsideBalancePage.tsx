@@ -880,6 +880,8 @@ function resolveLang(param?: string): Lang {
 }
 
 const localizedPath = (lang: Lang, base: string) => (lang === "sv" ? base : `/${lang}${base}`);
+const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
+const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
 
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
@@ -908,7 +910,18 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       "Clear product journeys with one focus at a time.",
       "A calmer experience where trust matters more than hype.",
     ];
-  const footerCta = copy.footerCta ?? copy.products[0]?.cta;
+  const products = copy.products.map((product, index) => {
+    if (index === 0) {
+      return { ...product, href: omegaBalancePath(currentLang) };
+    }
+
+    if (index === 1) {
+      return { ...product, href: localizedPath(currentLang, "/gut-balance") };
+    }
+
+    return product;
+  });
+  const footerCta = copy.footerCta ?? products[0]?.cta;
   const primaryRouteTitle = copy.primaryRouteTitle ?? "Start here";
   const primaryRouteBody =
     copy.primaryRouteBody ?? "OmegaBalance is the first clear way into the platform and the strongest place to begin right now.";
@@ -922,11 +935,11 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(127,153,130,0.14),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(48,77,63,0.10),_transparent_38%)]" />
         <div className="container-wide relative mx-auto">
           <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-            <Link to={localizedPath(currentLang, "/inside-balance")} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            <Link to={platformHomePath(currentLang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               {copy.navHome}
             </Link>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-              <Link to={currentLang === "sv" ? "/sv" : `/${currentLang}`} className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
+              <Link to={omegaBalancePath(currentLang)} className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
                 {copy.navOmega}
               </Link>
               <Link to={localizedPath(currentLang, "/gut-balance")} className="rounded-full border border-black/5 bg-white/70 px-4 py-2 text-sm font-medium text-foreground/80 shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
@@ -950,7 +963,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                   {copy.heroPrimaryCta}
                 </a>
                 <Link
-                  to={currentLang === "sv" ? "/sv" : `/${currentLang}`}
+                  to={omegaBalancePath(currentLang)}
                   className="inline-flex items-center justify-center rounded-full border border-black/5 bg-white/82 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
                 >
                   {copy.heroSecondaryCta}
@@ -978,8 +991,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
                   {primaryRouteBody}
                 </p>
-                <Link to={copy.products[0].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
-                  {copy.products[0].cta}
+                <Link to={products[0].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
+                  {products[0].cta}
                 </Link>
               </div>
               <div className="rounded-[1.75rem] border border-[#d8d2c7] bg-[#ece6da] p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
@@ -988,8 +1001,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
                   {secondaryRouteBody}
                 </p>
-                <Link to={copy.products[1].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
-                  {copy.products[1].cta}
+                <Link to={products[1].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
+                  {products[1].cta}
                 </Link>
               </div>
             </div>
@@ -1005,7 +1018,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           </div>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            {copy.products.map((product) => (
+            {products.map((product) => (
               <article key={product.title} className="rounded-[2rem] border border-black/5 bg-white/88 p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
                 <div className="flex flex-wrap items-center gap-2">
                   {product.eyebrow ? (
@@ -1114,7 +1127,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             <p className="mt-3 text-[1.01rem] leading-7 text-foreground/66">{copy.footerBody}</p>
             {footerCta ? (
               <Link
-                to={copy.products[0].href}
+                to={products[0].href}
                 className="mt-6 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-5 py-3 text-sm font-medium text-foreground transition hover:bg-white"
               >
                 {footerCta}

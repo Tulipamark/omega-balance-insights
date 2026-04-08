@@ -31,6 +31,8 @@ const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {
 
     if (hasLangPrefix) {
       nextPath = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${nextLang}`);
+    } else if (pathname === "/omega-balance" || pathname.startsWith("/omega-balance/")) {
+      nextPath = pathname.replace(/^\/omega-balance/, `/${nextLang}/omega-balance`);
     } else if (pathname === "/inside-balance" || pathname.startsWith("/inside-balance/")) {
       nextPath = pathname.replace(/^\/inside-balance/, `/${nextLang}/inside-balance`);
     } else if (pathname === "/gut-balance" || pathname.startsWith("/gut-balance/")) {

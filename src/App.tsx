@@ -41,7 +41,7 @@ const App = () => (
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
           <Routes>
-            <Route path="/" element={<HomePageWrapper />} />
+            <Route path="/" element={<InsideBalancePage lang={defaultLang} />} />
             <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
             <Route path="/integritet" element={<PrivacyPage />} />
@@ -49,11 +49,13 @@ const App = () => (
             <Route path="/kontakt" element={<ContactPage />} />
             <Route path="/inside-balance" element={<InsideBalancePage lang={defaultLang} />} />
             <Route path="/gut-balance" element={<GutBalancePage lang={defaultLang} />} />
+            <Route path="/omega-balance" element={<Index lang={defaultLang} />} />
             <Route path="/:lang/integritet" element={<PrivacyPage />} />
             <Route path="/:lang/villkor" element={<TermsPage />} />
             <Route path="/:lang/kontakt" element={<ContactPage />} />
             <Route path="/:lang/inside-balance" element={<InsideBalancePage />} />
             <Route path="/:lang/gut-balance" element={<GutBalancePage />} />
+            <Route path="/:lang/omega-balance" element={<Index />} />
             <Route path="/dashboard" element={<DashboardIndexPage />} />
             <Route path="/dashboard/login" element={<DashboardLoginPage />} />
             <Route path="/dashboard/admin-login" element={<DashboardLoginPage variant="admin" />} />
@@ -63,7 +65,7 @@ const App = () => (
             <Route path="/dashboard/partner/legal" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerLegalAcceptancePage /></ProtectedDashboardRoute>} />
             <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
             <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
-            <Route path="/:lang" element={<Index />} />
+            <Route path="/:lang" element={<InsideBalancePage />} />
             <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
             <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
             <Route path="*" element={<NotFound />} />
@@ -73,12 +75,6 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-
-function HomePageWrapper() {
-  const location = useLocation();
-
-  return <Navigate to={`/${defaultLang}${location.search}${location.hash}`} replace />;
-}
 
 function PartnerPageWrapper() {
   const { lang } = useParams<{ lang: string }>();
