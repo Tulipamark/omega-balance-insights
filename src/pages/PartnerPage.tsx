@@ -789,23 +789,23 @@ const baseContent: Pick<Record<Lang, PartnerPageContent>, "sv" | "en"> = {
     },
     reasons: {
       title: "Vad gör en partnermodell värd att bygga?",
-      body: "Vi tror att starka partnermöjligheter bygger på fyra saker: verklig efterfrågan, återkommande kunder, tydlig differentiering och möjlighet att växa över tid.",
+      body: "Vi tror att starka partnermöjligheter bygger på låg tröskel att börja, ett system som redan finns på plats och en modell som går att utveckla stegvis över tid.",
       cards: [
         {
-          title: "Verklig produkt, verkligt behov",
-          text: "Mätbar hälsa är lättare att kommunicera när produkten ger kunden ett konkret svar, inte bara en känsla.",
+          title: "Låg tröskel att börja",
+          text: "Du behöver inte bygga egen produkt, logistik eller ett stort upplägg från dag ett. Det gör vägen till start kortare och mer realistisk för fler.",
         },
         {
-          title: "Kunder som kan komma tillbaka",
-          text: "En modell blir starkare när den inte enbart bygger på nya engångsköp, utan även på uppföljning, förbättring och återköp.",
+          title: "Systemet finns redan",
+          text: "Produkter, infrastruktur och kundresa finns redan på plats. Det gör att mer fokus kan ligga på relationer, uppföljning och faktiskt arbete.",
         },
         {
-          title: "Rätt i tiden",
-          text: "Intresset för biomarkörer, personlig hälsa och datadrivna beslut växer. Det gör kategorin mer relevant än många traditionella hälsoprodukter.",
+          title: "Stöd och team runt dig",
+          text: "Du bygger inte ensam. För många är det här ett första steg in i entreprenörskap med stöd, sammanhang och tydligare riktning.",
         },
         {
-          title: "Inte låst till en liten marknad",
-          text: "När modellen kan fungera i fler länder och fler nätverk ökar den långsiktiga uppsidan för rätt typ av partner.",
+          title: "En etablerad global kategori",
+          text: "Direktförsäljning är redan en stor internationell industri. För rätt person gör det modellen lättare att ta på allvar och bygga långsiktigt i.",
         },
       ],
     },
@@ -910,12 +910,12 @@ const baseContent: Pick<Record<Lang, PartnerPageContent>, "sv" | "en"> = {
     },
     reasons: {
       title: "What makes a partner model worth building?",
-      body: "We believe strong partner opportunities depend on four things: real demand, recurring customers, clear differentiation and the ability to grow over time.",
+      body: "We believe strong partner opportunities depend on a low barrier to start, a system that already exists and a model that can be built step by step over time.",
       cards: [
-        { title: "Real product, real need", text: "Measurable health is easier to communicate when the product gives the customer a concrete answer, not just a feeling." },
-        { title: "Customers who may come back", text: "A stronger model is not only built on first-time purchases, but also on follow-up, improvement and repeat buying." },
-        { title: "Right on time", text: "Interest in biomarkers, personal health and data-driven decisions is growing. That makes the category more relevant than many traditional health products." },
-        { title: "Not limited to a small market", text: "When the model can work across more countries and networks, the long-term upside grows for the right kind of partner." },
+        { title: "Low barrier to start", text: "You do not need to create your own product, logistics or a large setup from day one. That makes the first step shorter and more realistic for more people." },
+        { title: "The system already exists", text: "Products, infrastructure and the customer journey are already in place. That leaves more room to focus on relationships, follow-up and actual work." },
+        { title: "Support and team around you", text: "You do not build alone. For many people, this becomes a first real step into entrepreneurship with guidance, context and clearer direction." },
+        { title: "An established global category", text: "Direct selling is already a large international industry. For the right person, that makes the model easier to take seriously and build in over time." },
       ],
     },
     fit: {

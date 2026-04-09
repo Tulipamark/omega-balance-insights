@@ -2,9 +2,9 @@ import type { Lang } from "@/lib/i18n";
 
 export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string; trust: string }> = {
   sv: {
-    headline: "Få ett tydligt mått på din omega-balans\noch se om det du gör faktiskt syns i resultatet",
-    supporting: "Ett enkelt blodtest visar din uppmätta balans mellan omega-6 och omega-3, baserat på dina egna värden.",
-    trust: "Ett enkelt sätt att få ett tydligt mätresultat.",
+    headline: "Upp till 97 % ligger utanför målet\n– du vet inte om du är en av dem",
+    supporting: "Ett enkelt blodtest visar din uppmätta balans mellan omega-6 och omega-3 svart på vitt, baserat på dina egna värden.",
+    trust: "Mät först. Justera sedan. Testa igen och se vad som faktiskt händer.",
   },
   en: {
     headline: "See where your omega balance actually stands",
@@ -44,7 +44,7 @@ export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string
 };
 
 export const trustItemsByLang: Record<Lang, string[]> = {
-  sv: ["Blodbaserat test", "Enkelt att göra hemma", "Personligt mätresultat"],
+  sv: ["Upp till 97 % ligger utanför målet", "Blodbaserat test hemma", "Personligt mätresultat"],
   en: ["Blood-based test", "Easy to do at home", "Personal measurement result"],
   no: ["Blodbasert test", "Enkelt å gjøre hjemme", "Personlig måleresultat"],
   da: ["Blodbaseret test", "Let at lave derhjemme", "Personligt måleresultat"],
@@ -59,11 +59,11 @@ export const insightCopyByLang: Record<
   { title: string; body: string; points: string[]; closingTitle: string; closingBody: string }
 > = {
   sv: {
-    title: "Många har aldrig mätt sin omega-balans",
-    body: "Det är vanligt att utgå från kost eller känsla, men utan ett mätresultat är det svårt att veta hur balansen faktiskt ser ut.",
-    points: ["Blodbaserat test", "Enkelt att göra hemma", "Personligt mätresultat"],
-    closingTitle: "Redo att ta nästa steg?",
-    closingBody: "Börja med testet och få ett tydligt mätresultat för din omega-balans.",
+    title: "Du märker det inte alltid – men du kan mäta det",
+    body: "Omega-balansen känns sällan tydligt i vardagen. Därför blir det lätt att tro att allt ser bra ut. Utan ett faktiskt test är det svårt att veta var du ligger.",
+    points: ["Svart på vitt", "Enkelt hemma", "Personligt resultat"],
+    closingTitle: "Börja med att se din nivå",
+    closingBody: "Ta testet och få ett tydligt mätresultat för din omega-balans.",
   },
   en: {
     title: "Most people have never measured their omega balance",

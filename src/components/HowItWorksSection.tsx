@@ -16,11 +16,11 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
     lang === "sv"
       ? {
           ...baseCopy,
-          body: "Tre enkla steg för att få ditt personliga mätresultat.",
+          body: "Tre tydliga steg för att se din nivå, få svar och börja följa din utveckling.",
           steps: [
-            { numberLabel: "STEG 01", title: "Ta provet", description: "Ta ett blodprov hemma." },
-            { numberLabel: "STEG 02", title: "Skicka in", description: "Skicka provet till laboratoriet." },
-            { numberLabel: "STEG 03", title: "Få resultat", description: "Få ditt personliga mätresultat." },
+            { numberLabel: "STEG 01", title: "Ta provet", description: "Ta ett enkelt blodprov hemma." },
+            { numberLabel: "STEG 02", title: "Få svar", description: "Se din uppmätta omega-balans svart på vitt." },
+            { numberLabel: "STEG 03", title: "Följ din utveckling", description: "Justera det du gör och testa igen för att se skillnaden." },
           ],
         }
       : lang === "en"
