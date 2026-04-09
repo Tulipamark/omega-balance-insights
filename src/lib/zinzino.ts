@@ -9,6 +9,8 @@ const zinzinoLocaleByLang: Partial<Record<Lang, { market: string; locale: string
 };
 
 const DEFAULT_INTERNATIONAL_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/GB/en-GB/products/shop/309000";
+const DEFAULT_INTERNATIONAL_ZINZINO_GUT_TEST_URL =
+  "https://www.zinzino.com/shop/2020937624/GB/en-GB/products/shop/309070";
 
 export function getZinzinoTestUrl(lang: Lang) {
   const localizedTarget = zinzinoLocaleByLang[lang];
@@ -18,4 +20,14 @@ export function getZinzinoTestUrl(lang: Lang) {
   }
 
   return `https://www.zinzino.com/shop/2020937624/${localizedTarget.market}/${localizedTarget.locale}/products/shop/309000`;
+}
+
+export function getZinzinoGutTestUrl(lang: Lang) {
+  const localizedTarget = zinzinoLocaleByLang[lang];
+
+  if (!localizedTarget) {
+    return DEFAULT_INTERNATIONAL_ZINZINO_GUT_TEST_URL;
+  }
+
+  return `https://www.zinzino.com/shop/2020937624/${localizedTarget.market}/${localizedTarget.locale}/products/shop/309070`;
 }

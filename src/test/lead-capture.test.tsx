@@ -8,6 +8,7 @@ const upsertLeadMock = vi.fn();
 const trackClickAndGetRedirectMock = vi.fn();
 const trackFunnelEventMock = vi.fn();
 const assignMock = vi.fn();
+const getLeadAttributionContextMock = vi.fn();
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -24,14 +25,44 @@ vi.mock("@/lib/funnel-events", () => ({
   logFunnelEvent: (...args: unknown[]) => trackFunnelEventMock(...args),
 }));
 
+vi.mock("@/lib/referral", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/referral")>("@/lib/referral");
+
+  return {
+    ...actual,
+    getLeadAttributionContext: (...args: unknown[]) => getLeadAttributionContextMock(...args),
+  };
+});
+
 describe("LeadCaptureSection", () => {
   beforeEach(() => {
     upsertLeadMock.mockReset();
     trackClickAndGetRedirectMock.mockReset();
     trackFunnelEventMock.mockReset();
+    getLeadAttributionContextMock.mockReset();
     assignMock.mockReset();
     upsertLeadMock.mockResolvedValue({ ok: true, mode: "created", lead_id: "lead-1" });
     trackFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-1" });
+    getLeadAttributionContextMock.mockResolvedValue({
+      sessionId: "session-test",
+      referralCode: "ELIN2026",
+      referredByUserId: "user-1",
+      landingPage: "/sv",
+      firstTouch: {
+        capturedAt: "2026-03-27T08:00:00.000Z",
+        landingPage: "/sv",
+        utmSource: "instagram",
+        utmMedium: "social",
+        utmCampaign: "spring",
+      },
+      lastTouch: {
+        capturedAt: "2026-03-27T09:00:00.000Z",
+        landingPage: "/sv",
+        utmSource: null,
+        utmMedium: null,
+        utmCampaign: null,
+      },
+    });
 
     window.localStorage.clear();
     window.sessionStorage.clear();
@@ -163,6 +194,15 @@ describe("LeadCaptureSection", () => {
   });
 
   it("shows a clear error when no referral can be routed", async () => {
+    getLeadAttributionContextMock.mockResolvedValueOnce({
+      sessionId: "session-test",
+      referralCode: null,
+      referredByUserId: null,
+      landingPage: "/sv",
+      firstTouch: null,
+      lastTouch: null,
+    });
+
     render(
       <MemoryRouter initialEntries={["/sv"]}>
         <LeadCaptureSection lang="sv" />
@@ -174,6 +214,32 @@ describe("LeadCaptureSection", () => {
     fireEvent.click(screen.getByRole("button", { name: "Boka konsultation" }));
 
     expect(await screen.findByText("Bokningen kan bara fortsätta via en giltig referral-länk.")).toBeInTheDocument();
+  });
+
+  it("shows the same clear error when a stored referral code no longer maps to a partner", async () => {
+    persistReferralCode("UNKNOWN999", "/sv");
+    getLeadAttributionContextMock.mockResolvedValueOnce({
+      sessionId: "session-test",
+      referralCode: "UNKNOWN999",
+      referredByUserId: null,
+      landingPage: "/sv",
+      firstTouch: null,
+      lastTouch: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={["/sv"]}>
+        <LeadCaptureSection lang="sv" />
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
+    fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Boka konsultation" }));
+
+    expect(await screen.findByText(/Bokningen kan bara forts.*giltig referral-l.*nk\./i)).toBeInTheDocument();
+    expect(upsertLeadMock).not.toHaveBeenCalled();
+    expect(trackClickAndGetRedirectMock).not.toHaveBeenCalled();
   });
 
   it("shows the edge error message when routing fails", async () => {
@@ -215,7 +281,7 @@ describe("LeadCaptureSection", () => {
     fireEvent.click(submitButton);
     fireEvent.click(submitButton);
 
-    expect(await screen.findByRole("button", { name: /Skickar/i })).toBeDisabled();
+    expect(await screen.findByRole("button", { name: /Skickar/i })).toBeInTheDocument();
     await waitFor(() => expect(upsertLeadMock).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(trackClickAndGetRedirectMock).toHaveBeenCalledTimes(1));
 

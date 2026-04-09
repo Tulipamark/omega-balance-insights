@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "npm:@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -155,6 +155,64 @@ async function sendLeadNotification(payload: NotificationPayload) {
   if (!response.ok) {
     const errorText = await response.text().catch(() => "");
     console.error("Failed to send lead notification", response.status, errorText);
+  }
+}
+
+async function sendLeadAcknowledgement(payload: NotificationPayload) {
+  const resendApiKey = Deno.env.get("RESEND_API_KEY");
+  const acknowledgementFrom =
+    Deno.env.get("LEAD_ACK_FROM") ||
+    Deno.env.get("LEAD_NOTIFICATION_FROM") ||
+    "InsideBalance <onboarding@resend.dev>";
+  const replyTo =
+    Deno.env.get("LEAD_ACK_REPLY_TO") ||
+    Deno.env.get("LEAD_NOTIFICATION_TO") ||
+    "hello@insidebalance.eu";
+
+  if (!resendApiKey) {
+    console.info("Lead acknowledgement skipped because RESEND_API_KEY is missing.");
+    return;
+  }
+
+  const intent = typeof payload.details.intent === "string" ? payload.details.intent : "lead";
+  const isPartnerLead = payload.leadType === "partner";
+  const subject = isPartnerLead
+    ? "Tack för din partnerförfrågan"
+    : "Tack för din förfrågan";
+  const intro = isPartnerLead
+    ? "Vi har tagit emot din partnerförfrågan och återkommer så snart vi kan."
+    : intent === "contact"
+      ? "Vi har tagit emot ditt meddelande och återkommer så snart vi kan."
+      : "Vi har tagit emot din förfrågan och återkommer så snart vi kan.";
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #1f2937; line-height: 1.65;">
+      <h2 style="margin-bottom: 12px;">Tack ${payload.fullName.split(" ")[0] || ""}</h2>
+      <p>${intro}</p>
+      <p>Normal svarstid är inom 24–48 timmar.</p>
+      <p>Om du vill komplettera något kan du svara direkt på det här mejlet eller skriva till <a href="mailto:${replyTo}">${replyTo}</a>.</p>
+      <p style="margin-top: 24px;">Vänliga hälsningar,<br />InsideBalance</p>
+    </div>
+  `;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: acknowledgementFrom,
+      to: [payload.email],
+      reply_to: replyTo,
+      subject,
+      html,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+    console.error("Failed to send lead acknowledgement", response.status, errorText);
   }
 }
 
@@ -336,6 +394,19 @@ Deno.serve(async (request: Request) => {
       partnerStatus: partner?.status || null,
       details,
     });
+    await sendLeadAcknowledgement({
+      mode: "created",
+      email,
+      fullName,
+      phone,
+      leadType,
+      leadSource,
+      sourcePage,
+      sessionId,
+      referralCode: partner?.referral_code || null,
+      partnerStatus: partner?.status || null,
+      details,
+    });
 
     return jsonResponse({ ok: true, mode: "created", lead_id: createdLead.id });
   }
@@ -386,6 +457,19 @@ Deno.serve(async (request: Request) => {
   }
 
   await sendLeadNotification({
+    mode: "updated",
+    email,
+    fullName,
+    phone,
+    leadType,
+    leadSource,
+    sourcePage,
+    sessionId,
+    referralCode: partner?.referral_code || null,
+    partnerStatus: partner?.status || null,
+    details,
+  });
+  await sendLeadAcknowledgement({
     mode: "updated",
     email,
     fullName,

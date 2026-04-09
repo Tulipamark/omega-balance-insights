@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { upsertLead, trackClickAndGetRedirect } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
-import { getActiveReferralCode, getLeadAttributionContext } from "@/lib/referral";
+import { getLeadAttributionContext } from "@/lib/referral";
 
 interface LeadCaptureSectionProps {
   lang: Lang;
@@ -73,30 +73,32 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       return;
     }
 
-    const referralCode = getActiveReferralCode(location.pathname, location.search);
-    if (!referralCode) {
-      void logFunnelEvent("lead_form_submit_failed", {
-        pathname: location.pathname,
-        search: location.search,
-        details: {
-          formType: "consultation",
-          reason: "missing_referral",
-        },
-      });
-      setErrorMessage(referralErrorByLang[lang]);
-      return;
-    }
-
     setSubmitting(true);
     setErrorMessage(null);
+    let submittedReferralCode: string | null = null;
 
     try {
       const attribution = await getLeadAttributionContext(location.pathname, location.search);
+      const validReferralCode = attribution.referredByUserId ? attribution.referralCode : null;
+
+      if (!validReferralCode) {
+        void logFunnelEvent("lead_form_submit_failed", {
+          pathname: location.pathname,
+          search: location.search,
+          details: {
+            formType: "consultation",
+            reason: "missing_referral",
+          },
+        });
+        throw new Error(referralErrorByLang[lang]);
+      }
+
+      submittedReferralCode = validReferralCode;
       const sessionId = attribution.sessionId;
       void logFunnelEvent("lead_form_submitted", {
         pathname: location.pathname,
         search: location.search,
-        referralCode,
+        referralCode: validReferralCode,
         sessionId,
         details: {
           formType: "consultation",
@@ -106,7 +108,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        ref: referralCode,
+        ref: validReferralCode,
         session_id: sessionId,
         lead_type: "customer",
         lead_source: "customer_form",
@@ -116,7 +118,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
           landingPage: attribution.landingPage,
           attribution: {
             sessionId: attribution.sessionId,
-            referralCode: attribution.referralCode,
+            referralCode: validReferralCode,
             referredByUserId: attribution.referredByUserId,
             landingPage: attribution.landingPage,
             firstTouch: attribution.firstTouch,
@@ -132,14 +134,14 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       void logFunnelEvent("consultation_redirect_requested", {
         pathname: location.pathname,
         search: location.search,
-        referralCode,
+        referralCode: validReferralCode,
         sessionId,
         details: {
           destinationType: "consultation",
         },
       });
       const response = await trackClickAndGetRedirect({
-        ref: referralCode,
+        ref: validReferralCode,
         type: "consultation",
         session_id: sessionId,
       });
@@ -154,7 +156,7 @@ const LeadCaptureSection = ({ lang }: LeadCaptureSectionProps) => {
       void logFunnelEvent("lead_form_submit_failed", {
         pathname: location.pathname,
         search: location.search,
-        referralCode,
+        referralCode: submittedReferralCode,
         details: {
           formType: "consultation",
           reason: error instanceof Error ? error.message : "submit_failed",

@@ -217,10 +217,11 @@ const ContactPage = () => {
 
     try {
       const attribution = await getLeadAttributionContext(location.pathname, location.search);
+      const validReferralCode = attribution.referredByUserId ? attribution.referralCode : null;
       void logFunnelEvent("lead_form_submitted", {
         pathname: location.pathname,
         search: location.search,
-        referralCode: attribution.referralCode,
+        referralCode: validReferralCode,
         sessionId: attribution.sessionId,
         details: {
           formType: "contact",
@@ -231,7 +232,7 @@ const ContactPage = () => {
         email: formData.email,
         phone: formData.phone || null,
         session_id: attribution.sessionId,
-        ref: attribution.referralCode,
+        ref: validReferralCode,
         lead_type: "customer",
         lead_source: "customer_form",
         source_page: currentLang === "sv" ? "/kontakt" : `/${currentLang}/kontakt`,
@@ -241,7 +242,7 @@ const ContactPage = () => {
           landingPage: attribution.landingPage,
           attribution: {
             sessionId: attribution.sessionId,
-            referralCode: attribution.referralCode,
+            referralCode: validReferralCode,
             referredByUserId: attribution.referredByUserId,
             landingPage: attribution.landingPage,
             firstTouch: attribution.firstTouch,

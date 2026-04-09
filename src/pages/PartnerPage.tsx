@@ -2939,11 +2939,17 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       }
 
       const attributionContext = await getLeadAttributionContext(location.pathname, location.search);
+      const validReferralCode = attributionContext.referredByUserId ? attributionContext.referralCode : null;
+
+      if (!validReferralCode) {
+        throw new Error(missingReferralByLang[lang]);
+      }
+
       const sessionId = attributionContext.sessionId;
       void logFunnelEvent("partner_form_submitted", {
         pathname: location.pathname,
         search: location.search,
-        referralCode: attribution.referralCode,
+        referralCode: validReferralCode,
         sessionId,
         details: {
           formType: "partner_application",
@@ -2953,7 +2959,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        ref: attribution.referralCode,
+        ref: validReferralCode,
         session_id: sessionId,
         lead_type: "partner",
         lead_source: "partner_form",
@@ -2966,7 +2972,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           landingPage: attributionContext.landingPage,
           attribution: {
             sessionId: attributionContext.sessionId,
-            referralCode: attributionContext.referralCode,
+            referralCode: validReferralCode,
             referredByUserId: attributionContext.referredByUserId,
             landingPage: attributionContext.landingPage,
             firstTouch: attributionContext.firstTouch,

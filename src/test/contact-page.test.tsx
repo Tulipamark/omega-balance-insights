@@ -38,6 +38,8 @@ vi.mock("@/lib/referral", () => ({
     }),
 }));
 
+const referralModule = await import("@/lib/referral");
+
 vi.mock("@/components/InfoPageLayout", () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
@@ -185,5 +187,44 @@ describe("ContactPage", () => {
 
     expect(await screen.findByText(/Tack, ditt meddelande .* Vi .* snart vi kan\./i)).toBeInTheDocument();
     expect(upsertLeadMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not send an invalid referral code for plain contact requests", async () => {
+    vi.spyOn(referralModule, "getLeadAttributionContext").mockResolvedValueOnce({
+      sessionId: "session-999",
+      referralCode: "UNKNOWN999",
+      referredByUserId: null,
+      landingPage: "/sv/gut-balance",
+      firstTouch: null,
+      lastTouch: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={["/sv/kontakt"]}>
+        <Routes>
+          <Route path="/:lang/kontakt" element={<ContactPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Per" } });
+    fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "per@example.com" } });
+    fireEvent.change(screen.getByLabelText("Meddelande"), { target: { value: "Hur blir jag partner?" } });
+    fireEvent.click(screen.getByRole("button", { name: "Skicka meddelande" }));
+
+    await waitFor(() =>
+      expect(upsertLeadMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          session_id: "session-999",
+          ref: null,
+          details: expect.objectContaining({
+            attribution: expect.objectContaining({
+              referralCode: null,
+              referredByUserId: null,
+            }),
+          }),
+        }),
+      ),
+    );
   });
 });
