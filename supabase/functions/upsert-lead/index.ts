@@ -293,6 +293,8 @@ Deno.serve(async (request: Request) => {
   const leadSource = body?.lead_source;
   const sourcePage = body?.source_page?.trim() || null;
   const details = body?.details ?? {};
+  const intent = typeof details.intent === "string" ? details.intent : null;
+  const allowDirectContactFallback = leadSource === "customer_form" && intent === "contact";
 
   if (!email || !isValidEmail(email) || !fullName || !leadType || !leadSource) {
     return jsonResponse({ ok: false, reason: "invalid_email" satisfies FailureReason }, 400);
@@ -321,18 +323,30 @@ Deno.serve(async (request: Request) => {
     if (partnerError) {
       console.error("Failed to resolve partner for lead", partnerError);
       if (!isSchemaMismatchError(partnerError)) {
-        return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
+        if (allowDirectContactFallback) {
+          console.warn("Contact lead fallback: ignoring unresolved referral code", referralCode);
+        } else {
+          return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
+        }
       }
     }
 
     if (partnerRow) {
       if (partnerRow.status !== "verified") {
-        return jsonResponse({ ok: false, reason: "partner_not_verified" satisfies FailureReason });
+        if (allowDirectContactFallback) {
+          console.warn("Contact lead fallback: ignoring unverified partner referral", referralCode);
+        } else {
+          return jsonResponse({ ok: false, reason: "partner_not_verified" satisfies FailureReason });
+        }
+      } else {
+        partner = partnerRow;
       }
-
-      partner = partnerRow;
     } else if (!partnerError) {
-      return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
+      if (allowDirectContactFallback) {
+        console.warn("Contact lead fallback: partner row missing for referral", referralCode);
+      } else {
+        return jsonResponse({ ok: false, reason: "partner_not_found" satisfies FailureReason });
+      }
     }
   }
 

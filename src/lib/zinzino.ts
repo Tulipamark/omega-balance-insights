@@ -2,6 +2,8 @@ import type { Lang } from "@/lib/i18n";
 
 const zinzinoLocaleByLang: Partial<Record<Lang, { market: string; locale: string }>> = {
   sv: { market: "SE", locale: "sv-SE" },
+  no: { market: "NO", locale: "no-NO" },
+  da: { market: "DK", locale: "da-DK" },
   fi: { market: "FI", locale: "fi-FI" },
   de: { market: "DE", locale: "de-DE" },
   fr: { market: "FR", locale: "fr-FR" },
