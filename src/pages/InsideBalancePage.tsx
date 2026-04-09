@@ -73,6 +73,28 @@ const navExploreLabelByLang: Record<Lang, string> = {
   it: "Esplora",
 };
 
+const activeSecondaryRouteTitleByLang: Record<Lang, string> = {
+  sv: "Utforska vidare",
+  no: "Utforsk videre",
+  da: "Udforsk videre",
+  fi: "Tutki lisää",
+  en: "Explore further",
+  de: "Weiter erkunden",
+  fr: "Explorer davantage",
+  it: "Esplora oltre",
+};
+
+const activeSecondaryRouteBodyByLang: Record<Lang, string> = {
+  sv: "För dig som vill förstå mage, tarm och inre balans genom samma lugna struktur.",
+  no: "For deg som vil forstå mage, tarm og indre balanse gjennom samme rolige struktur.",
+  da: "For dig, der vil forstå mave, tarm og indre balance gennem samme rolige struktur.",
+  fi: "Sinulle, joka haluat ymmärtää vatsaa, suolistoa ja sisäistä tasapainoa saman rauhallisen rakenteen kautta.",
+  en: "For people who want to understand gut health, digestion, and inner balance through the same calm structure.",
+  de: "Für Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen möchten.",
+  fr: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'équilibre intérieur dans la même structure apaisée.",
+  it: "Per chi vuole capire meglio intestino, digestione ed equilibrio interno attraverso la stessa struttura calma.",
+};
+
 const navAvailableLabelByLang: Record<Lang, string> = {
   sv: "Nu",
   no: "Nå",
@@ -166,25 +188,22 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
       "Varje testsp\u00e5r fokuserar p\u00e5 ett omr\u00e5de. V\u00e4lj det som passar ditt nul\u00e4ge b\u00e4st.",
     primaryRouteTitle: "B\u00f6rja h\u00e4r",
     primaryRouteBody: "Det tydligaste s\u00e4ttet att komma ig\u00e5ng i InsideBalance just nu.",
-    secondaryRouteTitle: "Kommer inom kort",
-    secondaryRouteBody: "F\u00f6r dig som senare vill utforska mage, tarm och inre balans.",
+    secondaryRouteTitle: "Utforska vidare",
+    secondaryRouteBody: "F\u00f6r dig som vill f\u00f6rst\u00e5 mage, tarm och inre balans genom samma lugna struktur.",
     products: [
       {
         title: "OmegaBalance",
-        eyebrow: "Tillg\u00e4nglig nu",
-        body: "F\u00f6r dig som vill f\u00f6rst\u00e5 din omega-6/omega-3-balans och b\u00f6rja med ett etablerat testsp\u00e5r.",
+        body: "F\u00f6r dig som vill f\u00f6rst\u00e5 din omega-6/omega-3-balans och b\u00f6rja med ett tydligt f\u00f6rsta test.",
         fit: "Passar dig som vill komma ig\u00e5ng med ett tydligt f\u00f6rsta test och en mer konkret bild av ditt nul\u00e4ge.",
         cta: "OmegaBalance",
         href: "/sv",
       },
       {
         title: "GutBalance",
-        eyebrow: "N\u00e4sta sp\u00e5r",
-        body: "V\u00e5rt kommande testsp\u00e5r f\u00f6r mage, tarm och inre balans.",
-        fit: "Passar dig som \u00e4r nyfiken p\u00e5 ett framtida sp\u00e5r med samma lugna och testbaserade logik.",
+        body: "F\u00f6r dig som vill f\u00f6rst\u00e5 tarm, immunf\u00f6rsvar och metabolism genom ett forskningsbaserat hemmatest.",
+        fit: "Passar dig som vill utforska mage, tarm och inre balans med samma lugna och testbaserade logik.",
         cta: "GutBalance",
         href: "/sv/gut-balance",
-        status: "Kommer snart",
       },
     ],
     whyTitle: "B\u00f6rja med att m\u00e4ta",
@@ -228,7 +247,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Hvert spor fokuserer på et område der målbare resultater gjør det lettere å forstå hva som er relevant akkurat nå.",
     products: [
       { title: "OmegaBalance", body: "For deg som vil forstå omega-6/omega-3-balansen din og få et tydeligere neste steg.", cta: "OmegaBalance", href: "/no" },
-      { title: "GutBalance", body: "Vårt neste testspor for mage, tarm og indre balanse.", cta: "GutBalance", href: "/no/gut-balance", status: "Kommer snart" },
+      { title: "GutBalance", body: "For deg som vil forstå mage, tarm og indre balanse gjennom samme rolige struktur.", cta: "GutBalance", href: "/no/gut-balance" },
     ],
     whyTitle: "Start med å måle",
     whyBody: "Mange prøver å forbedre helsen uten først å vite hvor de står. En test gir et tydeligere utgangspunkt.",
@@ -256,7 +275,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Hvert spor fokuserer på et område, hvor målbare resultater gør det lettere at forstå, hvad der er relevant nu.",
     products: [
       { title: "OmegaBalance", body: "For dig, der vil forstå din omega-6/omega-3-balance.", cta: "OmegaBalance", href: "/da" },
-      { title: "GutBalance", body: "Vores næste testspor for mave, tarm og indre balance.", cta: "GutBalance", href: "/da/gut-balance", status: "Kommer snart" },
+      { title: "GutBalance", body: "For dig, der vil forstå mave, tarm og indre balance gennem samme rolige struktur.", cta: "GutBalance", href: "/da/gut-balance" },
     ],
     whyTitle: "Start med at måle",
     whyBody: "Mange forsøger at forbedre sundheden uden først at kende udgangspunktet. En test giver en tydeligere start.",
@@ -284,7 +303,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Jokainen polku keskittyy alueeseen, jossa mitattavat tulokset auttavat ymm\u00e4rt\u00e4m\u00e4\u00e4n, mik\u00e4 on ajankohtaista juuri nyt.",
     products: [
       { title: "OmegaBalance", body: "Sinulle, joka haluat ymm\u00e4rt\u00e4\u00e4 omega-6/omega-3-tasapainoasi paremmin.", cta: "OmegaBalance", href: "/fi" },
-      { title: "GutBalance", body: "Seuraava testipolkumme vatsan, suoliston ja sis\u00e4isen tasapainon tueksi.", cta: "GutBalance", href: "/fi/gut-balance", status: "Tulossa pian" },
+      { title: "GutBalance", body: "Sinulle, joka haluat ymmärtää vatsaa, suolistoa ja sisäistä tasapainoa saman rauhallisen rakenteen kautta.", cta: "GutBalance", href: "/fi/gut-balance" },
     ],
     whyTitle: "Aloita mittaamalla",
     whyBody: "Moni yritt\u00e4\u00e4 parantaa hyvinvointiaan tiet\u00e4m\u00e4tt\u00e4 ensin nykytilannetta. Testi antaa selke\u00e4mm\u00e4n l\u00e4ht\u00f6pisteen.",
@@ -327,11 +346,10 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
       {
         title: "GutBalance",
         eyebrow: "Coming soon",
-        body: "Our upcoming focus on gut health, digestion, and inner balance.",
-        fit: "A good fit if you are curious about a future offering built on the same calm, test-based approach.",
+        body: "For people who want to understand gut health, digestion, and inner balance through the same calm structure.",
+        fit: "A good fit if you want to explore the gut, immunity, and metabolism with the same measured approach.",
         cta: "GutBalance",
         href: "/en/gut-balance",
-        status: "Coming soon",
       },
     ],
     whyTitle: "Start by measuring",
@@ -375,7 +393,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Jeder Weg konzentriert sich auf einen Bereich, in dem messbare Ergebnisse helfen, das Relevante jetzt besser zu verstehen.",
     products: [
       { title: "OmegaBalance", body: "F\u00fcr Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen wollen.", cta: "OmegaBalance", href: "/de" },
-      { title: "GutBalance", body: "Unser n\u00e4chster Testweg rund um Darm, Verdauung und innere Balance.", cta: "GutBalance", href: "/de/gut-balance", status: "Demn\u00e4chst" },
+      { title: "GutBalance", body: "Für Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen möchten.", cta: "GutBalance", href: "/de/gut-balance" },
     ],
     whyTitle: "Mit Messen beginnen",
     whyBody: "Viele versuchen ihre Gesundheit zu verbessern, bevor sie ihren Ausgangspunkt wirklich kennen. Ein Test schafft mehr Klarheit.",
@@ -403,7 +421,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Chaque parcours se concentre sur un domaine o\u00f9 des r\u00e9sultats mesurables rendent la suite plus claire.",
     products: [
       { title: "OmegaBalance", body: "Pour celles et ceux qui veulent mieux comprendre leur \u00e9quilibre om\u00e9ga-6/om\u00e9ga-3.", cta: "OmegaBalance", href: "/fr" },
-      { title: "GutBalance", body: "Notre prochain parcours autour du ventre, de l'intestin et de l'\u00e9quilibre int\u00e9rieur.", cta: "GutBalance", href: "/fr/gut-balance", status: "Bient\u00f4t" },
+      { title: "GutBalance", body: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'équilibre intérieur dans la même structure apaisée.", cta: "GutBalance", href: "/fr/gut-balance" },
     ],
     whyTitle: "Commencer par mesurer",
     whyBody: "Beaucoup essaient d'am\u00e9liorer leur sant\u00e9 sans conna\u00eetre clairement leur point de d\u00e9part. Un test apporte cette clart\u00e9.",
@@ -431,7 +449,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Ogni percorso si concentra su un'area in cui risultati misurabili rendono pi\u00f9 semplice capire cosa conta adesso.",
     products: [
       { title: "OmegaBalance", body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3.", cta: "OmegaBalance", href: "/it" },
-      { title: "GutBalance", body: "Il nostro prossimo percorso dedicato a intestino, digestione ed equilibrio interno.", cta: "GutBalance", href: "/it/gut-balance", status: "In arrivo" },
+      { title: "GutBalance", body: "Per chi vuole capire meglio intestino, digestione ed equilibrio interno attraverso la stessa struttura calma.", cta: "GutBalance", href: "/it/gut-balance" },
     ],
     whyTitle: "Inizia misurando",
     whyBody: "Molte persone cercano di migliorare la propria salute senza conoscere davvero il punto di partenza. Un test crea pi\u00f9 chiarezza.",
@@ -1015,9 +1033,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const primaryRouteTitle = copy.primaryRouteTitle ?? "Start here";
   const primaryRouteBody =
     copy.primaryRouteBody ?? "OmegaBalance is the first clear way into the platform and the strongest place to begin right now.";
-  const secondaryRouteTitle = copy.secondaryRouteTitle ?? "Next layer";
-  const secondaryRouteBody =
-    copy.secondaryRouteBody ?? "GutBalance is being built as the next product journey within the same InsideBalance structure.";
+  const secondaryRouteTitle = activeSecondaryRouteTitleByLang[currentLang];
+  const secondaryRouteBody = activeSecondaryRouteBodyByLang[currentLang];
 
   return (
     <main className="min-h-screen bg-[#f6f2ea] text-foreground">
@@ -1041,15 +1058,13 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="min-w-[13rem] rounded-2xl border-black/5 bg-white/95 p-2 shadow-[0_18px_40px_rgba(31,41,55,0.10)]">
                   <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
-                    <Link to={omegaBalancePath(currentLang)} className="flex w-full items-center justify-between gap-3">
+                    <Link to={omegaBalancePath(currentLang)} className="flex w-full items-center gap-3">
                       <span className="font-medium text-foreground">{copy.navOmega}</span>
-                      <span className="text-xs uppercase tracking-[0.14em] text-foreground/55">{navAvailableLabelByLang[currentLang]}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
-                    <Link to={localizedPath(currentLang, "/gut-balance")} className="flex w-full items-center justify-between gap-3">
+                    <Link to={localizedPath(currentLang, "/gut-balance")} className="flex w-full items-center gap-3">
                       <span className="font-medium text-foreground">{copy.navGut}</span>
-                      <span className="text-xs uppercase tracking-[0.14em] text-foreground/55">{navSoonLabelByLang[currentLang]}</span>
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -1129,18 +1144,6 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             {products.map((product) => (
               <article key={product.title} className="rounded-[2rem] border border-black/5 bg-white/88 p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
-                <div className="flex flex-wrap items-center gap-2">
-                  {product.eyebrow ? (
-                    <span className="inline-flex rounded-full border border-black/5 bg-[#f4efe6] px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-foreground/72">
-                      {product.eyebrow}
-                    </span>
-                  ) : null}
-                  {product.status ? (
-                    <span className="inline-flex rounded-full border border-black/5 bg-[#ece5d8] px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-foreground/72">
-                      {product.status}
-                    </span>
-                  ) : null}
-                </div>
                 <h3 className="mt-4 font-serif text-[1.95rem] font-semibold tracking-tight text-foreground">{product.title}</h3>
                 <p className="mt-4 max-w-xl text-[1.02rem] leading-7 text-foreground/68">{product.body}</p>
                 <p className="mt-4 max-w-xl text-[0.98rem] leading-7 text-foreground/60">{product.fit}</p>
