@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertLead } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
-import { getLeadAttributionContext, getReferralAttribution } from "@/lib/referral";
+import { getLeadAttributionContext } from "@/lib/referral";
 
 interface PartnerPageProps {
   lang: Lang;
@@ -37,17 +37,6 @@ const submitErrorByLang: Record<Lang, string> = {
   de: "Die Partneranfrage konnte gerade nicht gesendet werden.",
   fr: "La demande de partenariat n'a pas pu être envoyée pour le moment.",
   it: "La richiesta partner non può essere inviata in questo momento.",
-};
-
-const missingReferralByLang: Record<Lang, string> = {
-  sv: "Partneransökan behöver skickas via en giltig partnerlänk.",
-  no: "Partnersøknaden må sendes via en gyldig partnerlenke.",
-  da: "Partneransøgningen skal sendes via et gyldigt partnerlink.",
-  fi: "Partnerihakemus on lähetettävä voimassa olevan partnerilinkin kautta.",
-  en: "The partner application must be sent through a valid partner link.",
-  de: "Die Partneranfrage muss über einen gültigen Partnerlink gesendet werden.",
-  fr: "La demande partenaire doit être envoyée via un lien partenaire valide.",
-  it: "La richiesta partner deve essere inviata tramite un link partner valido.",
 };
 
 const submittingLabelByLang: Record<Lang, string> = {
@@ -2925,25 +2914,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     setErrorMessage(null);
 
     try {
-      const attribution = await getReferralAttribution(location.pathname);
-      if (!attribution.referralCode) {
-        void logFunnelEvent("partner_form_submit_failed", {
-          pathname: location.pathname,
-          search: location.search,
-          details: {
-            formType: "partner_application",
-            reason: "missing_referral",
-          },
-        });
-        throw new Error(missingReferralByLang[lang]);
-      }
-
       const attributionContext = await getLeadAttributionContext(location.pathname, location.search);
       const validReferralCode = attributionContext.referredByUserId ? attributionContext.referralCode : null;
-
-      if (!validReferralCode) {
-        throw new Error(missingReferralByLang[lang]);
-      }
 
       const sessionId = attributionContext.sessionId;
       void logFunnelEvent("partner_form_submitted", {
@@ -2953,6 +2925,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         sessionId,
         details: {
           formType: "partner_application",
+          partnerLinked: Boolean(validReferralCode),
         },
       });
       const response = await upsertLead({

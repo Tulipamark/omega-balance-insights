@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import PartnerPage from "@/pages/PartnerPage";
 
 const upsertLeadMock = vi.fn();
-const getReferralAttributionMock = vi.fn();
+const getLeadAttributionContextMock = vi.fn();
 const trackFunnelEventMock = vi.fn();
 
 vi.mock("framer-motion", () => ({
@@ -22,9 +22,26 @@ vi.mock("@/lib/funnel-events", () => ({
 }));
 
 vi.mock("@/lib/referral", () => ({
-  getReferralAttribution: (...args: unknown[]) => getReferralAttributionMock(...args),
-  getLeadAttributionContext: () =>
-    Promise.resolve({
+  getLeadAttributionContext: (...args: unknown[]) => getLeadAttributionContextMock(...args),
+}));
+
+vi.mock("@/components/FooterSection", () => ({
+  default: () => <div>Footer</div>,
+}));
+
+vi.mock("@/components/LanguageSwitcher", () => ({
+  default: () => <div>LanguageSwitcher</div>,
+}));
+
+describe("PartnerPage", () => {
+  beforeEach(() => {
+    upsertLeadMock.mockReset();
+    getLeadAttributionContextMock.mockReset();
+    trackFunnelEventMock.mockReset();
+
+    upsertLeadMock.mockResolvedValue({ ok: true, mode: "created", lead_id: "lead-2" });
+    trackFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-2" });
+    getLeadAttributionContextMock.mockResolvedValue({
       sessionId: "session-123",
       referralCode: "ELIN2026",
       referredByUserId: "user-1",
@@ -43,33 +60,10 @@ vi.mock("@/lib/referral", () => ({
         utmMedium: null,
         utmCampaign: null,
       },
-    }),
-}));
-
-vi.mock("@/components/FooterSection", () => ({
-  default: () => <div>Footer</div>,
-}));
-
-vi.mock("@/components/LanguageSwitcher", () => ({
-  default: () => <div>LanguageSwitcher</div>,
-}));
-
-describe("PartnerPage", () => {
-  beforeEach(() => {
-    upsertLeadMock.mockReset();
-    getReferralAttributionMock.mockReset();
-    trackFunnelEventMock.mockReset();
-    upsertLeadMock.mockResolvedValue({ ok: true, mode: "created", lead_id: "lead-2" });
-    trackFunnelEventMock.mockResolvedValue({ ok: true, event_id: "event-2" });
+    });
   });
 
   it("submits the partner application with referral ownership intact", async () => {
-    getReferralAttributionMock.mockResolvedValue({
-      referralCode: "ELIN2026",
-      referredByUserId: "user-1",
-      landingPage: "/sv/partners",
-    });
-
     render(
       <MemoryRouter initialEntries={["/sv/partners"]}>
         <PartnerPage lang="sv" />
@@ -79,8 +73,8 @@ describe("PartnerPage", () => {
     fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
     fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
     fireEvent.change(screen.getByLabelText("Telefonnummer"), { target: { value: "0701234567" } });
-    fireEvent.change(screen.getByLabelText("Varför är detta intressant för dig?"), { target: { value: "Jag vill bygga långsiktigt." } });
-    fireEvent.click(screen.getByRole("button", { name: "Skicka partnerförfrågan" }));
+    fireEvent.change(screen.getByLabelText(/varför är detta intressant för dig/i), { target: { value: "Jag vill bygga långsiktigt." } });
+    fireEvent.click(screen.getByRole("button", { name: /skicka partnerförfrågan/i }));
 
     await waitFor(() =>
       expect(upsertLeadMock).toHaveBeenCalledWith({
@@ -121,6 +115,7 @@ describe("PartnerPage", () => {
         },
       }),
     );
+
     expect(trackFunnelEventMock).toHaveBeenCalledWith(
       "partner_form_started",
       expect.objectContaining({
@@ -128,21 +123,28 @@ describe("PartnerPage", () => {
         search: "",
       }),
     );
+
     expect(trackFunnelEventMock).toHaveBeenCalledWith(
       "partner_form_submitted",
       expect.objectContaining({
         pathname: "/sv/partners",
         referralCode: "ELIN2026",
         sessionId: "session-123",
+        details: expect.objectContaining({
+          partnerLinked: true,
+        }),
       }),
     );
   });
 
-  it("shows a clear error when no valid partner link is present", async () => {
-    getReferralAttributionMock.mockResolvedValue({
+  it("allows a partner application even without a partner link", async () => {
+    getLeadAttributionContextMock.mockResolvedValue({
+      sessionId: "session-123",
       referralCode: null,
       referredByUserId: null,
       landingPage: "/sv/partners",
+      firstTouch: null,
+      lastTouch: null,
     });
 
     render(
@@ -154,19 +156,31 @@ describe("PartnerPage", () => {
     fireEvent.change(screen.getByLabelText("Namn"), { target: { value: "Anna Holm" } });
     fireEvent.change(screen.getByLabelText("E-post"), { target: { value: "anna@example.com" } });
     fireEvent.change(screen.getByLabelText("Telefonnummer"), { target: { value: "0701234567" } });
-    fireEvent.change(screen.getByLabelText("Varför är detta intressant för dig?"), { target: { value: "Jag vill bygga långsiktigt." } });
-    fireEvent.click(screen.getByRole("button", { name: "Skicka partnerförfrågan" }));
+    fireEvent.change(screen.getByLabelText(/varför är detta intressant för dig/i), { target: { value: "Jag vill bygga långsiktigt." } });
+    fireEvent.click(screen.getByRole("button", { name: /skicka partnerförfrågan/i }));
 
-    expect(await screen.findByText("Partneransökan behöver skickas via en giltig partnerlänk.")).toBeInTheDocument();
-    expect(upsertLeadMock).not.toHaveBeenCalled();
+    await waitFor(() =>
+      expect(upsertLeadMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          lead_type: "partner",
+          lead_source: "partner_form",
+          ref: null,
+        }),
+      ),
+    );
+
+    expect(screen.queryByText(/partneransökan behöver skickas via en giltig partnerlänk/i)).not.toBeInTheDocument();
+    expect(trackFunnelEventMock).toHaveBeenCalledWith(
+      "partner_form_submitted",
+      expect.objectContaining({
+        details: expect.objectContaining({
+          partnerLinked: false,
+        }),
+      }),
+    );
   });
-  it("ignores repeated submits while a partner application is already sending", async () => {
-    getReferralAttributionMock.mockResolvedValue({
-      referralCode: "ELIN2026",
-      referredByUserId: "user-1",
-      landingPage: "/sv/partners",
-    });
 
+  it("ignores repeated submits while a partner application is already sending", async () => {
     let resolveLead: ((value: { ok: true; mode: string; lead_id: string }) => void) | null = null;
     upsertLeadMock.mockImplementation(
       () =>
