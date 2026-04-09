@@ -63,6 +63,21 @@ const signInLabelByLang: Partial<Record<Lang, string>> = {
   it: "Accedi",
 };
 
+const insideBalanceLabelByLang: Partial<Record<Lang, string>> = {
+  sv: "InsideBalance",
+  no: "InsideBalance",
+  da: "InsideBalance",
+  fi: "InsideBalance",
+  en: "InsideBalance",
+  de: "InsideBalance",
+  fr: "InsideBalance",
+  it: "InsideBalance",
+};
+
+const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
+const omegaHomePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
+const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
+
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const copy = t(lang);
   const heroCopy = funnelHeroCopy[lang];
@@ -71,9 +86,17 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
     <section className="bg-hero px-4 pb-10 pt-6 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
       <div className="container-wide mx-auto">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
-          <a href={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
-            OmegaBalance
-          </a>
+          <div className="flex flex-col gap-1">
+            <Link
+              to={platformHomePath(lang)}
+              className="text-xs font-medium uppercase tracking-[0.14em] text-subtle transition-colors hover:text-foreground"
+            >
+              {insideBalanceLabelByLang[lang] ?? "InsideBalance"}
+            </Link>
+            <a href={omegaHomePath(lang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+              OmegaBalance
+            </a>
+          </div>
           <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
             <Link
               to="/dashboard/login"
@@ -82,8 +105,8 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               {signInLabelByLang[lang] ?? "Sign in"}
             </Link>
             <Link
-              to={`/${lang}/partners`}
-              className="inline-flex whitespace-nowrap rounded-full border border-border bg-card/90 px-3 py-2 text-xs font-medium text-foreground shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
+              to={partnerPath(lang)}
+              className="inline-flex whitespace-nowrap rounded-full border border-border/80 bg-card/75 px-3 py-2 text-xs font-medium text-foreground/88 shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
             >
               {copy.hero.partnerCta}
             </Link>
@@ -136,7 +159,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             </TrackedOutboundButton>
             <a
               href="#how-it-works"
-              className="btn-secondary text-center"
+              className="inline-flex items-center justify-center text-sm font-medium text-foreground/72 underline-offset-4 transition hover:text-foreground hover:underline"
               onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
                 details: { placement: "hero" },
               })}
@@ -145,11 +168,8 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             </a>
           </div>
 
-          <p className="mx-auto mt-4 max-w-2xl text-sm text-subtle">
-            {heroCopy.trust}
-          </p>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-subtle">
-            {measuredResultTriggerByLang[lang]}
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-subtle">
+            {heroCopy.trust} <span className="mx-1 hidden sm:inline">•</span> {measuredResultTriggerByLang[lang]}
           </p>
         </motion.div>
       </div>

@@ -1232,7 +1232,7 @@ const economicsDirectLabelByLang: Record<Lang, string> = {
 };
 
 const economicsDirectBodyByLang: Record<Lang, string> = {
-  sv: "När flera externa led kapas uppstår ett marginalutrymme som inte längre behöver ätas upp av grossist- och butiksmarginaler.",
+  sv: "När flera externa led kapas uppstår ett marginalutrymme som inte längre behöver tas av grossist- och butiksmarginaler.",
   no: "Når flere eksterne ledd kuttes bort, oppstår et marginrom som ikke lenger trenger å spises opp av grossist- og butikkmarginer.",
   da: "Når flere eksterne led skæres væk, opstår der et marginrum, som ikke længere behøver at blive spist op af grossist- og butiksmarginer.",
   fi: "Kun useita ulkoisia portaita poistetaan, syntyy marginaalitilaa, jota tukku- ja myymälämarginaalit eivät enää syö pois.",
@@ -3110,7 +3110,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       <section className="bg-hero section-padding pb-14 md:pb-24">
         <div className={heroShellClass}>
           <div className="mb-8 flex items-center justify-between gap-3 md:mb-12 md:gap-4">
-            <Link to={`/${lang}`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            <Link to={lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               OmegaBalance
             </Link>
             <LanguageSwitcher lang={lang} />
@@ -3537,6 +3537,30 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">{item.text}</p>
               </div>
             ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="px-4 py-10 md:px-6 md:py-12">
+        <motion.div
+          {...sectionMotion}
+          className="container-wide mx-auto rounded-[1.75rem] border border-border/80 bg-card/85 px-6 py-8 text-center shadow-sm md:px-10 md:py-10"
+        >
+          <p className="mx-auto max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.sticky.text}</p>
+          <div className="mt-6">
+            <a
+              href="#partner-application"
+              className="btn-primary inline-flex min-h-12 items-center justify-center px-6 py-3.5 text-center text-base"
+              onClick={() => void logFunnelEvent("partner_bottom_cta_clicked", {
+                pathname: location.pathname,
+                search: location.search,
+                details: {
+                  placement: "bottom-section",
+                },
+              })}
+            >
+              {page.sticky.cta}
+            </a>
           </div>
         </motion.div>
       </section>

@@ -14,13 +14,13 @@ const copyByLang: Record<Lang, { eyebrow: string; title: string; body: string; p
     primary: "Till InsideBalance",
     secondary: "Till OmegaBalance",
   },
-  no: { eyebrow: "GutBalance", title: "GutBalance er neste testspor", body: "Vi bygger nå grunnlaget for GutBalance som neste produktside innenfor InsideBalance.", primary: "Til InsideBalance", secondary: "Til OmegaBalance" },
-  da: { eyebrow: "GutBalance", title: "GutBalance er næste testspor", body: "Vi bygger nu grundlaget for GutBalance som næste produktside i InsideBalance.", primary: "Til InsideBalance", secondary: "Til OmegaBalance" },
-  fi: { eyebrow: "GutBalance", title: "GutBalance on seuraava testipolku", body: "Rakennamme nyt perustaa GutBalancelle InsideBalancen seuraavana tuotesivuna.", primary: "InsideBalanceen", secondary: "OmegaBalanceen" },
+  no: { eyebrow: "GutBalance", title: "GutBalance er neste testspor", body: "Vi bygger nå grunnlaget for GutBalance som neste produktside innenfor InsideBalance.", primary: "Til InsideBalance", secondary: "OmegaBalance" },
+  da: { eyebrow: "GutBalance", title: "GutBalance er næste testspor", body: "Vi bygger nu grundlaget for GutBalance som næste produktside i InsideBalance.", primary: "Til InsideBalance", secondary: "OmegaBalance" },
+  fi: { eyebrow: "GutBalance", title: "GutBalance on seuraava testipolku", body: "Rakennamme nyt perustaa GutBalancelle InsideBalancen seuraavana tuotesivuna.", primary: "InsideBalanceen", secondary: "OmegaBalance" },
   en: { eyebrow: "GutBalance", title: "GutBalance is the next test journey", body: "We are now building the foundation for GutBalance as the next product page inside InsideBalance.", primary: "Go to InsideBalance", secondary: "Go to OmegaBalance" },
-  de: { eyebrow: "GutBalance", title: "GutBalance ist der nächste Testweg", body: "Wir bauen gerade die Grundlage für GutBalance als nächste Produktseite innerhalb von InsideBalance.", primary: "Zu InsideBalance", secondary: "Zu OmegaBalance" },
-  fr: { eyebrow: "GutBalance", title: "GutBalance est le prochain parcours de test", body: "Nous posons actuellement les bases de GutBalance comme prochaine page produit au sein de InsideBalance.", primary: "Vers InsideBalance", secondary: "Vers OmegaBalance" },
-  it: { eyebrow: "GutBalance", title: "GutBalance è il prossimo percorso di test", body: "Stiamo costruendo le basi di GutBalance come prossima pagina prodotto dentro InsideBalance.", primary: "Vai a InsideBalance", secondary: "Vai a OmegaBalance" },
+  de: { eyebrow: "GutBalance", title: "GutBalance ist der nächste Testweg", body: "Wir bauen gerade die Grundlage für GutBalance als nächste Produktseite innerhalb von InsideBalance.", primary: "Zu InsideBalance", secondary: "OmegaBalance" },
+  fr: { eyebrow: "GutBalance", title: "GutBalance est le prochain parcours de test", body: "Nous posons actuellement les bases de GutBalance comme prochaine page produit au sein de InsideBalance.", primary: "Vers InsideBalance", secondary: "OmegaBalance" },
+  it: { eyebrow: "GutBalance", title: "GutBalance è il prossimo percorso di test", body: "Stiamo costruendo le basi di GutBalance come prossima pagina prodotto dentro InsideBalance.", primary: "Vai a InsideBalance", secondary: "OmegaBalance" },
 };
 
 function resolveLang(param?: string): Lang {

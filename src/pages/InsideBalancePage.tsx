@@ -1,5 +1,7 @@
+import { ChevronDown } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 import insideBalanceResultsImage from "@/assets/insidebalance-results.png";
 import insideBalanceConversationImage from "@/assets/insidebalance-conversation.png";
@@ -60,6 +62,94 @@ type VisualFrameCopy = {
   connectionBody: string;
 };
 
+const navExploreLabelByLang: Record<Lang, string> = {
+  sv: "Utforska",
+  no: "Utforsk",
+  da: "Udforsk",
+  fi: "Tutustu",
+  en: "Explore",
+  de: "Entdecken",
+  fr: "Explorer",
+  it: "Esplora",
+};
+
+const navAvailableLabelByLang: Record<Lang, string> = {
+  sv: "Nu",
+  no: "Nå",
+  da: "Nu",
+  fi: "Nyt",
+  en: "Now",
+  de: "Jetzt",
+  fr: "Maint.",
+  it: "Ora",
+};
+
+const navSoonLabelByLang: Record<Lang, string> = {
+  sv: "Snart",
+  no: "Snart",
+  da: "Snart",
+  fi: "Tulossa",
+  en: "Soon",
+  de: "Bald",
+  fr: "Bientôt",
+  it: "Presto",
+};
+
+const footerExploreLabelByLang: Record<Lang, string> = {
+  sv: "Områden",
+  no: "Områder",
+  da: "Områder",
+  fi: "Alueet",
+  en: "Areas",
+  de: "Bereiche",
+  fr: "Domaines",
+  it: "Aree",
+};
+
+const footerCompanyLabelByLang: Record<Lang, string> = {
+  sv: "Sidor",
+  no: "Sider",
+  da: "Sider",
+  fi: "Sivut",
+  en: "Pages",
+  de: "Seiten",
+  fr: "Pages",
+  it: "Pagine",
+};
+
+const footerContactLabelByLang: Record<Lang, string> = {
+  sv: "Kontakt",
+  no: "Kontakt",
+  da: "Kontakt",
+  fi: "Yhteystiedot",
+  en: "Contact",
+  de: "Kontakt",
+  fr: "Contact",
+  it: "Contatti",
+};
+
+const footerPrivacyLabelByLang: Record<Lang, string> = {
+  sv: "Integritet",
+  no: "Personvern",
+  da: "Privatliv",
+  fi: "Tietosuoja",
+  en: "Privacy",
+  de: "Datenschutz",
+  fr: "Confidentialité",
+  it: "Privacy",
+};
+
+const footerTermsLabelByLang: Record<Lang, string> = {
+  sv: "Villkor",
+  no: "Vilkår",
+  da: "Vilkår",
+  fi: "Ehdot",
+  en: "Terms",
+  de: "Bedingungen",
+  fr: "Conditions",
+  it: "Termini",
+};
+
 const copyByLang: Record<Lang, InsideBalanceCopy> = {
   sv: {
     navHome: "InsideBalance",
@@ -84,7 +174,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
         eyebrow: "Tillg\u00e4nglig nu",
         body: "F\u00f6r dig som vill f\u00f6rst\u00e5 din omega-6/omega-3-balans och b\u00f6rja med ett etablerat testsp\u00e5r.",
         fit: "Passar dig som vill komma ig\u00e5ng med ett tydligt f\u00f6rsta test och en mer konkret bild av ditt nul\u00e4ge.",
-        cta: "Till OmegaBalance",
+        cta: "OmegaBalance",
         href: "/sv",
       },
       {
@@ -92,7 +182,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
         eyebrow: "N\u00e4sta sp\u00e5r",
         body: "V\u00e5rt kommande testsp\u00e5r f\u00f6r mage, tarm och inre balans.",
         fit: "Passar dig som \u00e4r nyfiken p\u00e5 ett framtida sp\u00e5r med samma lugna och testbaserade logik.",
-        cta: "Till GutBalance",
+        cta: "GutBalance",
         href: "/sv/gut-balance",
         status: "Kommer snart",
       },
@@ -122,8 +212,8 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     ],
     footerTitle: "InsideBalance",
     footerBody:
-      "InsideBalance \u00e4r plattformen som samlar de h\u00e4r testomr\u00e5dena i en tydligare struktur. OmegaBalance och GutBalance bygger p\u00e5 samma helhetst\u00e4nk, men med olika fokus.",
-    footerCta: "Till OmegaBalance",
+      "InsideBalance samlar h\u00e4lsotester i en tydligare struktur. H\u00e4r ska det vara l\u00e4ttare att f\u00f6rst\u00e5 vad som finns, vad som passar och var du vill b\u00f6rja.",
+    footerCta: "OmegaBalance",
   },
   no: {
     navHome: "InsideBalance",
@@ -189,12 +279,12 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     heroTitle: "Testipohjaista hyvinvointia selke\u00e4mmill\u00e4 seuraavilla askelilla",
     heroBody: "InsideBalance kokoaa hyvinvointipolkumme yhteen paikkaan. Aloita sinulle sopivimmasta testist\u00e4.",
     heroPrimaryCta: "Tutustu testeihin",
-    heroSecondaryCta: "Siirry OmegaBalanceen",
+    heroSecondaryCta: "OmegaBalance",
     productsTitle: "Testipolkumme",
     productsBody: "Jokainen polku keskittyy alueeseen, jossa mitattavat tulokset auttavat ymm\u00e4rt\u00e4m\u00e4\u00e4n, mik\u00e4 on ajankohtaista juuri nyt.",
     products: [
-      { title: "OmegaBalance", body: "Sinulle, joka haluat ymm\u00e4rt\u00e4\u00e4 omega-6/omega-3-tasapainoasi paremmin.", cta: "Siirry OmegaBalanceen", href: "/fi" },
-      { title: "GutBalance", body: "Seuraava testipolkumme vatsan, suoliston ja sis\u00e4isen tasapainon tueksi.", cta: "Lue GutBalancesta", href: "/fi/gut-balance", status: "Tulossa pian" },
+      { title: "OmegaBalance", body: "Sinulle, joka haluat ymm\u00e4rt\u00e4\u00e4 omega-6/omega-3-tasapainoasi paremmin.", cta: "OmegaBalance", href: "/fi" },
+      { title: "GutBalance", body: "Seuraava testipolkumme vatsan, suoliston ja sis\u00e4isen tasapainon tueksi.", cta: "GutBalance", href: "/fi/gut-balance", status: "Tulossa pian" },
     ],
     whyTitle: "Aloita mittaamalla",
     whyBody: "Moni yritt\u00e4\u00e4 parantaa hyvinvointiaan tiet\u00e4m\u00e4tt\u00e4 ensin nykytilannetta. Testi antaa selke\u00e4mm\u00e4n l\u00e4ht\u00f6pisteen.",
@@ -231,7 +321,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
         eyebrow: "Available now",
         body: "For people who want to understand their omega-6/omega-3 balance and begin with an established test area.",
         fit: "A good fit if you want a clear first test and a more concrete picture of your current position.",
-        cta: "To OmegaBalance",
+        cta: "OmegaBalance",
         href: "/en",
       },
       {
@@ -239,7 +329,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
         eyebrow: "Coming soon",
         body: "Our upcoming focus on gut health, digestion, and inner balance.",
         fit: "A good fit if you are curious about a future offering built on the same calm, test-based approach.",
-        cta: "To GutBalance",
+        cta: "GutBalance",
         href: "/en/gut-balance",
         status: "Coming soon",
       },
@@ -270,7 +360,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     footerTitle: "InsideBalance",
     footerBody:
       "InsideBalance is the platform that brings these test areas into a clearer structure. OmegaBalance and GutBalance follow the same overall thinking, but with different focus areas.",
-    footerCta: "To OmegaBalance",
+    footerCta: "OmegaBalance",
   },
   de: {
     navHome: "InsideBalance",
@@ -280,12 +370,12 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     heroTitle: "Testbasierte Gesundheit mit klareren n\u00e4chsten Schritten",
     heroBody: "InsideBalance verbindet unsere Gesundheitswege an einem Ort. Starte mit dem Test, der am besten zu dir passt.",
     heroPrimaryCta: "Unsere Tests entdecken",
-    heroSecondaryCta: "Zu OmegaBalance",
+    heroSecondaryCta: "OmegaBalance",
     productsTitle: "Unsere Testwege",
     productsBody: "Jeder Weg konzentriert sich auf einen Bereich, in dem messbare Ergebnisse helfen, das Relevante jetzt besser zu verstehen.",
     products: [
-      { title: "OmegaBalance", body: "F\u00fcr Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen wollen.", cta: "Zu OmegaBalance", href: "/de" },
-      { title: "GutBalance", body: "Unser n\u00e4chster Testweg rund um Darm, Verdauung und innere Balance.", cta: "Mehr zu GutBalance", href: "/de/gut-balance", status: "Demn\u00e4chst" },
+      { title: "OmegaBalance", body: "F\u00fcr Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen wollen.", cta: "OmegaBalance", href: "/de" },
+      { title: "GutBalance", body: "Unser n\u00e4chster Testweg rund um Darm, Verdauung und innere Balance.", cta: "GutBalance", href: "/de/gut-balance", status: "Demn\u00e4chst" },
     ],
     whyTitle: "Mit Messen beginnen",
     whyBody: "Viele versuchen ihre Gesundheit zu verbessern, bevor sie ihren Ausgangspunkt wirklich kennen. Ein Test schafft mehr Klarheit.",
@@ -308,12 +398,12 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     heroTitle: "Une sant\u00e9 guid\u00e9e par les tests, avec des prochaines \u00e9tapes plus claires",
     heroBody: "InsideBalance rassemble nos parcours sant\u00e9 en un seul endroit. Commencez par le test le plus pertinent pour vous.",
     heroPrimaryCta: "Explorer nos tests",
-    heroSecondaryCta: "Aller vers OmegaBalance",
+    heroSecondaryCta: "OmegaBalance",
     productsTitle: "Nos parcours de test",
     productsBody: "Chaque parcours se concentre sur un domaine o\u00f9 des r\u00e9sultats mesurables rendent la suite plus claire.",
     products: [
-      { title: "OmegaBalance", body: "Pour celles et ceux qui veulent mieux comprendre leur \u00e9quilibre om\u00e9ga-6/om\u00e9ga-3.", cta: "Aller vers OmegaBalance", href: "/fr" },
-      { title: "GutBalance", body: "Notre prochain parcours autour du ventre, de l'intestin et de l'\u00e9quilibre int\u00e9rieur.", cta: "Lire sur GutBalance", href: "/fr/gut-balance", status: "Bient\u00f4t" },
+      { title: "OmegaBalance", body: "Pour celles et ceux qui veulent mieux comprendre leur \u00e9quilibre om\u00e9ga-6/om\u00e9ga-3.", cta: "OmegaBalance", href: "/fr" },
+      { title: "GutBalance", body: "Notre prochain parcours autour du ventre, de l'intestin et de l'\u00e9quilibre int\u00e9rieur.", cta: "GutBalance", href: "/fr/gut-balance", status: "Bient\u00f4t" },
     ],
     whyTitle: "Commencer par mesurer",
     whyBody: "Beaucoup essaient d'am\u00e9liorer leur sant\u00e9 sans conna\u00eetre clairement leur point de d\u00e9part. Un test apporte cette clart\u00e9.",
@@ -336,12 +426,12 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     heroTitle: "Salute basata sui test con passi successivi pi\u00f9 chiari",
     heroBody: "InsideBalance riunisce i nostri percorsi salute in un unico posto. Inizia dal test pi\u00f9 adatto a te.",
     heroPrimaryCta: "Scopri i nostri test",
-    heroSecondaryCta: "Vai a OmegaBalance",
+    heroSecondaryCta: "OmegaBalance",
     productsTitle: "I nostri percorsi di test",
     productsBody: "Ogni percorso si concentra su un'area in cui risultati misurabili rendono pi\u00f9 semplice capire cosa conta adesso.",
     products: [
-      { title: "OmegaBalance", body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3.", cta: "Vai a OmegaBalance", href: "/it" },
-      { title: "GutBalance", body: "Il nostro prossimo percorso dedicato a intestino, digestione ed equilibrio interno.", cta: "Scopri GutBalance", href: "/it/gut-balance", status: "In arrivo" },
+      { title: "OmegaBalance", body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3.", cta: "OmegaBalance", href: "/it" },
+      { title: "GutBalance", body: "Il nostro prossimo percorso dedicato a intestino, digestione ed equilibrio interno.", cta: "GutBalance", href: "/it/gut-balance", status: "In arrivo" },
     ],
     whyTitle: "Inizia misurando",
     whyBody: "Molte persone cercano di migliorare la propria salute senza conoscere davvero il punto di partenza. Un test crea pi\u00f9 chiarezza.",
@@ -377,7 +467,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Tilgjengelig nå",
         body: "For deg som vil forstå omega-6/omega-3-balansen din og begynne med et etablert testområde.",
         fit: "Passer deg som vil komme i gang med en tydelig første test og et mer konkret bilde av utgangspunktet ditt.",
-        cta: "Til OmegaBalance",
+        cta: "OmegaBalance",
         href: "/no",
       },
       {
@@ -385,7 +475,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Kommer snart",
         body: "Vår kommende satsing på mage, tarm og indre balanse.",
         fit: "Passer deg som er nysgjerrig på noe nytt bygget på den samme rolige og testbaserte logikken.",
-        cta: "Til GutBalance",
+        cta: "GutBalance",
         href: "/no/gut-balance",
         status: "Kommer snart",
       },
@@ -415,7 +505,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance er plattformen som samler disse testområdene i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhetstanke, men med ulikt fokus.",
-    footerCta: "Til OmegaBalance",
+    footerCta: "OmegaBalance",
   },
   da: {
     heroTitle: "Sundhedstests, der gør det lettere at forstå, hvad du faktisk har brug for",
@@ -435,7 +525,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Tilgængelig nu",
         body: "For dig, der vil forstå din omega-6/omega-3-balance og begynde med et etableret testområde.",
         fit: "Passer dig, der vil i gang med en tydelig første test og et mere konkret billede af dit udgangspunkt.",
-        cta: "Til OmegaBalance",
+        cta: "OmegaBalance",
         href: "/da",
       },
       {
@@ -443,7 +533,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Kommer snart",
         body: "Vores kommende fokus på mave, tarm og indre balance.",
         fit: "Passer dig, der er nysgerrig på noget nyt bygget på den samme rolige og testbaserede tilgang.",
-        cta: "Til GutBalance",
+        cta: "GutBalance",
         href: "/da/gut-balance",
         status: "Kommer snart",
       },
@@ -473,7 +563,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance er platformen, der samler disse testområder i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhedstanke, men med forskelligt fokus.",
-    footerCta: "Til OmegaBalance",
+    footerCta: "OmegaBalance",
   },
   fi: {
     heroTitle: "Terveystestit, joiden avulla on helpompi ymmärtää mitä todella tarvitset",
@@ -493,7 +583,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Saatavilla nyt",
         body: "Sinulle, joka haluat ymmärtää omega-6/omega-3-tasapainoasi ja aloittaa vakiintuneesta testialueesta.",
         fit: "Sopii sinulle, jos haluat selkeän ensimmäisen testin ja konkreettisemman kuvan nykytilanteestasi.",
-        cta: "OmegaBalanceen",
+        cta: "OmegaBalance",
         href: "/fi",
       },
       {
@@ -501,7 +591,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Tulossa pian",
         body: "Tuleva painopisteemme vatsan, suoliston ja sisäisen tasapainon tueksi.",
         fit: "Sopii sinulle, jos olet kiinnostunut tulevasta kokonaisuudesta, joka rakentuu saman rauhallisen ja testipohjaisen ajattelun varaan.",
-        cta: "GutBalanceen",
+        cta: "GutBalance",
         href: "/fi/gut-balance",
         status: "Tulossa pian",
       },
@@ -531,7 +621,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance on alusta, joka kokoaa nämä testialueet selkeämpään rakenteeseen. OmegaBalance ja GutBalance perustuvat samaan kokonaisajatteluun, mutta eri painotuksin.",
-    footerCta: "OmegaBalanceen",
+    footerCta: "OmegaBalance",
   },
   de: {
     heroTitle: "Gesundheitstests, die helfen klarer zu verstehen, was du tatsächlich brauchst",
@@ -551,7 +641,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Jetzt verfügbar",
         body: "Für Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen und mit einem etablierten Testbereich beginnen möchten.",
         fit: "Passend, wenn du mit einem klaren ersten Test und einem konkreteren Bild deiner Ausgangslage starten möchtest.",
-        cta: "Zu OmegaBalance",
+        cta: "OmegaBalance",
         href: "/de",
       },
       {
@@ -559,7 +649,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Demnächst",
         body: "Unser kommender Fokus rund um Darm, Verdauung und innere Balance.",
         fit: "Passend, wenn du neugierig auf ein zukünftiges Angebot bist, das auf derselben ruhigen und testbasierten Logik aufbaut.",
-        cta: "Zu GutBalance",
+        cta: "GutBalance",
         href: "/de/gut-balance",
         status: "Demnächst",
       },
@@ -589,7 +679,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance ist die Plattform, die diese Testbereiche in einer klareren Struktur zusammenführt. OmegaBalance und GutBalance folgen demselben ganzheitlichen Ansatz, aber mit unterschiedlichem Fokus.",
-    footerCta: "Zu OmegaBalance",
+    footerCta: "OmegaBalance",
   },
   fr: {
     heroTitle: "Des tests de santé qui aident à mieux comprendre ce dont vous avez réellement besoin",
@@ -609,7 +699,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Disponible maintenant",
         body: "Pour celles et ceux qui veulent mieux comprendre leur équilibre oméga-6/oméga-3 et commencer par un domaine de test déjà établi.",
         fit: "Adapté si vous voulez un premier test clair et une vision plus concrète de votre situation actuelle.",
-        cta: "Vers OmegaBalance",
+        cta: "OmegaBalance",
         href: "/fr",
       },
       {
@@ -617,7 +707,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Bientôt",
         body: "Notre prochain focus autour du ventre, de l’intestin et de l’équilibre intérieur.",
         fit: "Adapté si vous êtes curieux d’une future proposition construite sur la même logique calme et fondée sur les tests.",
-        cta: "Vers GutBalance",
+        cta: "GutBalance",
         href: "/fr/gut-balance",
         status: "Bientôt",
       },
@@ -647,7 +737,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance est la plateforme qui rassemble ces domaines de test dans une structure plus claire. OmegaBalance et GutBalance reposent sur la même vision d’ensemble, avec des focus différents.",
-    footerCta: "Vers OmegaBalance",
+    footerCta: "OmegaBalance",
   },
   it: {
     heroTitle: "Test di salute che aiutano a capire meglio ciò di cui hai davvero bisogno",
@@ -667,7 +757,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "Disponibile ora",
         body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3 e iniziare da un’area di test già consolidata.",
         fit: "Adatta se vuoi partire con un primo test chiaro e con un quadro più concreto della tua situazione attuale.",
-        cta: "Vai a OmegaBalance",
+        cta: "OmegaBalance",
         href: "/it",
       },
       {
@@ -675,7 +765,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
         eyebrow: "In arrivo",
         body: "Il nostro prossimo focus dedicato a intestino, digestione ed equilibrio interno.",
         fit: "Adatta se sei curioso di una proposta futura costruita sulla stessa logica calma e basata sui test.",
-        cta: "Vai a GutBalance",
+        cta: "GutBalance",
         href: "/it/gut-balance",
         status: "In arrivo",
       },
@@ -705,7 +795,7 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     footerBody:
       "InsideBalance è la piattaforma che riunisce queste aree di test in una struttura più chiara. OmegaBalance e GutBalance seguono la stessa visione d’insieme, ma con focus diversi.",
-    footerCta: "Vai a OmegaBalance",
+    footerCta: "OmegaBalance",
   },
 };
 
@@ -939,12 +1029,31 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               {copy.navHome}
             </Link>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-              <Link to={omegaBalancePath(currentLang)} className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
-                {copy.navOmega}
-              </Link>
-              <Link to={localizedPath(currentLang, "/gut-balance")} className="rounded-full border border-black/5 bg-white/70 px-4 py-2 text-sm font-medium text-foreground/80 shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
-                {copy.navGut}
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
+                  >
+                    <span>{navExploreLabelByLang[currentLang]}</span>
+                    <ChevronDown className="h-4 w-4 text-foreground/70" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[13rem] rounded-2xl border-black/5 bg-white/95 p-2 shadow-[0_18px_40px_rgba(31,41,55,0.10)]">
+                  <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
+                    <Link to={omegaBalancePath(currentLang)} className="flex w-full items-center justify-between gap-3">
+                      <span className="font-medium text-foreground">{copy.navOmega}</span>
+                      <span className="text-xs uppercase tracking-[0.14em] text-foreground/55">{navAvailableLabelByLang[currentLang]}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
+                    <Link to={localizedPath(currentLang, "/gut-balance")} className="flex w-full items-center justify-between gap-3">
+                      <span className="font-medium text-foreground">{copy.navGut}</span>
+                      <span className="text-xs uppercase tracking-[0.14em] text-foreground/55">{navSoonLabelByLang[currentLang]}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <LanguageSwitcher lang={currentLang} />
             </div>
           </div>
@@ -959,15 +1068,15 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               </h1>
               <p className="mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/68 md:text-lg">{copy.heroBody}</p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a href="#products" className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_22px_50px_rgba(31,70,55,0.18)] transition hover:opacity-95">
-                  {copy.heroPrimaryCta}
-                </a>
                 <Link
                   to={omegaBalancePath(currentLang)}
-                  className="inline-flex items-center justify-center rounded-full border border-black/5 bg-white/82 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
+                  className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_22px_50px_rgba(31,70,55,0.18)] transition hover:opacity-95"
                 >
                   {copy.heroSecondaryCta}
                 </Link>
+                <a href="#products" className="inline-flex items-center justify-center rounded-full border border-black/5 bg-white/82 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
+                  {copy.heroPrimaryCta}
+                </a>
               </div>
               <div className="mt-12 overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_24px_60px_rgba(31,41,55,0.08)]">
                 <div className="grid gap-0 md:grid-cols-[0.92fr_1.08fr]">
@@ -985,13 +1094,13 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              <div className="rounded-[1.75rem] border border-black/5 bg-white/82 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.06)]">
+              <div className="rounded-[1.75rem] border border-[rgba(70,99,80,0.12)] bg-[linear-gradient(180deg,rgba(250,247,241,0.98),rgba(240,236,227,0.96))] p-7 shadow-[0_22px_52px_rgba(31,70,55,0.10)]">
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{primaryRouteTitle}</p>
                 <p className="mt-3 text-[1.7rem] font-semibold tracking-tight text-foreground">OmegaBalance</p>
                 <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
                   {primaryRouteBody}
                 </p>
-                <Link to={products[0].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
+                <Link to={products[0].href} className="mt-5 inline-flex items-center rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_18px_40px_rgba(31,70,55,0.16)] transition hover:opacity-95">
                   {products[0].cta}
                 </Link>
               </div>
@@ -1120,24 +1229,40 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <footer className="border-t border-black/5 px-4 py-12 md:px-6">
-        <div className="container-wide mx-auto flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <footer className="border-t border-black/5 bg-[#f1ece2] px-4 py-12 md:px-6 md:py-14">
+        <div className="container-wide mx-auto grid gap-10 md:grid-cols-[1.3fr_0.7fr_0.7fr]">
           <div className="max-w-2xl">
             <p className="font-serif text-[1.7rem] font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
-            <p className="mt-3 text-[1.01rem] leading-7 text-foreground/66">{copy.footerBody}</p>
-            {footerCta ? (
-              <Link
-                to={products[0].href}
-                className="mt-6 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-5 py-3 text-sm font-medium text-foreground transition hover:bg-white"
-              >
-                {footerCta}
-              </Link>
-            ) : null}
+            <p className="mt-3 text-sm leading-6 text-foreground/66">{copy.footerBody}</p>
           </div>
-          <div className="flex flex-wrap gap-5 text-sm text-foreground/68">
-            <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">Kontakt</Link>
-            <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">Privacy</Link>
-            <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">Terms</Link>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerExploreLabelByLang[currentLang]}</p>
+            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
+              {footerCta ? (
+                <Link to={products[0].href} className="transition hover:text-foreground">
+                  {footerCta}
+                </Link>
+              ) : null}
+              <Link to={localizedPath(currentLang, "/gut-balance")} className="transition hover:text-foreground">
+                {copy.navGut}
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerCompanyLabelByLang[currentLang]}</p>
+            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
+              <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">
+                {footerContactLabelByLang[currentLang]}
+              </Link>
+              <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">
+                {footerPrivacyLabelByLang[currentLang]}
+              </Link>
+              <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">
+                {footerTermsLabelByLang[currentLang]}
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

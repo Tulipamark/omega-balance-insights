@@ -37,6 +37,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <CookieConsentBoundary />
+        <ScrollRestorationBoundary />
         <RecoveryRedirectBoundary />
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
@@ -104,6 +105,26 @@ function CookieConsentBoundary() {
       onDecline={declineOptionalTracking}
     />
   );
+}
+
+function ScrollRestorationBoundary() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace(/^#/, "");
+      const target = document.getElementById(id);
+
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.search, location.hash]);
+
+  return null;
 }
 
 function RecoveryRedirectBoundary() {
