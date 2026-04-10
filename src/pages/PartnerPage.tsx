@@ -2741,22 +2741,22 @@ const commercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageCon
 
 const finalCommercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageContent["hero"]>>> = {
   sv: {
-    title: "Bygg något seriöst vid sidan av med ett testbaserat hälsokoncept",
-    body: "För dig som vill arbeta med en tydlig modell i stället för att börja från noll. Du behöver inte jaga människor eller kunna allt från start, men du behöver vilja bygga med struktur, förtroende och verkliga nästa steg.",
+    title: "Bygg partnerverksamhet med ett färdigt system för trafik, leads och uppföljning",
+    body: "För dig som vill bygga seriöst med en tydlig modell i stället för att börja från noll. Du ansöker till ett arbetssätt som gör vägen från intresse till verklig partnerdialog tydligare, enklare och mer strukturerad.",
     cards: [
       {
-        title: "Tydlig väg in",
-        text: "Du arbetar inte från tom mark. Det finns redan ett flöde för trafik, leads och nästa steg.",
+        title: "Färdigt system",
+        text: "Du behöver inte bygga trafik, leadflöde och uppföljningslogik helt själv från start.",
         icon: FlaskConical,
       },
       {
-        title: "Mer konkret än traditionell hälsocopy",
-        text: "Testet gör det lättare att starta relevanta samtal eftersom människor utgår från något mätbart, inte bara löften.",
+        title: "Seriös modell",
+        text: "Du arbetar med struktur, uppföljning och verkliga nästa steg i stället för lösa ryck och slump.",
         icon: CircleDollarSign,
       },
       {
-        title: "Byggbart i verkligheten",
-        text: "Målet är inte hype eller snabba ryck, utan en modell du kan förstå, använda och bygga vidare på över tid.",
+        title: "Tydligt nästa steg",
+        text: "Målet är inte att du ska förstå allt direkt, utan att du snabbt ska se om modellen är rätt för dig.",
         icon: BarChart3,
       },
     ],
