@@ -2,7 +2,7 @@ import type { Lang } from "@/lib/i18n";
 
 export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string; trust: string }> = {
   sv: {
-    headline: "Upp till 97 % ligger utanför målet\n– du vet inte om du är en av dem",
+    headline: "Du vet inte hur din omega-6:3-balans faktiskt ser ut\nförrän du har mätt den",
     supporting: "Ett enkelt blodtest visar din uppmätta balans mellan omega-6 och omega-3 svart på vitt, baserat på dina egna värden.",
     trust: "Mät först. Justera sedan. Testa igen och se vad som faktiskt händer.",
   },
@@ -44,7 +44,7 @@ export const funnelHeroCopy: Record<Lang, { headline: string; supporting: string
 };
 
 export const trustItemsByLang: Record<Lang, string[]> = {
-  sv: ["Upp till 97 % ligger utanför målet", "Blodbaserat test hemma", "Personligt mätresultat"],
+  sv: ["Tydlig omega-6:3-analys", "Blodbaserat test hemma", "Personligt mätresultat"],
   en: ["Blood-based test", "Easy to do at home", "Personal measurement result"],
   no: ["Blodbasert test", "Enkelt å gjøre hjemme", "Personlig måleresultat"],
   da: ["Blodbaseret test", "Let at lave derhjemme", "Personligt måleresultat"],

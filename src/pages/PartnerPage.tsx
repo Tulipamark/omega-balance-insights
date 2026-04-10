@@ -1685,19 +1685,19 @@ const reasonsOverridesByLang: Partial<Record<Lang, PartnerPageContent["reasons"]
 const fitOverridesByLang: Partial<Record<Lang, PartnerPageContent["fit"]>> = {
   sv: {
     title: "Vem passar det här för?",
-    body: "Det här är inte för alla. Vi söker framför allt personer som vill arbeta seriöst, långsiktigt och med något de faktiskt kan stå för.",
+    body: "Det här passar bäst för personer som vill bygga något seriöst vid sidan av, tror på testbaserad hälsa och är bekväma med att arbeta stegvis.",
     columns: [
       {
-        title: "Passar dig som...",
+        title: "Det här är för dig som...",
         items: [
           "tror på testbaserad och mer faktadriven hälsa",
-          "vill bygga stegvis, inte jaga snabba genvägar",
+          "vill bygga stegvis i stället för att jaga snabba genvägar",
+          "vill ha en seriös sidobana med tydligare struktur",
           "är bekväm med att skapa relationer och förtroende",
-          "vill arbeta med något som känns relevant även framåt",
         ],
       },
       {
-        title: "Passar sämre om du...",
+        title: "Det här passar sämre om du...",
         items: [
           "letar efter en snabb lösning eller en titel",
           "hellre säljer hårt än bygger tillit",
@@ -1884,19 +1884,19 @@ const fitOverridesByLang: Partial<Record<Lang, PartnerPageContent["fit"]>> = {
 const stepsOverridesByLang: Partial<Record<Lang, PartnerPageContent["steps"]>> = {
   sv: {
     title: "Vad händer efter att du anmäler intresse?",
-    body: "Processen är enkel och utan press. Vi vill först förstå vem du är, sedan visa modellen tydligt och därefter låta dig avgöra om det känns rätt.",
+    body: "Processen är enkel och utan press. Först ser vi om det finns en rimlig match, sedan visar vi hur modellen fungerar i praktiken och därefter avgör du om du vill gå vidare.",
     items: [
       {
         title: "Vi går igenom din ansökan",
         text: "Vi läser dina svar för att förstå din bakgrund, din ambition och om det finns en rimlig match.",
       },
       {
-        title: "Du får en tydlig genomgång",
-        text: "Vi visar hur konceptet, kundresan och partnermodellen fungerar i praktiken.",
+        title: "Du får se hur det faktiskt fungerar",
+        text: "Vi visar hur länken, flödet, uppföljningen och nästa stegen ser ut i praktiken, så att modellen blir konkret.",
       },
       {
         title: "Du tar ställning i lugn och ro",
-        text: "Målet är inte att pressa fram ett ja, utan att du ska kunna fatta ett genomtänkt beslut.",
+        text: "Målet är inte att pressa fram ett ja, utan att du ska kunna avgöra om det här känns seriöst, relevant och rätt för dig.",
       },
     ],
   },
@@ -2213,9 +2213,9 @@ const conversionAssistByLang: Record<Lang, { eyebrow: string; title: string; ite
 
 const partnerMidPageCtaByLang: Record<Lang, { title: string; body: string; cta: string }> = {
   sv: {
-    title: "Känns modellen logisk för dig?",
-    body: "Om du ser potentialen behöver du inte läsa allt flera gånger. Skicka in din ansökan så tar vi nästa steg i dialog i stället.",
-    cta: "Ansök nu",
+    title: "Känns modellen relevant för dig?",
+    body: "Om du redan ser logiken behöver du inte förstå varje detalj först. Skicka in din ansökan så tar vi nästa steg i dialog i stället. Det tar ungefär 2 minuter.",
+    cta: "Ansök om att bli partner",
   },
   no: {
     title: "Kjennes modellen logisk for deg?",
@@ -2300,13 +2300,13 @@ const partnerDeepDiveByLang: Record<Lang, { eyebrow: string; title: string; body
 const partnerSystemModelByLang: Record<Lang, { eyebrow: string; title: string; body: string; items: { title: string; text: string }[] }> = {
   sv: {
     eyebrow: "Så fungerar det",
-    title: "En enkel modell från trafik till partnerdialog",
-    body: "Det här är inte tänkt att kännas diffust. Modellen ska gå att förstå snabbt och använda steg för steg.",
+    title: "Så fungerar modellen i praktiken",
+    body: "Det här ska inte kännas diffust. Du får en länk, rätt personer går in i flödet och du följer upp där det finns verkligt intresse.",
     items: [
-      { title: "Trafik", text: "Rätt personer hittar in via ett färdigt digitalt flöde." },
-      { title: "Leads", text: "Intresse fångas upp och blir tydligare än lösa DMs och kalla kontakter." },
-      { title: "Uppföljning", text: "Rätt personer får rätt nästa steg via dialog, samtal eller Zoom." },
-      { title: "Intäkt", text: "Fler relevanta partnerdialoger kan bli affär när modellen används konsekvent." },
+      { title: "Du delar din länk", text: "Du behöver inte bygga allt själv från noll. Det finns redan ett färdigt flöde att arbeta med." },
+      { title: "Rätt personer visar intresse", text: "Intresse fångas upp tydligare än via lösa meddelanden och kalla kontakter." },
+      { title: "Systemet tar dem vidare", text: "Flödet hjälper till att skapa förståelse innan du själv behöver bära hela förklaringen." },
+      { title: "Du följer upp där det är relevant", text: "När intresset är på riktigt blir nästa steg dialog, samtal eller Zoom i stället för gissningar." },
     ],
   },
   no: {
@@ -2740,7 +2740,27 @@ const commercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageCon
 };
 
 const finalCommercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPageContent["hero"]>>> = {
-  sv: {},
+  sv: {
+    title: "Bygg något seriöst vid sidan av med ett testbaserat hälsokoncept",
+    body: "För dig som vill arbeta med en tydlig modell i stället för att börja från noll. Du behöver inte jaga människor eller kunna allt från start, men du behöver vilja bygga med struktur, förtroende och verkliga nästa steg.",
+    cards: [
+      {
+        title: "Tydlig väg in",
+        text: "Du arbetar inte från tom mark. Det finns redan ett flöde för trafik, leads och nästa steg.",
+        icon: FlaskConical,
+      },
+      {
+        title: "Mer konkret än traditionell hälsocopy",
+        text: "Testet gör det lättare att starta relevanta samtal eftersom människor utgår från något mätbart, inte bara löften.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "Byggbart i verkligheten",
+        text: "Målet är inte hype eller snabba ryck, utan en modell du kan förstå, använda och bygga vidare på över tid.",
+        icon: BarChart3,
+      },
+    ],
+  },
 };
 
 const finalConversionAssistOverridesByLang: Partial<Record<Lang, { eyebrow: string; title: string }>> = {
