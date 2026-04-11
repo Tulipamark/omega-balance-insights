@@ -25,3 +25,6 @@ dist-ssr
 
 # Local Supabase CLI state
 supabase/.temp/
+
+# Local exported launch PDFs
+omega-balance-launch-*.pdf
