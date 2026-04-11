@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, BarChart3, Beaker, ChevronDown, Shield } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -990,6 +990,71 @@ function resolveLang(param?: string): Lang {
 const localizedPath = (lang: Lang, base: string) => (lang === "sv" ? base : `/${lang}${base}`);
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
+const primaryCtaClass =
+  "inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_40px_rgba(31,70,55,0.18)] ring-1 ring-[rgba(70,99,80,0.10)] transition-all duration-200 hover:-translate-y-0.5 hover:opacity-95";
+const secondaryCtaClass =
+  "inline-flex items-center justify-center gap-2 rounded-2xl border border-[rgba(70,99,80,0.12)] bg-white/88 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white";
+const trustIcons = [Beaker, BarChart3, Shield];
+const productLinkLabelByLang: Record<Lang, string> = {
+  sv: "Läs mer",
+  no: "Les mer",
+  da: "Læs mere",
+  fi: "Lue lisää",
+  en: "Learn more",
+  de: "Mehr erfahren",
+  fr: "En savoir plus",
+  it: "Scopri di più",
+};
+const footerCopyrightByLang: Record<Lang, string> = {
+  sv: "© 2026 InsideBalance. Alla rättigheter förbehållna.",
+  no: "© 2026 InsideBalance. Alle rettigheter forbeholdt.",
+  da: "© 2026 InsideBalance. Alle rettigheder forbeholdes.",
+  fi: "© 2026 InsideBalance. Kaikki oikeudet pidätetään.",
+  en: "© 2026 InsideBalance. All rights reserved.",
+  de: "© 2026 InsideBalance. Alle Rechte vorbehalten.",
+  fr: "© 2026 InsideBalance. Tous droits réservés.",
+  it: "© 2026 InsideBalance. Tutti i diritti riservati.",
+};
+const closingCtaTitleByLang: Record<Lang, string> = {
+  sv: "Redo att börja?",
+  no: "Klar til å starte?",
+  da: "Klar til at starte?",
+  fi: "Valmis aloittamaan?",
+  en: "Ready to begin?",
+  de: "Bereit zu starten?",
+  fr: "Prêt à commencer ?",
+  it: "Pronto per iniziare?",
+};
+const closingCtaBodyByLang: Record<Lang, string> = {
+  sv: "Börja med OmegaBalance – det tydligaste sättet att komma igång i InsideBalance just nu.",
+  no: "Start med OmegaBalance – den tydeligste måten å komme i gang i InsideBalance akkurat nå.",
+  da: "Start med OmegaBalance – den tydeligste måde at komme i gang i InsideBalance lige nu.",
+  fi: "Aloita OmegaBalancella – selkein tapa päästä alkuun InsideBalancessa juuri nyt.",
+  en: "Start with OmegaBalance - the clearest way to get going in InsideBalance right now.",
+  de: "Starte mit OmegaBalance - der klarste Weg, jetzt mit InsideBalance zu beginnen.",
+  fr: "Commencez par OmegaBalance - la manière la plus claire de démarrer avec InsideBalance aujourd'hui.",
+  it: "Inizia con OmegaBalance - il modo più chiaro per iniziare con InsideBalance in questo momento.",
+};
+const footerTaglineByLang: Record<Lang, string> = {
+  sv: "Hälsotester med tydlig struktur. Mät först, förstå sedan, agera därefter.",
+  no: "Helsetester med tydelig struktur. Mål først, forstå deretter, handle etterpå.",
+  da: "Sundhedstests med tydelig struktur. Mål først, forstå derefter, handl bagefter.",
+  fi: "Hyvinvointitestit selkeällä rakenteella. Mittaa ensin, ymmärrä sitten, toimi sen jälkeen.",
+  en: "Health tests with clear structure. Measure first, understand next, act after that.",
+  de: "Gesundheitstests mit klarer Struktur. Erst messen, dann verstehen, danach handeln.",
+  fr: "Des tests de santé avec une structure claire. Mesurez d'abord, comprenez ensuite, agissez après.",
+  it: "Test di salute con una struttura chiara. Misura prima, comprendi poi, agisci dopo.",
+};
+const footerWebsiteLabelByLang: Record<Lang, string> = {
+  sv: "insidebalance.eu",
+  no: "insidebalance.eu",
+  da: "insidebalance.eu",
+  fi: "insidebalance.eu",
+  en: "insidebalance.eu",
+  de: "insidebalance.eu",
+  fr: "insidebalance.eu",
+  it: "insidebalance.eu",
+};
 
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
@@ -1035,13 +1100,14 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     copy.primaryRouteBody ?? "OmegaBalance is the first clear way into the platform and the strongest place to begin right now.";
   const secondaryRouteTitle = activeSecondaryRouteTitleByLang[currentLang];
   const secondaryRouteBody = activeSecondaryRouteBodyByLang[currentLang];
+  const productLinkLabel = productLinkLabelByLang[currentLang];
+  const firstWhoItems = copy.whoItems.slice(0, 2);
 
   return (
-    <main className="min-h-screen bg-[#f6f2ea] text-foreground">
-      <section className="relative overflow-hidden px-4 pb-14 pt-6 md:px-6 md:pb-24 md:pt-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(127,153,130,0.14),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(48,77,63,0.10),_transparent_38%)]" />
-        <div className="container-wide relative mx-auto">
-          <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
+    <main className="min-h-screen bg-[#f7f3eb] text-foreground">
+      <section className="px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
+        <div className="container-wide mx-auto">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-14">
             <Link to={platformHomePath(currentLang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               {copy.navHome}
             </Link>
@@ -1050,7 +1116,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
                   >
                     <span>{navExploreLabelByLang[currentLang]}</span>
                     <ChevronDown className="h-4 w-4 text-foreground/70" />
@@ -1073,82 +1139,85 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             </div>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-14">
-            <div className="max-w-3xl">
-              <span className="inline-flex rounded-full border border-black/5 bg-white/75 px-4 py-1.5 text-sm font-medium tracking-wide text-foreground/75">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            <div>
+              <span className="mb-6 inline-block text-sm font-medium uppercase tracking-[0.18em] text-primary">
                 {copy.heroEyebrow}
               </span>
-              <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              <h1 className="max-w-4xl font-serif text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                 {copy.heroTitle}
               </h1>
-              <p className="mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/68 md:text-lg">{copy.heroBody}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  to={omegaBalancePath(currentLang)}
-                  className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_22px_50px_rgba(31,70,55,0.18)] transition hover:opacity-95"
-                >
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
+                {copy.heroBody}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link to={omegaBalancePath(currentLang)} className={primaryCtaClass}>
                   {copy.heroSecondaryCta}
                 </Link>
-                <a href="#products" className="inline-flex items-center justify-center rounded-full border border-black/5 bg-white/82 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white">
+                <a href="#products" className={secondaryCtaClass}>
                   {copy.heroPrimaryCta}
                 </a>
               </div>
-              <div className="mt-12 overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_24px_60px_rgba(31,41,55,0.08)]">
-                <div className="grid gap-0 md:grid-cols-[0.92fr_1.08fr]">
-                  <div className="aspect-[4/5] md:aspect-auto">
-                    <img src={insideBalancePortraitImage} alt={visuals.heroTitle} className="h-full w-full object-cover" />
-                  </div>
-                  <div className="flex items-center p-6 md:p-9">
-                    <div>
-                      <h2 className="mt-3 font-serif text-[1.85rem] font-semibold tracking-tight text-foreground md:text-[2.15rem]">{visuals.heroTitle}</h2>
-                      <p className="mt-4 text-[1.02rem] leading-7 text-foreground/68">{visuals.heroBody}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              <div className="rounded-[1.75rem] border border-[rgba(70,99,80,0.12)] bg-[linear-gradient(180deg,rgba(250,247,241,0.98),rgba(240,236,227,0.96))] p-7 shadow-[0_22px_52px_rgba(31,70,55,0.10)]">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{primaryRouteTitle}</p>
-                <p className="mt-3 text-[1.7rem] font-semibold tracking-tight text-foreground">OmegaBalance</p>
-                <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
-                  {primaryRouteBody}
-                </p>
-                <Link to={products[0].href} className="mt-5 inline-flex items-center rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_18px_40px_rgba(31,70,55,0.16)] transition hover:opacity-95">
-                  {products[0].cta}
-                </Link>
-              </div>
-              <div className="rounded-[1.75rem] border border-[#d8d2c7] bg-[#ece6da] p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{secondaryRouteTitle}</p>
-                <p className="mt-3 text-[1.7rem] font-semibold tracking-tight text-foreground">GutBalance</p>
-                <p className="mt-3 text-[0.98rem] leading-7 text-foreground/68">
-                  {secondaryRouteBody}
-                </p>
-                <Link to={products[1].href} className="mt-5 inline-flex items-center rounded-full border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white">
-                  {products[1].cta}
-                </Link>
+            <div className="mx-auto w-full max-w-[34rem] xl:max-w-[30rem]">
+              <div className="aspect-[4/4.8] overflow-hidden rounded-[1.75rem] shadow-[0_24px_55px_rgba(31,70,55,0.10)]">
+                <img src={insideBalancePortraitImage} alt={visuals.heroTitle} className="h-full w-full object-cover" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="products" className="px-4 py-14 md:px-6 md:py-20">
+      <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.78),rgba(247,243,235,0.92))] px-4 py-16 md:px-6 md:py-20">
+        <div className="container-wide mx-auto">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{trustTitle}</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-foreground/68">{trustBody}</p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {trustPoints.map((point, index) => {
+              const Icon = trustIcons[index] ?? Shield;
+
+              return (
+                <article key={point} className="rounded-[1.75rem] border border-black/5 bg-white/82 p-8 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(70,99,80,0.10)]">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{point.split(".")[0]}</h3>
+                  <p className="mt-3 leading-7 text-foreground/68">{point}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="products" className="px-4 py-16 md:px-6 md:py-20">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.productsTitle}</h2>
-            <p className="mt-4 text-[1.02rem] leading-8 text-foreground/70 md:text-[1.06rem]">{copy.productsBody}</p>
+            <p className="mt-4 text-lg leading-8 text-foreground/68">{copy.productsBody}</p>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            {products.map((product) => (
-              <article key={product.title} className="rounded-[2rem] border border-black/5 bg-white/88 p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
-                <h3 className="mt-4 font-serif text-[1.95rem] font-semibold tracking-tight text-foreground">{product.title}</h3>
-                <p className="mt-4 max-w-xl text-[1.02rem] leading-7 text-foreground/68">{product.body}</p>
-                <p className="mt-4 max-w-xl text-[0.98rem] leading-7 text-foreground/60">{product.fit}</p>
-                <Link to={product.href} className="mt-7 inline-flex items-center rounded-full border border-black/5 bg-[#faf7f1] px-5 py-3 text-sm font-medium text-foreground transition hover:bg-white">
-                  {product.cta}
+          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-2">
+            {products.map((product, index) => (
+              <article
+                key={product.title}
+                className={`group rounded-[1.75rem] border p-8 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(31,41,55,0.08)] ${
+                  index === 0 ? "border-[rgba(70,99,80,0.16)] bg-primary/5" : "border-black/5 bg-white/88"
+                }`}
+              >
+                <span className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
+                  {index === 0 ? primaryRouteTitle : secondaryRouteTitle}
+                </span>
+                <h3 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight">{product.title}</h3>
+                <p className="mt-4 leading-7 text-foreground/68">{product.body}</p>
+                <p className="mt-4 text-sm leading-7 text-foreground/60">{product.fit}</p>
+                <Link to={product.href} className="mt-6 inline-flex items-center gap-2 font-medium text-primary transition-all group-hover:gap-3">
+                  {productLinkLabel}
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </article>
             ))}
@@ -1156,97 +1225,103 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-6 md:py-20">
-        <div className="container-wide mx-auto grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-[2rem] border border-[#ddd5c7] bg-[#eee7da] p-9 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.whyTitle}</h2>
-            <p className="mt-5 max-w-2xl text-[1.06rem] leading-8 text-foreground/68">{copy.whyBody}</p>
-          </div>
-          <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
-            <div className="aspect-[16/11]">
-              <img src={insideBalanceResultsImage} alt={visuals.measurementTitle} className="h-full w-full object-cover" />
+      <section className="px-4 py-16 md:px-6 md:py-20">
+        <div className="container-wide mx-auto">
+          <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+            <div className="mx-auto w-full max-w-[38rem] xl:max-w-[34rem]">
+              <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
+                <img src={insideBalanceResultsImage} alt={visuals.measurementTitle} className="h-full w-full rounded-[1.75rem] object-cover" />
+              </div>
             </div>
-            <div className="p-8 md:p-9">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{visuals.measurementLabel}</p>
-              <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{visuals.measurementTitle}</h2>
-              <p className="mt-4 text-[1.06rem] leading-8 text-foreground/68">{visuals.measurementBody}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-14 md:px-6 md:py-20">
-        <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-[#ece6da] p-8 md:p-10 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <div>
-              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{trustTitle}</h2>
-              <p className="mt-5 max-w-2xl text-[1.06rem] leading-8 text-foreground/68">{trustBody}</p>
-            </div>
-            <div className="space-y-4">
-              {trustPoints.map((point) => (
-                <div key={point} className="rounded-2xl border border-black/5 bg-white/78 px-5 py-4 text-[1.01rem] leading-7 text-foreground/78">
-                  {point}
-                </div>
-              ))}
+              <span className="mb-3 block text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                {copy.whyTitle}
+              </span>
+              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">
+                {visuals.measurementTitle}
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-foreground/68">{copy.whyBody}</p>
+              <p className="mt-4 leading-8 text-foreground/68">{visuals.measurementBody}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-6 md:py-20">
+      <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.74),rgba(247,243,235,0.94))] px-4 py-16 md:px-6 md:py-20">
+        <div className="container-wide mx-auto">
+          <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
+            <div className="order-2 lg:order-1">
+              <span className="mb-3 block text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                {visuals.connectionLabel}
+              </span>
+              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">
+                {visuals.connectionTitle}
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-foreground/68">{visuals.connectionBody}</p>
+              <div className="mt-6 space-y-3">
+                {firstWhoItems.map((item) => (
+                  <div key={item} className="flex items-start gap-3 text-foreground/68">
+                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                    <p className="leading-7">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="order-1 mx-auto w-full max-w-[38rem] xl:max-w-[34rem] lg:order-2">
+              <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
+                <img src={insideBalanceConversationImage} alt={visuals.connectionTitle} className="h-full w-full rounded-[1.75rem] object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[linear-gradient(135deg,rgba(244,234,217,0.86),rgba(247,243,235,0.96))] px-4 py-16 md:px-6 md:py-20">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.howTitle}</h2>
           </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3">
             {copy.howSteps.map((step, index) => (
-              <article key={step.title} className="rounded-[1.75rem] border border-black/5 bg-white/88 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{index + 1}</p>
-                <h3 className="mt-3 text-[1.55rem] font-semibold tracking-tight text-foreground">{step.title}</h3>
-                <p className="mt-4 text-[1.01rem] leading-7 text-foreground/68">{step.body}</p>
+              <article key={step.title} className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground">
+                  {index + 1}
+                </div>
+                <h3 className="mt-5 font-serif text-[1.5rem] font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-3 leading-7 text-foreground/68">{step.body}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-6 md:py-20">
-        <div className="container-wide mx-auto grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
-            <div className="aspect-[16/11]">
-              <img src={insideBalanceConversationImage} alt={visuals.connectionTitle} className="h-full w-full object-cover" />
-            </div>
-          </div>
-          <div className="rounded-[2rem] border border-black/5 bg-white/88 p-8 md:p-9 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
-            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{visuals.connectionLabel}</p>
-            <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{visuals.connectionTitle}</h2>
-            <p className="mt-4 text-[1.06rem] leading-8 text-foreground/68">{visuals.connectionBody}</p>
-            <div className="mt-6 space-y-4">
-              {copy.whoItems.map((item) => (
-                <div key={item} className="rounded-2xl border border-black/5 bg-[#faf7f1] px-4 py-3 text-[1.01rem] leading-7 text-foreground/78">
-                  {item}
-                </div>
-              ))}
-            </div>
+      <section className="px-4 py-16 md:px-6 md:py-20">
+        <div className="container-wide mx-auto">
+          <div className="rounded-[2rem] bg-primary px-8 py-12 text-center md:px-12 md:py-16">
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.4rem]">
+              {closingCtaTitleByLang[currentLang]}
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white">
+              {closingCtaBodyByLang[currentLang]}
+            </p>
+            <Link to={omegaBalancePath(currentLang)} className="mt-8 inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-foreground transition hover:bg-[#faf7f1]">
+              {copy.heroSecondaryCta}
+            </Link>
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-black/5 bg-[#f1ece2] px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto grid gap-10 md:grid-cols-[1.3fr_0.7fr_0.7fr]">
+      <footer className="border-t border-black/5 px-4 py-12 md:px-6 md:py-14">
+        <div className="container-wide mx-auto grid gap-8 md:grid-cols-3">
           <div className="max-w-2xl">
             <p className="font-serif text-[1.7rem] font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
-            <p className="mt-3 text-sm leading-6 text-foreground/66">{copy.footerBody}</p>
+            <p className="mt-3 text-sm leading-6 text-foreground/66">{footerTaglineByLang[currentLang]}</p>
           </div>
 
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerExploreLabelByLang[currentLang]}</p>
             <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              {footerCta ? (
-                <Link to={products[0].href} className="transition hover:text-foreground">
-                  {footerCta}
-                </Link>
-              ) : null}
+              {footerCta ? <Link to={products[0].href} className="transition hover:text-foreground">{products[0].title}</Link> : null}
               <Link to={localizedPath(currentLang, "/gut-balance")} className="transition hover:text-foreground">
                 {copy.navGut}
               </Link>
@@ -1254,19 +1329,16 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerCompanyLabelByLang[currentLang]}</p>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerContactLabelByLang[currentLang]}</p>
             <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">
-                {footerContactLabelByLang[currentLang]}
-              </Link>
-              <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">
-                {footerPrivacyLabelByLang[currentLang]}
-              </Link>
-              <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">
-                {footerTermsLabelByLang[currentLang]}
-              </Link>
+              <a href="https://insidebalance.eu" className="transition hover:text-foreground">
+                {footerWebsiteLabelByLang[currentLang]}
+              </a>
             </div>
           </div>
+        </div>
+        <div className="container-wide mx-auto mt-10 border-t border-black/5 pt-6 text-center">
+          <p className="text-xs text-foreground/55">{footerCopyrightByLang[currentLang]}</p>
         </div>
       </footer>
     </main>
