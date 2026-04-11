@@ -1,5 +1,6 @@
 ﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { funnelHeroCopy } from "@/lib/funnel-copy";
@@ -106,7 +107,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             </Link>
             <Link
               to={partnerPath(lang)}
-              className="inline-flex whitespace-nowrap rounded-full border border-border/80 bg-card/75 px-3 py-2 text-xs font-medium text-foreground/88 shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
+              className="inline-flex whitespace-nowrap rounded-2xl border border-border/80 bg-card/75 px-3 py-2 text-xs font-medium text-foreground/88 shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
             >
               {copy.hero.partnerCta}
             </Link>
@@ -155,16 +156,22 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                   }
                 : {})}
             >
-              {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
+              <>
+                {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
+                <ArrowRight className="h-4 w-4" />
+              </>
             </TrackedOutboundButton>
             <a
               href="#how-it-works"
-              className="inline-flex items-center justify-center text-sm font-medium text-foreground/72 underline-offset-4 transition hover:text-foreground hover:underline"
+              className="btn-secondary px-6 py-3 text-sm sm:px-6 sm:py-3"
               onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
                 details: { placement: "hero" },
               })}
             >
-              {fallbackSecondaryCtaByLang[lang] ?? copy.hero.secondaryCta}
+              <>
+                {fallbackSecondaryCtaByLang[lang] ?? copy.hero.secondaryCta}
+                <ArrowRight className="h-4 w-4" />
+              </>
             </a>
           </div>
 

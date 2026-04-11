@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import gutBalanceHeroImage from "@/assets/gutbalance-hero.png";
 import FooterSection from "@/components/FooterSection";
@@ -506,6 +506,7 @@ const pageCopyByLang: Record<Lang, GutPageCopy> = {
 };
 
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
+const gutPrimaryCtaClass = "btn-primary min-h-12 gap-2 text-center";
 
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
@@ -535,7 +536,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                   lang={currentLang}
                   destinationType="test"
                   fallbackHref={getZinzinoGutTestUrl(currentLang)}
-                  className="btn-primary min-h-12 text-center"
+                  className={gutPrimaryCtaClass}
                   pendingLabel={pendingLabelByLang[currentLang]}
                   errorMessages={{ generic: genericErrorByLang[currentLang] }}
                   confirmTitle={copy.confirmTitle}
@@ -543,7 +544,10 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                   confirmConfirmLabel={copy.confirmConfirmLabel}
                   confirmCancelLabel={copy.confirmCancelLabel}
                 >
-                  {copy.heroPrimary}
+                  <>
+                    {copy.heroPrimary}
+                    <ArrowRight className="h-4 w-4" />
+                  </>
                 </TrackedOutboundButton>
               </div>
             </div>
@@ -601,7 +605,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {copy.markers.map((item) => (
-              <article key={item.title} className="rounded-[1.75rem] border border-black/5 bg-white/88 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
+              <article key={item.title} className="rounded-[1.75rem] border border-[hsl(var(--primary)/0.08)] bg-white/90 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
                 <h3 className="font-serif text-[1.55rem] font-semibold tracking-tight text-foreground">{item.title}</h3>
                 <p className="mt-4 text-[1.01rem] leading-7 text-foreground/68">{item.body}</p>
               </article>
@@ -644,15 +648,15 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
 
       <section className="px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-white/90 px-6 py-8 text-center shadow-[0_20px_50px_rgba(31,41,55,0.06)] md:px-10 md:py-10">
-          <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{copy.closingTitle}</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-foreground/70">{copy.closingBody}</p>
+        <div className="container-wide mx-auto rounded-[2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_24px_60px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
+          <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-primary-foreground md:text-[2.35rem]">{copy.closingTitle}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-primary-foreground/82">{copy.closingBody}</p>
           <div className="mx-auto mt-6 max-w-sm">
             <TrackedOutboundButton
               lang={currentLang}
               destinationType="test"
               fallbackHref={getZinzinoGutTestUrl(currentLang)}
-              className="btn-primary min-h-12 w-full text-center"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-center text-base font-medium text-foreground shadow-[0_18px_40px_rgba(31,41,55,0.10)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#faf7f1]"
               pendingLabel={pendingLabelByLang[currentLang]}
               errorMessages={{ generic: genericErrorByLang[currentLang] }}
               confirmTitle={copy.confirmTitle}
@@ -660,7 +664,10 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               confirmConfirmLabel={copy.confirmConfirmLabel}
               confirmCancelLabel={copy.confirmCancelLabel}
             >
-              {copy.closingPrimary}
+              <>
+                {copy.closingPrimary}
+                <ArrowRight className="h-4 w-4" />
+              </>
             </TrackedOutboundButton>
           </div>
         </div>

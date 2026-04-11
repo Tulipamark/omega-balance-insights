@@ -175,19 +175,22 @@
 
   .btn-primary {
     background: var(--gradient-cta);
-    @apply text-primary-foreground px-5 py-3 rounded-xl font-medium text-sm transition-all duration-300 sm:px-8 sm:py-4 sm:text-base;
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium text-primary-foreground ring-1 transition-all duration-200 sm:px-8 sm:py-4 sm:text-base;
+    ring-color: hsl(var(--primary) / 0.1);
+    box-shadow: 0 18px 40px hsl(var(--primary) / 0.18);
   }
 
   .btn-primary:hover {
-    @apply opacity-90 scale-[1.02];
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.3);
+    @apply -translate-y-0.5 opacity-95;
+    box-shadow: 0 22px 50px hsl(var(--primary) / 0.22);
   }
 
   .btn-secondary {
-    @apply bg-card text-foreground px-5 py-3 rounded-xl font-medium text-sm border border-border transition-all duration-300 sm:px-8 sm:py-4 sm:text-base;
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card text-foreground px-5 py-3 text-sm font-medium transition-all duration-200 sm:px-8 sm:py-4 sm:text-base;
+    box-shadow: 0 12px 30px hsl(35 14% 18% / 0.05);
   }
 
   .btn-secondary:hover {
-    @apply bg-secondary scale-[1.02];
+    @apply -translate-y-0.5 bg-secondary;
   }
 }
