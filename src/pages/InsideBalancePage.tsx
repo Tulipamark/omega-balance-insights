@@ -1132,7 +1132,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           <div className="mb-8 flex items-start justify-between gap-3 md:mb-14 md:items-center">
             <Link
               to={platformHomePath(currentLang)}
-              className="min-w-0 flex-1 transition-opacity hover:opacity-85"
+              className="-mt-1 min-w-0 flex-1 transition-opacity hover:opacity-85 md:mt-0"
               aria-label={copy.navHome}
             >
               <InsideBalanceLogo
