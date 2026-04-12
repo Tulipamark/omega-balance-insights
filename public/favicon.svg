@@ -5,17 +5,17 @@
       <stop offset="100%" stop-color="#5f876b" />
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#bg)" />
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bg)" />
   <text
     x="50%"
-    y="52%"
+    y="53%"
     text-anchor="middle"
     dominant-baseline="middle"
     fill="#f6f1e8"
     font-family="Georgia, 'Times New Roman', serif"
-    font-size="27"
+    font-size="31"
     font-weight="700"
-    letter-spacing="0.5"
+    letter-spacing="0.2"
   >
     ib
   </text>

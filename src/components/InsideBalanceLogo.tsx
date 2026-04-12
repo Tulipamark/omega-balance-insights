@@ -39,7 +39,7 @@ const InsideBalanceLogo = ({
     <img
       src={insideBalanceLogoSrc}
       alt={alt}
-      className={cn("block h-28 w-auto sm:h-32 md:h-36 lg:h-40", className, imageClassName)}
+      className={cn("block h-28 max-w-full w-auto sm:h-32 md:h-36 lg:h-40", className, imageClassName)}
     />
   );
 };

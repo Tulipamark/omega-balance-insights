@@ -1129,16 +1129,24 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
       <section className="px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
         <div className="container-wide mx-auto">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-14">
-            <Link to={platformHomePath(currentLang)} className="transition-opacity hover:opacity-85" aria-label={copy.navHome}>
-              <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
+          <div className="mb-8 flex items-start justify-between gap-3 md:mb-14 md:items-center">
+            <Link
+              to={platformHomePath(currentLang)}
+              className="min-w-0 flex-1 transition-opacity hover:opacity-85"
+              aria-label={copy.navHome}
+            >
+              <InsideBalanceLogo
+                alt={copy.navHome}
+                variant="full"
+                className="h-20 max-w-full sm:h-28 md:h-40 lg:h-44"
+              />
             </Link>
-            <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+            <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-black/5 bg-white/80 px-4 py-2.5 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-black/5 bg-white/80 px-3 py-2.5 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white sm:px-4"
                   >
                     <span>{navExploreLabelByLang[currentLang]}</span>
                     <ChevronDown className="h-4 w-4 text-foreground/70" />
