@@ -2,6 +2,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import gutBalanceHeroImage from "@/assets/gutbalance-hero.png";
 import FooterSection from "@/components/FooterSection";
+import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
@@ -518,8 +519,8 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       <section className="bg-[linear-gradient(180deg,rgba(247,244,236,1),rgba(238,233,223,1))] px-4 pb-12 pt-8 md:px-6 md:pb-16 md:pt-10">
         <div className="container-wide mx-auto">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-            <Link to={platformHomePath(currentLang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
-              InsideBalance
+            <Link to={platformHomePath(currentLang)} className="transition-opacity hover:opacity-85" aria-label="InsideBalance">
+              <InsideBalanceLogo alt="InsideBalance" variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
             </Link>
             <LanguageSwitcher lang={currentLang} />
           </div>

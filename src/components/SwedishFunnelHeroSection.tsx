@@ -6,6 +6,7 @@ import { logFunnelEvent } from "@/lib/funnel-events";
 import { funnelHeroCopy } from "@/lib/funnel-copy";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import VideoSection from "@/components/VideoSection";
 
@@ -87,12 +88,13 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
     <section className="bg-hero px-4 pb-10 pt-6 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
       <div className="container-wide mx-auto">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Link
               to={platformHomePath(lang)}
-              className="text-xs font-medium uppercase tracking-[0.14em] text-subtle transition-colors hover:text-foreground"
+              className="transition-opacity hover:opacity-85"
+              aria-label={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
             >
-              {insideBalanceLabelByLang[lang] ?? "InsideBalance"}
+              <InsideBalanceLogo alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"} variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
             </Link>
             <a href={omegaHomePath(lang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
               OmegaBalance

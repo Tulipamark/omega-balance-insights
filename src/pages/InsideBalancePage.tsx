@@ -1,5 +1,6 @@
 import { ArrowRight, BarChart3, Beaker, ChevronDown, Shield } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
@@ -1077,7 +1078,6 @@ const footerWebsiteLabelByLang: Record<Lang, string> = {
   fr: "insidebalance.eu",
   it: "insidebalance.eu",
 };
-
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? resolveLang(lang);
@@ -1130,8 +1130,8 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <section className="px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
         <div className="container-wide mx-auto">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4 md:mb-14">
-            <Link to={platformHomePath(currentLang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
-              {copy.navHome}
+            <Link to={platformHomePath(currentLang)} className="transition-opacity hover:opacity-85" aria-label={copy.navHome}>
+              <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
             </Link>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
               <DropdownMenu>
@@ -1334,10 +1334,15 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       </section>
 
       <footer className="border-t border-black/5 px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto grid gap-8 md:grid-cols-4">
+        <div className="container-wide mx-auto grid gap-6 md:grid-cols-4">
           <div className="max-w-2xl">
-            <p className="font-serif text-[1.7rem] font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
-            <p className="mt-3 text-sm leading-6 text-foreground/66">{footerTaglineByLang[currentLang]}</p>
+            <InsideBalanceLogo
+              alt={copy.footerTitle}
+              variant="full"
+              className="h-32 sm:h-36 md:h-40 lg:h-44"
+              imageClassName="-translate-y-6 sm:-translate-y-8"
+            />
+            <p className="-mt-6 sm:-mt-8 text-sm leading-6 text-foreground/66">{footerTaglineByLang[currentLang]}</p>
           </div>
 
           <div>
