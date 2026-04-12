@@ -172,6 +172,28 @@ const footerTermsLabelByLang: Record<Lang, string> = {
   it: "Termini",
 };
 
+const footerBackofficeLabelByLang: Record<Lang, string> = {
+  sv: "Partnerinloggning",
+  no: "Partnerinnlogging",
+  da: "Partnerlogin",
+  fi: "Partnerikirjautuminen",
+  en: "Partner login",
+  de: "Partner-Login",
+  fr: "Connexion partenaire",
+  it: "Accesso partner",
+};
+
+const footerAdminLabelByLang: Record<Lang, string> = {
+  sv: "Admininloggning",
+  no: "Admininnlogging",
+  da: "Adminlogin",
+  fi: "Admin-kirjautuminen",
+  en: "Admin login",
+  de: "Admin-Login",
+  fr: "Connexion admin",
+  it: "Accesso admin",
+};
+
 const copyByLang: Record<Lang, InsideBalanceCopy> = {
   sv: {
     navHome: "InsideBalance",
@@ -1312,7 +1334,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       </section>
 
       <footer className="border-t border-black/5 px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto grid gap-8 md:grid-cols-3">
+        <div className="container-wide mx-auto grid gap-8 md:grid-cols-4">
           <div className="max-w-2xl">
             <p className="font-serif text-[1.7rem] font-semibold tracking-tight text-foreground">{copy.footerTitle}</p>
             <p className="mt-3 text-sm leading-6 text-foreground/66">{footerTaglineByLang[currentLang]}</p>
@@ -1331,9 +1353,27 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerContactLabelByLang[currentLang]}</p>
             <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              <a href="https://insidebalance.eu" className="transition hover:text-foreground">
+              <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">
                 {footerWebsiteLabelByLang[currentLang]}
-              </a>
+              </Link>
+              <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">
+                {footerPrivacyLabelByLang[currentLang]}
+              </Link>
+              <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">
+                {footerTermsLabelByLang[currentLang]}
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerCompanyLabelByLang[currentLang]}</p>
+            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
+              <Link to="/dashboard/login" className="transition hover:text-foreground">
+                {footerBackofficeLabelByLang[currentLang]}
+              </Link>
+              <Link to="/dashboard/admin-login" className="transition hover:text-foreground">
+                {footerAdminLabelByLang[currentLang]}
+              </Link>
             </div>
           </div>
         </div>
