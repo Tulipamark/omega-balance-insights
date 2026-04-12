@@ -1129,19 +1129,19 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
       <section className="px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
         <div className="container-wide mx-auto">
-          <div className="mb-8 flex items-start justify-between gap-3 md:mb-14 md:items-center">
+          <div className="mb-8 flex flex-col gap-3 md:mb-14 md:flex-row md:items-center md:justify-between">
             <Link
               to={platformHomePath(currentLang)}
-              className="min-w-0 flex-1 transition-opacity hover:opacity-85"
+              className="min-w-0 transition-opacity hover:opacity-85 md:flex-1"
               aria-label={copy.navHome}
             >
               <InsideBalanceLogo
                 alt={copy.navHome}
                 variant="full"
-                className="h-20 max-w-full sm:h-28 md:h-40 lg:h-44"
+                className="h-28 max-w-full sm:h-32 md:h-40 lg:h-44"
               />
             </Link>
-            <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
+            <div className="flex shrink-0 items-center justify-end gap-2 self-end sm:gap-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
