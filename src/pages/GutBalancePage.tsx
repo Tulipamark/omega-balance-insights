@@ -649,8 +649,8 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
 
       <section className="px-4 py-12 md:px-6 md:py-14">
         <div className="container-wide mx-auto rounded-[2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_24px_60px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
-          <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-primary-foreground md:text-[2.35rem]">{copy.closingTitle}</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-primary-foreground/82">{copy.closingBody}</p>
+          <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.35rem]">{copy.closingTitle}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white">{copy.closingBody}</p>
           <div className="mx-auto mt-6 max-w-sm">
             <TrackedOutboundButton
               lang={currentLang}
