@@ -96,7 +96,10 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             >
               <InsideBalanceLogo alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"} variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
             </Link>
-            <a href={omegaHomePath(lang)} className="font-serif text-xl font-semibold tracking-tight text-foreground">
+            <a
+              href={omegaHomePath(lang)}
+              className="inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 font-serif text-sm font-semibold tracking-tight text-foreground/75 shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white sm:text-base"
+            >
               OmegaBalance
             </a>
           </div>

@@ -527,7 +527,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
 
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="max-w-3xl">
-              <span className="inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 text-sm font-medium tracking-wide text-foreground/75">
+              <span className="inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 font-serif text-sm font-semibold tracking-tight text-foreground/75">
                 {copy.heroEyebrow}
               </span>
               <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-6xl">{copy.heroTitle}</h1>
