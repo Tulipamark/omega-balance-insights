@@ -195,6 +195,17 @@ const footerAdminLabelByLang: Record<Lang, string> = {
   it: "Accesso admin",
 };
 
+const independentPartnerLabelByLang: Record<Lang, string> = {
+  sv: "Oberoende Zinzino-partner",
+  no: "Uavhengig Zinzino-partner",
+  da: "Uafhaengig Zinzino-partner",
+  fi: "Itsenainen Zinzino-kumppani",
+  en: "Independent Zinzino partner",
+  de: "Unabhaengiger Zinzino-Partner",
+  fr: "Partenaire Zinzino independant",
+  it: "Partner Zinzino indipendente",
+};
+
 const copyByLang: Record<Lang, InsideBalanceCopy> = {
   sv: {
     navHome: "InsideBalance",
@@ -1390,7 +1401,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           </div>
         </div>
         <div className="container-wide mx-auto mt-10 border-t border-black/5 pt-6 text-center">
-          <p className="text-xs text-foreground/55">{footerCopyrightByLang[currentLang]}</p>
+          <p className="text-xs text-foreground/55">
+            {footerCopyrightByLang[currentLang]} • {independentPartnerLabelByLang[currentLang]}
+          </p>
         </div>
       </footer>
     </main>
