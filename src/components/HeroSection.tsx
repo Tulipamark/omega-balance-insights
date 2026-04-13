@@ -78,7 +78,7 @@ const HeroSection = ({ lang }: HeroSectionProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <span className="badge-accent inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6 tracking-wide">
+            <span className="mb-6 inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 font-serif text-sm font-semibold tracking-tight text-foreground/75">
               {copy.badge}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6">

@@ -16,7 +16,7 @@ export default defineConfig(async ({ mode }) => {
       host: "::",
       port: 8081,
       hmr: {
-        overlay: false,
+        overlay: true,
       },
     },
     plugins,

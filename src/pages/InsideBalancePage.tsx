@@ -1,12 +1,20 @@
-import { ArrowRight, BarChart3, Beaker, ChevronDown, Shield } from "lucide-react";
+import { BarChart3, Beaker, ChevronDown, Shield } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  InsideBalanceClosingSection,
+  InsideBalanceConnectionSection,
+  InsideBalanceHowSection,
+  InsideBalanceProductsSection,
+  InsideBalanceTrustSection,
+  InsideBalanceWhyMeasureSection,
+} from "@/components/inside-balance/InsideBalanceSections";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
-import insideBalanceResultsImage from "@/assets/insidebalance-results.png";
-import insideBalanceConversationImage from "@/assets/insidebalance-conversation.png";
-import insideBalancePortraitImage from "@/assets/insidebalance-portrait.png";
+import insideBalanceResultsImage from "@/assets/insidebalance-results.webp";
+import insideBalanceConversationImage from "@/assets/insidebalance-conversation.webp";
+import insideBalancePortraitImage from "@/assets/insidebalance-portrait.webp";
 
 type InsideBalancePageProps = {
   lang?: Lang;
@@ -1210,146 +1218,45 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.78),rgba(247,243,235,0.92))] px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{trustTitle}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-foreground/68">{trustBody}</p>
-          </div>
+      <InsideBalanceTrustSection title={trustTitle} body={trustBody} points={trustPoints} icons={trustIcons} />
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {trustPoints.map((point, index) => {
-              const Icon = trustIcons[index] ?? Shield;
+      <InsideBalanceProductsSection
+        title={copy.productsTitle}
+        body={copy.productsBody}
+        products={products}
+        primaryRouteTitle={primaryRouteTitle}
+        primaryRouteBody={primaryRouteBody}
+        secondaryRouteTitle={secondaryRouteTitle}
+        secondaryRouteBody={secondaryRouteBody}
+        productLinkLabel={productLinkLabel}
+      />
 
-              return (
-                <article key={point} className="rounded-[1.75rem] border border-black/5 bg-white/82 p-8 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(70,99,80,0.10)]">
-                    <Icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{point}</h3>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <InsideBalanceWhyMeasureSection
+        eyebrow={copy.whyTitle}
+        title={visuals.measurementTitle}
+        body={copy.whyBody}
+        supportingBody={visuals.measurementBody}
+        imageSrc={insideBalanceResultsImage}
+        imageAlt={visuals.measurementTitle}
+      />
 
-      <section id="products" className="px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.productsTitle}</h2>
-            <p className="mt-4 text-lg leading-8 text-foreground/68">{copy.productsBody}</p>
-          </div>
+      <InsideBalanceConnectionSection
+        eyebrow={visuals.connectionLabel}
+        title={visuals.connectionTitle}
+        body={visuals.connectionBody}
+        items={firstWhoItems}
+        imageSrc={insideBalanceConversationImage}
+        imageAlt={visuals.connectionTitle}
+      />
 
-          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-2">
-            {products.map((product, index) => (
-              <article
-                key={product.title}
-                className={`group rounded-[1.75rem] border p-8 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(31,41,55,0.08)] ${
-                  index === 0 ? "border-[rgba(70,99,80,0.16)] bg-primary/5" : "border-black/5 bg-white/88"
-                }`}
-              >
-                <span className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  {index === 0 ? primaryRouteTitle : secondaryRouteTitle}
-                </span>
-                <h3 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight">{product.title}</h3>
-                <p className="mt-4 leading-7 text-foreground/68">{product.body}</p>
-                <p className="mt-4 text-sm leading-7 text-foreground/60">{product.fit}</p>
-                <Link to={product.href} className="mt-6 inline-flex items-center gap-2 font-medium text-primary transition-all group-hover:gap-3">
-                  {productLinkLabel}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <InsideBalanceHowSection title={copy.howTitle} steps={copy.howSteps} />
 
-      <section className="px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
-            <div className="mx-auto w-full max-w-[38rem] xl:max-w-[34rem]">
-              <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
-                <img src={insideBalanceResultsImage} alt={visuals.measurementTitle} className="h-full w-full rounded-[1.75rem] object-cover" />
-              </div>
-            </div>
-            <div>
-              <span className="mb-3 block text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                {copy.whyTitle}
-              </span>
-              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">
-                {visuals.measurementTitle}
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-foreground/68">{copy.whyBody}</p>
-              <p className="mt-4 leading-8 text-foreground/68">{visuals.measurementBody}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.74),rgba(247,243,235,0.94))] px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
-            <div className="order-2 lg:order-1">
-              <span className="mb-3 block text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                {visuals.connectionLabel}
-              </span>
-              <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">
-                {visuals.connectionTitle}
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-foreground/68">{visuals.connectionBody}</p>
-              <div className="mt-6 space-y-3">
-                {firstWhoItems.map((item) => (
-                  <div key={item} className="flex items-start gap-3 text-foreground/68">
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
-                    <p className="leading-7">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="order-1 mx-auto w-full max-w-[38rem] xl:max-w-[34rem] lg:order-2">
-              <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
-                <img src={insideBalanceConversationImage} alt={visuals.connectionTitle} className="h-full w-full rounded-[1.75rem] object-cover" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[linear-gradient(135deg,rgba(244,234,217,0.86),rgba(247,243,235,0.96))] px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.howTitle}</h2>
-          </div>
-          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3">
-            {copy.howSteps.map((step, index) => (
-              <article key={step.title} className="text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground">
-                  {index + 1}
-                </div>
-                <h3 className="mt-5 font-serif text-[1.5rem] font-semibold tracking-tight">{step.title}</h3>
-                <p className="mt-3 leading-7 text-foreground/68">{step.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-16 md:px-6 md:py-20">
-        <div className="container-wide mx-auto">
-          <div className="rounded-[2rem] bg-primary px-8 py-12 text-center md:px-12 md:py-16">
-            <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.4rem]">
-              {closingCtaTitleByLang[currentLang]}
-            </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white">
-              {closingCtaBodyByLang[currentLang]}
-            </p>
-            <Link to={omegaBalancePath(currentLang)} className="mt-8 inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-foreground transition hover:bg-[#faf7f1]">
-              {copy.heroSecondaryCta}
-            </Link>
-          </div>
-        </div>
-      </section>
+      <InsideBalanceClosingSection
+        title={closingCtaTitleByLang[currentLang]}
+        body={closingCtaBodyByLang[currentLang]}
+        ctaLabel={copy.heroSecondaryCta}
+        ctaHref={omegaBalancePath(currentLang)}
+      />
 
       <footer className="border-t border-black/5 px-4 py-12 md:px-6 md:py-14">
         <div className="container-wide mx-auto grid gap-6 md:grid-cols-4">

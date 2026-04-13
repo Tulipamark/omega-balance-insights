@@ -5,16 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import PartnerPage from "./pages/PartnerPage.tsx";
-import PrivacyPage from "./pages/PrivacyPage.tsx";
-import TermsPage from "./pages/TermsPage.tsx";
-import ContactPage from "./pages/ContactPage.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage.tsx";
 import InsideBalancePage from "./pages/InsideBalancePage.tsx";
-import GutBalancePage from "./pages/GutBalancePage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
@@ -24,6 +15,15 @@ import { useCookieConsent } from "./hooks/use-cookie-consent";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
 
 const queryClient = new QueryClient();
+const Index = React.lazy(() => import("./pages/Index.tsx"));
+const PartnerPage = React.lazy(() => import("./pages/PartnerPage.tsx"));
+const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage.tsx"));
+const TermsPage = React.lazy(() => import("./pages/TermsPage.tsx"));
+const ContactPage = React.lazy(() => import("./pages/ContactPage.tsx"));
+const NotFound = React.lazy(() => import("./pages/NotFound.tsx"));
+const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage.tsx"));
+const ForgotPasswordPage = React.lazy(() => import("./pages/ForgotPasswordPage.tsx"));
+const GutBalancePage = React.lazy(() => import("./pages/GutBalancePage.tsx"));
 const DashboardLoginPage = React.lazy(() => import("./pages/DashboardLoginPage.tsx"));
 const AdminDashboardPage = React.lazy(() => import("./pages/AdminDashboardPage.tsx"));
 const PartnerDashboardPage = React.lazy(() => import("./pages/PartnerDashboardPage.tsx"));
@@ -207,7 +207,7 @@ function RouteLoadingState() {
         <p className="text-sm uppercase tracking-[0.16em] text-muted-foreground">Laddar vy</p>
         <h1 className="mt-3 text-2xl font-semibold text-foreground">Vi hämtar nästa del av appen...</h1>
         <p className="mt-3 text-sm leading-6 text-subtle">
-          Första dashboard-laddningen är nu uppdelad i mindre delar för att hålla startsidan lättare.
+          Sidan delas upp i mindre delar för att hålla laddningen lättare och snabbare.
         </p>
       </div>
     </div>
