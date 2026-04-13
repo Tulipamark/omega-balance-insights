@@ -1215,8 +1215,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(70,99,80,0.10)]">
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{point.split(".")[0]}</h3>
-                  <p className="mt-3 leading-7 text-foreground/68">{point}</p>
+                  <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{point}</h3>
                 </article>
               );
             })}
