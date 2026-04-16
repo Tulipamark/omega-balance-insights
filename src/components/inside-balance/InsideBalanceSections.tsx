@@ -9,6 +9,7 @@ import type { Lang } from "@/lib/i18n";
 
 type ProductCard = {
   title: string;
+  eyebrow?: string;
   body: string;
   fit: string;
   href: string;
@@ -119,6 +120,7 @@ const SectionEyebrow = ({ children, className }: { children: string; className?:
 
 const ProductTrackCard = ({
   title,
+  eyebrow,
   body,
   fit,
   href,
@@ -134,16 +136,31 @@ const ProductTrackCard = ({
 }) => (
   <article
     className={cn(
-      "group rounded-[1.75rem] border p-8 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(31,41,55,0.08)]",
-      featured ? "border-[rgba(70,99,80,0.16)] bg-primary/5" : "border-black/5 bg-white/88",
+      "group relative overflow-hidden rounded-[2rem] border p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_60px_rgba(31,41,55,0.08)]",
+      featured
+        ? "border-[rgba(70,99,80,0.18)] bg-[linear-gradient(180deg,rgba(235,244,239,0.96),rgba(255,255,255,0.98))]"
+        : "border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,243,235,0.92))]",
     )}
   >
-    <span className="text-xs font-medium uppercase tracking-[0.18em] text-primary">{routeTitle}</span>
-    <p className="mt-3 max-w-md text-sm leading-6 text-foreground/62">{routeBody}</p>
-    <h3 className="mt-4 font-serif text-[2rem] font-semibold tracking-tight">{title}</h3>
-    <p className="mt-4 leading-7 text-foreground/68">{body}</p>
-    <p className="mt-4 text-sm leading-7 text-foreground/60">{fit}</p>
-    <Link to={href} className="mt-6 inline-flex items-center gap-2 font-medium text-primary transition-all group-hover:gap-3">
+    <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,rgba(70,99,80,0.85),rgba(143,170,151,0.45),rgba(255,255,255,0))]" />
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-primary">
+        {routeTitle}
+      </span>
+      {eyebrow ? (
+        <span className="inline-flex rounded-full border border-black/5 bg-white/80 px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-foreground/56">
+          {eyebrow}
+        </span>
+      ) : null}
+    </div>
+    <p className="mt-4 max-w-md text-sm leading-6 text-foreground/62">{routeBody}</p>
+    <h3 className="mt-5 font-serif text-[2rem] font-semibold tracking-tight">{title}</h3>
+    <p className="mt-4 text-[1.02rem] leading-7 text-foreground/72">{body}</p>
+    <div className="mt-5 rounded-[1.35rem] border border-black/5 bg-white/75 px-4 py-4 text-sm leading-7 text-foreground/62">{fit}</div>
+    <Link
+      to={href}
+      className="mt-6 inline-flex items-center gap-2 font-medium text-primary transition-all group-hover:gap-3"
+    >
       {linkLabel}
       <ArrowRight className="h-4 w-4" />
     </Link>
@@ -151,8 +168,8 @@ const ProductTrackCard = ({
 );
 
 const TrustPointCard = ({ point, Icon }: { point: string; Icon: LucideIcon }) => (
-  <article className="rounded-[1.75rem] border border-black/5 bg-white/82 p-8 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(70,99,80,0.10)]">
+  <article className="rounded-[1.9rem] border border-[rgba(70,99,80,0.08)] bg-white/84 p-8 shadow-[0_24px_50px_rgba(31,41,55,0.05)]">
+    <div className="flex h-12 w-12 items-center justify-center rounded-[1rem] bg-[rgba(70,99,80,0.10)]">
       <Icon className="h-6 w-6 text-primary" />
     </div>
     <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{point}</h3>
@@ -254,7 +271,7 @@ export const InsideBalanceHeroSection = ({
 );
 
 export const InsideBalanceTrustSection = ({ title, body, points, icons }: TrustSectionProps) => (
-  <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.78),rgba(247,243,235,0.92))] px-4 py-16 md:px-6 md:py-20">
+  <section className="bg-[linear-gradient(180deg,rgba(244,248,245,0.98),rgba(235,242,238,0.90))] px-4 py-16 md:px-6 md:py-20">
     <div className="container-wide mx-auto">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{title}</h2>
@@ -317,7 +334,7 @@ export const InsideBalanceWhyMeasureSection = ({
     <div className="container-wide mx-auto">
       <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
         <div className="mx-auto w-full max-w-[38rem] xl:max-w-[34rem]">
-          <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
+          <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem] shadow-[0_24px_55px_rgba(31,41,55,0.07)]">
             <img
               src={imageSrc}
               alt={imageAlt}
@@ -331,7 +348,9 @@ export const InsideBalanceWhyMeasureSection = ({
           <SectionEyebrow className="mb-3">{eyebrow}</SectionEyebrow>
           <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{title}</h2>
           <p className="mt-5 text-lg leading-8 text-foreground/68">{body}</p>
-          <p className="mt-4 leading-8 text-foreground/68">{supportingBody}</p>
+          <div className="mt-6 rounded-[1.5rem] border border-[rgba(70,99,80,0.08)] bg-[rgba(240,246,242,0.7)] px-5 py-5">
+            <p className="text-sm leading-8 text-foreground/68">{supportingBody}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -346,14 +365,14 @@ export const InsideBalanceConnectionSection = ({
   imageSrc,
   imageAlt,
 }: ConnectionSectionProps) => (
-  <section className="bg-[linear-gradient(135deg,rgba(228,238,232,0.74),rgba(247,243,235,0.94))] px-4 py-16 md:px-6 md:py-20">
+  <section className="bg-[linear-gradient(180deg,rgba(247,243,235,0.98),rgba(237,244,240,0.9))] px-4 py-16 md:px-6 md:py-20">
     <div className="container-wide mx-auto">
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
         <div className="order-2 lg:order-1">
           <SectionEyebrow className="mb-3">{eyebrow}</SectionEyebrow>
           <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{title}</h2>
           <p className="mt-5 text-lg leading-8 text-foreground/68">{body}</p>
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 space-y-3 rounded-[1.5rem] border border-black/5 bg-white/70 px-5 py-5">
             {items.map((item) => (
               <div key={item} className="flex items-start gap-3 text-foreground/68">
                 <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
@@ -363,7 +382,7 @@ export const InsideBalanceConnectionSection = ({
           </div>
         </div>
         <div className="order-1 mx-auto w-full max-w-[38rem] xl:max-w-[34rem] lg:order-2">
-          <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem]">
+          <div className="aspect-[16/11] overflow-hidden rounded-[1.75rem] shadow-[0_24px_55px_rgba(31,41,55,0.07)]">
             <img
               src={imageSrc}
               alt={imageAlt}
@@ -386,8 +405,8 @@ export const InsideBalanceHowSection = ({ title, steps }: HowSectionProps) => (
       </div>
       <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3">
         {steps.map((step, index) => (
-          <article key={step.title} className="text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground">
+          <article key={step.title} className="rounded-[1.75rem] border border-black/5 bg-white/72 px-6 py-8 text-center shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground shadow-[0_16px_30px_rgba(31,70,55,0.18)]">
               {index + 1}
             </div>
             <h3 className="mt-5 font-serif text-[1.5rem] font-semibold tracking-tight">{step.title}</h3>
@@ -402,10 +421,13 @@ export const InsideBalanceHowSection = ({ title, steps }: HowSectionProps) => (
 export const InsideBalanceClosingSection = ({ title, body, ctaLabel, ctaHref }: ClosingSectionProps) => (
   <section className="px-4 py-16 md:px-6 md:py-20">
     <div className="container-wide mx-auto">
-      <div className="rounded-[2rem] bg-primary px-8 py-12 text-center md:px-12 md:py-16">
+      <div className="rounded-[2.25rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.82))] px-8 py-12 text-center shadow-[0_28px_65px_hsl(var(--primary)/0.22)] md:px-12 md:py-16">
         <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.4rem]">{title}</h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white">{body}</p>
-        <Link to={ctaHref} className="mt-8 inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-foreground transition hover:bg-[#faf7f1]">
+        <Link
+          to={ctaHref}
+          className="mt-8 inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-foreground transition hover:-translate-y-0.5 hover:bg-[#faf7f1]"
+        >
           {ctaLabel}
         </Link>
       </div>

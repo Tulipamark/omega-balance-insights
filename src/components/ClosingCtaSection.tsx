@@ -47,7 +47,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl rounded-[1.9rem] border border-[hsl(var(--primary)/0.08)] bg-[linear-gradient(135deg,hsl(var(--primary)/0.08),hsl(var(--card))_55%)] px-5 py-7 shadow-elevated sm:px-6 md:px-10 md:py-10"
+          className="mx-auto max-w-3xl rounded-[2.1rem] border border-[hsl(var(--primary)/0.08)] bg-[linear-gradient(135deg,hsl(var(--primary)/0.12),hsl(var(--card))_50%,rgba(255,255,255,0.96))] px-5 py-8 shadow-elevated sm:px-6 md:px-10 md:py-12"
         >
           <h2 className="text-[2rem] font-semibold tracking-tight md:text-4xl">{insightCopy.closingTitle}</h2>
           <p className="mt-4 text-base leading-7 text-subtle sm:text-lg sm:leading-8">{insightCopy.closingBody}</p>

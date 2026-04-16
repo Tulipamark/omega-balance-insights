@@ -96,7 +96,7 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
                     : baseCopy;
 
   return (
-    <section id="how-it-works" className="section-padding">
+    <section id="how-it-works" className="section-padding bg-[linear-gradient(180deg,rgba(247,243,235,0.96),rgba(238,243,239,0.9))]">
       <div className="container-narrow">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -105,6 +105,7 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
           transition={{ duration: 0.6 }}
           className="mb-10 text-center sm:mb-12 md:mb-16"
         >
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-primary">How it works</p>
           <h2 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl md:mb-4 md:text-4xl">{copy.title}</h2>
           <p className="mx-auto max-w-xl text-base leading-7 text-subtle sm:text-lg">{copy.body}</p>
         </motion.div>
@@ -117,7 +118,7 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="text-center"
+              className="rounded-[1.75rem] border border-black/5 bg-white/76 p-5 text-center shadow-[0_20px_45px_rgba(31,41,55,0.05)]"
             >
               <div className="mb-5 flex h-40 items-center justify-center rounded-2xl bg-accent p-5 sm:mb-6 sm:h-48 sm:p-6">
                 <img src={stepImages[i]} alt={step.title} className="h-24 w-24 object-contain sm:h-28 sm:w-28" />

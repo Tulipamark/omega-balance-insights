@@ -516,7 +516,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
 
   return (
     <main className="min-h-screen bg-[#f7f4ec] text-foreground">
-      <section className="bg-[linear-gradient(180deg,rgba(247,244,236,1),rgba(238,233,223,1))] px-4 pb-12 pt-8 md:px-6 md:pb-16 md:pt-10">
+      <section className="bg-[radial-gradient(circle_at_top,rgba(235,244,239,0.9),rgba(247,244,236,0.96)_42%,rgba(238,233,223,1)_100%)] px-4 pb-12 pt-8 md:px-6 md:pb-16 md:pt-10">
         <div className="container-wide mx-auto">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
             <Link to={platformHomePath(currentLang)} className="transition-opacity hover:opacity-85" aria-label="InsideBalance">
@@ -527,16 +527,28 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
 
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="max-w-3xl">
-              <span className="inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 font-serif text-sm font-semibold tracking-tight text-foreground/75">
+              <span className="inline-flex rounded-full border border-black/5 bg-white/84 px-4 py-2 font-serif text-sm font-semibold tracking-tight text-foreground/75 shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
                 {copy.heroEyebrow}
               </span>
               <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-6xl">{copy.heroTitle}</h1>
               <p className="mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/70 md:text-lg">{copy.heroBody}</p>
+              <div className="mt-7 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[1.35rem] border border-black/5 bg-white/78 px-4 py-4 text-sm leading-6 text-foreground/70 shadow-[0_14px_35px_rgba(31,41,55,0.04)]">
+                  {copy.supportEyebrow}
+                </div>
+                <div className="rounded-[1.35rem] border border-black/5 bg-white/78 px-4 py-4 text-sm leading-6 text-foreground/70 shadow-[0_14px_35px_rgba(31,41,55,0.04)]">
+                  {copy.markersTitle}
+                </div>
+                <div className="rounded-[1.35rem] border border-black/5 bg-white/78 px-4 py-4 text-sm leading-6 text-foreground/70 shadow-[0_14px_35px_rgba(31,41,55,0.04)]">
+                  {copy.processTitle}
+                </div>
+              </div>
               <div className="mt-8">
                 <TrackedOutboundButton
                   lang={currentLang}
                   destinationType="test"
                   fallbackHref={getZinzinoGutTestUrl(currentLang)}
+                  preferFallbackHref
                   className={gutPrimaryCtaClass}
                   pendingLabel={pendingLabelByLang[currentLang]}
                   errorMessages={{ generic: genericErrorByLang[currentLang] }}
@@ -554,12 +566,12 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2 md:items-stretch">
-              <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
+              <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/88 shadow-[0_24px_55px_rgba(31,41,55,0.08)]">
                 <div className="h-[280px] md:h-full md:min-h-[320px]">
                   <img src={gutBalanceHeroImage} alt={copy.imageAlt} className="h-full w-full object-cover object-[center_22%]" />
                 </div>
               </div>
-              <div className="flex h-full items-center rounded-[1.75rem] border border-black/5 bg-white/86 p-6 shadow-[0_18px_40px_rgba(31,41,55,0.06)]">
+              <div className="flex h-full items-center rounded-[1.75rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,246,242,0.9))] p-6 shadow-[0_20px_45px_rgba(31,41,55,0.06)]">
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{copy.supportEyebrow}</p>
                   <h2 className="mt-3 font-serif text-[1.7rem] font-semibold tracking-tight text-foreground md:text-[1.95rem]">{copy.supportTitle}</h2>
@@ -573,12 +585,12 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
       <section className="px-4 py-14 md:px-6 md:py-18">
         <div className="container-wide mx-auto grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[2rem] border border-[#ddd5c7] bg-[#eee7da] p-9 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
+          <div className="rounded-[2rem] border border-[#ddd5c7] bg-[linear-gradient(180deg,rgba(238,231,218,1),rgba(244,239,229,1))] p-9 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{copy.whyTitle}</h2>
             <p className="mt-5 text-[1.02rem] leading-8 text-foreground/70">{copy.whyBody}</p>
           </div>
 
-          <div className="rounded-[2rem] border border-black/5 bg-white/88 p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
+          <div className="rounded-[2rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(240,246,242,0.84))] p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{copy.metabolismEyebrow}</p>
             <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.3rem]">{copy.metabolismTitle}</h2>
             <p className="mt-4 text-[1.02rem] leading-8 text-foreground/70">{copy.metabolismBody}</p>
@@ -599,14 +611,14 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-6 md:py-18">
+      <section className="bg-[linear-gradient(180deg,rgba(247,244,236,1),rgba(240,246,242,0.7))] px-4 py-14 md:px-6 md:py-18">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.markersTitle}</h2>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {copy.markers.map((item) => (
-              <article key={item.title} className="rounded-[1.75rem] border border-[hsl(var(--primary)/0.08)] bg-white/90 p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
+              <article key={item.title} className="rounded-[1.75rem] border border-[hsl(var(--primary)/0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(244,248,246,0.84))] p-7 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
                 <h3 className="font-serif text-[1.55rem] font-semibold tracking-tight text-foreground">{item.title}</h3>
                 <p className="mt-4 text-[1.01rem] leading-7 text-foreground/68">{item.body}</p>
               </article>
@@ -616,13 +628,13 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
 
       <section className="px-4 py-14 md:px-6 md:py-18">
-        <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-[#ece6da] p-8 md:p-10 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
+        <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-[linear-gradient(135deg,rgba(236,230,218,1),rgba(246,242,234,1))] p-8 md:p-10 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
           <div className="mb-6">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.3rem]">{copy.benefitsTitle}</h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {copy.benefits.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-2xl border border-black/5 bg-white/78 px-5 py-4">
+              <div key={item} className="flex items-start gap-3 rounded-2xl border border-black/5 bg-white/84 px-5 py-4 shadow-[0_10px_25px_rgba(31,41,55,0.04)]">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <p className="text-[1.01rem] leading-7 text-foreground/78">{item}</p>
               </div>
@@ -631,7 +643,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-6 md:py-18">
+      <section className="bg-[linear-gradient(180deg,rgba(247,244,236,1),rgba(236,243,238,0.82))] px-4 py-14 md:px-6 md:py-18">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.4rem]">{copy.processTitle}</h2>
@@ -649,7 +661,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
 
       <section className="px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto rounded-[2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_24px_60px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
+        <div className="container-wide mx-auto rounded-[2.2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_28px_68px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
           <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.35rem]">{copy.closingTitle}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white">{copy.closingBody}</p>
           <div className="mx-auto mt-6 max-w-sm">
@@ -657,6 +669,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               lang={currentLang}
               destinationType="test"
               fallbackHref={getZinzinoGutTestUrl(currentLang)}
+              preferFallbackHref
               className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-center text-base font-medium text-foreground shadow-[0_18px_40px_rgba(31,41,55,0.10)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#faf7f1]"
               pendingLabel={pendingLabelByLang[currentLang]}
               errorMessages={{ generic: genericErrorByLang[currentLang] }}

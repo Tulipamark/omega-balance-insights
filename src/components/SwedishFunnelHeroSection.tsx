@@ -83,9 +83,19 @@ const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/par
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const copy = t(lang);
   const heroCopy = funnelHeroCopy[lang];
+  const heroProofByLang: Record<Lang, string[]> = {
+    sv: ["Blodbaserat hemmatest", "Personligt mätresultat", "Tydlig nästa riktning"],
+    no: ["Blodbasert hjemmetest", "Personlig måling", "Tydelig neste retning"],
+    da: ["Blodbaseret hjemmetest", "Personlig måling", "Tydelig næste retning"],
+    fi: ["Kotona tehtävä veritesti", "Henkilökohtainen tulos", "Selkeä seuraava suunta"],
+    en: ["Blood-based home test", "Personal measurement result", "A clearer next step"],
+    de: ["Blutbasierter Heimtest", "Persönliches Messergebnis", "Klarere nächste Schritte"],
+    fr: ["Test sanguin à domicile", "Résultat personnel", "Étape suivante plus claire"],
+    it: ["Test del sangue a casa", "Risultato personale", "Passo successivo più chiaro"],
+  };
 
   return (
-    <section className="bg-hero px-4 pb-10 pt-6 sm:pb-12 sm:pt-8 md:px-6 md:pb-14 md:pt-10">
+    <section className="bg-[radial-gradient(circle_at_top,rgba(244,248,241,0.95),rgba(247,243,235,0.96)_46%,rgba(238,233,222,0.96)_100%)] px-4 pb-12 pt-6 sm:pb-14 sm:pt-8 md:px-6 md:pb-16 md:pt-10">
       <div className="container-wide mx-auto">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
           <div className="flex flex-col gap-2">
@@ -124,65 +134,80 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mx-auto max-w-5xl text-center"
+          className="mx-auto max-w-6xl"
         >
-          <span className="badge-accent inline-block rounded-full px-3 py-1.5 text-xs font-medium tracking-wide sm:px-4 sm:text-sm">
-            {copy.hero.badge}
-          </span>
+          <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+            <div className="text-center lg:text-left">
+              <span className="badge-accent inline-block rounded-full border border-black/5 px-3 py-1.5 text-xs font-medium tracking-wide shadow-card sm:px-4 sm:text-sm">
+                {copy.hero.badge}
+              </span>
 
-          <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line text-[2.1rem] font-semibold leading-[1.05] tracking-tight sm:text-4xl md:mt-5 md:text-6xl">
-            {heroCopy.headline}
-          </h1>
+              <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line text-[2.4rem] font-semibold leading-[1.02] tracking-tight sm:text-5xl md:mt-5 md:text-6xl lg:mx-0">
+                {heroCopy.headline}
+              </h1>
 
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl">
-            {heroCopy.supporting}
-          </p>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl lg:mx-0">
+                {heroCopy.supporting}
+              </p>
 
-          <div className="mt-7">
-            <VideoSection lang={lang} embedded showTranscript={false} showHeader={false} />
+              <div className="mt-7 grid gap-3 sm:grid-cols-3">
+                {heroProofByLang[lang].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-[1.35rem] border border-black/5 bg-white/80 px-4 py-4 text-sm font-medium leading-6 text-foreground/78 shadow-card"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 lg:mx-0 sm:mt-10">
+                <TrackedOutboundButton
+                  lang={lang}
+                  destinationType="test"
+                  fallbackHref={getZinzinoTestUrl(lang)}
+                  className="btn-primary w-full text-center"
+                  pendingLabel={pendingLabelByLang[lang]}
+                  trackingEventName="hero_primary_cta_clicked"
+                  trackingDetails={{ placement: "hero" }}
+                  errorMessages={{ generic: genericErrorByLang[lang] }}
+                  {...(lang === "sv"
+                    ? {
+                        confirmTitle: "Du går nu vidare till Zinzino",
+                        confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                        confirmConfirmLabel: "OK, gå vidare",
+                        confirmCancelLabel: "Stanna kvar",
+                      }
+                    : {})}
+                >
+                  <>
+                    {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                </TrackedOutboundButton>
+                <a
+                  href="#how-it-works"
+                  className="btn-secondary px-6 py-3 text-sm sm:px-6 sm:py-3"
+                  onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
+                    details: { placement: "hero" },
+                  })}
+                >
+                  <>
+                    {fallbackSecondaryCtaByLang[lang] ?? copy.hero.secondaryCta}
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                </a>
+              </div>
+
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-subtle lg:mx-0">
+                {heroCopy.trust} <span className="mx-1 hidden sm:inline">•</span> {measuredResultTriggerByLang[lang]}
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-black/5 bg-white/76 p-4 shadow-[0_28px_60px_rgba(31,70,55,0.10)] backdrop-blur">
+              <VideoSection lang={lang} embedded showTranscript={false} showHeader={false} />
+            </div>
           </div>
-
-          <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:mt-10">
-            <TrackedOutboundButton
-              lang={lang}
-              destinationType="test"
-              fallbackHref={getZinzinoTestUrl(lang)}
-              className="btn-primary w-full text-center"
-              pendingLabel={pendingLabelByLang[lang]}
-              trackingEventName="hero_primary_cta_clicked"
-              trackingDetails={{ placement: "hero" }}
-              errorMessages={{ generic: genericErrorByLang[lang] }}
-              {...(lang === "sv"
-                ? {
-                    confirmTitle: "Du går nu vidare till Zinzino",
-                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
-                    confirmConfirmLabel: "OK, gå vidare",
-                    confirmCancelLabel: "Stanna kvar",
-                  }
-                : {})}
-            >
-              <>
-                {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
-                <ArrowRight className="h-4 w-4" />
-              </>
-            </TrackedOutboundButton>
-            <a
-              href="#how-it-works"
-              className="btn-secondary px-6 py-3 text-sm sm:px-6 sm:py-3"
-              onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
-                details: { placement: "hero" },
-              })}
-            >
-              <>
-                {fallbackSecondaryCtaByLang[lang] ?? copy.hero.secondaryCta}
-                <ArrowRight className="h-4 w-4" />
-              </>
-            </a>
-          </div>
-
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-subtle">
-            {heroCopy.trust} <span className="mx-1 hidden sm:inline">•</span> {measuredResultTriggerByLang[lang]}
-          </p>
         </motion.div>
       </div>
     </section>

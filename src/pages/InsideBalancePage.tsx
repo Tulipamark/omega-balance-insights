@@ -1143,10 +1143,11 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const secondaryRouteBody = activeSecondaryRouteBodyByLang[currentLang];
   const productLinkLabel = productLinkLabelByLang[currentLang];
   const firstWhoItems = copy.whoItems.slice(0, 2);
+  const heroHighlights = trustPoints.slice(0, 3);
 
   return (
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
-      <section className="px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
+      <section className="bg-[radial-gradient(circle_at_top_left,rgba(231,243,236,0.9),rgba(247,243,235,0.95)_42%,rgba(244,238,227,0.98)_100%)] px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
         <div className="container-wide mx-auto">
           <div className="mb-8 flex items-start justify-between gap-3 md:mb-14 md:items-center">
             <Link
@@ -1188,9 +1189,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             </div>
           </div>
 
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16">
             <div>
-              <span className="mb-6 inline-block text-sm font-medium uppercase tracking-[0.18em] text-primary">
+              <span className="mb-6 inline-flex rounded-full border border-[rgba(70,99,80,0.12)] bg-white/80 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-primary shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
                 {copy.heroEyebrow}
               </span>
               <h1 className="max-w-4xl font-serif text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
@@ -1207,11 +1208,41 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                   {copy.heroPrimaryCta}
                 </a>
               </div>
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {heroHighlights.map((point) => (
+                  <div
+                    key={point}
+                    className="rounded-[1.4rem] border border-black/5 bg-white/72 px-4 py-4 text-sm leading-6 text-foreground/68 shadow-[0_14px_35px_rgba(31,41,55,0.04)]"
+                  >
+                    {point}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="mx-auto w-full max-w-[34rem] xl:max-w-[30rem]">
-              <div className="aspect-[4/4.8] overflow-hidden rounded-[1.75rem] shadow-[0_24px_55px_rgba(31,70,55,0.10)]">
-                <img src={insideBalancePortraitImage} alt={visuals.heroTitle} className="h-full w-full object-cover" />
+            <div className="mx-auto w-full max-w-[35rem] xl:max-w-[32rem]">
+              <div className="rounded-[2rem] border border-[rgba(70,99,80,0.08)] bg-white/72 p-4 shadow-[0_28px_65px_rgba(31,70,55,0.10)] backdrop-blur">
+                <div className="aspect-[4/4.5] overflow-hidden rounded-[1.65rem]">
+                  <img src={insideBalancePortraitImage} alt={visuals.heroTitle} className="h-full w-full object-cover" />
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <Link
+                    to={products[0].href}
+                    className="rounded-[1.4rem] border border-[rgba(70,99,80,0.12)] bg-[rgba(235,244,239,0.82)] px-4 py-4 transition hover:-translate-y-0.5"
+                  >
+                    <p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-primary">{primaryRouteTitle}</p>
+                    <h2 className="mt-2 text-lg font-semibold tracking-tight text-foreground">{products[0].title}</h2>
+                    <p className="mt-2 text-sm leading-6 text-foreground/62">{primaryRouteBody}</p>
+                  </Link>
+                  <Link
+                    to={products[1].href}
+                    className="rounded-[1.4rem] border border-black/5 bg-[rgba(255,255,255,0.82)] px-4 py-4 transition hover:-translate-y-0.5"
+                  >
+                    <p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-foreground/48">{secondaryRouteTitle}</p>
+                    <h2 className="mt-2 text-lg font-semibold tracking-tight text-foreground">{products[1].title}</h2>
+                    <p className="mt-2 text-sm leading-6 text-foreground/62">{secondaryRouteBody}</p>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
