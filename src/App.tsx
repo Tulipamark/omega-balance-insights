@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { isBetaAccessGranted } from "@/lib/beta-access";
 import InsideBalancePage from "./pages/InsideBalancePage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
@@ -28,6 +29,7 @@ const DashboardLoginPage = React.lazy(() => import("./pages/DashboardLoginPage.t
 const AdminDashboardPage = React.lazy(() => import("./pages/AdminDashboardPage.tsx"));
 const PartnerDashboardPage = React.lazy(() => import("./pages/PartnerDashboardPage.tsx"));
 const PartnerLegalAcceptancePage = React.lazy(() => import("./pages/PartnerLegalAcceptancePage.tsx"));
+const BetaEntryPage = React.lazy(() => import("./pages/BetaEntryPage.tsx"));
 
 // Trigger rebuild for GitHub-linked preview environments.
 const App = () => (
@@ -39,9 +41,11 @@ const App = () => (
         <CookieConsentBoundary />
         <ScrollRestorationBoundary />
         <RecoveryRedirectBoundary />
+        <BetaAccessBoundary />
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
           <Routes>
+            <Route path="/beta-entry" element={<BetaEntryPage />} />
             <Route path="/" element={<InsideBalancePage lang={defaultLang} />} />
             <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
@@ -105,6 +109,33 @@ function CookieConsentBoundary() {
       onDecline={declineOptionalTracking}
     />
   );
+}
+
+function BetaAccessBoundary() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const publicPreviewBypassPaths = new Set([
+      "/beta-entry",
+      "/dashboard",
+      "/dashboard/login",
+      "/dashboard/admin-login",
+      "/auth/forgot-password",
+      "/auth/reset-password",
+    ]);
+
+    const isDashboardPath = location.pathname.startsWith("/dashboard/");
+    const isAllowedPath = publicPreviewBypassPaths.has(location.pathname) || isDashboardPath;
+
+    if (isAllowedPath || isBetaAccessGranted()) {
+      return;
+    }
+
+    navigate("/beta-entry", { replace: true, state: { from: location.pathname } });
+  }, [location.pathname, navigate]);
+
+  return null;
 }
 
 function ScrollRestorationBoundary() {
