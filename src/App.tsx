@@ -52,13 +52,13 @@ const App = () => (
             <Route path="/integritet" element={<PrivacyPage />} />
             <Route path="/villkor" element={<TermsPage />} />
             <Route path="/kontakt" element={<ContactPage />} />
-            <Route path="/inside-balance" element={<InsideBalancePage lang={defaultLang} />} />
+            <Route path="/inside-balance" element={<Navigate to="/" replace />} />
             <Route path="/gut-balance" element={<GutBalancePage lang={defaultLang} />} />
             <Route path="/omega-balance" element={<Index lang={defaultLang} />} />
             <Route path="/:lang/integritet" element={<PrivacyPage />} />
             <Route path="/:lang/villkor" element={<TermsPage />} />
             <Route path="/:lang/kontakt" element={<ContactPage />} />
-            <Route path="/:lang/inside-balance" element={<InsideBalancePage />} />
+            <Route path="/:lang/inside-balance" element={<LocalizedInsideBalanceRedirect />} />
             <Route path="/:lang/gut-balance" element={<GutBalancePage />} />
             <Route path="/:lang/omega-balance" element={<Index />} />
             <Route path="/dashboard" element={<DashboardIndexPage />} />
@@ -85,6 +85,12 @@ function PartnerPageWrapper() {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   return <PartnerPage lang={currentLang} />;
+}
+
+function LocalizedInsideBalanceRedirect() {
+  const { lang } = useParams<{ lang: string }>();
+  const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
+  return <Navigate to={currentLang === defaultLang ? "/" : `/${currentLang}`} replace />;
 }
 
 function ReferralTrackingBoundary() {
