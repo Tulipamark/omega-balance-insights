@@ -36,11 +36,13 @@ const InsideBalanceLogo = ({
   }
 
   return (
-    <img
-      src={insideBalanceLogoSrc}
-      alt={alt}
-      className={cn("block h-28 max-w-full w-auto sm:h-32 md:h-36 lg:h-40", className, imageClassName)}
-    />
+    <span className={cn("inline-flex items-center overflow-visible", className)}>
+      <img
+        src={insideBalanceLogoSrc}
+        alt={alt}
+        className={cn("block h-full max-w-none w-auto", imageClassName)}
+      />
+    </span>
   );
 };
 

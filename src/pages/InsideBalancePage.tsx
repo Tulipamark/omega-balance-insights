@@ -1235,7 +1235,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <header className="border-b border-black/5 bg-[#f7f3eb] px-4 py-5 md:px-6">
         <div className="container-wide mx-auto flex items-center justify-between gap-6">
           <Link to={platformHomePath(currentLang)} className="min-w-0 flex-1" aria-label={copy.navHome}>
-            <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12 sm:h-14 md:h-16" />
+            <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12 sm:h-14 md:h-16" imageClassName="scale-[2] origin-left" />
           </Link>
           <nav className="hidden items-center gap-6 text-[0.95rem] text-foreground/70 xl:flex">
             <Link to={omegaPath} className="transition hover:text-foreground">{copy.navOmega}</Link>
@@ -1260,7 +1260,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 <SheetTitle className="sr-only">{copy.navHome}</SheetTitle>
                 <div className="mt-8 flex flex-col gap-6">
                   <div className="border-b border-black/5 pb-5">
-                    <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12" />
+                    <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12" imageClassName="scale-[1.65] origin-left" />
                   </div>
                   <div className="flex flex-col gap-3 text-base text-foreground/78">
                     <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.navHome}</Link></SheetClose>
@@ -1401,7 +1401,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <footer id="contact" className="border-t border-black/5 bg-[#f3ecdf] px-4 py-14 md:px-6 md:py-16">
         <div className="container-wide mx-auto grid gap-10 md:grid-cols-[1.25fr_0.75fr_0.75fr]">
           <div>
-            <InsideBalanceLogo alt={copy.footerTitle} variant="full" className="h-12 sm:h-14 md:h-16" />
+            <InsideBalanceLogo alt={copy.footerTitle} variant="full" className="h-12 sm:h-14 md:h-16" imageClassName="scale-[2] origin-left" />
             <p className="mt-4 max-w-lg text-sm leading-7 text-foreground/64">{copy.footerBody}</p>
           </div>
 
