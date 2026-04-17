@@ -1,19 +1,9 @@
-import { BarChart3, Beaker, ChevronDown, Shield } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import {
-  InsideBalanceClosingSection,
-  InsideBalanceConnectionSection,
-  InsideBalanceHowSection,
-  InsideBalanceProductsSection,
-  InsideBalanceTrustSection,
-  InsideBalanceWhyMeasureSection,
-} from "@/components/inside-balance/InsideBalanceSections";
+import FAQSection from "@/components/FAQSection";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
-import insideBalanceResultsImage from "@/assets/insidebalance-results.webp";
-import insideBalanceConversationImage from "@/assets/insidebalance-conversation.webp";
 import insideBalancePortraitImage from "@/assets/insidebalance-portrait.webp";
 
 type InsideBalancePageProps = {
@@ -1036,7 +1026,6 @@ const primaryCtaClass =
   "inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_40px_rgba(31,70,55,0.18)] ring-1 ring-[rgba(70,99,80,0.10)] transition-all duration-200 hover:-translate-y-0.5 hover:opacity-95";
 const secondaryCtaClass =
   "inline-flex items-center justify-center gap-2 rounded-2xl border border-[rgba(70,99,80,0.12)] bg-white/88 px-6 py-3.5 text-base font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white";
-const trustIcons = [Beaker, BarChart3, Shield];
 const productLinkLabelByLang: Record<Lang, string> = {
   sv: "Läs mer",
   no: "Les mer",
@@ -1096,6 +1085,86 @@ const footerWebsiteLabelByLang: Record<Lang, string> = {
   de: "insidebalance.eu",
   fr: "insidebalance.eu",
   it: "insidebalance.eu",
+};
+
+const topNavByLang: Record<Lang, { benefits: string; how: string; faq: string; contact: string; start: string }> = {
+  sv: { benefits: "Fördelar", how: "Så fungerar det", faq: "Vanliga frågor", contact: "Kontakt", start: "Kom igång" },
+  no: { benefits: "Fordeler", how: "Slik fungerer det", faq: "Vanlige spørsmål", contact: "Kontakt", start: "Kom i gang" },
+  da: { benefits: "Fordele", how: "Sådan fungerer det", faq: "Ofte stillede spørgsmål", contact: "Kontakt", start: "Kom i gang" },
+  fi: { benefits: "Edut", how: "Näin se toimii", faq: "Usein kysyttyä", contact: "Yhteys", start: "Aloita" },
+  en: { benefits: "Benefits", how: "How it works", faq: "FAQ", contact: "Contact", start: "Get started" },
+  de: { benefits: "Vorteile", how: "So funktioniert es", faq: "Häufige Fragen", contact: "Kontakt", start: "Loslegen" },
+  fr: { benefits: "Avantages", how: "Comment ça marche", faq: "FAQ", contact: "Contact", start: "Commencer" },
+  it: { benefits: "Vantaggi", how: "Come funziona", faq: "FAQ", contact: "Contatto", start: "Inizia" },
+};
+
+const heroBadgeByLang: Record<Lang, string> = {
+  sv: "Testbaserade hälsoinsikter",
+  no: "Testbaserte helseinnsikter",
+  da: "Testbaserede sundhedsindsigter",
+  fi: "Testipohjaiset hyvinvointi-insightit",
+  en: "Test-based health insights",
+  de: "Testbasierte Gesundheitsanalysen",
+  fr: "Des insights santé basés sur des tests",
+  it: "Insight sulla salute basati su test",
+};
+
+const heroTrustByLang: Record<Lang, string[]> = {
+  sv: ["Kliniskt testat", "100% naturligt", "Premium kvalitet"],
+  no: ["Klinisk testet", "100% naturlig", "Premium kvalitet"],
+  da: ["Klinisk testet", "100% naturligt", "Premium kvalitet"],
+  fi: ["Kliinisesti testattu", "100% luonnollinen", "Premium-laatu"],
+  en: ["Clinically tested", "100% natural", "Premium quality"],
+  de: ["Klinisch getestet", "100% natürlich", "Premium-Qualität"],
+  fr: ["Testé cliniquement", "100% naturel", "Qualité premium"],
+  it: ["Testato clinicamente", "100% naturale", "Qualità premium"],
+};
+
+const benefitsTitleByLang: Record<Lang, string> = {
+  sv: "Tydligt, seriöst och byggt för att hålla",
+  no: "Tydelig, seriøs og bygget for å vare",
+  da: "Tydeligt, seriøst og bygget til at holde",
+  fi: "Selkeä, vakaa ja rakennettu kestämään",
+  en: "Clear, serious, and built to last",
+  de: "Klar, seriös und für die Dauer gebaut",
+  fr: "Clair, sérieux et conçu pour durer",
+  it: "Chiaro, serio e costruito per durare",
+};
+
+const benefitsIntroByLang: Record<Lang, string> = {
+  sv: "InsideBalance bygger på mätbara tester och tydlig struktur. Det ska vara lättare att förstå vad som är relevant och orientera sig i sina val.",
+  no: "InsideBalance bygger på målbare tester og tydelig struktur. Det skal være lettere å forstå hva som er relevant og finne riktig vei videre.",
+  da: "InsideBalance bygger på målbare tests og tydelig struktur. Det skal være lettere at forstå, hvad der er relevant, og finde den rigtige vej videre.",
+  fi: "InsideBalance perustuu mitattaviin testeihin ja selkeään rakenteeseen. Tavoitteena on helpottaa olennaisen ymmärtämistä ja oikean suunnan löytämistä.",
+  en: "InsideBalance is built on measurable tests and a clear structure, so it feels easier to understand what matters and where to begin.",
+  de: "InsideBalance basiert auf messbaren Tests und klarer Struktur, damit leichter verständlich wird, was relevant ist und wo du beginnen kannst.",
+  fr: "InsideBalance repose sur des tests mesurables et une structure claire, pour mieux comprendre ce qui compte et où commencer.",
+  it: "InsideBalance si basa su test misurabili e una struttura chiara, così è più facile capire cosa conta e da dove iniziare.",
+};
+
+const benefitsGridByLang: Record<Lang, { title: string; body: string }[]> = {
+  sv: [
+    { title: "Omega-balans", body: "Förstå din omega-6/omega-3-balans och börja med ett tydligt första test." },
+    { title: "Tarmhälsa", body: "Utforska mage, tarm och inre balans med samma lugna och testbaserade logik." },
+    { title: "Personlig dosering", body: "Baserat på dina individuella resultat beräknas en daglig dos anpassad just för dig." },
+    { title: "Immunförsvar", body: "Omega-3-fettsyror kan bidra till immunsystemets normala funktion." },
+    { title: "Energi & välmående", body: "Omega-3-fettsyror kan bidra till allmänt välbefinnande – effekterna varierar." },
+    { title: "Mätbara resultat", body: "Testa igen efter 120 dagar för att mäta möjliga förändringar." },
+  ],
+  en: [
+    { title: "Omega balance", body: "Understand your omega-6/omega-3 balance and begin with a clear first test." },
+    { title: "Gut health", body: "Explore gut health and inner balance through the same calm, test-based logic." },
+    { title: "Personal dosing", body: "Based on your individual results, a daily dose can be tailored to your profile." },
+    { title: "Immune support", body: "Omega-3 fatty acids can contribute to normal immune function." },
+    { title: "Energy & wellbeing", body: "Omega-3 fatty acids may support general wellbeing, though effects vary." },
+    { title: "Measurable results", body: "Test again after 120 days to measure possible changes." },
+  ],
+  no: [],
+  da: [],
+  fi: [],
+  de: [],
+  fr: [],
+  it: [],
 };
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
