@@ -106,6 +106,11 @@ export const fr: Copy = {
   sticky: {
     text: "Découvrez votre ratio oméga-6 / oméga-3 dès aujourd'hui",
   },
+  cta: {
+    title: "Prêt à commencer ?",
+    subtitle: "Faites le test chez vous et obtenez une réponse claire sur votre équilibre oméga.",
+    button: "Continuer vers le test",
+  },
   partner: {
     navLabel: "Partenaires",
     heroBadge: "Opportunité partenaire",

@@ -211,7 +211,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     navOmega: "OmegaBalance",
     navGut: "GutBalance",
     heroEyebrow: "InsideBalance",
-    heroTitle: "H\u00e4lsotester som g\u00f6r det l\u00e4ttare att f\u00f6rst\u00e5 vad du faktiskt beh\u00f6ver",
+    heroTitle: "F\u00f6rst\u00e5 din inre balans med m\u00e4tbara tester",
     heroBody:
       "InsideBalance \u00e4r plattformen f\u00f6r dig som vill orientera dig tydligare bland h\u00e4lsotester och b\u00f6rja i r\u00e4tt \u00e4nde. H\u00e4r samlar vi v\u00e5ra testsp\u00e5r i en lugnare, mer genomt\u00e4nkt helhet.",
     heroPrimaryCta: "Utforska testsp\u00e5ren",
@@ -1121,6 +1121,17 @@ const heroTrustByLang: Record<Lang, string[]> = {
   it: ["Testato clinicamente", "100% naturale", "Qualità premium"],
 };
 
+const heroProofByLang: Partial<Record<Lang, { stat: string; body: string }>> = {
+  sv: {
+    stat: "Över 1,7 miljoner utförda BalanceTests hittills",
+    body: "Baserat på världens största databas av fettsyror från torrblodstester.",
+  },
+  en: {
+    stat: "1,741,426 BalanceTests completed to date",
+    body: "Based on the world's largest database of fatty acids from dried blood spot tests.",
+  },
+};
+
 const benefitsTitleByLang: Record<Lang, string> = {
   sv: "Tydligt, seriöst och byggt för att hålla",
   no: "Tydelig, seriøs og bygget for å vare",
@@ -1184,11 +1195,12 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     : baseCopy;
   const topNav = topNavByLang[currentLang];
   const heroTrust = heroTrustByLang[currentLang];
+  const heroProof = heroProofByLang[currentLang];
   const benefits = benefitsGridByLang[currentLang].length ? benefitsGridByLang[currentLang] : benefitsGridByLang.en;
   const omegaPath = omegaBalancePath(currentLang);
   const gutPath = localizedPath(currentLang, "/gut-balance");
   const followUpStepByLang: Record<Lang, { title: string; body: string }> = {
-    sv: { title: "Folj upp", body: "Testa igen efter 120 dagar for att mata mojliga forandringar." },
+    sv: { title: "Följ upp", body: "Testa igen efter 120 dagar för att mäta möjliga förändringar." },
     no: { title: "Folg opp", body: "Test pa nytt etter 120 dager for a male mulige endringer." },
     da: { title: "Folg op", body: "Test igen efter 120 dage for at male mulige aendringer." },
     fi: { title: "Seuraa", body: "Tee testi uudelleen 120 paivan kuluttua mahdollisten muutosten mittaamiseksi." },
@@ -1208,7 +1220,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     it: "Hai domande?",
   };
   const heroHighlightWordByLang: Partial<Record<Lang, string>> = {
-    sv: "vad du faktiskt behöver",
+    sv: "inre balans",
     en: "what you actually need",
   };
   const numberedSteps = [...copy.howSteps, followUpStepByLang[currentLang]];
@@ -1277,7 +1289,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               {highlightedHeroTitle ? (
                 <>
                   {highlightedHeroTitle[0]}
-                  <span className="text-primary">{heroHighlightWord}</span>
+                  <span className="text-primary italic">{heroHighlightWord}</span>
                   {highlightedHeroTitle[1]}
                 </>
               ) : (
@@ -1304,6 +1316,12 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 </span>
               ))}
             </div>
+            {heroProof ? (
+              <div className="mx-auto mt-8 max-w-3xl rounded-[1.8rem] border border-[rgba(70,99,80,0.1)] bg-white/86 px-7 py-6 text-center shadow-[0_18px_40px_rgba(31,41,55,0.06)]">
+                <p className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">{heroProof.stat}</p>
+                <p className="mt-3 text-base leading-8 text-foreground/66">{heroProof.body}</p>
+              </div>
+            ) : null}
           </div>
 
           <div className="mx-auto w-full max-w-[34rem]">
@@ -1356,7 +1374,6 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
       <section id="faq" className="px-4 py-18 md:px-6 md:py-24">
         <div className="container-wide mx-auto">
           <div className="mb-12 text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{topNav.faq}</p>
             <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{faqTitleByLang[currentLang]}</h2>
           </div>
         </div>
@@ -1365,17 +1382,16 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
 
       <section className="px-4 pb-18 md:px-6 md:pb-24">
         <div className="container-wide mx-auto">
-          <div className="rounded-[2rem] bg-primary px-8 py-10 text-primary-foreground shadow-[0_28px_70px_rgba(31,70,55,0.18)] md:px-12 md:py-14">
-            <div className="max-w-3xl">
+          <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-10 text-center text-primary-foreground shadow-[0_28px_70px_hsl(var(--primary)/0.22)] md:px-12 md:py-14">
+            <div className="absolute -left-14 bottom-0 h-36 w-36 rounded-full bg-white/5" />
+            <div className="absolute -right-10 top-0 h-32 w-32 rounded-full bg-white/5" />
+            <div className="relative mx-auto max-w-3xl">
               <h2 className="font-serif text-3xl font-semibold tracking-tight md:text-5xl">{closingCtaTitleByLang[currentLang]}</h2>
               <p className="mt-5 text-lg leading-8 text-primary-foreground/86">{closingCtaBodyByLang[currentLang]}</p>
             </div>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="relative mt-8 flex flex-wrap justify-center gap-4">
               <Link to={omegaPath} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3.5 text-base font-medium text-primary transition hover:opacity-95">
                 {copy.heroSecondaryCta}
-              </Link>
-              <Link to={gutPath} className="inline-flex items-center justify-center rounded-full border border-white/28 px-6 py-3.5 text-base font-medium text-white transition hover:bg-white/8">
-                {copy.navGut}
               </Link>
             </div>
           </div>

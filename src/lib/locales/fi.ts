@@ -106,6 +106,11 @@ export const fi: Copy = {
   sticky: {
     text: "Selvitä Omega-6 / Omega-3-suhteesi tänään",
   },
+  cta: {
+    title: "Valmis aloittamaan?",
+    subtitle: "Tee testi kotona ja saat selkeän vastauksen omega-tasapainostasi.",
+    button: "Jatka testiin",
+  },
   partner: {
     navLabel: "Partnerit",
     heroBadge: "Partnerimahdollisuus",

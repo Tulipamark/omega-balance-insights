@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
-import { insightCopyByLang } from "@/lib/funnel-copy";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
@@ -37,7 +36,6 @@ const primaryCtaByLang: Partial<Record<Lang, string>> = {
 
 const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
   const copy = t(lang);
-  const insightCopy = insightCopyByLang[lang];
 
   return (
     <section className="px-4 py-12 md:px-6 md:py-14">
@@ -47,16 +45,20 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-3xl rounded-[2.1rem] border border-[hsl(var(--primary)/0.08)] bg-[linear-gradient(135deg,hsl(var(--primary)/0.12),hsl(var(--card))_50%,rgba(255,255,255,0.96))] px-5 py-8 shadow-elevated sm:px-6 md:px-10 md:py-12"
+          className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl bg-primary px-6 py-10 text-primary-foreground shadow-elevated sm:px-8 md:px-12 md:py-14"
         >
-          <h2 className="text-[2rem] font-semibold tracking-tight md:text-4xl">{insightCopy.closingTitle}</h2>
-          <p className="mt-4 text-base leading-7 text-subtle sm:text-lg sm:leading-8">{insightCopy.closingBody}</p>
-          <div className="mx-auto mt-6 max-w-sm">
+          <div className="absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-white/5" />
+          <div className="absolute -right-12 top-0 h-36 w-36 rounded-full bg-white/5" />
+          <div className="relative">
+            <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-4xl">{copy.cta.title}</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-primary-foreground/86 sm:text-lg sm:leading-8">{copy.cta.subtitle}</p>
+          </div>
+          <div className="relative mx-auto mt-8 max-w-sm">
             <TrackedOutboundButton
               lang={lang}
               destinationType="test"
               fallbackHref={getZinzinoTestUrl(lang)}
-              className="btn-primary w-full px-6 py-3.5 text-base text-center"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"
               pendingLabel={pendingLabelByLang[lang]}
               trackingEventName="closing_cta_clicked"
               trackingDetails={{ placement: "closing-section" }}
@@ -71,7 +73,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
                 : {})}
             >
               <>
-                {primaryCtaByLang[lang] ?? copy.hero.primaryCta}
+                {copy.cta.button}
                 <ArrowRight className="h-4 w-4" />
               </>
             </TrackedOutboundButton>

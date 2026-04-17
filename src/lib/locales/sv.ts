@@ -163,6 +163,11 @@ export const sv: Copy = {
   sticky: {
     text: "Upptäck din Omega-6 / Omega-3-kvot idag",
   },
+  cta: {
+    title: "Redo att börja?",
+    subtitle: "Ta testet hemma och få ett tydligt svar på din omega-balans.",
+    button: "Gå vidare till testet",
+  },
   partner: {
     navLabel: "Partners",
     heroBadge: "Partnermöjlighet",

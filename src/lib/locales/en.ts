@@ -106,6 +106,11 @@ export const en: Copy = {
   sticky: {
     text: "Discover your Omega-6 / Omega-3 ratio today",
   },
+  cta: {
+    title: "Ready to start?",
+    subtitle: "Take the test at home and get a clear answer about your omega balance.",
+    button: "Continue to the test",
+  },
   partner: {
     navLabel: "Partners",
     heroBadge: "Partner opportunity",

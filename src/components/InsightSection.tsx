@@ -44,8 +44,7 @@ const InsightSection = ({ lang }: InsightSectionProps) => {
               key={point}
               className="rounded-[1.6rem] border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,248,246,0.9))] px-5 py-5 text-base font-medium text-foreground shadow-[0_18px_40px_rgba(31,41,55,0.05)]"
             >
-              <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-primary/80">Why it matters</span>
-              <span className="mt-3 block text-lg leading-7">{point}</span>
+              <span className="block text-lg leading-7">{point}</span>
             </li>
           ))}
         </motion.ul>

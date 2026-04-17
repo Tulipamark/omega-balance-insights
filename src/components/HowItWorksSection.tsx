@@ -105,7 +105,7 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
           transition={{ duration: 0.6 }}
           className="mb-10 text-center sm:mb-12 md:mb-16"
         >
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-primary">How it works</p>
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-primary">{lang === "sv" ? "Så fungerar testet" : "How it works"}</p>
           <h2 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl md:mb-4 md:text-4xl">{copy.title}</h2>
           <p className="mx-auto max-w-xl text-base leading-7 text-subtle sm:text-lg">{copy.body}</p>
         </motion.div>

@@ -1,12 +1,13 @@
 ﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { funnelHeroCopy } from "@/lib/funnel-copy";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import VideoSection from "@/components/VideoSection";
 
@@ -78,13 +79,15 @@ const insideBalanceLabelByLang: Partial<Record<Lang, string>> = {
 
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaHomePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
+const gutPath = (lang: Lang) => (lang === "sv" ? "/gut-balance" : `/${lang}/gut-balance`);
 const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
+const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
 
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const copy = t(lang);
   const heroCopy = funnelHeroCopy[lang];
   const heroProofByLang: Record<Lang, string[]> = {
-    sv: ["Blodbaserat hemmatest", "Personligt mätresultat", "Tydlig nästa riktning"],
+    sv: ["Tydlig omega-6:3-analys", "Blodbaserat test hemma", "Personligt mätresultat"],
     no: ["Blodbasert hjemmetest", "Personlig måling", "Tydelig neste retning"],
     da: ["Blodbaseret hjemmetest", "Personlig måling", "Tydelig næste retning"],
     fi: ["Kotona tehtävä veritesti", "Henkilökohtainen tulos", "Selkeä seuraava suunta"],
@@ -97,35 +100,49 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   return (
     <section className="bg-[radial-gradient(circle_at_top,rgba(244,248,241,0.95),rgba(247,243,235,0.96)_46%,rgba(238,233,222,0.96)_100%)] px-4 pb-12 pt-6 sm:pb-14 sm:pt-8 md:px-6 md:pb-16 md:pt-10">
       <div className="container-wide mx-auto">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-10">
-          <div className="flex flex-col gap-2">
+        <div className="mb-6 flex items-center justify-between gap-4 md:mb-10">
+          <div className="min-w-0 flex-1">
             <Link
               to={platformHomePath(lang)}
               className="transition-opacity hover:opacity-85"
               aria-label={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
             >
-              <InsideBalanceLogo alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"} variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
+              <InsideBalanceLogo alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"} variant="full" className="h-14 sm:h-16 md:h-20" />
             </Link>
-            <a
-              href={omegaHomePath(lang)}
-              className="inline-flex rounded-full border border-black/5 bg-white/80 px-4 py-1.5 font-serif text-sm font-semibold tracking-tight text-foreground/75 shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white"
-            >
-              OmegaBalance
-            </a>
           </div>
-          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+          <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
+            <Link to={platformHomePath(lang)} className="transition hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link>
+            <Link to={gutPath(lang)} className="transition hover:text-foreground">GutBalance</Link>
+            <a href="#how-it-works" className="transition hover:text-foreground">{copy.hero.secondaryCta}</a>
             <Link
-              to="/dashboard/login"
-              className="inline-flex whitespace-nowrap text-xs font-medium text-subtle transition-colors hover:text-foreground sm:text-sm"
+              to={contactPath(lang)}
+              className="transition hover:text-foreground"
             >
-              {signInLabelByLang[lang] ?? "Sign in"}
+              {copy.footer.contact}
             </Link>
-            <Link
-              to={partnerPath(lang)}
-              className="inline-flex whitespace-nowrap rounded-2xl border border-border/80 bg-card/75 px-3 py-2 text-xs font-medium text-foreground/88 shadow-card transition-colors hover:bg-card sm:px-4 sm:text-sm"
-            >
-              {copy.hero.partnerCta}
-            </Link>
+          </nav>
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/8 bg-white text-foreground shadow-[0_10px_24px_rgba(31,41,55,0.06)] transition hover:bg-white/90 xl:hidden"
+                  aria-label="Open navigation"
+                >
+                  <Menu className="h-5 w-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
+                <SheetTitle className="sr-only">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</SheetTitle>
+                <div className="mt-8 flex flex-col gap-3 text-base text-foreground/78">
+                  <SheetClose asChild><Link to={platformHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link></SheetClose>
+                  <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
+                  <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
+                  <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.hero.secondaryCta}</a></SheetClose>
+                  <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.footer.contact}</Link></SheetClose>
+                </div>
+              </SheetContent>
+            </Sheet>
             <LanguageSwitcher lang={lang} />
           </div>
         </div>
@@ -160,6 +177,13 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                   </div>
                 ))}
               </div>
+
+              {lang === "sv" ? (
+                <div className="mt-6 rounded-[1.6rem] border border-black/5 bg-white/84 px-6 py-5 text-center shadow-[0_16px_35px_rgba(31,41,55,0.05)] lg:text-left">
+                  <p className="text-lg font-semibold tracking-tight text-foreground md:text-xl">Över 1,7 miljoner utförda BalanceTests hittills</p>
+                  <p className="mt-2 text-sm leading-7 text-subtle">Baserat på världens största databas av fettsyror från torrblodstester.</p>
+                </div>
+              ) : null}
 
               <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 lg:mx-0 sm:mt-10">
                 <TrackedOutboundButton

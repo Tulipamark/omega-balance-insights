@@ -106,6 +106,11 @@ export const da: Copy = {
   sticky: {
     text: "Opdag dit Omega-6 / Omega-3-forhold i dag",
   },
+  cta: {
+    title: "Klar til at starte?",
+    subtitle: "Tag testen hjemme og få et tydeligt svar på din omega-balance.",
+    button: "Gå videre til testen",
+  },
   partner: {
     navLabel: "Partnere",
     heroBadge: "Partnermulighed",

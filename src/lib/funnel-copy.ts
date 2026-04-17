@@ -70,7 +70,11 @@ export const insightCopyByLang: Record<
     title: "Du märker det inte alltid – men du kan mäta det",
     body:
       "Omega-balansen känns sällan tydligt i vardagen. Därför blir det lätt att tro att allt ser bra ut. Utan ett faktiskt test är det svårt att veta var du ligger.",
-    points: ["Svart på vitt", "Enkelt hemma", "Personligt resultat"],
+    points: [
+      "Se din nivå svart på vitt",
+      "Ta testet hemma i lugn och ro",
+      "Få ett personligt svar baserat på dina värden",
+    ],
     closingTitle: "Börja med att se din nivå",
     closingBody: "Ta testet och få ett tydligt mätresultat för din omega-balans.",
   },

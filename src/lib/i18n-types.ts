@@ -80,6 +80,11 @@ export type Copy = {
   sticky: {
     text: string;
   };
+  cta: {
+    title: string;
+    subtitle: string;
+    button: string;
+  };
   partner: {
     navLabel: string;
     heroBadge: string;

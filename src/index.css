@@ -15,7 +15,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 210 30% 12%;
 
-    --primary: 172 40% 38%;
+    --primary: 144 17% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 15% 95%;
@@ -24,26 +24,28 @@
     --muted: 210 15% 95%;
     --muted-foreground: 210 12% 40%;
 
-    --accent: 172 25% 92%;
-    --accent-foreground: 172 40% 28%;
+    --accent: 144 18% 92%;
+    --accent-foreground: 144 17% 32%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 210 15% 90%;
     --input: 210 15% 90%;
-    --ring: 172 40% 38%;
+    --ring: 144 17% 42%;
 
     --radius: 0.75rem;
+    --font-heading: 'Source Serif 4', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
 
     /* Custom tokens */
     --hero-bg: 210 20% 97%;
     --section-alt: 210 15% 96%;
     --text-subtle: 210 12% 42%;
-    --badge-bg: 172 30% 94%;
-    --badge-text: 172 40% 30%;
-    --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(172 20% 96%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(172 40% 38%) 0%, hsl(172 45% 32%) 100%);
+    --badge-bg: 144 18% 92%;
+    --badge-text: 144 17% 32%;
+    --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(144 16% 96%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(144 17% 42%) 0%, hsl(144 17% 34%) 100%);
     --shadow-card: 0 1px 3px hsl(210 20% 12% / 0.04), 0 4px 16px hsl(210 20% 12% / 0.06);
     --shadow-elevated: 0 4px 12px hsl(210 20% 12% / 0.06), 0 12px 40px hsl(210 20% 12% / 0.08);
 
@@ -65,11 +67,11 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-body);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Serif 4', Georgia, serif;
+    font-family: var(--font-heading);
   }
 
   html {
@@ -83,24 +85,24 @@
     --card-foreground: 144 19% 15%;
     --popover: 40 29% 99%;
     --popover-foreground: 144 19% 15%;
-    --primary: 145 28% 28%;
+    --primary: 144 17% 42%;
     --primary-foreground: 40 33% 98%;
     --secondary: 40 22% 93%;
     --secondary-foreground: 144 19% 15%;
     --muted: 40 22% 93%;
     --muted-foreground: 34 10% 38%;
-    --accent: 86 21% 89%;
-    --accent-foreground: 145 28% 24%;
+    --accent: 144 18% 92%;
+    --accent-foreground: 144 17% 32%;
     --border: 35 18% 86%;
     --input: 35 18% 86%;
-    --ring: 145 28% 28%;
+    --ring: 144 17% 42%;
     --hero-bg: 42 34% 97%;
     --section-alt: 40 23% 94%;
     --text-subtle: 34 10% 40%;
-    --badge-bg: 86 18% 90%;
-    --badge-text: 145 24% 28%;
+    --badge-bg: 144 18% 92%;
+    --badge-text: 144 17% 32%;
     --gradient-hero: linear-gradient(180deg, hsl(42 34% 97%) 0%, hsl(88 16% 94%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(145 28% 28%) 0%, hsl(150 24% 23%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(144 17% 42%) 0%, hsl(144 17% 34%) 100%);
     --shadow-card: 0 1px 3px hsl(35 14% 18% / 0.04), 0 8px 24px hsl(35 14% 18% / 0.06);
     --shadow-elevated: 0 8px 24px hsl(35 14% 18% / 0.06), 0 20px 50px hsl(35 14% 18% / 0.09);
   }
@@ -112,24 +114,24 @@
     --card-foreground: 146 20% 14%;
     --popover: 42 24% 99%;
     --popover-foreground: 146 20% 14%;
-    --primary: 148 30% 26%;
+    --primary: 144 17% 42%;
     --primary-foreground: 40 26% 98%;
     --secondary: 38 19% 92%;
     --secondary-foreground: 146 20% 14%;
     --muted: 38 19% 92%;
     --muted-foreground: 32 10% 39%;
-    --accent: 88 17% 88%;
-    --accent-foreground: 148 28% 23%;
+    --accent: 144 18% 92%;
+    --accent-foreground: 144 17% 32%;
     --border: 34 16% 84%;
     --input: 34 16% 84%;
-    --ring: 148 30% 26%;
+    --ring: 144 17% 42%;
     --hero-bg: 44 28% 96%;
     --section-alt: 38 20% 93%;
     --text-subtle: 32 10% 39%;
-    --badge-bg: 86 15% 88%;
-    --badge-text: 148 26% 24%;
+    --badge-bg: 144 18% 92%;
+    --badge-text: 144 17% 32%;
     --gradient-hero: linear-gradient(180deg, hsl(44 28% 96%) 0%, hsl(82 12% 93%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(148 30% 26%) 0%, hsl(153 24% 21%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(144 17% 42%) 0%, hsl(144 17% 34%) 100%);
     --shadow-card: 0 1px 3px hsl(35 16% 17% / 0.04), 0 8px 22px hsl(35 16% 17% / 0.06);
     --shadow-elevated: 0 8px 24px hsl(35 16% 17% / 0.06), 0 18px 46px hsl(35 16% 17% / 0.09);
   }
