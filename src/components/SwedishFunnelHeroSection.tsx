@@ -107,7 +107,12 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               className="transition-opacity hover:opacity-85"
               aria-label={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
             >
-              <InsideBalanceLogo alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"} variant="full" className="h-14 sm:h-16 md:h-20" />
+              <InsideBalanceLogo
+                alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
+                variant="full"
+                className="h-14 sm:h-16 md:h-20"
+                imageClassName="scale-[2] origin-left"
+              />
             </Link>
           </div>
           <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
