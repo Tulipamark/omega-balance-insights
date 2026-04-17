@@ -34,21 +34,30 @@ const adminLabel = {
 } satisfies Record<Lang, string>;
 
 const independentPartnerLabel = {
-  sv: "Oberoende Zinzino-partner",
+  sv: "Oberoende partner till Zinzino",
   no: "Uavhengig Zinzino-partner",
-  da: "Uafhængig Zinzino-partner",
-  fi: "Itsenäinen Zinzino-kumppani",
+  da: "Uafhaengig Zinzino-partner",
+  fi: "Itsenainen Zinzino-kumppani",
   en: "Independent Zinzino partner",
-  de: "Unabhängiger Zinzino-Partner",
-  fr: "Partenaire Zinzino indépendant",
+  de: "Unabhaengiger Zinzino-Partner",
+  fr: "Partenaire Zinzino independant",
   it: "Partner Zinzino indipendente",
 } satisfies Record<Lang, string>;
 
+const swedishFooterLineByBrand: Partial<Record<string, string>> = {
+  OmegaBalance: "© 2026 OmegaBalance. Vetenskapligt baserad fettsyreanalys. Drivs av Per Lundström. Oberoende partner till Zinzino.",
+  GutBalance: "© 2026 GutBalance. Forskningsbaserad analys av tarmhälsa. Drivs av Per Lundström. Oberoende partner till Zinzino.",
+};
+
 const FooterSection = ({ lang, brandName = "OmegaBalance", taglineOverride }: FooterSectionProps) => {
   const copy = t(lang).footer;
-  const localizedPath = (basePath: "/integritet" | "/villkor" | "/kontakt") => (lang === "sv" ? basePath : `/${lang}${basePath}`);
+  const localizedPath = (basePath: "/integritet" | "/villkor" | "/kontakt") =>
+    lang === "sv" ? basePath : `/${lang}${basePath}`;
   const resolvedTagline = trimTrailingPunctuation(taglineOverride ?? copy.tagline);
-  const footerLine = `© ${brandName} 2026 • ${resolvedTagline} • ${independentPartnerLabel[lang]}`;
+  const footerLine =
+    lang === "sv" && swedishFooterLineByBrand[brandName]
+      ? swedishFooterLineByBrand[brandName]!
+      : `© 2026 ${brandName}. ${resolvedTagline}. ${independentPartnerLabel[lang]}.`;
 
   return (
     <footer className="border-t border-border px-6 py-12 md:px-12">
