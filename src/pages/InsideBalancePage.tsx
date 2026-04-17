@@ -1,8 +1,9 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Menu } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import FAQSection from "@/components/FAQSection";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 import insideBalancePortraitImage from "@/assets/insidebalance-portrait.webp";
 
@@ -1181,234 +1182,233 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         trustPoints: copyOverride.trustPoints ?? baseCopy.trustPoints,
       }
     : baseCopy;
-  const baseVisuals = visualFramesByLang[currentLang];
-  const visuals = visualFrameOverridesByLang[currentLang] ?? baseVisuals;
-  const trustTitle = copy.trustTitle ?? "Serious, clear, and built to last";
-  const trustBody =
-    copy.trustBody ??
-    "InsideBalance is designed to feel calm and credible, built around measurable tests, clear communication, and next steps that are easy to understand.";
-  const trustPoints =
-    copy.trustPoints ?? [
-      "A test-based starting point instead of guesswork.",
-      "Clear product journeys with one focus at a time.",
-      "A calmer experience where trust matters more than hype.",
-    ];
-  const products = copy.products.map((product, index) => {
-    if (index === 0) {
-      return { ...product, href: omegaBalancePath(currentLang) };
-    }
-
-    if (index === 1) {
-      return { ...product, href: localizedPath(currentLang, "/gut-balance") };
-    }
-
-    return product;
-  });
-  const footerCta = copy.footerCta ?? products[0]?.cta;
-  const primaryRouteTitle = copy.primaryRouteTitle ?? "Start here";
-  const primaryRouteBody =
-    copy.primaryRouteBody ?? "OmegaBalance is the first clear way into the platform and the strongest place to begin right now.";
-  const secondaryRouteTitle = activeSecondaryRouteTitleByLang[currentLang];
-  const secondaryRouteBody = activeSecondaryRouteBodyByLang[currentLang];
-  const productLinkLabel = productLinkLabelByLang[currentLang];
-  const firstWhoItems = copy.whoItems.slice(0, 2);
-  const heroHighlights = trustPoints.slice(0, 3);
+  const topNav = topNavByLang[currentLang];
+  const heroTrust = heroTrustByLang[currentLang];
+  const benefits = benefitsGridByLang[currentLang].length ? benefitsGridByLang[currentLang] : benefitsGridByLang.en;
+  const omegaPath = omegaBalancePath(currentLang);
+  const gutPath = localizedPath(currentLang, "/gut-balance");
+  const followUpStepByLang: Record<Lang, { title: string; body: string }> = {
+    sv: { title: "Folj upp", body: "Testa igen efter 120 dagar for att mata mojliga forandringar." },
+    no: { title: "Folg opp", body: "Test pa nytt etter 120 dager for a male mulige endringer." },
+    da: { title: "Folg op", body: "Test igen efter 120 dage for at male mulige aendringer." },
+    fi: { title: "Seuraa", body: "Tee testi uudelleen 120 paivan kuluttua mahdollisten muutosten mittaamiseksi." },
+    en: { title: "Follow up", body: "Test again after 120 days to measure possible changes." },
+    de: { title: "Erneut testen", body: "Teste nach 120 Tagen erneut, um mogliche Veranderungen zu messen." },
+    fr: { title: "Faire le suivi", body: "Refaites le test apres 120 jours pour mesurer d'eventuels changements." },
+    it: { title: "Follow-up", body: "Ripeti il test dopo 120 giorni per misurare possibili cambiamenti." },
+  };
+  const faqTitleByLang: Record<Lang, string> = {
+    sv: "Har du frågor?",
+    no: "Har du sporsmal?",
+    da: "Har du sporgsmal?",
+    fi: "Onko sinulla kysymyksia?",
+    en: "Have questions?",
+    de: "Hast du Fragen?",
+    fr: "Vous avez des questions ?",
+    it: "Hai domande?",
+  };
+  const heroHighlightWordByLang: Partial<Record<Lang, string>> = {
+    sv: "vad du faktiskt behöver",
+    en: "what you actually need",
+  };
+  const numberedSteps = [...copy.howSteps, followUpStepByLang[currentLang]];
+  const heroHighlightWord = heroHighlightWordByLang[currentLang];
+  const highlightedHeroTitle =
+    heroHighlightWord && copy.heroTitle.includes(heroHighlightWord)
+      ? copy.heroTitle.split(heroHighlightWord)
+      : null;
 
   return (
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
-      <section className="bg-[radial-gradient(circle_at_top_left,rgba(231,243,236,0.9),rgba(247,243,235,0.95)_42%,rgba(244,238,227,0.98)_100%)] px-4 pb-20 pt-6 md:px-6 md:pt-8 lg:pb-28">
-        <div className="container-wide mx-auto">
-          <div className="mb-8 flex items-start justify-between gap-3 md:mb-14 md:items-center">
-            <Link
-              to={platformHomePath(currentLang)}
-              className="-mt-1 min-w-0 flex-1 transition-opacity hover:opacity-85 md:mt-0"
-              aria-label={copy.navHome}
-            >
-              <InsideBalanceLogo
-                alt={copy.navHome}
-                variant="full"
-                className="h-20 max-w-full sm:h-28 md:h-40 lg:h-44"
-              />
-            </Link>
-            <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-2 rounded-2xl border border-black/5 bg-white/80 px-3 py-2.5 text-sm font-medium text-foreground shadow-[0_12px_30px_rgba(31,41,55,0.05)] transition hover:bg-white sm:px-4"
-                  >
-                    <span>{navExploreLabelByLang[currentLang]}</span>
-                    <ChevronDown className="h-4 w-4 text-foreground/70" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-[13rem] rounded-2xl border-black/5 bg-white/95 p-2 shadow-[0_18px_40px_rgba(31,41,55,0.10)]">
-                  <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
-                    <Link to={omegaBalancePath(currentLang)} className="flex w-full items-center gap-3">
-                      <span className="font-medium text-foreground">{copy.navOmega}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5">
-                    <Link to={localizedPath(currentLang, "/gut-balance")} className="flex w-full items-center gap-3">
-                      <span className="font-medium text-foreground">{copy.navGut}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <LanguageSwitcher lang={currentLang} />
+      <header className="border-b border-black/5 bg-[#f7f3eb] px-4 py-5 md:px-6">
+        <div className="container-wide mx-auto flex items-center justify-between gap-6">
+          <Link to={platformHomePath(currentLang)} className="min-w-0 flex-1" aria-label={copy.navHome}>
+            <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12 sm:h-14 md:h-16" />
+          </Link>
+          <nav className="hidden items-center gap-6 text-[0.95rem] text-foreground/70 xl:flex">
+            <Link to={omegaPath} className="transition hover:text-foreground">{copy.navOmega}</Link>
+            <Link to={gutPath} className="transition hover:text-foreground">{copy.navGut}</Link>
+            <a href="#benefits" className="transition hover:text-foreground">{topNav.benefits}</a>
+            <a href="#how-it-works" className="transition hover:text-foreground">{topNav.how}</a>
+            <a href="#faq" className="transition hover:text-foreground">{topNav.faq}</a>
+            <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">{topNav.contact}</Link>
+          </nav>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/8 bg-white text-foreground shadow-[0_10px_24px_rgba(31,41,55,0.06)] transition hover:bg-white/90 xl:hidden"
+                  aria-label="Open navigation"
+                >
+                  <Menu className="h-5 w-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
+                <SheetTitle className="sr-only">{copy.navHome}</SheetTitle>
+                <div className="mt-8 flex flex-col gap-6">
+                  <div className="border-b border-black/5 pb-5">
+                    <InsideBalanceLogo alt={copy.navHome} variant="full" className="h-12" />
+                  </div>
+                  <div className="flex flex-col gap-3 text-base text-foreground/78">
+                    <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.navHome}</Link></SheetClose>
+                    <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.navOmega}</Link></SheetClose>
+                    <SheetClose asChild><Link to={gutPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.navGut}</Link></SheetClose>
+                    <SheetClose asChild><a href="#benefits" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{topNav.benefits}</a></SheetClose>
+                    <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{topNav.how}</a></SheetClose>
+                    <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{topNav.faq}</a></SheetClose>
+                    <SheetClose asChild><Link to={localizedPath(currentLang, "/kontakt")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{topNav.contact}</Link></SheetClose>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <LanguageSwitcher lang={currentLang} />
+          </div>
+        </div>
+      </header>
+
+      <section className="overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(230,243,235,0.95),rgba(247,243,235,0.98)_42%,rgba(242,235,223,1)_100%)] px-4 pb-20 pt-10 md:px-6 md:pb-24 md:pt-16">
+        <div className="container-wide mx-auto grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <div className="text-center lg:text-center">
+            <span className="inline-flex rounded-full border border-[rgba(70,99,80,0.12)] bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
+              {heroBadgeByLang[currentLang]}
+            </span>
+            <h1 className="mt-6 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+              {highlightedHeroTitle ? (
+                <>
+                  {highlightedHeroTitle[0]}
+                  <span className="text-primary">{heroHighlightWord}</span>
+                  {highlightedHeroTitle[1]}
+                </>
+              ) : (
+                copy.heroTitle
+              )}
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
+              {copy.heroBody}
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link to={omegaPath} className={primaryCtaClass}>
+                {copy.heroSecondaryCta}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a href="#benefits" className={secondaryCtaClass}>
+                {copy.heroPrimaryCta}
+              </a>
+            </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-foreground/70">
+              {heroTrust.map((item) => (
+                <span key={item} className="inline-flex items-center gap-2 rounded-full bg-white/78 px-4 py-2 shadow-[0_10px_24px_rgba(31,41,55,0.04)]">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
 
-          <div className="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16">
-            <div>
-              <span className="mb-6 inline-flex rounded-full border border-[rgba(70,99,80,0.12)] bg-white/80 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-primary shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
-                {copy.heroEyebrow}
-              </span>
-              <h1 className="max-w-4xl font-serif text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                {copy.heroTitle}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
-                {copy.heroBody}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link to={omegaBalancePath(currentLang)} className={primaryCtaClass}>
-                  {copy.heroSecondaryCta}
-                </Link>
-                <a href="#products" className={secondaryCtaClass}>
-                  {copy.heroPrimaryCta}
-                </a>
-              </div>
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {heroHighlights.map((point) => (
-                  <div
-                    key={point}
-                    className="rounded-[1.4rem] border border-black/5 bg-white/72 px-4 py-4 text-sm leading-6 text-foreground/68 shadow-[0_14px_35px_rgba(31,41,55,0.04)]"
-                  >
-                    {point}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mx-auto w-full max-w-[35rem] xl:max-w-[32rem]">
-              <div className="rounded-[2rem] border border-[rgba(70,99,80,0.08)] bg-white/72 p-4 shadow-[0_28px_65px_rgba(31,70,55,0.10)] backdrop-blur">
-                <div className="aspect-[4/4.5] overflow-hidden rounded-[1.65rem]">
-                  <img src={insideBalancePortraitImage} alt={visuals.heroTitle} className="h-full w-full object-cover" />
-                </div>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <Link
-                    to={products[0].href}
-                    className="rounded-[1.4rem] border border-[rgba(70,99,80,0.12)] bg-[rgba(235,244,239,0.82)] px-4 py-4 transition hover:-translate-y-0.5"
-                  >
-                    <p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-primary">{primaryRouteTitle}</p>
-                    <h2 className="mt-2 text-lg font-semibold tracking-tight text-foreground">{products[0].title}</h2>
-                    <p className="mt-2 text-sm leading-6 text-foreground/62">{primaryRouteBody}</p>
-                  </Link>
-                  <Link
-                    to={products[1].href}
-                    className="rounded-[1.4rem] border border-black/5 bg-[rgba(255,255,255,0.82)] px-4 py-4 transition hover:-translate-y-0.5"
-                  >
-                    <p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-foreground/48">{secondaryRouteTitle}</p>
-                    <h2 className="mt-2 text-lg font-semibold tracking-tight text-foreground">{products[1].title}</h2>
-                    <p className="mt-2 text-sm leading-6 text-foreground/62">{secondaryRouteBody}</p>
-                  </Link>
-                </div>
+          <div className="mx-auto w-full max-w-[34rem]">
+            <div className="rounded-[2rem] border border-[rgba(70,99,80,0.08)] bg-white/78 p-4 shadow-[0_28px_70px_rgba(31,70,55,0.10)]">
+              <div className="aspect-[4/4.6] overflow-hidden rounded-[1.6rem]">
+                <img src={insideBalancePortraitImage} alt={copy.heroTitle} className="h-full w-full object-cover" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <InsideBalanceTrustSection title={trustTitle} body={trustBody} points={trustPoints} icons={trustIcons} />
-
-      <InsideBalanceProductsSection
-        title={copy.productsTitle}
-        body={copy.productsBody}
-        products={products}
-        primaryRouteTitle={primaryRouteTitle}
-        primaryRouteBody={primaryRouteBody}
-        secondaryRouteTitle={secondaryRouteTitle}
-        secondaryRouteBody={secondaryRouteBody}
-        productLinkLabel={productLinkLabel}
-      />
-
-      <InsideBalanceWhyMeasureSection
-        eyebrow={copy.whyTitle}
-        title={visuals.measurementTitle}
-        body={copy.whyBody}
-        supportingBody={visuals.measurementBody}
-        imageSrc={insideBalanceResultsImage}
-        imageAlt={visuals.measurementTitle}
-      />
-
-      <InsideBalanceConnectionSection
-        eyebrow={visuals.connectionLabel}
-        title={visuals.connectionTitle}
-        body={visuals.connectionBody}
-        items={firstWhoItems}
-        imageSrc={insideBalanceConversationImage}
-        imageAlt={visuals.connectionTitle}
-      />
-
-      <InsideBalanceHowSection title={copy.howTitle} steps={copy.howSteps} />
-
-      <InsideBalanceClosingSection
-        title={closingCtaTitleByLang[currentLang]}
-        body={closingCtaBodyByLang[currentLang]}
-        ctaLabel={copy.heroSecondaryCta}
-        ctaHref={omegaBalancePath(currentLang)}
-      />
-
-      <footer className="border-t border-black/5 px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto grid gap-6 md:grid-cols-4">
-          <div className="max-w-2xl">
-            <InsideBalanceLogo
-              alt={copy.footerTitle}
-              variant="full"
-              className="h-32 sm:h-36 md:h-40 lg:h-44"
-              imageClassName="-translate-y-6 sm:-translate-y-8"
-            />
-            <p className="-mt-6 sm:-mt-8 text-sm leading-6 text-foreground/66">{footerTaglineByLang[currentLang]}</p>
+      <section id="benefits" className="px-4 py-18 md:px-6 md:py-24">
+        <div className="container-wide mx-auto">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.heroEyebrow} - health testing</p>
+            <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{benefitsTitleByLang[currentLang]}</h2>
+            <p className="mt-5 text-lg leading-8 text-foreground/68">{benefitsIntroByLang[currentLang]}</p>
           </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {benefits.map((benefit) => (
+              <article key={benefit.title} className="rounded-[1.8rem] border border-[rgba(70,99,80,0.1)] bg-white px-6 py-7 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
+                <h3 className="text-xl font-semibold tracking-tight">{benefit.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-foreground/68">{benefit.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerExploreLabelByLang[currentLang]}</p>
-            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              {footerCta ? <Link to={products[0].href} className="transition hover:text-foreground">{products[0].title}</Link> : null}
-              <Link to={localizedPath(currentLang, "/gut-balance")} className="transition hover:text-foreground">
+      <section id="how-it-works" className="bg-[#efe7d8] px-4 py-18 md:px-6 md:py-24">
+        <div className="container-wide mx-auto">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.whyTitle}</p>
+            <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{copy.howTitle}</h2>
+            <p className="mt-5 text-lg leading-8 text-foreground/68">{copy.whyBody}</p>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {numberedSteps.map((step, index) => (
+              <article key={`${step.title}-${index}`} className="rounded-[1.75rem] bg-white px-6 py-7 shadow-[0_18px_38px_rgba(31,41,55,0.05)]">
+                <p className="text-sm font-semibold tracking-[0.16em] text-primary">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="mt-4 text-xl font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-foreground/68">{step.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" className="px-4 py-18 md:px-6 md:py-24">
+        <div className="container-wide mx-auto">
+          <div className="mb-12 text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{topNav.faq}</p>
+            <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{faqTitleByLang[currentLang]}</h2>
+          </div>
+        </div>
+        <FAQSection lang={currentLang} />
+      </section>
+
+      <section className="px-4 pb-18 md:px-6 md:pb-24">
+        <div className="container-wide mx-auto">
+          <div className="rounded-[2rem] bg-primary px-8 py-10 text-primary-foreground shadow-[0_28px_70px_rgba(31,70,55,0.18)] md:px-12 md:py-14">
+            <div className="max-w-3xl">
+              <h2 className="font-serif text-3xl font-semibold tracking-tight md:text-5xl">{closingCtaTitleByLang[currentLang]}</h2>
+              <p className="mt-5 text-lg leading-8 text-primary-foreground/86">{closingCtaBodyByLang[currentLang]}</p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link to={omegaPath} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3.5 text-base font-medium text-primary transition hover:opacity-95">
+                {copy.heroSecondaryCta}
+              </Link>
+              <Link to={gutPath} className="inline-flex items-center justify-center rounded-full border border-white/28 px-6 py-3.5 text-base font-medium text-white transition hover:bg-white/8">
                 {copy.navGut}
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      <footer id="contact" className="border-t border-black/5 bg-[#f3ecdf] px-4 py-14 md:px-6 md:py-16">
+        <div className="container-wide mx-auto grid gap-10 md:grid-cols-[1.25fr_0.75fr_0.75fr]">
+          <div>
+            <InsideBalanceLogo alt={copy.footerTitle} variant="full" className="h-12 sm:h-14 md:h-16" />
+            <p className="mt-4 max-w-lg text-sm leading-7 text-foreground/64">{copy.footerBody}</p>
+          </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerContactLabelByLang[currentLang]}</p>
-            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">
-                {footerWebsiteLabelByLang[currentLang]}
-              </Link>
-              <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">
-                {footerPrivacyLabelByLang[currentLang]}
-              </Link>
-              <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">
-                {footerTermsLabelByLang[currentLang]}
-              </Link>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/40">{footerExploreLabelByLang[currentLang]}</p>
+            <div className="mt-4 flex flex-col gap-2.5 text-sm text-foreground/70">
+              <a href="#benefits" className="transition hover:text-foreground">{topNav.benefits}</a>
+              <a href="#how-it-works" className="transition hover:text-foreground">{topNav.how}</a>
+              <a href="#faq" className="transition hover:text-foreground">{topNav.faq}</a>
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/45">{footerCompanyLabelByLang[currentLang]}</p>
-            <div className="mt-4 flex flex-col gap-3 text-sm text-foreground/72">
-              <Link to="/dashboard/login" className="transition hover:text-foreground">
-                {footerBackofficeLabelByLang[currentLang]}
-              </Link>
-              <Link to="/dashboard/admin-login" className="transition hover:text-foreground">
-                {footerAdminLabelByLang[currentLang]}
-              </Link>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/40">{footerContactLabelByLang[currentLang]}</p>
+            <div className="mt-4 flex flex-col gap-2.5 text-sm text-foreground/70">
+              <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">{topNav.contact}</Link>
+              <Link to={localizedPath(currentLang, "/integritet")} className="transition hover:text-foreground">{footerPrivacyLabelByLang[currentLang]}</Link>
+              <Link to={localizedPath(currentLang, "/villkor")} className="transition hover:text-foreground">{footerTermsLabelByLang[currentLang]}</Link>
             </div>
           </div>
         </div>
-        <div className="container-wide mx-auto mt-10 border-t border-black/5 pt-6 text-center">
-          <p className="text-xs text-foreground/55">
+        <div className="container-wide mx-auto mt-10 border-t border-black/5 pt-6">
+          <p className="text-center text-xs text-foreground/50">
             {footerCopyrightByLang[currentLang]} • {independentPartnerLabelByLang[currentLang]}
           </p>
         </div>
