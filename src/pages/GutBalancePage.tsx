@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import gutBalanceHeroImage from "@/assets/gutbalance-hero.png";
+import gutBalanceHeroImage from "@/assets/gut-balance-test-phone.jpg";
 import FooterSection from "@/components/FooterSection";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -526,12 +526,12 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="max-w-3xl">
+            <div className="mx-auto max-w-3xl text-center">
               <span className="inline-flex rounded-full border border-black/5 bg-white/84 px-4 py-2 font-serif text-sm font-semibold tracking-tight text-foreground/75 shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
                 {copy.heroEyebrow}
               </span>
               <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-6xl">{copy.heroTitle}</h1>
-              <p className="mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/70 md:text-lg">{copy.heroBody}</p>
+              <p className="mx-auto mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/70 md:text-lg">{copy.heroBody}</p>
               <div className="mt-7 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-[1.35rem] border border-black/5 bg-white/78 px-4 py-4 text-sm leading-6 text-foreground/70 shadow-[0_14px_35px_rgba(31,41,55,0.04)]">
                   {copy.supportEyebrow}
@@ -543,7 +543,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                   {copy.processTitle}
                 </div>
               </div>
-              <div className="mt-8">
+              <div className="mx-auto mt-8 max-w-sm">
                 <TrackedOutboundButton
                   lang={currentLang}
                   destinationType="test"
@@ -571,12 +571,12 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                   <img src={gutBalanceHeroImage} alt={copy.imageAlt} className="h-full w-full object-cover object-[center_22%]" />
                 </div>
               </div>
-              <div className="flex h-full items-center rounded-[1.75rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,246,242,0.9))] p-6 shadow-[0_20px_45px_rgba(31,41,55,0.06)]">
-                <div>
+              <div className="flex h-full items-center rounded-[1.75rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,246,242,0.9))] p-6 text-center shadow-[0_20px_45px_rgba(31,41,55,0.06)]">
+                <div className="w-full">
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{copy.supportEyebrow}</p>
                   <h2 className="mt-3 font-serif text-[1.7rem] font-semibold tracking-tight text-foreground md:text-[1.95rem]">{copy.supportTitle}</h2>
-                  <p className="mt-4 text-[1rem] leading-7 text-foreground/70">{copy.supportBody}</p>
-                  <p className="mt-4 text-[0.98rem] leading-7 text-foreground/70">{copy.supportDetail}</p>
+                  <p className="mx-auto mt-4 max-w-xl text-[1rem] leading-7 text-foreground/70">{copy.supportBody}</p>
+                  <p className="mx-auto mt-4 max-w-xl text-[0.98rem] leading-7 text-foreground/70">{copy.supportDetail}</p>
                 </div>
               </div>
             </div>
@@ -585,15 +585,15 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
       <section className="px-4 py-14 md:px-6 md:py-18">
         <div className="container-wide mx-auto grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[2rem] border border-[#ddd5c7] bg-[linear-gradient(180deg,rgba(238,231,218,1),rgba(244,239,229,1))] p-9 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
+          <div className="rounded-[2rem] border border-[#ddd5c7] bg-[linear-gradient(180deg,rgba(238,231,218,1),rgba(244,239,229,1))] p-9 text-center shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.35rem]">{copy.whyTitle}</h2>
-            <p className="mt-5 text-[1.02rem] leading-8 text-foreground/70">{copy.whyBody}</p>
+            <p className="mx-auto mt-5 max-w-2xl text-[1.02rem] leading-8 text-foreground/70">{copy.whyBody}</p>
           </div>
 
-          <div className="rounded-[2rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(240,246,242,0.84))] p-8 shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
+          <div className="rounded-[2rem] border border-black/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(240,246,242,0.84))] p-8 text-center shadow-[0_20px_50px_rgba(31,41,55,0.06)]">
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{copy.metabolismEyebrow}</p>
             <h2 className="mt-3 font-serif text-[2rem] font-semibold tracking-tight md:text-[2.3rem]">{copy.metabolismTitle}</h2>
-            <p className="mt-4 text-[1.02rem] leading-8 text-foreground/70">{copy.metabolismBody}</p>
+            <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-foreground/70">{copy.metabolismBody}</p>
             <div className="mt-6 space-y-3 border-t border-black/5 pt-5">
               {copy.researchLinks.map((link) => (
                 <a
@@ -629,7 +629,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
 
       <section className="px-4 py-14 md:px-6 md:py-18">
         <div className="container-wide mx-auto rounded-[2rem] border border-black/5 bg-[linear-gradient(135deg,rgba(236,230,218,1),rgba(246,242,234,1))] p-8 md:p-10 shadow-[0_18px_40px_rgba(31,41,55,0.05)]">
-          <div className="mb-6">
+          <div className="mb-6 text-center">
             <h2 className="font-serif text-[2rem] font-semibold tracking-tight md:text-[2.3rem]">{copy.benefitsTitle}</h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
@@ -661,10 +661,15 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
       </section>
 
       <section className="px-4 py-12 md:px-6 md:py-14">
-        <div className="container-wide mx-auto rounded-[2.2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_28px_68px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
-          <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.35rem]">{copy.closingTitle}</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white">{copy.closingBody}</p>
-          <div className="mx-auto mt-6 max-w-sm">
+        <div className="container-wide mx-auto">
+          <div className="relative overflow-hidden rounded-[2.2rem] bg-[linear-gradient(135deg,hsl(var(--primary)),hsl(var(--primary)/0.88))] px-6 py-8 text-center shadow-[0_28px_68px_hsl(var(--primary)/0.22)] md:px-10 md:py-10">
+            <div className="absolute -left-14 bottom-0 h-36 w-36 rounded-full bg-white/5" />
+            <div className="absolute -right-10 top-0 h-32 w-32 rounded-full bg-white/5" />
+            <div className="relative">
+              <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.35rem]">{copy.closingTitle}</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white">{copy.closingBody}</p>
+            </div>
+            <div className="relative mx-auto mt-6 max-w-sm">
             <TrackedOutboundButton
               lang={currentLang}
               destinationType="test"
@@ -677,12 +682,13 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               confirmDescription={copy.confirmDescription}
               confirmConfirmLabel={copy.confirmConfirmLabel}
               confirmCancelLabel={copy.confirmCancelLabel}
-            >
-              <>
-                {copy.closingPrimary}
-                <ArrowRight className="h-4 w-4" />
-              </>
-            </TrackedOutboundButton>
+              >
+                <>
+                  {copy.closingPrimary}
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              </TrackedOutboundButton>
+            </div>
           </div>
         </div>
       </section>

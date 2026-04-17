@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import stepTest from "@/assets/step-test.png";
 import stepSend from "@/assets/step-send.png";
 import stepResults from "@/assets/step-results.png";
+import omegaBalanceBloodSpotImage from "@/assets/omega-balance-blood-spot.jpg";
 import { Lang, t } from "@/lib/i18n";
 
 const stepImages = [stepTest, stepSend, stepResults];
@@ -129,6 +130,29 @@ const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
             </motion.div>
           ))}
         </div>
+
+        {lang === "sv" ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-[1.9rem] border border-black/5 bg-white/80 shadow-[0_22px_50px_rgba(31,41,55,0.06)]"
+          >
+            <div className="grid items-center md:grid-cols-[0.95fr_1.05fr]">
+              <div className="h-full min-h-[220px] overflow-hidden">
+                <img src={omegaBalanceBloodSpotImage} alt="Blodbaserat test hemma" className="h-full w-full object-cover" />
+              </div>
+              <div className="p-6 text-center md:p-8 md:text-left">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Hemma test</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight">Ett enkelt blodprov som du tar hemma</h3>
+                <p className="mt-4 text-base leading-7 text-subtle">
+                  Några droppar blod på provkortet räcker för att analysera din omega-balans och ge dig ett tydligare utgångsläge.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
       </div>
     </section>
   );
