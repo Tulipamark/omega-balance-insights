@@ -77,7 +77,7 @@ const activeSecondaryRouteTitleByLang: Record<Lang, string> = {
   sv: "Utforska vidare",
   no: "Utforsk videre",
   da: "Udforsk videre",
-  fi: "Tutki lisÃ¤Ã¤",
+  fi: "Tutki lisää",
   en: "Explore further",
   de: "Weiter erkunden",
   fr: "Explorer davantage",
@@ -85,19 +85,19 @@ const activeSecondaryRouteTitleByLang: Record<Lang, string> = {
 };
 
 const activeSecondaryRouteBodyByLang: Record<Lang, string> = {
-  sv: "FÃ¶r dig som vill fÃ¶rstÃ¥ mage, tarm och inre balans genom samma lugna struktur.",
-  no: "For deg som vil forstÃ¥ mage, tarm og indre balanse gjennom samme rolige struktur.",
-  da: "For dig, der vil forstÃ¥ mave, tarm og indre balance gennem samme rolige struktur.",
-  fi: "Sinulle, joka haluat ymmÃ¤rtÃ¤Ã¤ vatsaa, suolistoa ja sisÃ¤istÃ¤ tasapainoa saman rauhallisen rakenteen kautta.",
+  sv: "För dig som vill förstå mage, tarm och inre balans genom samma lugna struktur.",
+  no: "For deg som vil forstå mage, tarm og indre balanse gjennom samme rolige struktur.",
+  da: "For dig, der vil forstå mave, tarm og indre balance gennem samme rolige struktur.",
+  fi: "Sinulle, joka haluat ymmärtää vatsaa, suolistoa ja sisäistä tasapainoa saman rauhallisen rakenteen kautta.",
   en: "For people who want to understand gut health, digestion, and inner balance through the same calm structure.",
-  de: "FÃ¼r Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen mÃ¶chten.",
-  fr: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'Ã©quilibre intÃ©rieur dans la mÃªme structure apaisÃ©e.",
+  de: "Für Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen möchten.",
+  fr: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'équilibre intérieur dans la même structure apaisée.",
   it: "Per chi vuole capire meglio intestino, digestione ed equilibrio interno attraverso la stessa struttura calma.",
 };
 
 const navAvailableLabelByLang: Record<Lang, string> = {
   sv: "Nu",
-  no: "NÃ¥",
+  no: "Nå",
   da: "Nu",
   fi: "Nyt",
   en: "Now",
@@ -113,14 +113,14 @@ const navSoonLabelByLang: Record<Lang, string> = {
   fi: "Tulossa",
   en: "Soon",
   de: "Bald",
-  fr: "BientÃ´t",
+  fr: "Bientôt",
   it: "Presto",
 };
 
 const footerExploreLabelByLang: Record<Lang, string> = {
   sv: "Områden",
-  no: "OmrÃ¥der",
-  da: "OmrÃ¥der",
+  no: "Områder",
+  da: "Områder",
   fi: "Alueet",
   en: "Areas",
   de: "Bereiche",
@@ -157,14 +157,14 @@ const footerPrivacyLabelByLang: Record<Lang, string> = {
   fi: "Tietosuoja",
   en: "Privacy",
   de: "Datenschutz",
-  fr: "ConfidentialitÃ©",
+  fr: "Confidentialité",
   it: "Privacy",
 };
 
 const footerTermsLabelByLang: Record<Lang, string> = {
   sv: "Villkor",
-  no: "VilkÃ¥r",
-  da: "VilkÃ¥r",
+  no: "Vilkår",
+  da: "Vilkår",
   fi: "Ehdot",
   en: "Terms",
   de: "Bedingungen",
@@ -195,14 +195,14 @@ const footerAdminLabelByLang: Record<Lang, string> = {
 };
 
 const independentPartnerLabelByLang: Record<Lang, string> = {
-  sv: "Oberoende Zinzino-partner",
-  no: "Uavhengig Zinzino-partner",
-  da: "Uafhaengig Zinzino-partner",
+  sv: "Oberoende partner till Zinzino",
+  no: "Uavhengig partner til Zinzino",
+  da: "Uafhaengig partner til Zinzino",
   fi: "Itsenainen Zinzino-kumppani",
-  en: "Independent Zinzino partner",
-  de: "Unabhaengiger Zinzino-Partner",
-  fr: "Partenaire Zinzino independant",
-  it: "Partner Zinzino indipendente",
+  en: "Independent partner to Zinzino",
+  de: "Unabhaengiger Partner von Zinzino",
+  fr: "Partenaire independant de Zinzino",
+  it: "Partner indipendente di Zinzino",
 };
 
 const copyByLang: Record<Lang, InsideBalanceCopy> = {
@@ -221,8 +221,8 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
       "Varje testsp\u00e5r fokuserar p\u00e5 ett omr\u00e5de. V\u00e4lj det som passar ditt nul\u00e4ge b\u00e4st.",
     primaryRouteTitle: "B\u00f6rja h\u00e4r",
     primaryRouteBody: "Det tydligaste s\u00e4ttet att komma ig\u00e5ng i InsideBalance just nu.",
-    secondaryRouteTitle: "Utforska vidare",
-    secondaryRouteBody: "F\u00f6r dig som vill f\u00f6rst\u00e5 mage, tarm och inre balans genom samma lugna struktur.",
+    secondaryRouteTitle: "N\u00e4sta sp\u00e5r",
+    secondaryRouteBody: "F\u00f6r dig som vill g\u00e5 vidare med ett tydligare fokus p\u00e5 tarmh\u00e4lsa.",
     products: [
       {
         title: "OmegaBalance",
@@ -234,7 +234,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
       {
         title: "GutBalance",
         body: "F\u00f6r dig som vill f\u00f6rst\u00e5 tarm, immunf\u00f6rsvar och metabolism genom ett forskningsbaserat hemmatest.",
-        fit: "Passar dig som vill utforska mage, tarm och inre balans med samma lugna och testbaserade logik.",
+        fit: "Passar dig som vill b\u00f6rja med ett tydligare testsp\u00e5r f\u00f6r tarmh\u00e4lsa och f\u00e5 en lugnare v\u00e4g vidare.",
         cta: "GutBalance",
         href: "/sv/gut-balance",
       },
@@ -273,53 +273,53 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     navGut: "GutBalance",
     heroEyebrow: "InsideBalance",
     heroTitle: "Testbasert helse med tydeligere neste steg",
-    heroBody: "InsideBalance samler helsebanene vÃ¥re pÃ¥ ett sted. Start med testen som passer deg best og fÃ¥ en tydeligere vei videre.",
-    heroPrimaryCta: "Utforsk vÃ¥re tester",
+    heroBody: "InsideBalance samler helsebanene våre på ett sted. Start med testen som passer deg best og få en tydeligere vei videre.",
+    heroPrimaryCta: "Utforsk våre tester",
     heroSecondaryCta: "OmegaBalance",
-    productsTitle: "VÃ¥re testspor",
-    productsBody: "Hvert spor fokuserer pÃ¥ et omrÃ¥de der mÃ¥lbare resultater gjÃ¸r det lettere Ã¥ forstÃ¥ hva som er relevant akkurat nÃ¥.",
+    productsTitle: "Våre testspor",
+    productsBody: "Hvert spor fokuserer på et område der målbare resultater gjør det lettere å forstå hva som er relevant akkurat nå.",
     products: [
-      { title: "OmegaBalance", body: "For deg som vil forstÃ¥ omega-6/omega-3-balansen din og fÃ¥ et tydeligere neste steg.", cta: "OmegaBalance", href: "/no" },
-      { title: "GutBalance", body: "For deg som vil forstÃ¥ mage, tarm og indre balanse gjennom samme rolige struktur.", cta: "GutBalance", href: "/no/gut-balance" },
+      { title: "OmegaBalance", body: "For deg som vil forstå omega-6/omega-3-balansen din og få et tydeligere neste steg.", cta: "OmegaBalance", href: "/no" },
+      { title: "GutBalance", body: "For deg som vil forstå mage, tarm og indre balanse gjennom samme rolige struktur.", cta: "GutBalance", href: "/no/gut-balance" },
     ],
-    whyTitle: "Start med Ã¥ mÃ¥le",
-    whyBody: "Mange prÃ¸ver Ã¥ forbedre helsen uten fÃ¸rst Ã¥ vite hvor de stÃ¥r. En test gir et tydeligere utgangspunkt.",
+    whyTitle: "Start med å måle",
+    whyBody: "Mange prøver å forbedre helsen uten først å vite hvor de står. En test gir et tydeligere utgangspunkt.",
     howTitle: "Slik fungerer det",
     howSteps: [
-      { title: "Velg spor", body: "Start med omrÃ¥det som kjennes mest relevant akkurat nÃ¥." },
-      { title: "Ta testen hjemme", body: "Testene er laget for Ã¥ vÃ¦re enkle Ã¥ komme i gang med." },
-      { title: "FÃ¥ tydeligere neste steg", body: "Du fÃ¥r et bedre grunnlag Ã¥ ta beslutninger ut fra." },
+      { title: "Velg spor", body: "Start med området som kjennes mest relevant akkurat nå." },
+      { title: "Ta testen hjemme", body: "Testene er laget for å være enkle å komme i gang med." },
+      { title: "Få tydeligere neste steg", body: "Du får et bedre grunnlag å ta beslutninger ut fra." },
     ],
-    whoTitle: "For deg som vil forstÃ¥ mer, ikke bare gjette",
-    whoItems: ["Du vil ha et tydeligere utgangspunkt.", "Du vil ta beslutninger basert pÃ¥ data.", "Du vil starte enkelt, men smart."],
+    whoTitle: "For deg som vil forstå mer, ikke bare gjette",
+    whoItems: ["Du vil ha et tydeligere utgangspunkt.", "Du vil ta beslutninger basert på data.", "Du vil starte enkelt, men smart."],
     footerTitle: "InsideBalance",
-    footerBody: "InsideBalance er plattformen bak testsporene vÃ¥re. OmegaBalance og GutBalance er to tydelige veier inn i samme helhet.",
+    footerBody: "InsideBalance er plattformen bak testsporene våre. OmegaBalance og GutBalance er to tydelige veier inn i samme helhet.",
   },
   da: {
     navHome: "InsideBalance",
     navOmega: "OmegaBalance",
     navGut: "GutBalance",
     heroEyebrow: "InsideBalance",
-    heroTitle: "Testbaseret sundhed med tydeligere nÃ¦ste skridt",
-    heroBody: "InsideBalance samler vores sundhedsspor Ã©t sted. Start med den test, der passer dig bedst.",
+    heroTitle: "Testbaseret sundhed med tydeligere næste skridt",
+    heroBody: "InsideBalance samler vores sundhedsspor ét sted. Start med den test, der passer dig bedst.",
     heroPrimaryCta: "Udforsk vores tests",
     heroSecondaryCta: "OmegaBalance",
     productsTitle: "Vores testspor",
-    productsBody: "Hvert spor fokuserer pÃ¥ et omrÃ¥de, hvor mÃ¥lbare resultater gÃ¸r det lettere at forstÃ¥, hvad der er relevant nu.",
+    productsBody: "Hvert spor fokuserer på et område, hvor målbare resultater gør det lettere at forstå, hvad der er relevant nu.",
     products: [
-      { title: "OmegaBalance", body: "For dig, der vil forstÃ¥ din omega-6/omega-3-balance.", cta: "OmegaBalance", href: "/da" },
-      { title: "GutBalance", body: "For dig, der vil forstÃ¥ mave, tarm og indre balance gennem samme rolige struktur.", cta: "GutBalance", href: "/da/gut-balance" },
+      { title: "OmegaBalance", body: "For dig, der vil forstå din omega-6/omega-3-balance.", cta: "OmegaBalance", href: "/da" },
+      { title: "GutBalance", body: "For dig, der vil forstå mave, tarm og indre balance gennem samme rolige struktur.", cta: "GutBalance", href: "/da/gut-balance" },
     ],
-    whyTitle: "Start med at mÃ¥le",
-    whyBody: "Mange forsÃ¸ger at forbedre sundheden uden fÃ¸rst at kende udgangspunktet. En test giver en tydeligere start.",
-    howTitle: "SÃ¥dan fungerer det",
+    whyTitle: "Start med at måle",
+    whyBody: "Mange forsøger at forbedre sundheden uden først at kende udgangspunktet. En test giver en tydeligere start.",
+    howTitle: "Sådan fungerer det",
     howSteps: [
-      { title: "VÃ¦lg spor", body: "Start med det omrÃ¥de, der fÃ¸les mest relevant lige nu." },
-      { title: "Tag testen hjemme", body: "Testene er lavet til at vÃ¦re nemme at komme i gang med." },
-      { title: "FÃ¥ tydeligere nÃ¦ste skridt", body: "Du fÃ¥r et bedre grundlag at trÃ¦ffe beslutninger ud fra." },
+      { title: "Vælg spor", body: "Start med det område, der føles mest relevant lige nu." },
+      { title: "Tag testen hjemme", body: "Testene er lavet til at være nemme at komme i gang med." },
+      { title: "Få tydeligere næste skridt", body: "Du får et bedre grundlag at træffe beslutninger ud fra." },
     ],
-    whoTitle: "For dig, der vil forstÃ¥ mere, ikke bare gÃ¦tte",
-    whoItems: ["Du vil have et tydeligere udgangspunkt.", "Du vil trÃ¦ffe beslutninger ud fra data.", "Du vil starte enkelt, men smart."],
+    whoTitle: "For dig, der vil forstå mere, ikke bare gætte",
+    whoItems: ["Du vil have et tydeligere udgangspunkt.", "Du vil træffe beslutninger ud fra data.", "Du vil starte enkelt, men smart."],
     footerTitle: "InsideBalance",
     footerBody: "InsideBalance er platformen bag vores testspor. OmegaBalance og GutBalance er to tydelige veje ind i samme helhed.",
   },
@@ -336,7 +336,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Jokainen polku keskittyy alueeseen, jossa mitattavat tulokset auttavat ymm\u00e4rt\u00e4m\u00e4\u00e4n, mik\u00e4 on ajankohtaista juuri nyt.",
     products: [
       { title: "OmegaBalance", body: "Sinulle, joka haluat ymm\u00e4rt\u00e4\u00e4 omega-6/omega-3-tasapainoasi paremmin.", cta: "OmegaBalance", href: "/fi" },
-      { title: "GutBalance", body: "Sinulle, joka haluat ymmÃ¤rtÃ¤Ã¤ vatsaa, suolistoa ja sisÃ¤istÃ¤ tasapainoa saman rauhallisen rakenteen kautta.", cta: "GutBalance", href: "/fi/gut-balance" },
+      { title: "GutBalance", body: "Sinulle, joka haluat ymmärtää vatsaa, suolistoa ja sisäistä tasapainoa saman rauhallisen rakenteen kautta.", cta: "GutBalance", href: "/fi/gut-balance" },
     ],
     whyTitle: "Aloita mittaamalla",
     whyBody: "Moni yritt\u00e4\u00e4 parantaa hyvinvointiaan tiet\u00e4m\u00e4tt\u00e4 ensin nykytilannetta. Testi antaa selke\u00e4mm\u00e4n l\u00e4ht\u00f6pisteen.",
@@ -426,7 +426,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Jeder Weg konzentriert sich auf einen Bereich, in dem messbare Ergebnisse helfen, das Relevante jetzt besser zu verstehen.",
     products: [
       { title: "OmegaBalance", body: "F\u00fcr Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen wollen.", cta: "OmegaBalance", href: "/de" },
-      { title: "GutBalance", body: "FÃ¼r Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen mÃ¶chten.", cta: "GutBalance", href: "/de/gut-balance" },
+      { title: "GutBalance", body: "Für Menschen, die Darm, Verdauung und innere Balance in derselben ruhigen Struktur besser verstehen möchten.", cta: "GutBalance", href: "/de/gut-balance" },
     ],
     whyTitle: "Mit Messen beginnen",
     whyBody: "Viele versuchen ihre Gesundheit zu verbessern, bevor sie ihren Ausgangspunkt wirklich kennen. Ein Test schafft mehr Klarheit.",
@@ -454,7 +454,7 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
     productsBody: "Chaque parcours se concentre sur un domaine o\u00f9 des r\u00e9sultats mesurables rendent la suite plus claire.",
     products: [
       { title: "OmegaBalance", body: "Pour celles et ceux qui veulent mieux comprendre leur \u00e9quilibre om\u00e9ga-6/om\u00e9ga-3.", cta: "OmegaBalance", href: "/fr" },
-      { title: "GutBalance", body: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'Ã©quilibre intÃ©rieur dans la mÃªme structure apaisÃ©e.", cta: "GutBalance", href: "/fr/gut-balance" },
+      { title: "GutBalance", body: "Pour celles et ceux qui veulent mieux comprendre le ventre, l'intestin et l'équilibre intérieur dans la même structure apaisée.", cta: "GutBalance", href: "/fr/gut-balance" },
     ],
     whyTitle: "Commencer par mesurer",
     whyBody: "Beaucoup essaient d'am\u00e9liorer leur sant\u00e9 sans conna\u00eetre clairement leur point de d\u00e9part. Un test apporte cette clart\u00e9.",
@@ -501,146 +501,146 @@ const copyByLang: Record<Lang, InsideBalanceCopy> = {
 
 const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
   no: {
-    heroTitle: "Helsetester som gjÃ¸r det lettere Ã¥ forstÃ¥ hva du faktisk trenger",
+    heroTitle: "Helsetester som gjør det lettere å forstå hva du faktisk trenger",
     heroBody:
-      "InsideBalance er plattformen for deg som vil orientere deg tydeligere blant helsetester og begynne i riktig ende. Her samler vi testomrÃ¥dene i en roligere og mer gjennomtenkt helhet.",
-    heroPrimaryCta: "Utforsk testomrÃ¥dene",
+      "InsideBalance er plattformen for deg som vil orientere deg tydeligere blant helsetester og begynne i riktig ende. Her samler vi testområdene i en roligere og mer gjennomtenkt helhet.",
+    heroPrimaryCta: "Utforsk testområdene",
     heroSecondaryCta: "OmegaBalance",
-    productsTitle: "VÃ¥re testomrÃ¥der",
-    productsBody: "Hvert testomrÃ¥de har ett tydelig fokus. Velg det som passer situasjonen din best.",
+    productsTitle: "Våre testområder",
+    productsBody: "Hvert testområde har ett tydelig fokus. Velg det som passer situasjonen din best.",
     primaryRouteTitle: "Start her",
-    primaryRouteBody: "Den tydeligste mÃ¥ten Ã¥ komme i gang i InsideBalance akkurat nÃ¥.",
+    primaryRouteBody: "Den tydeligste måten å komme i gang i InsideBalance akkurat nå.",
     secondaryRouteTitle: "Kommer snart",
     secondaryRouteBody: "For deg som senere vil utforske mage, tarm og indre balanse.",
     products: [
       {
         title: "OmegaBalance",
-        eyebrow: "Tilgjengelig nÃ¥",
-        body: "For deg som vil forstÃ¥ omega-6/omega-3-balansen din og begynne med et etablert testomrÃ¥de.",
-        fit: "Passer deg som vil komme i gang med en tydelig fÃ¸rste test og et mer konkret bilde av utgangspunktet ditt.",
+        eyebrow: "Tilgjengelig nå",
+        body: "For deg som vil forstå omega-6/omega-3-balansen din og begynne med et etablert testområde.",
+        fit: "Passer deg som vil komme i gang med en tydelig første test og et mer konkret bilde av utgangspunktet ditt.",
         cta: "OmegaBalance",
         href: "/no",
       },
       {
         title: "GutBalance",
         eyebrow: "Kommer snart",
-        body: "VÃ¥r kommende satsing pÃ¥ mage, tarm og indre balanse.",
-        fit: "Passer deg som er nysgjerrig pÃ¥ noe nytt bygget pÃ¥ den samme rolige og testbaserte logikken.",
+        body: "Vår kommende satsing på mage, tarm og indre balanse.",
+        fit: "Passer deg som er nysgjerrig på noe nytt bygget på den samme rolige og testbaserte logikken.",
         cta: "GutBalance",
         href: "/no/gut-balance",
         status: "Kommer snart",
       },
     ],
-    whyTitle: "Begynn med Ã¥ mÃ¥le",
+    whyTitle: "Begynn med å måle",
     whyBody:
-      "Mange prÃ¸ver Ã¥ forbedre helsen fÃ¸r de vet hva kroppen faktisk viser. En test gjÃ¸r det lettere Ã¥ skille mellom det som bare hÃ¸res bra ut og det som faktisk kan vÃ¦re relevant for deg.",
-    trustTitle: "Tydelig, seriÃ¸st og bygget for Ã¥ vare",
+      "Mange prøver å forbedre helsen før de vet hva kroppen faktisk viser. En test gjør det lettere å skille mellom det som bare høres bra ut og det som faktisk kan være relevant for deg.",
+    trustTitle: "Tydelig, seriøst og bygget for å vare",
     trustBody:
-      "InsideBalance bygger pÃ¥ mÃ¥lbare tester og tydelig struktur. Det skal vÃ¦re lettere Ã¥ forstÃ¥ hva som er relevant og orientere seg i egne valg.",
+      "InsideBalance bygger på målbare tester og tydelig struktur. Det skal være lettere å forstå hva som er relevant og orientere seg i egne valg.",
     trustPoints: [
       "Et testbasert utgangspunkt i stedet for generell gjetting.",
-      "Tydelige omrÃ¥der der hvert tema fÃ¥r sitt eget fokus.",
-      "En roligere opplevelse der troverdighet gÃ¥r foran hype.",
+      "Tydelige områder der hvert tema får sitt eget fokus.",
+      "En roligere opplevelse der troverdighet går foran hype.",
     ],
     howTitle: "Slik fungerer det",
     howSteps: [
-      { title: "Velg testomrÃ¥de", body: "Begynn med omrÃ¥det som virker mest relevant for deg akkurat nÃ¥." },
-      { title: "GjennomfÃ¸r testen", body: "Testen er laget for Ã¥ vÃ¦re enkel Ã¥ komme i gang med hjemme." },
-      { title: "ForstÃ¥ resultatet", body: "Du fÃ¥r et tydeligere grunnlag for Ã¥ forstÃ¥ hva du vil gjÃ¸re videre." },
+      { title: "Velg testområde", body: "Begynn med området som virker mest relevant for deg akkurat nå." },
+      { title: "Gjennomfør testen", body: "Testen er laget for å være enkel å komme i gang med hjemme." },
+      { title: "Forstå resultatet", body: "Du får et tydeligere grunnlag for å forstå hva du vil gjøre videre." },
     ],
     whoTitle: "For deg som vil ha mer klarhet",
     whoItems: [
-      "Du vil forstÃ¥ utgangspunktet ditt fÃ¸r du begynner Ã¥ endre pÃ¥ ting.",
-      "Du vil stÃ¸tte deg pÃ¥ data heller enn bare magefÃ¸lelse.",
+      "Du vil forstå utgangspunktet ditt før du begynner å endre på ting.",
+      "Du vil støtte deg på data heller enn bare magefølelse.",
       "Du vil starte enkelt, men med en tydelig tanke bak.",
     ],
     footerBody:
-      "InsideBalance er plattformen som samler disse testomrÃ¥dene i en tydeligere struktur. OmegaBalance og GutBalance bygger pÃ¥ samme helhetstanke, men med ulikt fokus.",
+      "InsideBalance er plattformen som samler disse testområdene i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhetstanke, men med ulikt fokus.",
     footerCta: "OmegaBalance",
   },
   da: {
-    heroTitle: "Sundhedstests, der gÃ¸r det lettere at forstÃ¥, hvad du faktisk har brug for",
+    heroTitle: "Sundhedstests, der gør det lettere at forstå, hvad du faktisk har brug for",
     heroBody:
-      "InsideBalance er platformen for dig, der vil orientere dig tydeligere blandt sundhedstests og begynde det rigtige sted. Her samler vi testomrÃ¥derne i en roligere og mere gennemtÃ¦nkt helhed.",
-    heroPrimaryCta: "Udforsk testomrÃ¥derne",
+      "InsideBalance er platformen for dig, der vil orientere dig tydeligere blandt sundhedstests og begynde det rigtige sted. Her samler vi testområderne i en roligere og mere gennemtænkt helhed.",
+    heroPrimaryCta: "Udforsk testområderne",
     heroSecondaryCta: "OmegaBalance",
-    productsTitle: "Vores testomrÃ¥der",
-    productsBody: "Hvert testomrÃ¥de har Ã©t tydeligt fokus. VÃ¦lg det, der passer bedst til din situation lige nu.",
+    productsTitle: "Vores testområder",
+    productsBody: "Hvert testområde har ét tydeligt fokus. Vælg det, der passer bedst til din situation lige nu.",
     primaryRouteTitle: "Start her",
-    primaryRouteBody: "Den tydeligste mÃ¥de at komme i gang i InsideBalance lige nu.",
+    primaryRouteBody: "Den tydeligste måde at komme i gang i InsideBalance lige nu.",
     secondaryRouteTitle: "Kommer snart",
     secondaryRouteBody: "For dig, der senere vil udforske mave, tarm og indre balance.",
     products: [
       {
         title: "OmegaBalance",
-        eyebrow: "TilgÃ¦ngelig nu",
-        body: "For dig, der vil forstÃ¥ din omega-6/omega-3-balance og begynde med et etableret testomrÃ¥de.",
-        fit: "Passer dig, der vil i gang med en tydelig fÃ¸rste test og et mere konkret billede af dit udgangspunkt.",
+        eyebrow: "Tilgængelig nu",
+        body: "For dig, der vil forstå din omega-6/omega-3-balance og begynde med et etableret testområde.",
+        fit: "Passer dig, der vil i gang med en tydelig første test og et mere konkret billede af dit udgangspunkt.",
         cta: "OmegaBalance",
         href: "/da",
       },
       {
         title: "GutBalance",
         eyebrow: "Kommer snart",
-        body: "Vores kommende fokus pÃ¥ mave, tarm og indre balance.",
-        fit: "Passer dig, der er nysgerrig pÃ¥ noget nyt bygget pÃ¥ den samme rolige og testbaserede tilgang.",
+        body: "Vores kommende fokus på mave, tarm og indre balance.",
+        fit: "Passer dig, der er nysgerrig på noget nyt bygget på den samme rolige og testbaserede tilgang.",
         cta: "GutBalance",
         href: "/da/gut-balance",
         status: "Kommer snart",
       },
     ],
-    whyTitle: "Start med at mÃ¥le",
+    whyTitle: "Start med at måle",
     whyBody:
-      "Mange forsÃ¸ger at forbedre sundheden, fÃ¸r de ved, hvad kroppen faktisk viser. En test gÃ¸r det lettere at skelne mellem det, der bare lyder godt, og det, der faktisk kan vÃ¦re relevant for dig.",
-    trustTitle: "Tydeligt, seriÃ¸st og bygget til at holde",
+      "Mange forsøger at forbedre sundheden, før de ved, hvad kroppen faktisk viser. En test gør det lettere at skelne mellem det, der bare lyder godt, og det, der faktisk kan være relevant for dig.",
+    trustTitle: "Tydeligt, seriøst og bygget til at holde",
     trustBody:
-      "InsideBalance bygger pÃ¥ mÃ¥lbare tests og tydelig struktur. Det skal vÃ¦re lettere at forstÃ¥, hvad der er relevant, og orientere sig i sine valg.",
+      "InsideBalance bygger på målbare tests og tydelig struktur. Det skal være lettere at forstå, hvad der er relevant, og orientere sig i sine valg.",
     trustPoints: [
-      "En testbaseret start i stedet for generelle gÃ¦tterier.",
-      "Tydelige omrÃ¥der, hvor hvert emne fÃ¥r sit eget fokus.",
-      "En roligere oplevelse, hvor trovÃ¦rdighed gÃ¥r foran hype.",
+      "En testbaseret start i stedet for generelle gætterier.",
+      "Tydelige områder, hvor hvert emne får sit eget fokus.",
+      "En roligere oplevelse, hvor troværdighed går foran hype.",
     ],
-    howTitle: "SÃ¥dan fungerer det",
+    howTitle: "Sådan fungerer det",
     howSteps: [
-      { title: "VÃ¦lg testomrÃ¥de", body: "Begynd med det omrÃ¥de, der virker mest relevant for dig lige nu." },
-      { title: "GennemfÃ¸r testen", body: "Testen er lavet til at vÃ¦re enkel at gÃ¥ i gang med hjemme." },
-      { title: "ForstÃ¥ resultatet", body: "Du fÃ¥r et tydeligere grundlag for at forstÃ¥, hvad du vil gÃ¸re videre." },
+      { title: "Vælg testområde", body: "Begynd med det område, der virker mest relevant for dig lige nu." },
+      { title: "Gennemfør testen", body: "Testen er lavet til at være enkel at gå i gang med hjemme." },
+      { title: "Forstå resultatet", body: "Du får et tydeligere grundlag for at forstå, hvad du vil gøre videre." },
     ],
     whoTitle: "For dig, der vil have mere klarhed",
     whoItems: [
-      "Du vil forstÃ¥ dit udgangspunkt, fÃ¸r du Ã¦ndrer pÃ¥ noget.",
-      "Du vil stÃ¸tte dig mere pÃ¥ data end pÃ¥ mavefornemmelser alene.",
+      "Du vil forstå dit udgangspunkt, før du ændrer på noget.",
+      "Du vil støtte dig mere på data end på mavefornemmelser alene.",
       "Du vil begynde enkelt, men med en tydelig tanke bag.",
     ],
     footerBody:
-      "InsideBalance er platformen, der samler disse testomrÃ¥der i en tydeligere struktur. OmegaBalance og GutBalance bygger pÃ¥ samme helhedstanke, men med forskelligt fokus.",
+      "InsideBalance er platformen, der samler disse testområder i en tydeligere struktur. OmegaBalance og GutBalance bygger på samme helhedstanke, men med forskelligt fokus.",
     footerCta: "OmegaBalance",
   },
   fi: {
-    heroTitle: "Terveystestit, joiden avulla on helpompi ymmÃ¤rtÃ¤Ã¤ mitÃ¤ todella tarvitset",
+    heroTitle: "Terveystestit, joiden avulla on helpompi ymmärtää mitä todella tarvitset",
     heroBody:
-      "InsideBalance on alusta sinulle, joka haluat hahmottaa terveystestejÃ¤ selkeÃ¤mmin ja aloittaa oikeasta kohdasta. TÃ¤Ã¤llÃ¤ kokoamme testialueet rauhallisemmaksi ja harkitummaksi kokonaisuudeksi.",
+      "InsideBalance on alusta sinulle, joka haluat hahmottaa terveystestejä selkeämmin ja aloittaa oikeasta kohdasta. Täällä kokoamme testialueet rauhallisemmaksi ja harkitummaksi kokonaisuudeksi.",
     heroPrimaryCta: "Tutustu testialueisiin",
     heroSecondaryCta: "OmegaBalance",
     productsTitle: "Testialueemme",
-    productsBody: "Jokaisella testialueella on yksi selkeÃ¤ painopiste. Valitse se, joka sopii tÃ¤mÃ¤nhetkiseen tilanteeseesi parhaiten.",
-    primaryRouteTitle: "Aloita tÃ¤stÃ¤",
-    primaryRouteBody: "Selkein tapa pÃ¤Ã¤stÃ¤ alkuun InsideBalancessa juuri nyt.",
+    productsBody: "Jokaisella testialueella on yksi selkeä painopiste. Valitse se, joka sopii tämänhetkiseen tilanteeseesi parhaiten.",
+    primaryRouteTitle: "Aloita tästä",
+    primaryRouteBody: "Selkein tapa päästä alkuun InsideBalancessa juuri nyt.",
     secondaryRouteTitle: "Tulossa pian",
-    secondaryRouteBody: "Sinulle, joka haluat myÃ¶hemmin tutkia vatsan, suoliston ja sisÃ¤isen tasapainon teemoja.",
+    secondaryRouteBody: "Sinulle, joka haluat myöhemmin tutkia vatsan, suoliston ja sisäisen tasapainon teemoja.",
     products: [
       {
         title: "OmegaBalance",
         eyebrow: "Saatavilla nyt",
-        body: "Sinulle, joka haluat ymmÃ¤rtÃ¤Ã¤ omega-6/omega-3-tasapainoasi ja aloittaa vakiintuneesta testialueesta.",
-        fit: "Sopii sinulle, jos haluat selkeÃ¤n ensimmÃ¤isen testin ja konkreettisemman kuvan nykytilanteestasi.",
+        body: "Sinulle, joka haluat ymmärtää omega-6/omega-3-tasapainoasi ja aloittaa vakiintuneesta testialueesta.",
+        fit: "Sopii sinulle, jos haluat selkeän ensimmäisen testin ja konkreettisemman kuvan nykytilanteestasi.",
         cta: "OmegaBalance",
         href: "/fi",
       },
       {
         title: "GutBalance",
         eyebrow: "Tulossa pian",
-        body: "Tuleva painopisteemme vatsan, suoliston ja sisÃ¤isen tasapainon tueksi.",
+        body: "Tuleva painopisteemme vatsan, suoliston ja sisäisen tasapainon tueksi.",
         fit: "Sopii sinulle, jos olet kiinnostunut tulevasta kokonaisuudesta, joka rakentuu saman rauhallisen ja testipohjaisen ajattelun varaan.",
         cta: "GutBalance",
         href: "/fi/gut-balance",
@@ -649,165 +649,165 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     whyTitle: "Aloita mittaamalla",
     whyBody:
-      "Moni yrittÃ¤Ã¤ parantaa hyvinvointiaan ennen kuin tietÃ¤Ã¤, mitÃ¤ keho todella nÃ¤yttÃ¤Ã¤. Testi auttaa erottamaan sen, mikÃ¤ vain kuulostaa hyvÃ¤ltÃ¤, siitÃ¤ mikÃ¤ voi oikeasti olla sinulle olennaista.",
-    trustTitle: "SelkeÃ¤, vakavasti otettava ja pitkÃ¤jÃ¤nteisesti rakennettu",
+      "Moni yrittää parantaa hyvinvointiaan ennen kuin tietää, mitä keho todella näyttää. Testi auttaa erottamaan sen, mikä vain kuulostaa hyvältä, siitä mikä voi oikeasti olla sinulle olennaista.",
+    trustTitle: "Selkeä, vakavasti otettava ja pitkäjänteisesti rakennettu",
     trustBody:
-      "InsideBalance rakentuu mitattavien testien ja selkeÃ¤n rakenteen varaan. Tavoitteena on, ettÃ¤ olennaisen ymmÃ¤rtÃ¤minen ja omissa valinnoissa suunnistaminen tuntuu helpommalta.",
+      "InsideBalance rakentuu mitattavien testien ja selkeän rakenteen varaan. Tavoitteena on, että olennaisen ymmärtäminen ja omissa valinnoissa suunnistaminen tuntuu helpommalta.",
     trustPoints: [
-      "Testipohjainen lÃ¤htÃ¶kohta yleisen arvailun sijaan.",
-      "SelkeÃ¤t alueet, joissa jokaisella teemalla on oma painopisteensÃ¤.",
+      "Testipohjainen lähtökohta yleisen arvailun sijaan.",
+      "Selkeät alueet, joissa jokaisella teemalla on oma painopisteensä.",
       "Rauhallisempi kokemus, jossa uskottavuus menee hypen edelle.",
     ],
-    howTitle: "NÃ¤in se toimii",
+    howTitle: "Näin se toimii",
     howSteps: [
-      { title: "Valitse testialue", body: "Aloita alueesta, joka tuntuu juuri nyt merkityksellisimmÃ¤ltÃ¤." },
-      { title: "Tee testi", body: "Testi on suunniteltu niin, ettÃ¤ sen aloittaminen kotona on helppoa." },
-      { title: "YmmÃ¤rrÃ¤ tulos", body: "Saat selkeÃ¤mmÃ¤n pohjan sille, miten haluat edetÃ¤." },
+      { title: "Valitse testialue", body: "Aloita alueesta, joka tuntuu juuri nyt merkityksellisimmältä." },
+      { title: "Tee testi", body: "Testi on suunniteltu niin, että sen aloittaminen kotona on helppoa." },
+      { title: "Ymmärrä tulos", body: "Saat selkeämmän pohjan sille, miten haluat edetä." },
     ],
-    whoTitle: "Sinulle, joka haluat enemmÃ¤n selkeyttÃ¤",
+    whoTitle: "Sinulle, joka haluat enemmän selkeyttä",
     whoItems: [
-      "Haluat ymmÃ¤rtÃ¤Ã¤ lÃ¤htÃ¶tilanteesi ennen kuin alat muuttaa asioita.",
-      "Haluat nojata dataan enemmÃ¤n kuin pelkkÃ¤Ã¤n tuntumaan.",
+      "Haluat ymmärtää lähtötilanteesi ennen kuin alat muuttaa asioita.",
+      "Haluat nojata dataan enemmän kuin pelkkään tuntumaan.",
       "Haluat aloittaa yksinkertaisesti, mutta ajatuksella.",
     ],
     footerBody:
-      "InsideBalance on alusta, joka kokoaa nÃ¤mÃ¤ testialueet selkeÃ¤mpÃ¤Ã¤n rakenteeseen. OmegaBalance ja GutBalance perustuvat samaan kokonaisajatteluun, mutta eri painotuksin.",
+      "InsideBalance on alusta, joka kokoaa nämä testialueet selkeämpään rakenteeseen. OmegaBalance ja GutBalance perustuvat samaan kokonaisajatteluun, mutta eri painotuksin.",
     footerCta: "OmegaBalance",
   },
   de: {
-    heroTitle: "Gesundheitstests, die helfen klarer zu verstehen, was du tatsÃ¤chlich brauchst",
+    heroTitle: "Gesundheitstests, die helfen klarer zu verstehen, was du tatsächlich brauchst",
     heroBody:
-      "InsideBalance ist die Plattform fÃ¼r Menschen, die sich im Bereich Gesundheitstests besser orientieren und am richtigen Punkt beginnen mÃ¶chten. Hier fassen wir die Testbereiche in einer ruhigeren und klareren Struktur zusammen.",
+      "InsideBalance ist die Plattform für Menschen, die sich im Bereich Gesundheitstests besser orientieren und am richtigen Punkt beginnen möchten. Hier fassen wir die Testbereiche in einer ruhigeren und klareren Struktur zusammen.",
     heroPrimaryCta: "Testbereiche entdecken",
     heroSecondaryCta: "OmegaBalance",
     productsTitle: "Unsere Testbereiche",
-    productsBody: "Jeder Testbereich hat einen klaren Fokus. WÃ¤hle den Bereich, der am besten zu deiner aktuellen Situation passt.",
+    productsBody: "Jeder Testbereich hat einen klaren Fokus. Wähle den Bereich, der am besten zu deiner aktuellen Situation passt.",
     primaryRouteTitle: "Hier beginnen",
     primaryRouteBody: "Der klarste Weg, um jetzt mit InsideBalance zu beginnen.",
-    secondaryRouteTitle: "DemnÃ¤chst",
-    secondaryRouteBody: "FÃ¼r Menschen, die sich spÃ¤ter mit Darm, Verdauung und innerer Balance beschÃ¤ftigen mÃ¶chten.",
+    secondaryRouteTitle: "Demnächst",
+    secondaryRouteBody: "Für Menschen, die sich später mit Darm, Verdauung und innerer Balance beschäftigen möchten.",
     products: [
       {
         title: "OmegaBalance",
-        eyebrow: "Jetzt verfÃ¼gbar",
-        body: "FÃ¼r Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen und mit einem etablierten Testbereich beginnen mÃ¶chten.",
-        fit: "Passend, wenn du mit einem klaren ersten Test und einem konkreteren Bild deiner Ausgangslage starten mÃ¶chtest.",
+        eyebrow: "Jetzt verfügbar",
+        body: "Für Menschen, die ihre Omega-6/Omega-3-Balance besser verstehen und mit einem etablierten Testbereich beginnen möchten.",
+        fit: "Passend, wenn du mit einem klaren ersten Test und einem konkreteren Bild deiner Ausgangslage starten möchtest.",
         cta: "OmegaBalance",
         href: "/de",
       },
       {
         title: "GutBalance",
-        eyebrow: "DemnÃ¤chst",
+        eyebrow: "Demnächst",
         body: "Unser kommender Fokus rund um Darm, Verdauung und innere Balance.",
-        fit: "Passend, wenn du neugierig auf ein zukÃ¼nftiges Angebot bist, das auf derselben ruhigen und testbasierten Logik aufbaut.",
+        fit: "Passend, wenn du neugierig auf ein zukünftiges Angebot bist, das auf derselben ruhigen und testbasierten Logik aufbaut.",
         cta: "GutBalance",
         href: "/de/gut-balance",
-        status: "DemnÃ¤chst",
+        status: "Demnächst",
       },
     ],
     whyTitle: "Mit Messen beginnen",
     whyBody:
-      "Viele versuchen ihre Gesundheit zu verbessern, bevor sie wissen, was der eigene KÃ¶rper tatsÃ¤chlich zeigt. Ein Test hilft dabei, zwischen gut klingenden Ideen und wirklich relevanten Hinweisen zu unterscheiden.",
-    trustTitle: "Klar, seriÃ¶s und langfristig gedacht",
+      "Viele versuchen ihre Gesundheit zu verbessern, bevor sie wissen, was der eigene Körper tatsächlich zeigt. Ein Test hilft dabei, zwischen gut klingenden Ideen und wirklich relevanten Hinweisen zu unterscheiden.",
+    trustTitle: "Klar, seriös und langfristig gedacht",
     trustBody:
       "InsideBalance basiert auf messbaren Tests und klarer Struktur. Es soll leichter werden zu verstehen, was relevant ist und wie man sich in den eigenen Entscheidungen orientiert.",
     trustPoints: [
       "Eine testbasierte Grundlage statt allgemeiner Vermutung.",
       "Klare Bereiche, in denen jedes Thema seinen eigenen Fokus hat.",
-      "Ein ruhigeres Erlebnis, bei dem GlaubwÃ¼rdigkeit vor Hype steht.",
+      "Ein ruhigeres Erlebnis, bei dem Glaubwürdigkeit vor Hype steht.",
     ],
     howTitle: "So funktioniert es",
     howSteps: [
-      { title: "Testbereich wÃ¤hlen", body: "Beginne mit dem Bereich, der fÃ¼r dich im Moment am relevantesten erscheint." },
-      { title: "Test durchfÃ¼hren", body: "Der Test ist so aufgebaut, dass du ihn leicht zu Hause beginnen kannst." },
-      { title: "Ergebnis einordnen", body: "Du bekommst eine klarere Grundlage, um zu verstehen, wie du weitergehen mÃ¶chtest." },
+      { title: "Testbereich wählen", body: "Beginne mit dem Bereich, der für dich im Moment am relevantesten erscheint." },
+      { title: "Test durchführen", body: "Der Test ist so aufgebaut, dass du ihn leicht zu Hause beginnen kannst." },
+      { title: "Ergebnis einordnen", body: "Du bekommst eine klarere Grundlage, um zu verstehen, wie du weitergehen möchtest." },
     ],
-    whoTitle: "FÃ¼r Menschen, die mehr Klarheit mÃ¶chten",
+    whoTitle: "Für Menschen, die mehr Klarheit möchten",
     whoItems: [
-      "Du willst deine Ausgangslage verstehen, bevor du etwas verÃ¤nderst.",
-      "Du willst dich stÃ¤rker auf Daten stÃ¼tzen als nur auf GefÃ¼hl.",
+      "Du willst deine Ausgangslage verstehen, bevor du etwas veränderst.",
+      "Du willst dich stärker auf Daten stützen als nur auf Gefühl.",
       "Du willst einfach anfangen, aber mit einem klaren Gedanken dahinter.",
     ],
     footerBody:
-      "InsideBalance ist die Plattform, die diese Testbereiche in einer klareren Struktur zusammenfÃ¼hrt. OmegaBalance und GutBalance folgen demselben ganzheitlichen Ansatz, aber mit unterschiedlichem Fokus.",
+      "InsideBalance ist die Plattform, die diese Testbereiche in einer klareren Struktur zusammenführt. OmegaBalance und GutBalance folgen demselben ganzheitlichen Ansatz, aber mit unterschiedlichem Fokus.",
     footerCta: "OmegaBalance",
   },
   fr: {
-    heroTitle: "Des tests de santÃ© qui aident Ã  mieux comprendre ce dont vous avez rÃ©ellement besoin",
+    heroTitle: "Des tests de santé qui aident à mieux comprendre ce dont vous avez réellement besoin",
     heroBody:
-      "InsideBalance est une plateforme pensÃ©e pour celles et ceux qui veulent sâ€™orienter plus clairement parmi les tests de santÃ© et commencer au bon endroit. Nous y rÃ©unissons diffÃ©rents domaines de test dans un cadre plus calme et plus cohÃ©rent.",
+      "InsideBalance est une plateforme pensée pour celles et ceux qui veulent s’orienter plus clairement parmi les tests de santé et commencer au bon endroit. Nous y réunissons différents domaines de test dans un cadre plus calme et plus cohérent.",
     heroPrimaryCta: "Explorer les domaines de test",
     heroSecondaryCta: "OmegaBalance",
     productsTitle: "Nos domaines de test",
-    productsBody: "Chaque domaine a un focus clair. Choisissez celui qui correspond le mieux Ã  votre situation actuelle.",
+    productsBody: "Chaque domaine a un focus clair. Choisissez celui qui correspond le mieux à votre situation actuelle.",
     primaryRouteTitle: "Commencer ici",
-    primaryRouteBody: "La maniÃ¨re la plus claire de commencer avec InsideBalance aujourdâ€™hui.",
-    secondaryRouteTitle: "BientÃ´t disponible",
-    secondaryRouteBody: "Pour celles et ceux qui voudront plus tard explorer le ventre, lâ€™intestin et lâ€™Ã©quilibre intÃ©rieur.",
+    primaryRouteBody: "La manière la plus claire de commencer avec InsideBalance aujourd’hui.",
+    secondaryRouteTitle: "Bientôt disponible",
+    secondaryRouteBody: "Pour celles et ceux qui voudront plus tard explorer le ventre, l’intestin et l’équilibre intérieur.",
     products: [
       {
         title: "OmegaBalance",
         eyebrow: "Disponible maintenant",
-        body: "Pour celles et ceux qui veulent mieux comprendre leur Ã©quilibre omÃ©ga-6/omÃ©ga-3 et commencer par un domaine de test dÃ©jÃ  Ã©tabli.",
-        fit: "AdaptÃ© si vous voulez un premier test clair et une vision plus concrÃ¨te de votre situation actuelle.",
+        body: "Pour celles et ceux qui veulent mieux comprendre leur équilibre oméga-6/oméga-3 et commencer par un domaine de test déjà établi.",
+        fit: "Adapté si vous voulez un premier test clair et une vision plus concrète de votre situation actuelle.",
         cta: "OmegaBalance",
         href: "/fr",
       },
       {
         title: "GutBalance",
-        eyebrow: "BientÃ´t",
-        body: "Notre prochain focus autour du ventre, de lâ€™intestin et de lâ€™Ã©quilibre intÃ©rieur.",
-        fit: "AdaptÃ© si vous Ãªtes curieux dâ€™une future proposition construite sur la mÃªme logique calme et fondÃ©e sur les tests.",
+        eyebrow: "Bientôt",
+        body: "Notre prochain focus autour du ventre, de l’intestin et de l’équilibre intérieur.",
+        fit: "Adapté si vous êtes curieux d’une future proposition construite sur la même logique calme et fondée sur les tests.",
         cta: "GutBalance",
         href: "/fr/gut-balance",
-        status: "BientÃ´t",
+        status: "Bientôt",
       },
     ],
     whyTitle: "Commencer par mesurer",
     whyBody:
-      "Beaucoup essaient dâ€™amÃ©liorer leur santÃ© avant de savoir ce que leur corps montre rÃ©ellement. Un test aide Ã  distinguer ce qui sonne bien de ce qui peut vraiment Ãªtre pertinent pour vous.",
-    trustTitle: "Clair, sÃ©rieux et pensÃ© pour durer",
+      "Beaucoup essaient d’améliorer leur santé avant de savoir ce que leur corps montre réellement. Un test aide à distinguer ce qui sonne bien de ce qui peut vraiment être pertinent pour vous.",
+    trustTitle: "Clair, sérieux et pensé pour durer",
     trustBody:
-      "InsideBalance repose sur des tests mesurables et une structure claire. Lâ€™objectif est de rendre plus simple la comprÃ©hension de ce qui est pertinent et de mieux se repÃ©rer dans ses choix.",
+      "InsideBalance repose sur des tests mesurables et une structure claire. L’objectif est de rendre plus simple la compréhension de ce qui est pertinent et de mieux se repérer dans ses choix.",
     trustPoints: [
-      "Une base fondÃ©e sur les tests plutÃ´t que sur des suppositions gÃ©nÃ©rales.",
-      "Des domaines clairs oÃ¹ chaque sujet garde son propre focus.",
-      "Une expÃ©rience plus posÃ©e, oÃ¹ la crÃ©dibilitÃ© passe avant lâ€™effet de mode.",
+      "Une base fondée sur les tests plutôt que sur des suppositions générales.",
+      "Des domaines clairs où chaque sujet garde son propre focus.",
+      "Une expérience plus posée, où la crédibilité passe avant l’effet de mode.",
     ],
-    howTitle: "Comment Ã§a fonctionne",
+    howTitle: "Comment ça fonctionne",
     howSteps: [
-      { title: "Choisir le domaine de test", body: "Commencez par le domaine qui vous paraÃ®t le plus pertinent aujourdâ€™hui." },
-      { title: "RÃ©aliser le test", body: "Le test est conÃ§u pour Ãªtre simple Ã  dÃ©marrer chez vous." },
-      { title: "Comprendre le rÃ©sultat", body: "Vous obtenez une base plus claire pour comprendre comment vous souhaitez avancer." },
+      { title: "Choisir le domaine de test", body: "Commencez par le domaine qui vous paraît le plus pertinent aujourd’hui." },
+      { title: "Réaliser le test", body: "Le test est conçu pour être simple à démarrer chez vous." },
+      { title: "Comprendre le résultat", body: "Vous obtenez une base plus claire pour comprendre comment vous souhaitez avancer." },
     ],
-    whoTitle: "Pour celles et ceux qui veulent plus de clartÃ©",
+    whoTitle: "Pour celles et ceux qui veulent plus de clarté",
     whoItems: [
-      "Vous voulez comprendre votre situation de dÃ©part avant de changer quoi que ce soit.",
-      "Vous voulez vous appuyer davantage sur des donnÃ©es que sur la seule intuition.",
-      "Vous voulez commencer simplement, mais avec une vraie intention derriÃ¨re.",
+      "Vous voulez comprendre votre situation de départ avant de changer quoi que ce soit.",
+      "Vous voulez vous appuyer davantage sur des données que sur la seule intuition.",
+      "Vous voulez commencer simplement, mais avec une vraie intention derrière.",
     ],
     footerBody:
-      "InsideBalance est la plateforme qui rassemble ces domaines de test dans une structure plus claire. OmegaBalance et GutBalance reposent sur la mÃªme vision dâ€™ensemble, avec des focus diffÃ©rents.",
+      "InsideBalance est la plateforme qui rassemble ces domaines de test dans une structure plus claire. OmegaBalance et GutBalance reposent sur la même vision d’ensemble, avec des focus différents.",
     footerCta: "OmegaBalance",
   },
   it: {
-    heroTitle: "Test di salute che aiutano a capire meglio ciÃ² di cui hai davvero bisogno",
+    heroTitle: "Test di salute che aiutano a capire meglio ciò di cui hai davvero bisogno",
     heroBody:
-      "InsideBalance Ã¨ la piattaforma per chi vuole orientarsi con piÃ¹ chiarezza tra i test di salute e cominciare dal punto giusto. Qui raccogliamo le diverse aree di test in una struttura piÃ¹ calma e piÃ¹ coerente.",
+      "InsideBalance è la piattaforma per chi vuole orientarsi con più chiarezza tra i test di salute e cominciare dal punto giusto. Qui raccogliamo le diverse aree di test in una struttura più calma e più coerente.",
     heroPrimaryCta: "Esplora le aree di test",
     heroSecondaryCta: "OmegaBalance",
     productsTitle: "Le nostre aree di test",
     productsBody: "Ogni area ha un focus chiaro. Scegli quella che si adatta meglio alla tua situazione attuale.",
     primaryRouteTitle: "Inizia qui",
-    primaryRouteBody: "Il modo piÃ¹ chiaro per iniziare con InsideBalance in questo momento.",
+    primaryRouteBody: "Il modo più chiaro per iniziare con InsideBalance in questo momento.",
     secondaryRouteTitle: "In arrivo",
-    secondaryRouteBody: "Per chi vorrÃ  in seguito approfondire intestino, digestione ed equilibrio interno.",
+    secondaryRouteBody: "Per chi vorrà in seguito approfondire intestino, digestione ed equilibrio interno.",
     products: [
       {
         title: "OmegaBalance",
         eyebrow: "Disponibile ora",
-        body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3 e iniziare da unâ€™area di test giÃ  consolidata.",
-        fit: "Adatta se vuoi partire con un primo test chiaro e con un quadro piÃ¹ concreto della tua situazione attuale.",
+        body: "Per chi vuole capire meglio il proprio equilibrio omega-6/omega-3 e iniziare da un’area di test già consolidata.",
+        fit: "Adatta se vuoi partire con un primo test chiaro e con un quadro più concreto della tua situazione attuale.",
         cta: "OmegaBalance",
         href: "/it",
       },
@@ -823,29 +823,29 @@ const copyOverridesByLang: Partial<Record<Lang, Partial<InsideBalanceCopy>>> = {
     ],
     whyTitle: "Inizia misurando",
     whyBody:
-      "Molte persone cercano di migliorare la propria salute prima di sapere cosa il corpo sta davvero mostrando. Un test aiuta a distinguere ciÃ² che suona bene da ciÃ² che puÃ² essere davvero rilevante per te.",
+      "Molte persone cercano di migliorare la propria salute prima di sapere cosa il corpo sta davvero mostrando. Un test aiuta a distinguere ciò che suona bene da ciò che può essere davvero rilevante per te.",
     trustTitle: "Chiaro, serio e costruito per durare",
     trustBody:
-      "InsideBalance si basa su test misurabili e su una struttura chiara. Lâ€™obiettivo Ã¨ rendere piÃ¹ facile capire cosa Ã¨ rilevante e orientarsi meglio nelle proprie scelte.",
+      "InsideBalance si basa su test misurabili e su una struttura chiara. L’obiettivo è rendere più facile capire cosa è rilevante e orientarsi meglio nelle proprie scelte.",
     trustPoints: [
       "Una base fondata sui test invece che su supposizioni generiche.",
       "Aree chiare in cui ogni tema mantiene il proprio focus.",
-      "Unâ€™esperienza piÃ¹ calma, in cui la credibilitÃ  viene prima dellâ€™hype.",
+      "Un’esperienza più calma, in cui la credibilità viene prima dell’hype.",
     ],
     howTitle: "Come funziona",
     howSteps: [
-      { title: "Scegli lâ€™area di test", body: "Inizia dallâ€™area che senti piÃ¹ rilevante per te in questo momento." },
-      { title: "Completa il test", body: "Il test Ã¨ pensato per essere semplice da iniziare a casa." },
-      { title: "Comprendi il risultato", body: "Hai una base piÃ¹ chiara per capire come vuoi procedere." },
+      { title: "Scegli l’area di test", body: "Inizia dall’area che senti più rilevante per te in questo momento." },
+      { title: "Completa il test", body: "Il test è pensato per essere semplice da iniziare a casa." },
+      { title: "Comprendi il risultato", body: "Hai una base più chiara per capire come vuoi procedere." },
     ],
-    whoTitle: "Per chi vuole piÃ¹ chiarezza",
+    whoTitle: "Per chi vuole più chiarezza",
     whoItems: [
       "Vuoi capire la tua situazione di partenza prima di cambiare qualcosa.",
-      "Vuoi affidarti piÃ¹ ai dati che al solo intuito.",
-      "Vuoi iniziare in modo semplice, ma con unâ€™idea chiara dietro.",
+      "Vuoi affidarti più ai dati che al solo intuito.",
+      "Vuoi iniziare in modo semplice, ma con un’idea chiara dietro.",
     ],
     footerBody:
-      "InsideBalance Ã¨ la piattaforma che riunisce queste aree di test in una struttura piÃ¹ chiara. OmegaBalance e GutBalance seguono la stessa visione dâ€™insieme, ma con focus diversi.",
+      "InsideBalance è la piattaforma che riunisce queste aree di test in una struttura più chiara. OmegaBalance e GutBalance seguono la stessa visione d’insieme, ma con focus diversi.",
     footerCta: "OmegaBalance",
   },
 };
@@ -856,40 +856,40 @@ const visualFramesByLang: Record<Lang, VisualFrameCopy> = {
     heroBody: "InsideBalance g\u00f6r det l\u00e4ttare att f\u00f6rst\u00e5 sina testresultat och veta vad n\u00e4sta steg kan vara.",
     measurementLabel: "Efter testet",
     measurementTitle: "Insikt som blir till handling",
-    measurementBody: "NÃ¤r du ser dina resultat tydligare blir nÃ¤sta steg lÃ¤ttare att ta. Det Ã¤r dÃ¤r vÃ¥ra testspÃ¥r ska hjÃ¤lpa, inte bara informera.",
+    measurementBody: "När du ser dina resultat tydligare blir nästa steg lättare att ta. Det är där våra testspår ska hjälpa, inte bara informera.",
     connectionLabel: "Tillsammans",
-    connectionTitle: "Samtal som kÃ¤nns naturliga",
-    connectionBody: "Bra hÃ¤lsobeslut blir ofta lÃ¤ttare att bÃ¤ra nÃ¤r de gÃ¥r att prata om i en varm, vardaglig miljÃ¶.",
+    connectionTitle: "Samtal som känns naturliga",
+    connectionBody: "Bra hälsobeslut blir ofta lättare att bära när de går att prata om i en varm, vardaglig miljö.",
   },
   no: {
     heroTitle: "Tydelighet som kjennes menneskelig",
-    heroBody: "En varm fÃ¸rste kontakt gjÃ¸r det lettere Ã¥ forstÃ¥ at InsideBalance ikke bare handler om testdata, men om retning og neste steg.",
+    heroBody: "En varm første kontakt gjør det lettere å forstå at InsideBalance ikke bare handler om testdata, men om retning og neste steg.",
     measurementLabel: "Etter testen",
     measurementTitle: "Innsikt som blir til handling",
-    measurementBody: "NÃ¥r du ser resultatene tydeligere, blir neste steg lettere Ã¥ ta.",
+    measurementBody: "Når du ser resultatene tydeligere, blir neste steg lettere å ta.",
     connectionLabel: "Sammen",
     connectionTitle: "Samtaler som kjennes naturlige",
-    connectionBody: "Gode helsevalg blir ofte lettere Ã¥ bÃ¦re nÃ¥r de kan deles i en varm hverdagssituasjon.",
+    connectionBody: "Gode helsevalg blir ofte lettere å bære når de kan deles i en varm hverdagssituasjon.",
   },
   da: {
-    heroTitle: "Tydelighed der fÃ¸les menneskelig",
-    heroBody: "En varm fÃ¸rste kontakt gÃ¸r det lettere at forstÃ¥, at InsideBalance ikke kun handler om testdata, men om retning og nÃ¦ste skridt.",
+    heroTitle: "Tydelighed der føles menneskelig",
+    heroBody: "En varm første kontakt gør det lettere at forstå, at InsideBalance ikke kun handler om testdata, men om retning og næste skridt.",
     measurementLabel: "Efter testen",
     measurementTitle: "Indsigt der bliver til handling",
-    measurementBody: "NÃ¥r du ser dine resultater tydeligere, bliver nÃ¦ste skridt lettere at tage.",
+    measurementBody: "Når du ser dine resultater tydeligere, bliver næste skridt lettere at tage.",
     connectionLabel: "Sammen",
-    connectionTitle: "Samtaler der fÃ¸les naturlige",
-    connectionBody: "Gode sundhedsvalg bliver ofte lettere at bÃ¦re i en varm og hverdagsnÃ¦r ramme.",
+    connectionTitle: "Samtaler der føles naturlige",
+    connectionBody: "Gode sundhedsvalg bliver ofte lettere at bære i en varm og hverdagsnær ramme.",
   },
   fi: {
-    heroTitle: "SelkeyttÃ¤ inhimillisellÃ¤ tavalla",
-    heroBody: "LÃ¤mmin ensikohtaaminen auttaa ymmÃ¤rtÃ¤mÃ¤Ã¤n, ettei InsideBalance ole vain testidataa vaan myÃ¶s suuntaa ja seuraavia askelia.",
-    measurementLabel: "Testin jÃ¤lkeen",
+    heroTitle: "Selkeyttä inhimillisellä tavalla",
+    heroBody: "Lämmin ensikohtaaminen auttaa ymmärtämään, ettei InsideBalance ole vain testidataa vaan myös suuntaa ja seuraavia askelia.",
+    measurementLabel: "Testin jälkeen",
     measurementTitle: "Oivallus muuttuu toiminnaksi",
-    measurementBody: "Kun nÃ¤et tuloksesi selvemmin, seuraava askel on helpompi ottaa.",
-    connectionLabel: "YhdessÃ¤",
+    measurementBody: "Kun näet tuloksesi selvemmin, seuraava askel on helpompi ottaa.",
+    connectionLabel: "Yhdessä",
     connectionTitle: "Luontevia keskusteluja",
-    connectionBody: "HyvÃ¤t hyvinvointivalinnat tuntuvat usein helpommilta, kun niistÃ¤ voi puhua luonnollisessa ympÃ¤ristÃ¶ssÃ¤.",
+    connectionBody: "Hyvät hyvinvointivalinnat tuntuvat usein helpommilta, kun niistä voi puhua luonnollisessa ympäristössä.",
   },
   en: {
     heroTitle: "Clarity that feels human",
@@ -903,76 +903,76 @@ const visualFramesByLang: Record<Lang, VisualFrameCopy> = {
   },
   de: {
     heroTitle: "Klarheit, die menschlich wirkt",
-    heroBody: "Ein warmer erster Eindruck macht verstÃ¤ndlich, dass InsideBalance nicht nur aus Testdaten besteht, sondern aus Richtung und nÃ¤chsten Schritten.",
+    heroBody: "Ein warmer erster Eindruck macht verständlich, dass InsideBalance nicht nur aus Testdaten besteht, sondern aus Richtung und nächsten Schritten.",
     measurementLabel: "Nach dem Test",
     measurementTitle: "Erkenntnis wird Handlung",
-    measurementBody: "Wenn Ergebnisse klarer werden, wird auch der nÃ¤chste Schritt leichter.",
+    measurementBody: "Wenn Ergebnisse klarer werden, wird auch der nächste Schritt leichter.",
     connectionLabel: "Gemeinsam",
-    connectionTitle: "GesprÃ¤che, die natÃ¼rlich wirken",
+    connectionTitle: "Gespräche, die natürlich wirken",
     connectionBody: "Gute Gesundheitsentscheidungen tragen sich oft leichter in einer warmen Alltagssituation.",
   },
   fr: {
-    heroTitle: "Une clartÃ© qui reste humaine",
-    heroBody: "Un premier contact chaleureux aide Ã  comprendre que InsideBalance ne parle pas seulement de donnÃ©es, mais aussi de direction et de prochaines Ã©tapes.",
-    measurementLabel: "AprÃ¨s le test",
-    measurementTitle: "Une comprÃ©hension qui devient action",
-    measurementBody: "Quand les rÃ©sultats deviennent plus clairs, l'Ã©tape suivante devient plus simple.",
+    heroTitle: "Une clarté qui reste humaine",
+    heroBody: "Un premier contact chaleureux aide à comprendre que InsideBalance ne parle pas seulement de données, mais aussi de direction et de prochaines étapes.",
+    measurementLabel: "Après le test",
+    measurementTitle: "Une compréhension qui devient action",
+    measurementBody: "Quand les résultats deviennent plus clairs, l'étape suivante devient plus simple.",
     connectionLabel: "Ensemble",
-    connectionTitle: "Des Ã©changes naturels",
-    connectionBody: "Les bonnes dÃ©cisions santÃ© sont souvent plus faciles Ã  porter dans un cadre chaleureux du quotidien.",
+    connectionTitle: "Des échanges naturels",
+    connectionBody: "Les bonnes décisions santé sont souvent plus faciles à porter dans un cadre chaleureux du quotidien.",
   },
   it: {
     heroTitle: "Chiarezza con un tono umano",
     heroBody: "Un primo contatto caldo aiuta a capire che InsideBalance non riguarda solo i dati, ma anche direzione e passi successivi.",
     measurementLabel: "Dopo il test",
     measurementTitle: "Un insight che diventa azione",
-    measurementBody: "Quando i risultati diventano piÃ¹ chiari, il passo successivo Ã¨ piÃ¹ facile da compiere.",
+    measurementBody: "Quando i risultati diventano più chiari, il passo successivo è più facile da compiere.",
     connectionLabel: "Insieme",
     connectionTitle: "Conversazioni naturali",
-    connectionBody: "Le buone scelte per la salute spesso sono piÃ¹ facili da portare avanti in un contesto quotidiano e umano.",
+    connectionBody: "Le buone scelte per la salute spesso sono più facili da portare avanti in un contesto quotidiano e umano.",
   },
 };
 
 const visualFrameOverridesByLang: Partial<Record<Lang, VisualFrameCopy>> = {
   sv: {
-    heroTitle: "MÃ¤tning med en lugnare riktning",
-    heroBody: "InsideBalance gÃ¶r det lÃ¤ttare att fÃ¶rstÃ¥ sina testresultat och veta vad nÃ¤sta steg kan vara.",
+    heroTitle: "Mätning med en lugnare riktning",
+    heroBody: "InsideBalance gör det lättare att förstå sina testresultat och veta vad nästa steg kan vara.",
     measurementLabel: "Efter testet",
     measurementTitle: "Insikt som blir till handling",
-    measurementBody: "NÃ¤r dina resultat blir tydligare blir det ocksÃ¥ lÃ¤ttare att se vad som faktiskt kÃ¤nns relevant.",
+    measurementBody: "När dina resultat blir tydligare blir det också lättare att se vad som faktiskt känns relevant.",
     connectionLabel: "Tillsammans",
-    connectionTitle: "Samtal som kÃ¤nns naturliga",
-    connectionBody: "HÃ¤lsoval kÃ¤nns ofta lÃ¤ttare att bÃ¤ra nÃ¤r de gÃ¥r att prata om i en varm och vardaglig miljÃ¶.",
+    connectionTitle: "Samtal som känns naturliga",
+    connectionBody: "Hälsoval känns ofta lättare att bära när de går att prata om i en varm och vardaglig miljö.",
   },
   no: {
-    heroTitle: "Tydelighet som fÃ¸les menneskelig",
-    heroBody: "InsideBalance skal gjÃ¸re testresultater lettere Ã¥ ta inn og lettere Ã¥ bruke i virkeligheten.",
+    heroTitle: "Tydelighet som føles menneskelig",
+    heroBody: "InsideBalance skal gjøre testresultater lettere å ta inn og lettere å bruke i virkeligheten.",
     measurementLabel: "Etter testen",
     measurementTitle: "Innsikt som blir til handling",
-    measurementBody: "NÃ¥r resultatene blir lettere Ã¥ forstÃ¥, blir det ogsÃ¥ enklere Ã¥ se hva som faktisk kjennes relevant.",
+    measurementBody: "Når resultatene blir lettere å forstå, blir det også enklere å se hva som faktisk kjennes relevant.",
     connectionLabel: "Sammen",
     connectionTitle: "Samtaler som kjennes naturlige",
-    connectionBody: "Helsevalg fÃ¸les ofte lettere Ã¥ bÃ¦re nÃ¥r de kan deles i en varm og hverdagslig situasjon.",
+    connectionBody: "Helsevalg føles ofte lettere å bære når de kan deles i en varm og hverdagslig situasjon.",
   },
   da: {
-    heroTitle: "Tydelighed der fÃ¸les menneskelig",
-    heroBody: "InsideBalance skal gÃ¸re testresultater lettere at tage ind og lettere at bruge i virkeligheden.",
+    heroTitle: "Tydelighed der føles menneskelig",
+    heroBody: "InsideBalance skal gøre testresultater lettere at tage ind og lettere at bruge i virkeligheden.",
     measurementLabel: "Efter testen",
     measurementTitle: "Indsigt der bliver til handling",
-    measurementBody: "NÃ¥r resultaterne er lettere at forstÃ¥, bliver det ogsÃ¥ nemmere at se, hvad der faktisk er relevant.",
+    measurementBody: "Når resultaterne er lettere at forstå, bliver det også nemmere at se, hvad der faktisk er relevant.",
     connectionLabel: "Sammen",
-    connectionTitle: "Samtaler der fÃ¸les naturlige",
-    connectionBody: "Sundhedsvalg fÃ¸les ofte lettere at bÃ¦re, nÃ¥r de kan deles i en varm og hverdagsnÃ¦r ramme.",
+    connectionTitle: "Samtaler der føles naturlige",
+    connectionBody: "Sundhedsvalg føles ofte lettere at bære, når de kan deles i en varm og hverdagsnær ramme.",
   },
   fi: {
-    heroTitle: "SelkeyttÃ¤ inhimillisellÃ¤ tavalla",
-    heroBody: "InsideBalance tekee testituloksista helpompia ottaa vastaan ja helpompia kÃ¤yttÃ¤Ã¤ arjessa.",
-    measurementLabel: "Testin jÃ¤lkeen",
+    heroTitle: "Selkeyttä inhimillisellä tavalla",
+    heroBody: "InsideBalance tekee testituloksista helpompia ottaa vastaan ja helpompia käyttää arjessa.",
+    measurementLabel: "Testin jälkeen",
     measurementTitle: "Oivallus muuttuu toiminnaksi",
-    measurementBody: "Kun tuloksia on helpompi ymmÃ¤rtÃ¤Ã¤, on myÃ¶s helpompi nÃ¤hdÃ¤ mikÃ¤ tuntuu oikeasti olennaiselta.",
-    connectionLabel: "YhdessÃ¤",
+    measurementBody: "Kun tuloksia on helpompi ymmärtää, on myös helpompi nähdä mikä tuntuu oikeasti olennaiselta.",
+    connectionLabel: "Yhdessä",
     connectionTitle: "Luontevia keskusteluja",
-    connectionBody: "Terveyteen liittyvÃ¤t valinnat tuntuvat usein helpommilta, kun niistÃ¤ voi puhua lÃ¤mpimÃ¤ssÃ¤ ja arkisessa ympÃ¤ristÃ¶ssÃ¤.",
+    connectionBody: "Terveyteen liittyvät valinnat tuntuvat usein helpommilta, kun niistä voi puhua lämpimässä ja arkisessa ympäristössä.",
   },
   en: {
     heroTitle: "Clarity that feels human",
@@ -986,33 +986,33 @@ const visualFrameOverridesByLang: Partial<Record<Lang, VisualFrameCopy>> = {
   },
   de: {
     heroTitle: "Klarheit, die menschlich wirkt",
-    heroBody: "InsideBalance soll Testergebnisse leichter zugÃ¤nglich und im Alltag leichter nutzbar machen.",
+    heroBody: "InsideBalance soll Testergebnisse leichter zugänglich und im Alltag leichter nutzbar machen.",
     measurementLabel: "Nach dem Test",
     measurementTitle: "Erkenntnis wird Handlung",
     measurementBody: "Wenn Ergebnisse leichter zu verstehen sind, wird auch klarer, was wirklich relevant erscheint.",
     connectionLabel: "Gemeinsam",
-    connectionTitle: "GesprÃ¤che, die natÃ¼rlich wirken",
+    connectionTitle: "Gespräche, die natürlich wirken",
     connectionBody: "Gesundheitsbezogene Entscheidungen lassen sich oft leichter tragen, wenn man sie in einer warmen Alltagssituation besprechen kann.",
   },
   fr: {
-    heroTitle: "Une clartÃ© qui reste humaine",
-    heroBody: "InsideBalance est conÃ§u pour rendre les rÃ©sultats plus faciles Ã  comprendre et plus simples Ã  utiliser dans la vraie vie.",
-    measurementLabel: "AprÃ¨s le test",
-    measurementTitle: "Une comprÃ©hension qui devient action",
-    measurementBody: "Quand les rÃ©sultats sont plus faciles Ã  comprendre, il devient aussi plus simple de voir ce qui paraÃ®t vraiment pertinent.",
+    heroTitle: "Une clarté qui reste humaine",
+    heroBody: "InsideBalance est conçu pour rendre les résultats plus faciles à comprendre et plus simples à utiliser dans la vraie vie.",
+    measurementLabel: "Après le test",
+    measurementTitle: "Une compréhension qui devient action",
+    measurementBody: "Quand les résultats sont plus faciles à comprendre, il devient aussi plus simple de voir ce qui paraît vraiment pertinent.",
     connectionLabel: "Ensemble",
-    connectionTitle: "Des Ã©changes naturels",
-    connectionBody: "Les choix liÃ©s Ã  la santÃ© sont souvent plus faciles Ã  porter lorsquâ€™ils peuvent Ãªtre partagÃ©s dans un cadre chaleureux du quotidien.",
+    connectionTitle: "Des échanges naturels",
+    connectionBody: "Les choix liés à la santé sont souvent plus faciles à porter lorsqu’ils peuvent être partagés dans un cadre chaleureux du quotidien.",
   },
   it: {
     heroTitle: "Chiarezza con un tono umano",
-    heroBody: "InsideBalance Ã¨ pensato per rendere i risultati piÃ¹ facili da comprendere e piÃ¹ semplici da usare nella vita reale.",
+    heroBody: "InsideBalance è pensato per rendere i risultati più facili da comprendere e più semplici da usare nella vita reale.",
     measurementLabel: "Dopo il test",
     measurementTitle: "Un insight che diventa azione",
-    measurementBody: "Quando i risultati sono piÃ¹ facili da capire, diventa anche piÃ¹ semplice vedere ciÃ² che appare davvero rilevante.",
+    measurementBody: "Quando i risultati sono più facili da capire, diventa anche più semplice vedere ciò che appare davvero rilevante.",
     connectionLabel: "Insieme",
     connectionTitle: "Conversazioni naturali",
-    connectionBody: "Le scelte legate alla salute risultano spesso piÃ¹ facili da sostenere quando possono essere condivise in un contesto quotidiano e accogliente.",
+    connectionBody: "Le scelte legate alla salute risultano spesso più facili da sostenere quando possono essere condivise in un contesto quotidiano e accogliente.",
   },
 };
 
@@ -1030,51 +1030,51 @@ const secondaryCtaClass =
 const productLinkLabelByLang: Record<Lang, string> = {
   sv: "Läs mer",
   no: "Les mer",
-  da: "LÃ¦s mere",
-  fi: "Lue lisÃ¤Ã¤",
+  da: "Læs mere",
+  fi: "Lue lisää",
   en: "Learn more",
   de: "Mehr erfahren",
   fr: "En savoir plus",
-  it: "Scopri di piÃ¹",
+  it: "Scopri di più",
 };
 const footerCopyrightByLang: Record<Lang, string> = {
   sv: "© 2026 InsideBalance. Alla rättigheter förbehållna. Drivs av Per Lundström. Oberoende partner till Zinzino.",
-  no: "Â© 2026 InsideBalance. Alle rettigheter forbeholdt.",
-  da: "Â© 2026 InsideBalance. Alle rettigheder forbeholdes.",
-  fi: "Â© 2026 InsideBalance. Kaikki oikeudet pidÃ¤tetÃ¤Ã¤n.",
-  en: "Â© 2026 InsideBalance. All rights reserved.",
-  de: "Â© 2026 InsideBalance. Alle Rechte vorbehalten.",
-  fr: "Â© 2026 InsideBalance. Tous droits rÃ©servÃ©s.",
-  it: "Â© 2026 InsideBalance. Tutti i diritti riservati.",
+  no: "© 2026 InsideBalance. Alle rettigheter forbeholdt. Drives av Per Lundström. Uavhengig partner til Zinzino.",
+  da: "© 2026 InsideBalance. Alle rettigheder forbeholdes. Drives af Per Lundström. Uafhaengig partner til Zinzino.",
+  fi: "© 2026 InsideBalance. Kaikki oikeudet pidätetään. Ylläpitäjä Per Lundström. Itsenainen Zinzino-kumppani.",
+  en: "© 2026 InsideBalance. All rights reserved. Operated by Per Lundström. Independent partner to Zinzino.",
+  de: "© 2026 InsideBalance. Alle Rechte vorbehalten. Betrieben von Per Lundström. Unabhaengiger Partner von Zinzino.",
+  fr: "© 2026 InsideBalance. Tous droits réservés. Exploite par Per Lundström. Partenaire independant de Zinzino.",
+  it: "© 2026 InsideBalance. Tutti i diritti riservati. Gestito da Per Lundström. Partner indipendente di Zinzino.",
 };
 const closingCtaTitleByLang: Record<Lang, string> = {
   sv: "Redo att börja?",
-  no: "Klar til Ã¥ starte?",
+  no: "Klar til å starte?",
   da: "Klar til at starte?",
   fi: "Valmis aloittamaan?",
   en: "Ready to begin?",
   de: "Bereit zu starten?",
-  fr: "PrÃªt Ã  commencer ?",
+  fr: "Prêt à commencer ?",
   it: "Pronto per iniziare?",
 };
 const closingCtaBodyByLang: Record<Lang, string> = {
   sv: "Börja med OmegaBalance – det tydligaste sättet att komma igång i InsideBalance just nu.",
-  no: "Start med OmegaBalance â€“ den tydeligste mÃ¥ten Ã¥ komme i gang i InsideBalance akkurat nÃ¥.",
-  da: "Start med OmegaBalance â€“ den tydeligste mÃ¥de at komme i gang i InsideBalance lige nu.",
-  fi: "Aloita OmegaBalancella â€“ selkein tapa pÃ¤Ã¤stÃ¤ alkuun InsideBalancessa juuri nyt.",
+  no: "Start med OmegaBalance – den tydeligste måten å komme i gang i InsideBalance akkurat nå.",
+  da: "Start med OmegaBalance – den tydeligste måde at komme i gang i InsideBalance lige nu.",
+  fi: "Aloita OmegaBalancella – selkein tapa päästä alkuun InsideBalancessa juuri nyt.",
   en: "Start with OmegaBalance - the clearest way to get going in InsideBalance right now.",
   de: "Starte mit OmegaBalance - der klarste Weg, jetzt mit InsideBalance zu beginnen.",
-  fr: "Commencez par OmegaBalance - la maniÃ¨re la plus claire de dÃ©marrer avec InsideBalance aujourd'hui.",
-  it: "Inizia con OmegaBalance - il modo piÃ¹ chiaro per iniziare con InsideBalance in questo momento.",
+  fr: "Commencez par OmegaBalance - la manière la plus claire de démarrer avec InsideBalance aujourd'hui.",
+  it: "Inizia con OmegaBalance - il modo più chiaro per iniziare con InsideBalance in questo momento.",
 };
 const footerTaglineByLang: Record<Lang, string> = {
   sv: "Hälsotester med tydlig struktur. Mät först, förstå sedan, agera därefter.",
-  no: "Helsetester med tydelig struktur. MÃ¥l fÃ¸rst, forstÃ¥ deretter, handle etterpÃ¥.",
-  da: "Sundhedstests med tydelig struktur. MÃ¥l fÃ¸rst, forstÃ¥ derefter, handl bagefter.",
-  fi: "Hyvinvointitestit selkeÃ¤llÃ¤ rakenteella. Mittaa ensin, ymmÃ¤rrÃ¤ sitten, toimi sen jÃ¤lkeen.",
+  no: "Helsetester med tydelig struktur. Mål først, forstå deretter, handle etterpå.",
+  da: "Sundhedstests med tydelig struktur. Mål først, forstå derefter, handl bagefter.",
+  fi: "Hyvinvointitestit selkeällä rakenteella. Mittaa ensin, ymmärrä sitten, toimi sen jälkeen.",
   en: "Health tests with clear structure. Measure first, understand next, act after that.",
   de: "Gesundheitstests mit klarer Struktur. Erst messen, dann verstehen, danach handeln.",
-  fr: "Des tests de santÃ© avec une structure claire. Mesurez d'abord, comprenez ensuite, agissez aprÃ¨s.",
+  fr: "Des tests de santé avec une structure claire. Mesurez d'abord, comprenez ensuite, agissez après.",
   it: "Test di salute con una struttura chiara. Misura prima, comprendi poi, agisci dopo.",
 };
 const footerWebsiteLabelByLang: Record<Lang, string> = {
@@ -1090,12 +1090,12 @@ const footerWebsiteLabelByLang: Record<Lang, string> = {
 
 const topNavByLang: Record<Lang, { benefits: string; how: string; faq: string; contact: string; start: string }> = {
   sv: { benefits: "Fördelar", how: "Så fungerar det", faq: "Vanliga frågor", contact: "Kontakt", start: "Kom igång" },
-  no: { benefits: "Fordeler", how: "Slik fungerer det", faq: "Vanlige spÃ¸rsmÃ¥l", contact: "Kontakt", start: "Kom i gang" },
-  da: { benefits: "Fordele", how: "SÃ¥dan fungerer det", faq: "Ofte stillede spÃ¸rgsmÃ¥l", contact: "Kontakt", start: "Kom i gang" },
-  fi: { benefits: "Edut", how: "NÃ¤in se toimii", faq: "Usein kysyttyÃ¤", contact: "Yhteys", start: "Aloita" },
+  no: { benefits: "Fordeler", how: "Slik fungerer det", faq: "Vanlige spørsmål", contact: "Kontakt", start: "Kom i gang" },
+  da: { benefits: "Fordele", how: "Sådan fungerer det", faq: "Ofte stillede spørgsmål", contact: "Kontakt", start: "Kom i gang" },
+  fi: { benefits: "Edut", how: "Näin se toimii", faq: "Usein kysyttyä", contact: "Yhteys", start: "Aloita" },
   en: { benefits: "Benefits", how: "How it works", faq: "FAQ", contact: "Contact", start: "Get started" },
-  de: { benefits: "Vorteile", how: "So funktioniert es", faq: "HÃ¤ufige Fragen", contact: "Kontakt", start: "Loslegen" },
-  fr: { benefits: "Avantages", how: "Comment Ã§a marche", faq: "FAQ", contact: "Contact", start: "Commencer" },
+  de: { benefits: "Vorteile", how: "So funktioniert es", faq: "Häufige Fragen", contact: "Kontakt", start: "Loslegen" },
+  fr: { benefits: "Avantages", how: "Comment ça marche", faq: "FAQ", contact: "Contact", start: "Commencer" },
   it: { benefits: "Vantaggi", how: "Come funziona", faq: "FAQ", contact: "Contatto", start: "Inizia" },
 };
 
@@ -1106,7 +1106,7 @@ const heroBadgeByLang: Record<Lang, string> = {
   fi: "Testipohjaiset hyvinvointi-insightit",
   en: "Test-based health insights",
   de: "Testbasierte Gesundheitsanalysen",
-  fr: "Des insights santÃ© basÃ©s sur des tests",
+  fr: "Des insights santé basés sur des tests",
   it: "Insight sulla salute basati su test",
 };
 
@@ -1116,9 +1116,9 @@ const heroTrustByLang: Record<Lang, string[]> = {
   da: ["Klinisk testet", "100% naturligt", "Premium kvalitet"],
   fi: ["Kliinisesti testattu", "100% luonnollinen", "Premium-laatu"],
   en: ["Clinically tested", "100% natural", "Premium quality"],
-  de: ["Klinisch getestet", "100% natÃ¼rlich", "Premium-QualitÃ¤t"],
-  fr: ["TestÃ© cliniquement", "100% naturel", "QualitÃ© premium"],
-  it: ["Testato clinicamente", "100% naturale", "QualitÃ  premium"],
+  de: ["Klinisch getestet", "100% natürlich", "Premium-Qualität"],
+  fr: ["Testé cliniquement", "100% naturel", "Qualité premium"],
+  it: ["Testato clinicamente", "100% naturale", "Qualità premium"],
 };
 
 const heroProofByLang: Partial<Record<Lang, { stat: string; body: string }>> = {
@@ -1134,24 +1134,24 @@ const heroProofByLang: Partial<Record<Lang, { stat: string; body: string }>> = {
 
 const benefitsTitleByLang: Record<Lang, string> = {
   sv: "Tydligt, seriöst och byggt för att hålla",
-  no: "Tydelig, seriÃ¸s og bygget for Ã¥ vare",
-  da: "Tydeligt, seriÃ¸st og bygget til at holde",
-  fi: "SelkeÃ¤, vakaa ja rakennettu kestÃ¤mÃ¤Ã¤n",
+  no: "Tydelig, seriøs og bygget for å vare",
+  da: "Tydeligt, seriøst og bygget til at holde",
+  fi: "Selkeä, vakaa ja rakennettu kestämään",
   en: "Clear, serious, and built to last",
-  de: "Klar, seriÃ¶s und fÃ¼r die Dauer gebaut",
-  fr: "Clair, sÃ©rieux et conÃ§u pour durer",
+  de: "Klar, seriös und für die Dauer gebaut",
+  fr: "Clair, sérieux et conçu pour durer",
   it: "Chiaro, serio e costruito per durare",
 };
 
 const benefitsIntroByLang: Record<Lang, string> = {
   sv: "InsideBalance bygger på mätbara tester och tydlig struktur. Det ska vara lättare att förstå vad som är relevant och orientera sig i sina val.",
-  no: "InsideBalance bygger pÃ¥ mÃ¥lbare tester og tydelig struktur. Det skal vÃ¦re lettere Ã¥ forstÃ¥ hva som er relevant og finne riktig vei videre.",
-  da: "InsideBalance bygger pÃ¥ mÃ¥lbare tests og tydelig struktur. Det skal vÃ¦re lettere at forstÃ¥, hvad der er relevant, og finde den rigtige vej videre.",
-  fi: "InsideBalance perustuu mitattaviin testeihin ja selkeÃ¤Ã¤n rakenteeseen. Tavoitteena on helpottaa olennaisen ymmÃ¤rtÃ¤mistÃ¤ ja oikean suunnan lÃ¶ytÃ¤mistÃ¤.",
+  no: "InsideBalance bygger på målbare tester og tydelig struktur. Det skal være lettere å forstå hva som er relevant og finne riktig vei videre.",
+  da: "InsideBalance bygger på målbare tests og tydelig struktur. Det skal være lettere at forstå, hvad der er relevant, og finde den rigtige vej videre.",
+  fi: "InsideBalance perustuu mitattaviin testeihin ja selkeään rakenteeseen. Tavoitteena on helpottaa olennaisen ymmärtämistä ja oikean suunnan löytämistä.",
   en: "InsideBalance is built on measurable tests and a clear structure, so it feels easier to understand what matters and where to begin.",
-  de: "InsideBalance basiert auf messbaren Tests und klarer Struktur, damit leichter verstÃ¤ndlich wird, was relevant ist und wo du beginnen kannst.",
-  fr: "InsideBalance repose sur des tests mesurables et une structure claire, pour mieux comprendre ce qui compte et oÃ¹ commencer.",
-  it: "InsideBalance si basa su test misurabili e una struttura chiara, cosÃ¬ Ã¨ piÃ¹ facile capire cosa conta e da dove iniziare.",
+  de: "InsideBalance basiert auf messbaren Tests und klarer Struktur, damit leichter verständlich wird, was relevant ist und wo du beginnen kannst.",
+  fr: "InsideBalance repose sur des tests mesurables et une structure claire, pour mieux comprendre ce qui compte et où commencer.",
+  it: "InsideBalance si basa su test misurabili e una struttura chiara, così è più facile capire cosa conta e da dove iniziare.",
 };
 
 const benefitsGridByLang: Record<Lang, { title: string; body: string }[]> = {
@@ -1300,14 +1300,16 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               {copy.heroBody}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link to={omegaPath} className={primaryCtaClass}>
-                {copy.heroSecondaryCta}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a href="#benefits" className={secondaryCtaClass}>
+              <a href="#test-tracks" className={primaryCtaClass}>
                 {copy.heroPrimaryCta}
+                <ArrowRight className="h-4 w-4" />
               </a>
             </div>
+            <p className="mt-5 text-sm leading-7 text-foreground/62">
+              {currentLang === "sv"
+                ? "Börja med rätt testspår först, gå vidare till produktbeslut sen."
+                : copy.heroSecondaryCta}
+            </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-foreground/70">
               {heroTrust.map((item) => (
                 <span key={item} className="inline-flex items-center gap-2 rounded-full bg-white/78 px-4 py-2 shadow-[0_10px_24px_rgba(31,41,55,0.04)]">
@@ -1334,10 +1336,56 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section id="benefits" className="px-4 py-18 md:px-6 md:py-24">
+      <section id="test-tracks" className="px-4 py-18 md:px-6 md:py-24">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.heroEyebrow} - testbaserad hälsa</p>
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.productsTitle}</p>
+            <h2 className="mt-5 font-serif text-3xl font-semibold tracking-tight md:text-5xl">
+              {currentLang === "sv" ? "Välj det spår som passar dig bäst just nu" : copy.productsTitle}
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-foreground/68">{copy.productsBody}</p>
+          </div>
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            {copy.products.map((product, index) => {
+              const accentTitle =
+                index === 0 ? copy.primaryRouteTitle ?? copy.navOmega : copy.secondaryRouteTitle ?? copy.navGut;
+              const accentBody =
+                index === 0 ? copy.primaryRouteBody ?? product.fit : copy.secondaryRouteBody ?? product.fit;
+
+              return (
+                <article
+                  key={product.title}
+                  className="rounded-[2rem] border border-[rgba(70,99,80,0.1)] bg-white px-7 py-8 shadow-[0_20px_45px_rgba(31,41,55,0.05)]"
+                >
+                  <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{accentTitle}</p>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-tight">{product.title}</h3>
+                  <p className="mt-4 text-base leading-8 text-foreground/72">{product.body}</p>
+                  <div className="mt-6 rounded-[1.4rem] bg-[rgba(239,247,242,0.85)] px-5 py-5">
+                    <p className="text-sm font-medium text-foreground/82">{accentBody}</p>
+                  </div>
+                  <div className="mt-7 flex flex-col items-start gap-4">
+                    <Link
+                      to={product.href}
+                      className={index === 0 ? primaryCtaClass : secondaryCtaClass}
+                    >
+                      {product.cta}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <span className="text-sm text-foreground/55">{product.fit}</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="benefits" className="px-4 pt-24 pb-18 md:px-6 md:py-24">
+        <div className="container-wide mx-auto">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+              {currentLang === "sv" ? "Varför börja med test" : `${copy.heroEyebrow} - test based`}
+            </p>
             <h2 className="mt-5 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{benefitsTitleByLang[currentLang]}</h2>
             <p className="mt-6 text-lg leading-8 text-foreground/68">{benefitsIntroByLang[currentLang]}</p>
           </div>
@@ -1425,7 +1473,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
         <div className="container-wide mx-auto mt-10 border-t border-black/5 pt-6">
           <p className="text-center text-xs text-foreground/50">
-            {currentLang === "sv" ? footerCopyrightByLang[currentLang] : `${footerCopyrightByLang[currentLang]} • ${independentPartnerLabelByLang[currentLang]}`}
+            {footerCopyrightByLang[currentLang]}
           </p>
         </div>
       </footer>
