@@ -8,7 +8,6 @@ export type ClaimText = {
 
 export type LangRecord<T> = Partial<Record<Lang, T>>;
 
-export function resolveContent<T>(content: LangRecord<T>, lang: Lang, fallbackLang: Lang = "en"): T {
+export function resolveContent<T>(content: LangRecord<T>, lang: Lang, fallbackLang: Lang = "sv"): T {
   return content[lang] ?? content[fallbackLang] ?? content.sv ?? Object.values(content)[0]!;
 }
-
