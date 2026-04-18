@@ -188,7 +188,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
             <div className="absolute -right-10 top-0 h-32 w-32 rounded-full bg-white/5" />
             <div className="relative mx-auto max-w-3xl">
               <h2 className="font-serif text-[2rem] font-semibold tracking-tight text-white md:text-[2.35rem]">{copy.omegaLink.title}</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white/86">{copy.omegaLink.body}</p>
+              <p className="mx-auto mt-4 max-w-2xl text-[1.02rem] leading-8 text-white">{copy.omegaLink.body}</p>
             </div>
             <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link to={omegaPath} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary transition hover:opacity-95">

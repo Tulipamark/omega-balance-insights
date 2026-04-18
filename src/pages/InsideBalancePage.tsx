@@ -160,7 +160,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section id="process" className="px-4 py-18 md:px-6 md:py-24">
+      <section id="process" className="px-4 pt-24 pb-18 md:px-6 md:py-24">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.process.eyebrow}</p>
@@ -180,7 +180,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section id="trust" className="bg-[#efe7d8] px-4 py-18 md:px-6 md:py-24">
+      <section id="trust" className="bg-[#efe7d8] px-4 pt-24 pb-18 md:px-6 md:py-24">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.trust.eyebrow}</p>
@@ -198,7 +198,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section className="px-4 py-18 md:px-6 md:py-24">
+      <section className="px-4 pt-24 pb-18 md:px-6 md:py-24">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.nextStep.eyebrow}</p>
