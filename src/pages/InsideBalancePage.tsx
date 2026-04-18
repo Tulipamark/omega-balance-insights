@@ -1336,7 +1336,27 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         </div>
       </section>
 
-      <section id="test-tracks" className="px-4 py-18 md:px-6 md:py-24">
+      <section id="benefits" className="px-4 pt-24 pb-18 md:px-6 md:py-24">
+        <div className="container-wide mx-auto">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+              {currentLang === "sv" ? "Varför börja med test" : `${copy.heroEyebrow} - test based`}
+            </p>
+            <h2 className="mt-5 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{benefitsTitleByLang[currentLang]}</h2>
+            <p className="mt-6 text-lg leading-8 text-foreground/68">{benefitsIntroByLang[currentLang]}</p>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {benefits.map((benefit) => (
+              <article key={benefit.title} className="rounded-[1.8rem] border border-[rgba(70,99,80,0.1)] bg-white px-6 py-7 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
+                <h3 className="text-xl font-semibold tracking-tight">{benefit.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-foreground/68">{benefit.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="test-tracks" className="px-4 pt-8 pb-18 md:px-6 md:pt-10 md:pb-24">
         <div className="container-wide mx-auto">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">{copy.productsTitle}</p>
@@ -1376,26 +1396,6 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 </article>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      <section id="benefits" className="px-4 pt-24 pb-18 md:px-6 md:py-24">
-        <div className="container-wide mx-auto">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-              {currentLang === "sv" ? "Varför börja med test" : `${copy.heroEyebrow} - test based`}
-            </p>
-            <h2 className="mt-5 font-serif text-3xl font-semibold tracking-tight md:text-5xl">{benefitsTitleByLang[currentLang]}</h2>
-            <p className="mt-6 text-lg leading-8 text-foreground/68">{benefitsIntroByLang[currentLang]}</p>
-          </div>
-          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {benefits.map((benefit) => (
-              <article key={benefit.title} className="rounded-[1.8rem] border border-[rgba(70,99,80,0.1)] bg-white px-6 py-7 shadow-[0_18px_40px_rgba(31,41,55,0.04)]">
-                <h3 className="text-xl font-semibold tracking-tight">{benefit.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-foreground/68">{benefit.body}</p>
-              </article>
-            ))}
           </div>
         </div>
       </section>
