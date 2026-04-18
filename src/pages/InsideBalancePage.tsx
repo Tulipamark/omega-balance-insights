@@ -9,6 +9,7 @@ import zinzinoLoveImage from "@/assets/zinzino-love-D01jEncW.png";
 import { insideBalanceV4Content } from "@/content/inside-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
+import InsideBalanceLegacyPage from "./InsideBalanceLegacyPage";
 
 type InsideBalancePageProps = {
   lang?: Lang;
@@ -32,6 +33,11 @@ const secondaryLinkClass =
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? resolveLang(lang);
+
+  if (currentLang !== "sv" && currentLang !== "en") {
+    return <InsideBalanceLegacyPage lang={currentLang} />;
+  }
+
   const copy = resolveContent(insideBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
   const gutPath = gutBalancePath(currentLang);
