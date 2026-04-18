@@ -1,53 +1,27 @@
 import { motion } from "framer-motion";
+import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
+import { resolveContent } from "@/content/v4-types";
 import type { Lang } from "@/lib/i18n";
-import { insightCopyByLang } from "@/lib/funnel-copy";
 
 interface InsightSectionProps {
   lang: Lang;
 }
 
 const InsightSection = ({ lang }: InsightSectionProps) => {
-  const copy = insightCopyByLang[lang];
+  const copy = resolveContent(omegaBalanceV4Content, lang);
 
   return (
-    <section className="px-4 py-14 md:px-6 md:py-16">
-      <div className="container-narrow mx-auto max-w-5xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center text-3xl font-semibold tracking-tight md:text-4xl"
-        >
-          {copy.title}
-        </motion.h2>
-
+    <section className="bg-[rgba(238,243,236,0.92)] px-4 py-10 md:px-6 md:py-12">
+      <div className="container-narrow mx-auto max-w-4xl">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, delay: 0.08 }}
-          className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-center text-lg leading-8 text-subtle"
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-3xl text-center text-lg leading-8 text-subtle"
         >
-          {copy.body}
+          {copy.normalizing.body.text}
         </motion.p>
-
-        <motion.ul
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, delay: 0.16 }}
-          className="mx-auto mt-10 grid max-w-4xl gap-4 text-left md:grid-cols-3"
-        >
-          {copy.points.map((point) => (
-            <li
-              key={point}
-              className="rounded-[1.6rem] border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,248,246,0.9))] px-5 py-5 text-base font-medium text-foreground shadow-[0_18px_40px_rgba(31,41,55,0.05)]"
-            >
-              <span className="block text-lg leading-7">{point}</span>
-            </li>
-          ))}
-        </motion.ul>
       </div>
     </section>
   );

@@ -6,6 +6,10 @@ import StickyCtaBar from "@/components/StickyCtaBar";
 import TrustSection from "@/components/TrustSection";
 import InsightSection from "@/components/InsightSection";
 import ClosingCtaSection from "@/components/ClosingCtaSection";
+import FaqDetails from "@/components/funnel/FaqDetails";
+import OmegaMarkersSection from "@/components/omega/OmegaMarkersSection";
+import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
+import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 
 type IndexProps = {
@@ -15,13 +19,16 @@ type IndexProps = {
 const Index = ({ lang: explicitLang }: IndexProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? ((isSupportedLang(lang) ? lang : defaultLang) as Lang);
+  const copy = resolveContent(omegaBalanceV4Content, currentLang);
 
   return (
     <main className="brand-omega min-h-screen bg-background pb-24 md:pb-0">
       <SwedishFunnelHeroSection lang={currentLang} />
       <InsightSection lang={currentLang} />
+      <OmegaMarkersSection lang={currentLang} />
       <TrustSection lang={currentLang} />
       <HowItWorksSection lang={currentLang} />
+      <FaqDetails title={copy.faqTitle} items={copy.faq} className="bg-[rgba(247,243,235,0.65)]" />
       <ClosingCtaSection lang={currentLang} />
       <FooterSection lang={currentLang} />
       <StickyCtaBar lang={currentLang} />
