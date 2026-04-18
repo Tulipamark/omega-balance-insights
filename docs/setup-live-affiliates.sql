@@ -13,7 +13,7 @@ begin;
 
 update public.partners
 set
-  zinzino_test_url = 'https://www.zinzino.com/shop/2020937624/SE/sv-SE/products/shop/309000',
+  zinzino_test_url = 'https://www.zinzino.com/shop/site/SE/sv-SE/products/shop/home-health-tests/309000',
   zinzino_shop_url = 'https://www.zinzino.com/2020937624/se',
   zinzino_partner_url = 'https://www.zinzino.com/2020937624/se/sv-se/partnerweb/',
   status = 'verified',

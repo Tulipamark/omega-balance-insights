@@ -20,6 +20,7 @@ type TrackedOutboundButtonProps = {
   lang?: Lang;
   destinationType: "test" | "shop" | "partner" | "consultation";
   fallbackHref: string;
+  preferFallbackHref?: boolean;
   className: string;
   children: React.ReactNode;
   pendingLabel?: string;
@@ -103,6 +104,7 @@ const TrackedOutboundButton = ({
   lang,
   destinationType,
   fallbackHref,
+  preferFallbackHref = false,
   className,
   children,
   pendingLabel = "\u00d6ppnar...",
@@ -148,6 +150,11 @@ const TrackedOutboundButton = ({
     }
 
     if (!referralCode) {
+      window.location.assign(fallbackHref);
+      return;
+    }
+
+    if (preferFallbackHref) {
       window.location.assign(fallbackHref);
       return;
     }

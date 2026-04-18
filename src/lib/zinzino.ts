@@ -5,31 +5,27 @@ const zinzinoLocaleByLang: Partial<Record<Lang, { market: string; locale: string
   no: { market: "NO", locale: "no-NO" },
   da: { market: "DK", locale: "da-DK" },
   fi: { market: "FI", locale: "fi-FI" },
+  en: { market: "GB", locale: "en-GB" },
   de: { market: "DE", locale: "de-DE" },
   fr: { market: "FR", locale: "fr-FR" },
   it: { market: "IT", locale: "it-IT" },
 };
 
-const DEFAULT_INTERNATIONAL_ZINZINO_TEST_URL = "https://www.zinzino.com/shop/2020937624/GB/en-GB/products/shop/309000";
-const DEFAULT_INTERNATIONAL_ZINZINO_GUT_TEST_URL =
-  "https://www.zinzino.com/shop/2020937624/GB/en-GB/products/shop/309070";
+const DEFAULT_INTERNATIONAL_ZINZINO_TARGET = { market: "GB", locale: "en-GB" } as const;
+
+function buildZinzinoHealthTestUrl(
+  target: { market: string; locale: string },
+  productId: "309000" | "309070",
+) {
+  return `https://www.zinzino.com/shop/site/${target.market}/${target.locale}/products/shop/home-health-tests/${productId}`;
+}
 
 export function getZinzinoTestUrl(lang: Lang) {
-  const localizedTarget = zinzinoLocaleByLang[lang];
-
-  if (!localizedTarget) {
-    return DEFAULT_INTERNATIONAL_ZINZINO_TEST_URL;
-  }
-
-  return `https://www.zinzino.com/shop/2020937624/${localizedTarget.market}/${localizedTarget.locale}/products/shop/309000`;
+  const localizedTarget = zinzinoLocaleByLang[lang] ?? DEFAULT_INTERNATIONAL_ZINZINO_TARGET;
+  return buildZinzinoHealthTestUrl(localizedTarget, "309000");
 }
 
 export function getZinzinoGutTestUrl(lang: Lang) {
-  const localizedTarget = zinzinoLocaleByLang[lang];
-
-  if (!localizedTarget) {
-    return DEFAULT_INTERNATIONAL_ZINZINO_GUT_TEST_URL;
-  }
-
-  return `https://www.zinzino.com/shop/2020937624/${localizedTarget.market}/${localizedTarget.locale}/products/shop/309070`;
+  const localizedTarget = zinzinoLocaleByLang[lang] ?? DEFAULT_INTERNATIONAL_ZINZINO_TARGET;
+  return buildZinzinoHealthTestUrl(localizedTarget, "309070");
 }
