@@ -44,6 +44,7 @@ function resolveLang(param?: string): Lang {
 
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
+const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
 
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
@@ -51,6 +52,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const currentLang = explicitLang ?? resolveLang(lang);
   const copy = resolveContent(gutBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
+  const partnersPath = partnerPath(currentLang);
 
   return (
     <main className="min-h-screen bg-[#f7f4ec] text-foreground">
@@ -63,6 +65,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
             <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
               <Link to={platformHomePath(currentLang)} className="transition hover:text-foreground">InsideBalance</Link>
               <Link to={omegaPath} className="transition hover:text-foreground">OmegaBalance</Link>
+              <Link to={partnersPath} className="transition hover:text-foreground">{t(currentLang).partner.navLabel}</Link>
               <a href="#faq" className="transition hover:text-foreground">{copy.faqTitle}</a>
               <Link to={contactPath(currentLang)} className="transition hover:text-foreground">Kontakt</Link>
             </nav>
@@ -86,6 +89,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                     <div className="flex flex-col gap-3 text-base text-foreground/78">
                       <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
+                      <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{t(currentLang).partner.navLabel}</Link></SheetClose>
                       <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</a></SheetClose>
                       <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Kontakt</Link></SheetClose>
                     </div>

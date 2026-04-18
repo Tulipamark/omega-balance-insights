@@ -59,6 +59,7 @@ const insideBalanceLabelByLang: Partial<Record<Lang, string>> = {
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaHomePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
 const gutPath = (lang: Lang) => (lang === "sv" ? "/gut-balance" : `/${lang}/gut-balance`);
+const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
 
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
@@ -93,6 +94,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
           <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
             <Link to={platformHomePath(lang)} className="transition hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link>
             <Link to={gutPath(lang)} className="transition hover:text-foreground">GutBalance</Link>
+            <Link to={partnerPath(lang)} className="transition hover:text-foreground">{baseCopy.partner.navLabel}</Link>
             <a href="#how-it-works" className="transition hover:text-foreground">{content.hero.secondaryCta}</a>
             <Link to={contactPath(lang)} className="transition hover:text-foreground">
               {baseCopy.footer.contact}
@@ -124,6 +126,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     <SheetClose asChild><Link to={platformHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link></SheetClose>
                     <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
+                    <SheetClose asChild><Link to={partnerPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.partner.navLabel}</Link></SheetClose>
                     <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</a></SheetClose>
                     <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.footer.contact}</Link></SheetClose>
                   </div>

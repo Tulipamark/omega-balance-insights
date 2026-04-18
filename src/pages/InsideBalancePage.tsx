@@ -22,6 +22,7 @@ const localizedPath = (lang: Lang, path: string) => (lang === "sv" ? path : `/${
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaBalancePath = (lang: Lang) => localizedPath(lang, "/omega-balance");
 const gutBalancePath = (lang: Lang) => localizedPath(lang, "/gut-balance");
+const partnerPath = (lang: Lang) => localizedPath(lang, "/partners");
 
 const primaryCtaClass =
   "inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_38px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95";
@@ -35,6 +36,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const copy = resolveContent(insideBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
   const gutPath = gutBalancePath(currentLang);
+  const partnersPath = partnerPath(currentLang);
 
   return (
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
@@ -46,6 +48,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           <nav className="hidden items-center gap-6 text-[0.95rem] text-foreground/72 xl:flex">
             <Link to={omegaPath} className="transition hover:text-foreground">{copy.nav.omega}</Link>
             <Link to={gutPath} className="transition hover:text-foreground">{copy.nav.gut}</Link>
+            <Link to={partnersPath} className="transition hover:text-foreground">Partner</Link>
             <a href="#process" className="transition hover:text-foreground">{copy.nav.process}</a>
             <a href="#trust" className="transition hover:text-foreground">{copy.nav.trust}</a>
             <a href="#faq" className="transition hover:text-foreground">{copy.nav.faq}</a>
@@ -72,6 +75,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                     <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.home}</Link></SheetClose>
                     <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.omega}</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.gut}</Link></SheetClose>
+                    <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Partner</Link></SheetClose>
                     <SheetClose asChild><a href="#process" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</a></SheetClose>
                     <SheetClose asChild><a href="#trust" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</a></SheetClose>
                     <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</a></SheetClose>
