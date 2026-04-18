@@ -11,7 +11,6 @@ import { gutBalanceV4Content } from "@/content/gut-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
 import { getZinzinoGutTestUrl } from "@/lib/zinzino";
-import GutBalanceLegacyPage from "./GutBalanceLegacyPage";
 
 type GutBalancePageProps = {
   lang?: Lang;
@@ -50,11 +49,6 @@ const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kont
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? resolveLang(lang);
-
-  if (currentLang !== "sv" && currentLang !== "en") {
-    return <GutBalanceLegacyPage lang={currentLang} />;
-  }
-
   const copy = resolveContent(gutBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
 

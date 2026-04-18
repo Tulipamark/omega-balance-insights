@@ -11,7 +11,6 @@ import OmegaMarkersSection from "@/components/omega/OmegaMarkersSection";
 import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
-import LegacyOmegaPage from "./LegacyOmegaPage";
 
 type IndexProps = {
   lang?: Lang;
@@ -20,11 +19,6 @@ type IndexProps = {
 const Index = ({ lang: explicitLang }: IndexProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? ((isSupportedLang(lang) ? lang : defaultLang) as Lang);
-
-  if (currentLang !== "sv" && currentLang !== "en") {
-    return <LegacyOmegaPage lang={currentLang} />;
-  }
-
   const copy = resolveContent(omegaBalanceV4Content, currentLang);
 
   return (
