@@ -58,7 +58,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
         <div className="container-wide mx-auto">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
             <Link to={platformHomePath(currentLang)} className="transition-opacity hover:opacity-85" aria-label="InsideBalance">
-              <InsideBalanceLogo alt="InsideBalance" variant="full" className="h-32 sm:h-36 md:h-40 lg:h-44" />
+              <InsideBalanceLogo alt="InsideBalance" variant="full" className="h-12 sm:h-14 md:h-16" imageClassName="scale-[2] origin-left" />
             </Link>
             <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
               <Link to={platformHomePath(currentLang)} className="transition hover:text-foreground">InsideBalance</Link>
@@ -75,17 +75,22 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                     aria-label="Open navigation"
                   >
                     <Menu className="h-5 w-5" />
-                  </button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
-                  <SheetTitle className="sr-only">InsideBalance</SheetTitle>
-                  <div className="mt-8 flex flex-col gap-3 text-base text-foreground/78">
-                    <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
-                    <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
-                    <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</a></SheetClose>
-                    <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Kontakt</Link></SheetClose>
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
+                <SheetTitle className="sr-only">InsideBalance</SheetTitle>
+                  <div className="mt-8 flex flex-col gap-6">
+                    <div className="border-b border-black/5 pb-5">
+                      <InsideBalanceLogo alt="InsideBalance" variant="full" className="h-12" imageClassName="scale-[1.65] origin-left" />
+                    </div>
+                    <div className="flex flex-col gap-3 text-base text-foreground/78">
+                      <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
+                      <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
+                      <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</a></SheetClose>
+                      <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Kontakt</Link></SheetClose>
+                    </div>
                   </div>
-                </SheetContent>
+              </SheetContent>
               </Sheet>
               <LanguageSwitcher lang={currentLang} />
             </div>
@@ -96,7 +101,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               <span className="inline-flex rounded-full border border-black/5 bg-white/84 px-4 py-2 font-serif text-sm font-semibold tracking-tight text-foreground/75 shadow-[0_12px_30px_rgba(31,41,55,0.05)]">
                 {copy.hero.eyebrow}
               </span>
-              <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-6xl">{copy.hero.title}</h1>
+              <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">{copy.hero.title}</h1>
               <p className="mx-auto mt-6 max-w-2xl text-[1.0625rem] leading-8 text-foreground/70 md:text-lg lg:mx-0">{copy.hero.body}</p>
               <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-foreground/70 lg:justify-start">
                 {copy.hero.trustRow.map((item) => (

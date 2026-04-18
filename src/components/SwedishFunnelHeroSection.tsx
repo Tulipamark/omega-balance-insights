@@ -64,6 +64,13 @@ const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kont
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const baseCopy = t(lang);
   const content = resolveContent(omegaBalanceV4Content, lang);
+  const renderRatioValue = (value: string, isClaimPending: boolean) => {
+    if (!isClaimPending) {
+      return value;
+    }
+
+    return lang === "sv" ? "Referenspunkt" : "Reference point";
+  };
 
   return (
     <section className="bg-[radial-gradient(circle_at_top,rgba(244,248,241,0.95),rgba(247,243,235,0.96)_46%,rgba(238,233,222,0.96)_100%)] px-4 pb-12 pt-6 sm:pb-14 sm:pt-8 md:px-6 md:pb-16 md:pt-10">
@@ -78,7 +85,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               <InsideBalanceLogo
                 alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
                 variant="full"
-                className="h-14 sm:h-16 md:h-20"
+                className="h-12 sm:h-14 md:h-16"
                 imageClassName="scale-[2] origin-left"
               />
             </Link>
@@ -104,12 +111,22 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
                 <SheetTitle className="sr-only">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</SheetTitle>
-                <div className="mt-8 flex flex-col gap-3 text-base text-foreground/78">
-                  <SheetClose asChild><Link to={platformHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link></SheetClose>
-                  <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
-                  <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
-                  <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</a></SheetClose>
-                  <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.footer.contact}</Link></SheetClose>
+                <div className="mt-8 flex flex-col gap-6">
+                  <div className="border-b border-black/5 pb-5">
+                    <InsideBalanceLogo
+                      alt={insideBalanceLabelByLang[lang] ?? "InsideBalance"}
+                      variant="full"
+                      className="h-12"
+                      imageClassName="scale-[1.65] origin-left"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-3 text-base text-foreground/78">
+                    <SheetClose asChild><Link to={platformHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link></SheetClose>
+                    <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
+                    <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
+                    <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</a></SheetClose>
+                    <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.footer.contact}</Link></SheetClose>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -129,7 +146,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                 {content.hero.eyebrow}
               </span>
 
-              <h1 className="mx-auto mt-5 max-w-4xl text-[2.5rem] font-semibold leading-[0.98] tracking-tight sm:text-5xl md:text-[4.2rem] lg:mx-0">
+              <h1 className="mx-auto mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:mx-0 lg:text-6xl">
                 {content.hero.title}
               </h1>
 
@@ -187,7 +204,9 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     <div key={bar.label}>
                       <div className="mb-2 flex items-center justify-between gap-4 text-sm">
                         <span className="font-medium text-foreground/74">{bar.label}</span>
-                        <span className="font-semibold text-foreground">{bar.value}</span>
+                        <span className="font-semibold text-foreground">
+                          {renderRatioValue(bar.value, Boolean(bar.claim && bar.claim.verification === "required"))}
+                        </span>
                       </div>
                       <div className="h-3 rounded-full bg-[#e7e1d6]">
                         <div className={`h-3 rounded-full ${bar.widthClass} ${bar.colorClass}`} />
@@ -218,11 +237,6 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     <ArrowRight className="h-4 w-4" />
                   </>
                 </TrackedOutboundButton>
-                {content.hero.ratioBars.find((bar) => bar.claim)?.claim ? (
-                  <p className="mt-4 text-xs leading-6 text-subtle">
-                    {content.hero.ratioBars.find((bar) => bar.claim)?.claim?.text}
-                  </p>
-                ) : null}
               </div>
             </div>
           </div>
