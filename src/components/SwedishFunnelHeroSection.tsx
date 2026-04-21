@@ -79,6 +79,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const baseCopy = t(lang);
   const content = resolveContent(omegaBalanceV4Content, lang);
   const currentPath = omegaHomePath(lang);
+
   const renderRatioValue = (value: string, isClaimPending: boolean) => {
     if (!isClaimPending) {
       return value;
@@ -86,6 +87,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
 
     return referencePointByLang[lang];
   };
+
   const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname !== currentPath) {
       return;
@@ -125,9 +127,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             <Link to={gutPath(lang)} className="transition hover:text-foreground">GutBalance</Link>
             <Link to={partnerPath(lang)} className="transition hover:text-foreground">{baseCopy.partner.navLabel}</Link>
             <Link to={sectionPath(lang, "how-it-works")} onClick={handleSectionClick("how-it-works")} className="transition hover:text-foreground">{content.hero.secondaryCta}</Link>
-            <Link to={contactPath(lang)} className="transition hover:text-foreground">
-              {baseCopy.footer.contact}
-            </Link>
+            <Link to={contactPath(lang)} className="transition hover:text-foreground">{baseCopy.footer.contact}</Link>
           </nav>
           <div className="flex items-center justify-end gap-2 sm:gap-3">
             <Sheet>
