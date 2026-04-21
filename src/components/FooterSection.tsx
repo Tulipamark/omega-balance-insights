@@ -100,10 +100,11 @@ const FooterSection = ({ lang, brandName = "OmegaBalance", taglineOverride }: Fo
   const localizedPath = (basePath: "/integritet" | "/villkor" | "/kontakt") =>
     lang === "sv" ? basePath : `/${lang}${basePath}`;
   const resolvedTagline = trimTrailingPunctuation(taglineOverride ?? copy.tagline);
+  const taglineSegment = resolvedTagline ? ` ${resolvedTagline}.` : "";
   const footerLine =
     lang === "sv" && swedishFooterLineByBrand[brandName]
       ? swedishFooterLineByBrand[brandName]!
-      : `\u00a9 2026 ${brandName}. ${resolvedTagline}. ${operatedByLabel[lang]}. ${independentPartnerLabel[lang]}.`;
+      : `\u00a9 2026 ${brandName}.${taglineSegment} ${operatedByLabel[lang]}. ${independentPartnerLabel[lang]}.`;
 
   return (
     <footer className="border-t border-black/5 bg-[#f3ecdf] px-4 py-14 md:px-6 md:py-16">

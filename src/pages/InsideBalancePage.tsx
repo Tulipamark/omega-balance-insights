@@ -283,7 +283,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
         <FaqDetails title={copy.faqTitle} items={copy.faq} className="bg-[#f7f3eb]" />
       </div>
 
-      <FooterSection lang={currentLang} brandName="InsideBalance" />
+      <FooterSection lang={currentLang} brandName="InsideBalance" taglineOverride="" />
     </main>
   );
 };
