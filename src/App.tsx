@@ -150,12 +150,45 @@ function ScrollRestorationBoundary() {
   React.useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace(/^#/, "");
-      const target = document.getElementById(id);
+      let frameId = 0;
+      let timeoutId = 0;
+      let attempts = 0;
 
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
+      const scrollToHashTarget = () => {
+        const target = document.getElementById(id);
+
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        attempts += 1;
+
+        if (attempts < 12) {
+          frameId = window.requestAnimationFrame(scrollToHashTarget);
+          return;
+        }
+
+        timeoutId = window.setTimeout(() => {
+          const delayedTarget = document.getElementById(id);
+
+          if (delayedTarget) {
+            delayedTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 120);
+      };
+
+      scrollToHashTarget();
+
+      return () => {
+        if (frameId) {
+          window.cancelAnimationFrame(frameId);
+        }
+
+        if (timeoutId) {
+          window.clearTimeout(timeoutId);
+        }
+      };
     }
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
