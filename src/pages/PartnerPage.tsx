@@ -3301,53 +3301,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className={sectionShellClass}>
-          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
-            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-xl font-semibold tracking-tight text-foreground">
-                  {partnerMidPageCtaByLang[lang].title}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-subtle md:text-base">
-                  {partnerMidPageCtaByLang[lang].body}
-                </p>
-              </div>
-              <a
-                href="#partner-application"
-                className="btn-primary whitespace-nowrap text-center"
-                onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
-                  pathname: location.pathname,
-                  search: location.search,
-                  details: {
-                    placement: "mid-page-bridge",
-                  },
-                })}
-              >
-                {partnerMidPageCtaByLang[lang].cta}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {applicationSection}
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className={sectionShellClass}>
-          <div className="rounded-[1.75rem] border border-border/80 bg-card px-6 py-6 shadow-sm md:px-8 md:py-7">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {partnerDeepDiveByLang[lang].eyebrow}
-            </p>
-            <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
-              {partnerDeepDiveByLang[lang].title}
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-subtle md:text-base">
-              {partnerDeepDiveByLang[lang].body}
-            </p>
-          </div>
-        </div>
-      </section>
 
       <section className="px-4 py-6 md:px-6 md:py-8">
         <div className={sectionShellClass}>
@@ -3365,26 +3319,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               >
                 {item.label}
               </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-6 md:px-6 md:py-8">
-        <div className="container-wide">
-          <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {flowSummaryByLang[lang].title}
-            </p>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {flowSummaryByLang[lang].items.map((item, index) => (
-                <div key={item} className="rounded-2xl border border-border/70 bg-background px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                    {index + 1}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/85">{item}</p>
-                </div>
               ))}
             </div>
           </div>
@@ -3488,18 +3422,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         </motion.div>
       </section>
 
-      <section className="px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className={sectionShellClass}>
-          <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{proofLayerByLang[lang].title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{proofLayerByLang[lang].body}</p>
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {proofLayerByLang[lang].cards.map((card) => (
-              <ExpandableInfoCard key={card.title} lang={lang} title={card.title} text={card.text} />
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
       <section id="partner-reasons" className="px-4 py-10 md:px-6 md:py-12">
         <motion.div {...sectionMotion} className={sectionShellClass}>
           <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{page.reasons.title}</h2>
@@ -3510,18 +3432,6 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 <h3 className="text-lg font-semibold tracking-tight">{card.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-subtle md:text-[15px]">{card.text}</p>
               </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      <section className="bg-section-alt px-4 py-10 md:px-6 md:py-12">
-        <motion.div {...sectionMotion} className={sectionShellClass}>
-          <h2 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">{whyZinzinoByLang[lang].title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-subtle md:text-lg">{whyZinzinoByLang[lang].body}</p>
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {whyZinzinoByLang[lang].cards.map((card) => (
-              <ExpandableInfoCard key={card.title} lang={lang} title={card.title} text={card.text} />
             ))}
           </div>
         </motion.div>
