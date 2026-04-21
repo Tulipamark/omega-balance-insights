@@ -108,7 +108,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                   <Menu className="h-5 w-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
+              <SheetContent side="right" onCloseAutoFocus={(event) => event.preventDefault()} className="w-[88vw] max-w-sm border-l border-black/5 bg-[#f7f3eb] px-6 py-8">
                 <SheetTitle className="sr-only">{copy.nav.home}</SheetTitle>
                 <div className="mt-8 flex flex-col gap-6">
                   <div className="border-b border-black/5 pb-5">
