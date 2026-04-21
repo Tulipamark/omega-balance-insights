@@ -25,8 +25,8 @@ const Index = ({ lang: explicitLang }: IndexProps) => {
   return (
     <main className="brand-omega min-h-screen bg-background pb-24 md:pb-0">
       <SwedishFunnelHeroSection lang={currentLang} />
-      <InsightSection lang={currentLang} />
       <VideoSection lang={currentLang} />
+      <InsightSection lang={currentLang} />
       <OmegaMarkersSection lang={currentLang} />
       <TrustSection lang={currentLang} />
       <HowItWorksSection lang={currentLang} />
