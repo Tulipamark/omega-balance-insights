@@ -8,6 +8,7 @@ import InsightSection from "@/components/InsightSection";
 import ClosingCtaSection from "@/components/ClosingCtaSection";
 import FaqDetails from "@/components/funnel/FaqDetails";
 import OmegaMarkersSection from "@/components/omega/OmegaMarkersSection";
+import VideoSection from "@/components/VideoSection";
 import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
@@ -25,6 +26,7 @@ const Index = ({ lang: explicitLang }: IndexProps) => {
     <main className="brand-omega min-h-screen bg-background pb-24 md:pb-0">
       <SwedishFunnelHeroSection lang={currentLang} />
       <InsightSection lang={currentLang} />
+      <VideoSection lang={currentLang} />
       <OmegaMarkersSection lang={currentLang} />
       <TrustSection lang={currentLang} />
       <HowItWorksSection lang={currentLang} />
