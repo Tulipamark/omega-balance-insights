@@ -55,15 +55,15 @@ export const gutBalanceV4Content: LangRecord<GutBalanceV4Content> = {
     },
     product: {
       eyebrow: "Vad ZinoBiotic+ gör",
-      title: "Ett dagligt komplement i GutBalance-upplägget",
+      title: "En del av den dagliga rutinen",
       body: {
-        text: "ZinoBiotic+ används som en del av GutBalance tillsammans med test, digital rapport och uppföljning. Syftet här är att beskriva hur produkten passar in i ett mer strukturerat upplägg över tid.",
+        text: "I GutBalance används ZinoBiotic+ som den löpande produktdelen mellan test och uppföljning. Tanken är att göra upplägget enklare att följa över tid, med en tydligare koppling mellan daglig rutin, rapport och nästa steg.",
         verification: "verified",
       },
       points: [
-        { text: "Används som del av en daglig rutin tillsammans med test och uppföljning.", verification: "verified" },
-        { text: "Beskrivs sakligt och utan att lova en viss individuell effekt.", verification: "verified" },
-        { text: "Presenteras som komplement till GutBalance, inte som en fristående lösning.", verification: "verified" },
+        { text: "Används dagligen som komplement till test och rapport.", verification: "verified" },
+        { text: "Ingår i ett upplägg med uppföljning över tid.", verification: "verified" },
+        { text: "Beskrivs återhållsamt utan större hälsolöften.", verification: "verified" },
       ],
     },
     science: {
