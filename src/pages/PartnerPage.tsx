@@ -17,6 +17,9 @@ interface PartnerPageProps {
   lang: Lang;
 }
 
+const partnerPagePath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
+const partnerSectionPath = (lang: Lang, sectionId: string) => `${partnerPagePath(lang)}#${sectionId}`;
+
 const readMoreByLang: Record<Lang, { more: string; less: string }> = {
   sv: { more: "Läs mer", less: "Visa mindre" },
   no: { more: "Les mer", less: "Vis mindre" },
@@ -3121,8 +3124,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               <h1 className="mt-5 max-w-3xl text-[2.35rem] font-semibold leading-[1.05] tracking-tight sm:text-4xl md:mt-6 md:text-6xl">{page.hero.title}</h1>
               <p className="mt-3 max-w-2xl text-base leading-7 text-subtle sm:text-lg sm:leading-8 md:text-xl">{page.hero.body}</p>
               <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
-                <a
-                  href="#partner-application"
+                <Link
+                  to={partnerSectionPath(lang, "partner-application")}
                   className="btn-primary w-full px-6 py-3.5 text-center text-base sm:w-auto"
                   onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
                     pathname: location.pathname,
@@ -3133,8 +3136,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                   })}
                 >
                   {page.hero.primaryCta}
-                </a>
-                <a href="#partner-system" className="btn-secondary w-full px-6 py-3.5 text-center text-base sm:w-auto">{page.hero.secondaryCta}</a>
+                </Link>
+                <Link to={partnerSectionPath(lang, "partner-system")} className="btn-secondary w-full px-6 py-3.5 text-center text-base sm:w-auto">{page.hero.secondaryCta}</Link>
               </div>
               <div className="mt-7 grid gap-4 sm:mt-8 sm:gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
                 <div className="rounded-[1.35rem] border border-border/80 bg-background/80 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
@@ -3151,8 +3154,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                       </div>
                     ))}
                   </div>
-                  <a
-                    href="#partner-application"
+                  <Link
+                    to={partnerSectionPath(lang, "partner-application")}
                     className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
                     onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
                       pathname: location.pathname,
@@ -3163,7 +3166,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                     })}
                   >
                     {conversionAssist.cta}
-                  </a>
+                  </Link>
                 </div>
                 <div className="rounded-[1.35rem] border border-border/80 bg-secondary/35 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -3331,13 +3334,13 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               {sectionNavByLang[lang].items.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
-                >
-                  {item.label}
-                </a>
+              <Link
+                key={item.href}
+                to={partnerSectionPath(lang, item.href.replace(/^#/, ""))}
+                className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+              >
+                {item.label}
+              </Link>
               ))}
             </div>
           </div>
@@ -3547,8 +3550,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         >
           <p className="mx-auto max-w-2xl text-base leading-7 text-subtle md:text-lg">{page.sticky.text}</p>
           <div className="mt-6">
-            <a
-              href="#partner-application"
+            <Link
+              to={partnerSectionPath(lang, "partner-application")}
               className="btn-primary inline-flex min-h-12 items-center justify-center px-6 py-3.5 text-center text-base"
               onClick={() => void logFunnelEvent("partner_bottom_cta_clicked", {
                 pathname: location.pathname,
@@ -3559,7 +3562,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               })}
             >
               {page.sticky.cta}
-            </a>
+            </Link>
           </div>
         </motion.div>
       </section>
@@ -3570,8 +3573,8 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 px-3 py-3 backdrop-blur-lg md:hidden">
           <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{page.sticky.text}</p>
-            <a
-              href="#partner-application"
+            <Link
+              to={partnerSectionPath(lang, "partner-application")}
               className="btn-primary w-full whitespace-nowrap px-5 py-3 text-center text-base sm:w-auto"
               onClick={() => void logFunnelEvent("partner_sticky_cta_clicked", {
                 pathname: location.pathname,
@@ -3582,7 +3585,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               })}
             >
               {page.sticky.cta}
-            </a>
+            </Link>
           </div>
         </div>
       ) : null}

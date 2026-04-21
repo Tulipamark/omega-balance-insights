@@ -72,6 +72,7 @@ const omegaHomePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${la
 const gutPath = (lang: Lang) => (lang === "sv" ? "/gut-balance" : `/${lang}/gut-balance`);
 const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+const sectionPath = (lang: Lang, sectionId: string) => `${omegaHomePath(lang)}#${sectionId}`;
 
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const baseCopy = t(lang);
@@ -106,7 +107,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             <Link to={platformHomePath(lang)} className="transition hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link>
             <Link to={gutPath(lang)} className="transition hover:text-foreground">GutBalance</Link>
             <Link to={partnerPath(lang)} className="transition hover:text-foreground">{baseCopy.partner.navLabel}</Link>
-            <a href="#how-it-works" className="transition hover:text-foreground">{content.hero.secondaryCta}</a>
+            <Link to={sectionPath(lang, "how-it-works")} className="transition hover:text-foreground">{content.hero.secondaryCta}</Link>
             <Link to={contactPath(lang)} className="transition hover:text-foreground">
               {baseCopy.footer.contact}
             </Link>
@@ -138,7 +139,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
                     <SheetClose asChild><Link to={partnerPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.partner.navLabel}</Link></SheetClose>
-                    <SheetClose asChild><a href="#how-it-works" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</a></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(lang, "how-it-works")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</Link></SheetClose>
                     <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.footer.contact}</Link></SheetClose>
                   </div>
                 </div>
@@ -195,8 +196,8 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                 <p className="text-center text-xs leading-6 text-subtle lg:text-left">
                   {content.hero.trustRow.map((item) => item.text).join(" • ")}
                 </p>
-                <a
-                  href="#how-it-works"
+                <Link
+                  to={sectionPath(lang, "how-it-works")}
                   className="inline-flex items-center justify-center gap-2 px-1 py-1 text-sm font-medium text-foreground/72 transition hover:text-foreground"
                   onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
                     details: { placement: "hero" },
@@ -206,7 +207,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     {fallbackSecondaryCtaByLang[lang] ?? content.hero.secondaryCta}
                     <ArrowRight className="h-4 w-4" />
                   </>
-                </a>
+                </Link>
               </div>
             </div>
 

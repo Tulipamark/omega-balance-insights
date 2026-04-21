@@ -23,6 +23,7 @@ const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaBalancePath = (lang: Lang) => localizedPath(lang, "/omega-balance");
 const gutBalancePath = (lang: Lang) => localizedPath(lang, "/gut-balance");
 const partnerPath = (lang: Lang) => localizedPath(lang, "/partners");
+const sectionPath = (lang: Lang, sectionId: string) => `${platformHomePath(lang)}#${sectionId}`;
 
 const heroSupportByLang: Record<Lang, { eyebrow: string; omegaBody: string; gutBody: string }> = {
   sv: { eyebrow: "Mät först", omegaBody: "är den tydligaste startpunkten.", gutBody: "fungerar som ett kompletterande spår senare." },
@@ -74,9 +75,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             <Link to={omegaPath} className="transition hover:text-foreground">{copy.nav.omega}</Link>
             <Link to={gutPath} className="transition hover:text-foreground">{copy.nav.gut}</Link>
             <Link to={partnersPath} className="transition hover:text-foreground">{partnerLabel}</Link>
-            <a href="#process" className="transition hover:text-foreground">{copy.nav.process}</a>
-            <a href="#trust" className="transition hover:text-foreground">{copy.nav.trust}</a>
-            <a href="#faq" className="transition hover:text-foreground">{copy.nav.faq}</a>
+            <Link to={sectionPath(currentLang, "process")} className="transition hover:text-foreground">{copy.nav.process}</Link>
+            <Link to={sectionPath(currentLang, "trust")} className="transition hover:text-foreground">{copy.nav.trust}</Link>
+            <Link to={sectionPath(currentLang, "faq")} className="transition hover:text-foreground">{copy.nav.faq}</Link>
             <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">{copy.nav.contact}</Link>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -101,9 +102,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                     <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.omega}</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.gut}</Link></SheetClose>
                     <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{partnerLabel}</Link></SheetClose>
-                    <SheetClose asChild><a href="#process" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</a></SheetClose>
-                    <SheetClose asChild><a href="#trust" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</a></SheetClose>
-                    <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</a></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "process")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "trust")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</Link></SheetClose>
                     <SheetClose asChild><Link to={localizedPath(currentLang, "/kontakt")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.contact}</Link></SheetClose>
                   </div>
                 </div>
@@ -131,10 +132,10 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 {copy.hero.primaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a href="#process" className={secondaryLinkClass}>
+              <Link to={sectionPath(currentLang, "process")} className={secondaryLinkClass}>
                 {copy.hero.secondaryCta}
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
             <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-foreground/70 lg:justify-start">
               {copy.hero.trustRow.map((item) => (

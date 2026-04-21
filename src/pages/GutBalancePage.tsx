@@ -44,8 +44,10 @@ function resolveLang(param?: string): Lang {
 
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
+const gutBalancePath = (lang: Lang) => (lang === "sv" ? "/gut-balance" : `/${lang}/gut-balance`);
 const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+const sectionPath = (lang: Lang, sectionId: string) => `${gutBalancePath(lang)}#${sectionId}`;
 
 const confirmCopyByLang: Record<Lang, { title: string; description: string; confirm: string; cancel: string }> = {
   sv: { title: "Du går nu vidare till Zinzino", description: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.", confirm: "OK, gå vidare", cancel: "Stanna kvar" },
@@ -90,7 +92,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               <Link to={platformHomePath(currentLang)} className="transition hover:text-foreground">InsideBalance</Link>
               <Link to={omegaPath} className="transition hover:text-foreground">OmegaBalance</Link>
               <Link to={partnersPath} className="transition hover:text-foreground">{translation.partner.navLabel}</Link>
-              <a href="#faq" className="transition hover:text-foreground">{copy.faqTitle}</a>
+              <Link to={sectionPath(currentLang, "faq")} className="transition hover:text-foreground">{copy.faqTitle}</Link>
               <Link to={contactPath(currentLang)} className="transition hover:text-foreground">{translation.footer.contact}</Link>
             </nav>
             <div className="flex items-center gap-2 sm:gap-3">
@@ -114,7 +116,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                       <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.partner.navLabel}</Link></SheetClose>
-                      <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</a></SheetClose>
+                      <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</Link></SheetClose>
                       <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.footer.contact}</Link></SheetClose>
                     </div>
                   </div>
