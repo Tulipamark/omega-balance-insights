@@ -56,6 +56,17 @@ const insideBalanceLabelByLang: Partial<Record<Lang, string>> = {
   it: "InsideBalance",
 };
 
+const referencePointByLang: Record<Lang, string> = {
+  sv: "Referenspunkt",
+  no: "Referansepunkt",
+  da: "Referencepunkt",
+  fi: "Viitepiste",
+  en: "Reference point",
+  de: "Referenzpunkt",
+  fr: "Point de référence",
+  it: "Punto di riferimento",
+};
+
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);
 const omegaHomePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/${lang}/omega-balance`);
 const gutPath = (lang: Lang) => (lang === "sv" ? "/gut-balance" : `/${lang}/gut-balance`);
@@ -70,7 +81,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
       return value;
     }
 
-    return lang === "sv" ? "Referenspunkt" : "Reference point";
+    return referencePointByLang[lang];
   };
 
   return (

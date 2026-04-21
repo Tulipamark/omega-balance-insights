@@ -9,7 +9,7 @@ import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { gutBalanceV4Content } from "@/content/gut-balance-v4";
 import { resolveContent } from "@/content/v4-types";
-import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
+import { Lang, defaultLang, isSupportedLang, t } from "@/lib/i18n";
 import { getZinzinoGutTestUrl } from "@/lib/zinzino";
 
 type GutBalancePageProps = {
@@ -47,12 +47,36 @@ const omegaBalancePath = (lang: Lang) => (lang === "sv" ? "/omega-balance" : `/$
 const partnerPath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
 
+const confirmCopyByLang: Record<Lang, { title: string; description: string; confirm: string; cancel: string }> = {
+  sv: { title: "Du går nu vidare till Zinzino", description: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.", confirm: "OK, gå vidare", cancel: "Stanna kvar" },
+  no: { title: "Du går nå videre til Zinzino", description: "Neste steg skjer hos Zinzino, der bestilling og levering håndteres.", confirm: "OK, gå videre", cancel: "Bli her" },
+  da: { title: "Du går nu videre til Zinzino", description: "Næste skridt sker hos Zinzino, hvor bestilling og levering håndteres.", confirm: "OK, gå videre", cancel: "Bliv her" },
+  fi: { title: "Siirryt nyt Zinzinoon", description: "Seuraava vaihe tapahtuu Zinzino-sivulla, jossa tilaus ja toimitus hoidetaan.", confirm: "OK, jatka", cancel: "Pysy täällä" },
+  en: { title: "You are now continuing to Zinzino", description: "The next step takes place at Zinzino, where ordering and delivery are handled.", confirm: "OK, continue", cancel: "Stay here" },
+  de: { title: "Du gehst jetzt zu Zinzino weiter", description: "Der nächste Schritt findet bei Zinzino statt, wo Bestellung und Lieferung abgewickelt werden.", confirm: "OK, weiter", cancel: "Hier bleiben" },
+  fr: { title: "Vous allez maintenant continuer vers Zinzino", description: "L'étape suivante se déroule chez Zinzino, où la commande et la livraison sont gérées.", confirm: "OK, continuer", cancel: "Rester ici" },
+  it: { title: "Stai per continuare su Zinzino", description: "Il passaggio successivo avviene su Zinzino, dove vengono gestiti ordine e consegna.", confirm: "OK, continua", cancel: "Resta qui" },
+};
+
+const gutTaglineByLang: Record<Lang, string> = {
+  sv: "Forskningsbaserad analys av tarmhälsa",
+  no: "Forskningsbasert analyse av tarmhelse",
+  da: "Forskningsbaseret analyse af tarmsundhed",
+  fi: "Tutkimukseen perustuva suolistoterveyden analyysi",
+  en: "Research-based gut health analysis",
+  de: "Forschungsbasierte Analyse der Darmgesundheit",
+  fr: "Analyse de la santé intestinale fondée sur la recherche",
+  it: "Analisi della salute intestinale basata sulla ricerca",
+};
+
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = explicitLang ?? resolveLang(lang);
   const copy = resolveContent(gutBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
   const partnersPath = partnerPath(currentLang);
+  const translation = t(currentLang);
+  const confirmCopy = confirmCopyByLang[currentLang];
 
   return (
     <main className="min-h-screen bg-[#f7f4ec] text-foreground">
@@ -65,9 +89,9 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
             <nav className="hidden items-center gap-6 text-sm text-foreground/72 xl:flex">
               <Link to={platformHomePath(currentLang)} className="transition hover:text-foreground">InsideBalance</Link>
               <Link to={omegaPath} className="transition hover:text-foreground">OmegaBalance</Link>
-              <Link to={partnersPath} className="transition hover:text-foreground">{t(currentLang).partner.navLabel}</Link>
+              <Link to={partnersPath} className="transition hover:text-foreground">{translation.partner.navLabel}</Link>
               <a href="#faq" className="transition hover:text-foreground">{copy.faqTitle}</a>
-              <Link to={contactPath(currentLang)} className="transition hover:text-foreground">Kontakt</Link>
+              <Link to={contactPath(currentLang)} className="transition hover:text-foreground">{translation.footer.contact}</Link>
             </nav>
             <div className="flex items-center gap-2 sm:gap-3">
               <Sheet>
@@ -89,9 +113,9 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                     <div className="flex flex-col gap-3 text-base text-foreground/78">
                       <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
-                      <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{t(currentLang).partner.navLabel}</Link></SheetClose>
+                      <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.partner.navLabel}</Link></SheetClose>
                       <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</a></SheetClose>
-                      <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Kontakt</Link></SheetClose>
+                      <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.footer.contact}</Link></SheetClose>
                     </div>
                   </div>
               </SheetContent>
@@ -124,10 +148,10 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
                   pendingLabel={pendingLabelByLang[currentLang]}
                   errorMessages={{ generic: genericErrorByLang[currentLang] }}
-                  confirmTitle={currentLang === "sv" ? "Du går nu vidare till Zinzino" : "You are now continuing to Zinzino"}
-                  confirmDescription={currentLang === "sv" ? "Nästa steg sker hos Zinzino, där beställning och leverans hanteras." : "The next step takes place at Zinzino, where ordering and delivery are handled."}
-                  confirmConfirmLabel={currentLang === "sv" ? "OK, gå vidare" : "OK, continue"}
-                  confirmCancelLabel={currentLang === "sv" ? "Stanna kvar" : "Stay here"}
+                  confirmTitle={confirmCopy.title}
+                  confirmDescription={confirmCopy.description}
+                  confirmConfirmLabel={confirmCopy.confirm}
+                  confirmCancelLabel={confirmCopy.cancel}
                 >
                   <>
                     {copy.hero.primaryCta}
@@ -223,7 +247,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
         </div>
       </section>
 
-      <FooterSection lang={currentLang} brandName="GutBalance" taglineOverride={currentLang === "sv" ? "Forskningsbaserad analys av tarmhälsa" : "Research-based gut health analysis"} />
+      <FooterSection lang={currentLang} brandName="GutBalance" taglineOverride={gutTaglineByLang[currentLang]} />
     </main>
   );
 };

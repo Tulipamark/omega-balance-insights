@@ -13,13 +13,32 @@ interface HowItWorksSectionProps {
   lang: Lang;
 }
 
+const eyebrowByLang: Record<Lang, string> = {
+  sv: "Så fungerar det",
+  no: "Slik fungerer det",
+  da: "Sådan fungerer det",
+  fi: "Näin se toimii",
+  en: "How it works",
+  de: "So funktioniert es",
+  fr: "Comment cela fonctionne",
+  it: "Come funziona",
+};
+
+const bodyByLang: Record<Lang, string> = {
+  sv: "Fyra tydliga steg från provtagning till rapport och uppföljning.",
+  no: "Fire tydelige steg fra prøvetaking hjemme til rapport og oppfølging.",
+  da: "Fire tydelige trin fra prøvetagning hjemme til rapport og opfølgning.",
+  fi: "Neljä selkeää vaihetta kotona tehtävästä näytteenotosta raporttiin ja seurantaan.",
+  en: "Four clear steps from sampling at home to report and follow-up.",
+  de: "Vier klare Schritte von der Probenahme zu Hause bis zum Bericht und Follow-up.",
+  fr: "Quatre étapes claires, du prélèvement à domicile au rapport et au suivi.",
+  it: "Quattro passaggi chiari dal prelievo a casa al report e al follow-up.",
+};
+
 const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {
   const copy = resolveContent(omegaBalanceV4Content, lang);
-  const eyebrow = lang === "sv" ? "Så fungerar det" : "How it works";
-  const body =
-    lang === "sv"
-      ? "Fyra tydliga steg från provtagning till rapport och uppföljning."
-      : "Four clear steps from sampling at home to report and follow-up.";
+  const eyebrow = eyebrowByLang[lang];
+  const body = bodyByLang[lang];
 
   return (
     <section id="how-it-works" className="section-padding bg-[linear-gradient(180deg,rgba(247,243,235,0.96),rgba(238,243,239,0.9))]">

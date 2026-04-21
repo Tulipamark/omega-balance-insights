@@ -8,7 +8,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/com
 import zinzinoLoveImage from "@/assets/zinzino-love-D01jEncW.png";
 import { insideBalanceV4Content } from "@/content/inside-balance-v4";
 import { resolveContent } from "@/content/v4-types";
-import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
+import { Lang, defaultLang, isSupportedLang, t } from "@/lib/i18n";
 
 type InsideBalancePageProps = {
   lang?: Lang;
@@ -24,6 +24,28 @@ const omegaBalancePath = (lang: Lang) => localizedPath(lang, "/omega-balance");
 const gutBalancePath = (lang: Lang) => localizedPath(lang, "/gut-balance");
 const partnerPath = (lang: Lang) => localizedPath(lang, "/partners");
 
+const heroSupportByLang: Record<Lang, { eyebrow: string; omegaBody: string; gutBody: string }> = {
+  sv: { eyebrow: "Mät först", omegaBody: "är den tydligaste startpunkten.", gutBody: "fungerar som ett kompletterande spår senare." },
+  no: { eyebrow: "Mål først", omegaBody: "er det tydeligste startpunktet.", gutBody: "fungerer som et komplementært spor senere." },
+  da: { eyebrow: "Mål først", omegaBody: "er det tydeligste startpunkt.", gutBody: "fungerer som et supplerende spor senere." },
+  fi: { eyebrow: "Mittaa ensin", omegaBody: "on selkein aloituspiste.", gutBody: "toimii täydentävänä polkuna myöhemmin." },
+  en: { eyebrow: "Measure first", omegaBody: "is the clearest place to begin.", gutBody: "works as a complementary path later on." },
+  de: { eyebrow: "Zuerst messen", omegaBody: "ist der klarste Startpunkt.", gutBody: "funktioniert später als ergänzender Weg." },
+  fr: { eyebrow: "Mesurez d'abord", omegaBody: "est le point de départ le plus clair.", gutBody: "fonctionne ensuite comme un parcours complémentaire." },
+  it: { eyebrow: "Misura prima", omegaBody: "è il punto di partenza più chiaro.", gutBody: "funziona poi come percorso complementare." },
+};
+
+const nextStepPreviewByLang: Record<Lang, { eyebrow: string; cards: { title: string; body: string }[] }> = {
+  sv: { eyebrow: "Vad nästa steg innehåller", cards: [{ title: "Test", body: "Ett konkret utgångsvärde i stället för gissning." }, { title: "Rapport", body: "Tydligare sammanhang kring det du faktiskt mäter." }, { title: "Vägledning", body: "En lugnare väg vidare när du vet mer om nuläget." }, { title: "Uppföljning", body: "Möjlighet att följa förändring i siffror över tid." }] },
+  no: { eyebrow: "Hva neste steg inneholder", cards: [{ title: "Test", body: "En konkret startverdi i stedet for gjetting." }, { title: "Rapport", body: "Tydeligere sammenheng rundt det du faktisk måler." }, { title: "Veiledning", body: "En roligere vei videre når du vet mer om utgangspunktet." }, { title: "Oppfølging", body: "Mulighet til å følge endring i tall over tid." }] },
+  da: { eyebrow: "Hvad næste skridt indeholder", cards: [{ title: "Test", body: "En konkret startværdi i stedet for gætteri." }, { title: "Rapport", body: "Tydeligere sammenhæng omkring det, du faktisk måler." }, { title: "Vejledning", body: "En roligere vej videre, når du ved mere om udgangspunktet." }, { title: "Opfølgning", body: "Mulighed for at følge ændringer i tal over tid." }] },
+  fi: { eyebrow: "Mitä seuraava vaihe sisältää", cards: [{ title: "Testi", body: "Konkreettinen lähtöarvo arvailun sijaan." }, { title: "Raportti", body: "Selkeämpi kokonaiskuva siitä, mitä todella mittaat." }, { title: "Ohjaus", body: "Rauhallisempi seuraava askel, kun tiedät enemmän lähtötilanteesta." }, { title: "Seuranta", body: "Mahdollisuus seurata muutosta numeroina ajan mittaan." }] },
+  en: { eyebrow: "What the next step includes", cards: [{ title: "Test", body: "A concrete starting value instead of guesswork." }, { title: "Report", body: "Clearer context around what you are actually measuring." }, { title: "Guidance", body: "A calmer next step once you understand the current picture." }, { title: "Follow-up", body: "A way to track change in numbers over time." }] },
+  de: { eyebrow: "Was der nächste Schritt umfasst", cards: [{ title: "Test", body: "Ein konkreter Ausgangswert statt Vermutungen." }, { title: "Bericht", body: "Mehr Klarheit über das, was du tatsächlich misst." }, { title: "Orientierung", body: "Ein ruhigerer nächster Schritt, wenn du die Ausgangslage besser kennst." }, { title: "Follow-up", body: "Die Möglichkeit, Veränderungen über Zahlen im Zeitverlauf zu verfolgen." }] },
+  fr: { eyebrow: "Ce que comprend l'étape suivante", cards: [{ title: "Test", body: "Une valeur de départ concrète au lieu d'hypothèses." }, { title: "Rapport", body: "Un contexte plus clair autour de ce que vous mesurez réellement." }, { title: "Orientation", body: "Une suite plus sereine lorsque vous comprenez mieux votre point de départ." }, { title: "Suivi", body: "La possibilité de suivre l'évolution en chiffres dans le temps." }] },
+  it: { eyebrow: "Cosa comprende il passo successivo", cards: [{ title: "Test", body: "Un valore iniziale concreto invece di supposizioni." }, { title: "Report", body: "Un contesto più chiaro su ciò che stai realmente misurando." }, { title: "Guida", body: "Un passo successivo più tranquillo quando capisci meglio il punto di partenza." }, { title: "Follow-up", body: "La possibilità di seguire il cambiamento in numeri nel tempo." }] },
+};
+
 const primaryCtaClass =
   "inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_38px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95";
 
@@ -37,6 +59,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const omegaPath = omegaBalancePath(currentLang);
   const gutPath = gutBalancePath(currentLang);
   const partnersPath = partnerPath(currentLang);
+  const heroSupport = heroSupportByLang[currentLang];
+  const nextStepPreview = nextStepPreviewByLang[currentLang];
+  const partnerLabel = t(currentLang).partner.navLabel;
 
   return (
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
@@ -48,7 +73,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
           <nav className="hidden items-center gap-6 text-[0.95rem] text-foreground/72 xl:flex">
             <Link to={omegaPath} className="transition hover:text-foreground">{copy.nav.omega}</Link>
             <Link to={gutPath} className="transition hover:text-foreground">{copy.nav.gut}</Link>
-            <Link to={partnersPath} className="transition hover:text-foreground">Partner</Link>
+            <Link to={partnersPath} className="transition hover:text-foreground">{partnerLabel}</Link>
             <a href="#process" className="transition hover:text-foreground">{copy.nav.process}</a>
             <a href="#trust" className="transition hover:text-foreground">{copy.nav.trust}</a>
             <a href="#faq" className="transition hover:text-foreground">{copy.nav.faq}</a>
@@ -75,7 +100,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                     <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.home}</Link></SheetClose>
                     <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.omega}</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.gut}</Link></SheetClose>
-                    <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">Partner</Link></SheetClose>
+                    <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{partnerLabel}</Link></SheetClose>
                     <SheetClose asChild><a href="#process" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</a></SheetClose>
                     <SheetClose asChild><a href="#trust" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</a></SheetClose>
                     <SheetClose asChild><a href="#faq" className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</a></SheetClose>
@@ -126,38 +151,28 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
               <div className="h-[270px] overflow-hidden sm:h-[290px]">
                 <img
                   src={zinzinoLoveImage}
-                  alt="BalanceOil med ros och blad"
+                  alt={copy.hero.title}
                   className="h-full w-full scale-[1.0] object-cover object-[20%_53%]"
                 />
               </div>
               <div className="px-5 py-4">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Mät först</p>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">{heroSupport.eyebrow}</p>
                 <p className="mt-2 max-w-none text-sm leading-6 text-foreground/68">
-                  <span className="font-semibold text-foreground">OmegaBalance</span> är den tydligaste startpunkten.
+                  <span className="font-semibold text-foreground">OmegaBalance</span> {heroSupport.omegaBody}
                   <span className="mx-2 text-foreground/28">•</span>
-                  <span className="font-semibold text-foreground">GutBalance</span> fungerar som ett kompletterande spår senare.
+                  <span className="font-semibold text-foreground">GutBalance</span> {heroSupport.gutBody}
                 </p>
               </div>
             </div>
             <div className="rounded-[2rem] border border-[rgba(70,99,80,0.08)] bg-white/82 p-6 shadow-[0_18px_40px_rgba(31,41,55,0.06)]">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Vad nästa steg innehåller</p>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">{nextStepPreview.eyebrow}</p>
               <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <div className="rounded-[1.3rem] bg-[rgba(247,243,235,0.92)] px-5 py-4">
-                  <p className="text-sm font-semibold text-foreground">Test</p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/68">Ett konkret utgångsvärde i stället för gissning.</p>
-                </div>
-                <div className="rounded-[1.3rem] bg-[rgba(247,243,235,0.92)] px-5 py-4">
-                  <p className="text-sm font-semibold text-foreground">Rapport</p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/68">Tydligare sammanhang kring det du faktiskt mäter.</p>
-                </div>
-                <div className="rounded-[1.3rem] bg-[rgba(247,243,235,0.92)] px-5 py-4">
-                  <p className="text-sm font-semibold text-foreground">Vägledning</p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/68">En lugnare väg vidare när du vet mer om nuläget.</p>
-                </div>
-                <div className="rounded-[1.3rem] bg-[rgba(247,243,235,0.92)] px-5 py-4">
-                  <p className="text-sm font-semibold text-foreground">Uppföljning</p>
-                  <p className="mt-2 text-sm leading-7 text-foreground/68">Möjlighet att följa förändring i siffror över tid.</p>
-                </div>
+                {nextStepPreview.cards.map((card) => (
+                  <div key={card.title} className="rounded-[1.3rem] bg-[rgba(247,243,235,0.92)] px-5 py-4">
+                    <p className="text-sm font-semibold text-foreground">{card.title}</p>
+                    <p className="mt-2 text-sm leading-7 text-foreground/68">{card.body}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
