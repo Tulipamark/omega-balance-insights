@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle2, Menu } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import FooterSection from "@/components/FooterSection";
 import FaqDetails from "@/components/funnel/FaqDetails";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
@@ -55,6 +55,7 @@ const secondaryLinkClass =
 
 const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
+  const location = useLocation();
   const currentLang = explicitLang ?? resolveLang(lang);
   const copy = resolveContent(insideBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
@@ -63,6 +64,22 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const heroSupport = heroSupportByLang[currentLang];
   const nextStepPreview = nextStepPreviewByLang[currentLang];
   const partnerLabel = t(currentLang).partner.navLabel;
+  const homePath = platformHomePath(currentLang);
+  const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname !== homePath) {
+      return;
+    }
+
+    const target = document.getElementById(sectionId);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `${homePath}#${sectionId}`);
+  };
 
   return (
     <main className="min-h-screen bg-[#f7f3eb] text-foreground">
@@ -75,9 +92,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
             <Link to={omegaPath} className="transition hover:text-foreground">{copy.nav.omega}</Link>
             <Link to={gutPath} className="transition hover:text-foreground">{copy.nav.gut}</Link>
             <Link to={partnersPath} className="transition hover:text-foreground">{partnerLabel}</Link>
-            <Link to={sectionPath(currentLang, "process")} className="transition hover:text-foreground">{copy.nav.process}</Link>
-            <Link to={sectionPath(currentLang, "trust")} className="transition hover:text-foreground">{copy.nav.trust}</Link>
-            <Link to={sectionPath(currentLang, "faq")} className="transition hover:text-foreground">{copy.nav.faq}</Link>
+            <Link to={sectionPath(currentLang, "process")} onClick={handleSectionClick("process")} className="transition hover:text-foreground">{copy.nav.process}</Link>
+            <Link to={sectionPath(currentLang, "trust")} onClick={handleSectionClick("trust")} className="transition hover:text-foreground">{copy.nav.trust}</Link>
+            <Link to={sectionPath(currentLang, "faq")} onClick={handleSectionClick("faq")} className="transition hover:text-foreground">{copy.nav.faq}</Link>
             <Link to={localizedPath(currentLang, "/kontakt")} className="transition hover:text-foreground">{copy.nav.contact}</Link>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -102,9 +119,9 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                     <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.omega}</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.gut}</Link></SheetClose>
                     <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{partnerLabel}</Link></SheetClose>
-                    <SheetClose asChild><Link to={sectionPath(currentLang, "process")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</Link></SheetClose>
-                    <SheetClose asChild><Link to={sectionPath(currentLang, "trust")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</Link></SheetClose>
-                    <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "process")} onClick={handleSectionClick("process")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.process}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "trust")} onClick={handleSectionClick("trust")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.trust}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} onClick={handleSectionClick("faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.faq}</Link></SheetClose>
                     <SheetClose asChild><Link to={localizedPath(currentLang, "/kontakt")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.nav.contact}</Link></SheetClose>
                   </div>
                 </div>
@@ -132,7 +149,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
                 {copy.hero.primaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to={sectionPath(currentLang, "process")} className={secondaryLinkClass}>
+              <Link to={sectionPath(currentLang, "process")} onClick={handleSectionClick("process")} className={secondaryLinkClass}>
                 {copy.hero.secondaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>

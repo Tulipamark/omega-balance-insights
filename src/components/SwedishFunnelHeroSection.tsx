@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, Menu } from "lucide-react";
 import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
 import { resolveContent } from "@/content/v4-types";
@@ -75,14 +75,31 @@ const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kont
 const sectionPath = (lang: Lang, sectionId: string) => `${omegaHomePath(lang)}#${sectionId}`;
 
 const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
+  const location = useLocation();
   const baseCopy = t(lang);
   const content = resolveContent(omegaBalanceV4Content, lang);
+  const currentPath = omegaHomePath(lang);
   const renderRatioValue = (value: string, isClaimPending: boolean) => {
     if (!isClaimPending) {
       return value;
     }
 
     return referencePointByLang[lang];
+  };
+  const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname !== currentPath) {
+      return;
+    }
+
+    const target = document.getElementById(sectionId);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `${currentPath}#${sectionId}`);
   };
 
   return (
@@ -107,7 +124,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
             <Link to={platformHomePath(lang)} className="transition hover:text-foreground">{insideBalanceLabelByLang[lang] ?? "InsideBalance"}</Link>
             <Link to={gutPath(lang)} className="transition hover:text-foreground">GutBalance</Link>
             <Link to={partnerPath(lang)} className="transition hover:text-foreground">{baseCopy.partner.navLabel}</Link>
-            <Link to={sectionPath(lang, "how-it-works")} className="transition hover:text-foreground">{content.hero.secondaryCta}</Link>
+            <Link to={sectionPath(lang, "how-it-works")} onClick={handleSectionClick("how-it-works")} className="transition hover:text-foreground">{content.hero.secondaryCta}</Link>
             <Link to={contactPath(lang)} className="transition hover:text-foreground">
               {baseCopy.footer.contact}
             </Link>
@@ -139,7 +156,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     <SheetClose asChild><Link to={omegaHomePath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
                     <SheetClose asChild><Link to={gutPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">GutBalance</Link></SheetClose>
                     <SheetClose asChild><Link to={partnerPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.partner.navLabel}</Link></SheetClose>
-                    <SheetClose asChild><Link to={sectionPath(lang, "how-it-works")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</Link></SheetClose>
+                    <SheetClose asChild><Link to={sectionPath(lang, "how-it-works")} onClick={handleSectionClick("how-it-works")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{content.hero.secondaryCta}</Link></SheetClose>
                     <SheetClose asChild><Link to={contactPath(lang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{baseCopy.footer.contact}</Link></SheetClose>
                   </div>
                 </div>
@@ -199,9 +216,12 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                 <Link
                   to={sectionPath(lang, "how-it-works")}
                   className="inline-flex items-center justify-center gap-2 px-1 py-1 text-sm font-medium text-foreground/72 transition hover:text-foreground"
-                  onClick={() => void logFunnelEvent("hero_secondary_cta_clicked", {
-                    details: { placement: "hero" },
-                  })}
+                  onClick={(event) => {
+                    handleSectionClick("how-it-works")(event);
+                    void logFunnelEvent("hero_secondary_cta_clicked", {
+                      details: { placement: "hero" },
+                    });
+                  }}
                 >
                   <>
                     {fallbackSecondaryCtaByLang[lang] ?? content.hero.secondaryCta}

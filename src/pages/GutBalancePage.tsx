@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle2, Menu } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import gutBalanceHeroImage from "@/assets/gut-balance-test-phone.jpg";
 import FooterSection from "@/components/FooterSection";
 import FaqDetails from "@/components/funnel/FaqDetails";
@@ -73,12 +73,29 @@ const gutTaglineByLang: Record<Lang, string> = {
 
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const { lang } = useParams<{ lang: string }>();
+  const location = useLocation();
   const currentLang = explicitLang ?? resolveLang(lang);
   const copy = resolveContent(gutBalanceV4Content, currentLang);
   const omegaPath = omegaBalancePath(currentLang);
   const partnersPath = partnerPath(currentLang);
   const translation = t(currentLang);
   const confirmCopy = confirmCopyByLang[currentLang];
+  const currentPath = gutBalancePath(currentLang);
+  const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname !== currentPath) {
+      return;
+    }
+
+    const target = document.getElementById(sectionId);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `${currentPath}#${sectionId}`);
+  };
 
   return (
     <main className="min-h-screen bg-[#f7f4ec] text-foreground">
@@ -92,7 +109,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               <Link to={platformHomePath(currentLang)} className="transition hover:text-foreground">InsideBalance</Link>
               <Link to={omegaPath} className="transition hover:text-foreground">OmegaBalance</Link>
               <Link to={partnersPath} className="transition hover:text-foreground">{translation.partner.navLabel}</Link>
-              <Link to={sectionPath(currentLang, "faq")} className="transition hover:text-foreground">{copy.faqTitle}</Link>
+              <Link to={sectionPath(currentLang, "faq")} onClick={handleSectionClick("faq")} className="transition hover:text-foreground">{copy.faqTitle}</Link>
               <Link to={contactPath(currentLang)} className="transition hover:text-foreground">{translation.footer.contact}</Link>
             </nav>
             <div className="flex items-center gap-2 sm:gap-3">
@@ -116,7 +133,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
                       <SheetClose asChild><Link to={platformHomePath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">InsideBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={omegaPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">OmegaBalance</Link></SheetClose>
                       <SheetClose asChild><Link to={partnersPath} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.partner.navLabel}</Link></SheetClose>
-                      <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</Link></SheetClose>
+                      <SheetClose asChild><Link to={sectionPath(currentLang, "faq")} onClick={handleSectionClick("faq")} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{copy.faqTitle}</Link></SheetClose>
                       <SheetClose asChild><Link to={contactPath(currentLang)} className="rounded-2xl px-3 py-3 transition hover:bg-black/3 hover:text-foreground">{translation.footer.contact}</Link></SheetClose>
                     </div>
                   </div>

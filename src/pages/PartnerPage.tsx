@@ -2926,6 +2926,23 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const currentPath = partnerPagePath(lang);
+  const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname !== currentPath) {
+      return;
+    }
+
+    const target = document.getElementById(sectionId);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `${currentPath}#${sectionId}`);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -3127,17 +3144,20 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 <Link
                   to={partnerSectionPath(lang, "partner-application")}
                   className="btn-primary w-full px-6 py-3.5 text-center text-base sm:w-auto"
-                  onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
-                    pathname: location.pathname,
-                    search: location.search,
-                    details: {
-                      placement: "hero",
-                    },
-                  })}
+                  onClick={(event) => {
+                    handleSectionClick("partner-application")(event);
+                    void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                      pathname: location.pathname,
+                      search: location.search,
+                      details: {
+                        placement: "hero",
+                      },
+                    });
+                  }}
                 >
                   {page.hero.primaryCta}
                 </Link>
-                <Link to={partnerSectionPath(lang, "partner-system")} className="btn-secondary w-full px-6 py-3.5 text-center text-base sm:w-auto">{page.hero.secondaryCta}</Link>
+                <Link to={partnerSectionPath(lang, "partner-system")} onClick={handleSectionClick("partner-system")} className="btn-secondary w-full px-6 py-3.5 text-center text-base sm:w-auto">{page.hero.secondaryCta}</Link>
               </div>
               <div className="mt-7 grid gap-4 sm:mt-8 sm:gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
                 <div className="rounded-[1.35rem] border border-border/80 bg-background/80 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
@@ -3157,13 +3177,16 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                   <Link
                     to={partnerSectionPath(lang, "partner-application")}
                     className="mt-4 inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
-                    onClick={() => void logFunnelEvent("partner_hero_primary_cta_clicked", {
-                      pathname: location.pathname,
-                      search: location.search,
-                      details: {
-                        placement: "hero-fast-track",
-                      },
-                    })}
+                    onClick={(event) => {
+                      handleSectionClick("partner-application")(event);
+                      void logFunnelEvent("partner_hero_primary_cta_clicked", {
+                        pathname: location.pathname,
+                        search: location.search,
+                        details: {
+                          placement: "hero-fast-track",
+                        },
+                      });
+                    }}
                   >
                     {conversionAssist.cta}
                   </Link>
@@ -3337,6 +3360,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
               <Link
                 key={item.href}
                 to={partnerSectionPath(lang, item.href.replace(/^#/, ""))}
+                onClick={handleSectionClick(item.href.replace(/^#/, ""))}
                 className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
               >
                 {item.label}
@@ -3553,13 +3577,16 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <Link
               to={partnerSectionPath(lang, "partner-application")}
               className="btn-primary inline-flex min-h-12 items-center justify-center px-6 py-3.5 text-center text-base"
-              onClick={() => void logFunnelEvent("partner_bottom_cta_clicked", {
-                pathname: location.pathname,
-                search: location.search,
-                details: {
-                  placement: "bottom-section",
-                },
-              })}
+              onClick={(event) => {
+                handleSectionClick("partner-application")(event);
+                void logFunnelEvent("partner_bottom_cta_clicked", {
+                  pathname: location.pathname,
+                  search: location.search,
+                  details: {
+                    placement: "bottom-section",
+                  },
+                });
+              }}
             >
               {page.sticky.cta}
             </Link>
@@ -3576,13 +3603,16 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <Link
               to={partnerSectionPath(lang, "partner-application")}
               className="btn-primary w-full whitespace-nowrap px-5 py-3 text-center text-base sm:w-auto"
-              onClick={() => void logFunnelEvent("partner_sticky_cta_clicked", {
-                pathname: location.pathname,
-                search: location.search,
-                details: {
-                  placement: "sticky-bar",
-                },
-              })}
+              onClick={(event) => {
+                handleSectionClick("partner-application")(event);
+                void logFunnelEvent("partner_sticky_cta_clicked", {
+                  pathname: location.pathname,
+                  search: location.search,
+                  details: {
+                    placement: "sticky-bar",
+                  },
+                });
+              }}
             >
               {page.sticky.cta}
             </Link>
