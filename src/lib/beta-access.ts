@@ -20,7 +20,8 @@ export function isBetaAccessGranted() {
     return false;
   }
 
-  return window.localStorage.getItem(BETA_ACCESS_STORAGE_KEY) === "granted";
+  window.localStorage.removeItem(BETA_ACCESS_STORAGE_KEY);
+  return window.sessionStorage.getItem(BETA_ACCESS_STORAGE_KEY) === "granted";
 }
 
 export function grantBetaAccess() {
@@ -28,7 +29,8 @@ export function grantBetaAccess() {
     return;
   }
 
-  window.localStorage.setItem(BETA_ACCESS_STORAGE_KEY, "granted");
+  window.localStorage.removeItem(BETA_ACCESS_STORAGE_KEY);
+  window.sessionStorage.setItem(BETA_ACCESS_STORAGE_KEY, "granted");
 }
 
 export function revokeBetaAccess() {
@@ -37,6 +39,7 @@ export function revokeBetaAccess() {
   }
 
   window.localStorage.removeItem(BETA_ACCESS_STORAGE_KEY);
+  window.sessionStorage.removeItem(BETA_ACCESS_STORAGE_KEY);
 }
 
 export function isValidBetaAccessCode(input: string) {
@@ -45,4 +48,3 @@ export function isValidBetaAccessCode(input: string) {
 
   return normalizedInput.length > 0 && normalizedInput === configuredCode;
 }
-
