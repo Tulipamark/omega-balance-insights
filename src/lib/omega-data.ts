@@ -1436,10 +1436,12 @@ function buildMarketInsights(visits: ReferralVisit[]) {
       .slice(0, 8);
   };
 
+  const hasTrustedCity = (visit: ReferralVisit) => visit.geo_source === "headers" && Boolean(visit.geo_city);
+
   return {
     topCountries: topBucket((visit) => visit.geo_country || visit.geo_country_code || null),
     topCities: topBucket((visit) => {
-      if (!visit.geo_city && !visit.geo_country_code) {
+      if (!hasTrustedCity(visit) || !visit.geo_country_code) {
         return null;
       }
 
@@ -1451,7 +1453,7 @@ function buildMarketInsights(visits: ReferralVisit[]) {
       .map((visit) => ({
         created_at: visit.created_at,
         country: visit.geo_country || visit.geo_country_code || null,
-        city: visit.geo_city || null,
+        city: hasTrustedCity(visit) ? visit.geo_city || null : null,
         referral_code: visit.referral_code || null,
       })),
   };
