@@ -4,19 +4,18 @@
       <stop offset="0%" stop-color="#1f4637" />
       <stop offset="100%" stop-color="#5f876b" />
     </linearGradient>
+    <clipPath id="icon-clip">
+      <rect x="8" y="8" width="48" height="48" rx="14" />
+    </clipPath>
   </defs>
   <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bg)" />
-  <text
-    x="50%"
-    y="53%"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    fill="#f6f1e8"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="31"
-    font-weight="700"
-    letter-spacing="0.2"
-  >
-    ib
-  </text>
+  <image
+    href="insidebalance-logo.png"
+    x="-12"
+    y="-1"
+    width="108"
+    height="108"
+    clip-path="url(#icon-clip)"
+    preserveAspectRatio="xMinYMin slice"
+  />
 </svg>
