@@ -1,5 +1,7 @@
 import type { Lang } from "@/lib/i18n";
 
+const ZINZINO_REFERRAL_ACCOUNT_ID = "2020937624";
+
 const zinzinoLocaleByLang: Partial<Record<Lang, { market: string; locale: string }>> = {
   sv: { market: "SE", locale: "sv-SE" },
   no: { market: "NO", locale: "no-NO" },
@@ -17,7 +19,7 @@ function buildZinzinoHealthTestUrl(
   target: { market: string; locale: string },
   productId: "309000" | "309070",
 ) {
-  return `https://www.zinzino.com/shop/site/${target.market}/${target.locale}/products/shop/home-health-tests/${productId}`;
+  return `https://www.zinzino.com/shop/${ZINZINO_REFERRAL_ACCOUNT_ID}/${target.market}/${target.locale}/products/shop/${productId}`;
 }
 
 export function getZinzinoTestUrl(lang: Lang) {
