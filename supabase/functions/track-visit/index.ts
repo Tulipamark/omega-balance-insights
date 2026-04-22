@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 type RequestBody = {
-  ref?: string;
+  ref?: string | null;
   session_id?: string;
   landing_page?: string;
   referrer?: string | null;
@@ -24,8 +24,8 @@ type PartnerRow = {
 };
 
 type ModernVisitInsertPayload = {
-  partner_id: string;
-  referral_code: string;
+  partner_id: string | null;
+  referral_code: string | null;
   session_id: string;
   visitor_id: string;
   landing_page: string;
@@ -44,7 +44,7 @@ type ModernVisitInsertPayload = {
 };
 
 type LegacyVisitInsertPayload = {
-  referral_code: string;
+  referral_code: string | null;
   visitor_id: string;
   landing_page: string;
   utm_source: string | null;
@@ -265,7 +265,7 @@ Deno.serve(async (request: Request) => {
   const landingPage = body?.landing_page?.trim();
   const clientIp = getClientIp(request);
 
-  if (!referralCode || !sessionId || !landingPage) {
+  if (!sessionId || !landingPage) {
     return jsonResponse({ ok: false, partnerFound: false, verified: false });
   }
 
@@ -276,23 +276,29 @@ Deno.serve(async (request: Request) => {
     },
   });
 
-  const { data: partner, error: partnerError } = await supabase
-    .from("partners")
-    .select("id, referral_code, status")
-    .eq("referral_code", referralCode)
-    .maybeSingle<PartnerRow>();
+  let partner: PartnerRow | null = null;
 
-  if (partnerError) {
-    console.error("Failed to resolve partner for visit tracking", partnerError);
-    return jsonResponse({ ok: false, partnerFound: false, verified: false });
-  }
+  if (referralCode) {
+    const { data: resolvedPartner, error: partnerError } = await supabase
+      .from("partners")
+      .select("id, referral_code, status")
+      .eq("referral_code", referralCode)
+      .maybeSingle<PartnerRow>();
 
-  if (!partner) {
-    return jsonResponse({ ok: false, partnerFound: false, verified: false });
-  }
+    if (partnerError) {
+      console.error("Failed to resolve partner for visit tracking", partnerError);
+      return jsonResponse({ ok: false, partnerFound: false, verified: false });
+    }
 
-  if (partner.status !== "verified") {
-    return jsonResponse({ ok: false, partnerFound: true, verified: false });
+    if (!resolvedPartner) {
+      return jsonResponse({ ok: false, partnerFound: false, verified: false });
+    }
+
+    if (resolvedPartner.status !== "verified") {
+      return jsonResponse({ ok: false, partnerFound: true, verified: false });
+    }
+
+    partner = resolvedPartner;
   }
 
   const ipHash = clientIp ? await hashValue(clientIp) : null;
@@ -318,8 +324,8 @@ Deno.serve(async (request: Request) => {
   };
 
   const modernInsertPayload: ModernVisitInsertPayload = {
-    partner_id: partner.id,
-    referral_code: partner.referral_code,
+    partner_id: partner?.id || null,
+    referral_code: partner?.referral_code || referralCode,
     session_id: sessionId,
     visitor_id: sessionId,
     landing_page: landingPage,
@@ -338,7 +344,7 @@ Deno.serve(async (request: Request) => {
   };
 
   const legacyInsertPayload: LegacyVisitInsertPayload = {
-    referral_code: partner.referral_code,
+    referral_code: partner?.referral_code || referralCode,
     visitor_id: sessionId,
     landing_page: landingPage,
     utm_source: body?.utm_source || null,
@@ -349,8 +355,8 @@ Deno.serve(async (request: Request) => {
 
   if (insertError) {
     console.error("Failed to insert referral visit", insertError);
-    return jsonResponse({ ok: false, partnerFound: true, verified: true });
+    return jsonResponse({ ok: false, partnerFound: Boolean(partner), verified: partner?.status === "verified" });
   }
 
-  return jsonResponse({ ok: true, partnerFound: true, verified: true });
+  return jsonResponse({ ok: true, partnerFound: Boolean(partner), verified: partner?.status === "verified" });
 });

@@ -91,6 +91,8 @@ describe("referral utilities", () => {
   it("tracks only referral-aware landing pages", () => {
     expect(shouldTrackReferralLanding("/")).toBe(true);
     expect(shouldTrackReferralLanding("/sv")).toBe(true);
+    expect(shouldTrackReferralLanding("/sv/omega-balance")).toBe(true);
+    expect(shouldTrackReferralLanding("/sv/gut-balance")).toBe(true);
     expect(shouldTrackReferralLanding("/sv/partners")).toBe(true);
     expect(shouldTrackReferralLanding("/partners")).toBe(true);
     expect(shouldTrackReferralLanding("/dashboard/login")).toBe(false);
@@ -141,6 +143,22 @@ describe("referral utilities", () => {
     await captureReferralVisit("/sv", "?ref=elin2026&utm_source=instagram");
 
     expect(trackVisitMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("tracks public page visits even without a referral code", async () => {
+    persistSessionId("session-123");
+
+    await captureReferralVisit("/sv/omega-balance", "?utm_source=google&utm_medium=organic");
+
+    expect(trackVisitMock).toHaveBeenCalledWith(expect.objectContaining({
+      ref: null,
+      session_id: "session-123",
+      landing_page: "/sv/omega-balance",
+      utm_source: "google",
+      utm_medium: "organic",
+      utm_campaign: null,
+      user_agent: navigator.userAgent || null,
+    }));
   });
 
   it("builds lead attribution with first-touch and last-touch context", async () => {

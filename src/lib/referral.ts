@@ -237,29 +237,12 @@ export async function getLeadAttributionContext(pathname: string, search: string
 }
 
 export function shouldTrackReferralLanding(pathname: string) {
-  const segments = pathname.split("/").filter(Boolean);
-
-  if (segments.length === 0) {
-    return true;
-  }
-
-  if (segments.length === 1 && isSupportedLang(segments[0])) {
-    return true;
-  }
-
-  if (
-    segments.length === 2 &&
-    isSupportedLang(segments[0]) &&
-    segments[1] === "partners"
-  ) {
-    return true;
-  }
-
-  if (segments.length === 1 && segments[0] === "partners") {
-    return true;
-  }
-
-  return false;
+  return ![
+    "/beta-entry",
+    "/integritet",
+    "/villkor",
+    "/kontakt",
+  ].includes(pathname) && !pathname.startsWith("/dashboard") && !pathname.startsWith("/auth/");
 }
 
 export async function captureReferralVisit(pathname: string, search: string) {
@@ -271,15 +254,14 @@ export async function captureReferralVisit(pathname: string, search: string) {
     return;
   }
 
-  const referralCode = getReferralCandidate(pathname, search) || getStoredReferral()?.referralCode;
-  if (!referralCode) {
-    return;
-  }
+  const referralCode = getReferralCandidate(pathname, search) || getStoredReferral()?.referralCode || null;
 
-  persistReferralCode(referralCode, pathname, search);
+  if (referralCode) {
+    persistReferralCode(referralCode, pathname, search);
+  }
   const sessionId = getOrCreateSessionId();
 
-  const cacheKey = `${referralCode}:${pathname}:${search}`;
+  const cacheKey = `${referralCode || "direct"}:${pathname}:${search}`;
   if (window.sessionStorage.getItem(VISIT_CACHE_KEY) === cacheKey) {
     return;
   }

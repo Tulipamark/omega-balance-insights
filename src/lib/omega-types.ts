@@ -62,7 +62,7 @@ export interface TrackVisitResponse {
 }
 
 export interface TrackVisitRequest {
-  ref: string;
+  ref?: string | null;
   session_id: string;
   landing_page: string;
   referrer: string | null;
