@@ -1,17 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <clipPath id="icon-clip">
-      <rect x="6" y="6" width="52" height="52" />
-    </clipPath>
-  </defs>
-  <rect x="0" y="0" width="64" height="64" fill="#f6f1e8" />
-  <image
-    href="insidebalance-logo.png"
-    x="5"
-    y="-3"
-    width="54"
-    height="54"
-    clip-path="url(#icon-clip)"
-    preserveAspectRatio="xMidYMin slice"
+  <rect x="2" y="2" width="60" height="60" fill="#ffffff" stroke="#1f4637" stroke-width="2" />
+  <circle cx="32" cy="21" r="6.25" fill="#dfcfbf" />
+  <path
+    d="M31 29.5C25.4 29.5 20.5 33.9 20.5 40.8C20.5 47.9 25.7 52.1 31 53V29.5Z"
+    fill="#173243"
+  />
+  <path
+    d="M33 29.5C38.6 29.5 43.5 33.9 43.5 40.8C43.5 47.9 38.3 52.1 33 53V29.5Z"
+    fill="#a9bcab"
+  />
+  <path
+    d="M31 30C26.2 27.4 24 23.5 24 18.6C24 17.8 24.1 17.1 24.2 16.5C29.3 18.2 31.9 22.3 31.9 28.3V30H31Z"
+    fill="#173243"
+  />
+  <path
+    d="M33 30C37.8 27.4 40 23.5 40 18.6C40 17.8 39.9 17.1 39.8 16.5C34.7 18.2 32.1 22.3 32.1 28.3V30H33Z"
+    fill="#a9bcab"
   />
 </svg>
