@@ -6,9 +6,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { isBetaAccessGranted } from "@/lib/beta-access";
-import InsideBalancePage from "./pages/InsideBalancePage.tsx";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
-import { getPortalAccessState, signOutPortalUser } from "./lib/omega-data";
+import { getPortalAccessState, signOutPortalUser } from "./lib/portal-access";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
 import { isSupabaseConfigured } from "./integrations/supabase/client";
 import { CookieConsentBanner } from "./components/CookieConsentBanner";
@@ -16,6 +15,7 @@ import { useCookieConsent } from "./hooks/use-cookie-consent";
 import { useReferralTracking } from "./hooks/use-referral-tracking";
 
 const queryClient = new QueryClient();
+const InsideBalancePage = React.lazy(() => import("./pages/InsideBalancePage.tsx"));
 const Index = React.lazy(() => import("./pages/Index.tsx"));
 const PartnerPage = React.lazy(() => import("./pages/PartnerPage.tsx"));
 const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage.tsx"));
