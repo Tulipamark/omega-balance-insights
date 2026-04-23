@@ -98,7 +98,7 @@ const brandIntroByLang = {
 
 const socialLinks = {
   instagram: "https://www.instagram.com/insidebalance.eu",
-  facebook: "https://www.facebook.com/profile.php?id=61574295346336&sk=about",
+  facebook: "https://www.facebook.com/Insidebalance.eu/",
 } as const;
 
 const FooterSection = ({ lang, brandName = "OmegaBalance", taglineOverride }: FooterSectionProps) => {

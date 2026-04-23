@@ -5,7 +5,7 @@ export const SITE_URL = "https://insidebalance.eu";
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-insidebalance.png`;
 export const SOCIAL_PROFILES = [
   "https://www.instagram.com/insidebalance.eu",
-  "https://www.facebook.com/profile.php?id=61574295346336&sk=about",
+  "https://www.facebook.com/Insidebalance.eu/",
 ] as const;
 
 type FaqItem = {
