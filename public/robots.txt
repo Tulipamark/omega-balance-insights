@@ -12,5 +12,8 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /beta-entry
 
 Sitemap: https://insidebalance.eu/sitemap.xml

@@ -9,6 +9,7 @@ import zinzinoLoveImage from "@/assets/zinzino-love-D01jEncW.jpg";
 import { insideBalanceV4Content } from "@/content/inside-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang, t } from "@/lib/i18n";
+import { buildAlternates, buildOrganizationSchema, useSeo } from "@/lib/seo";
 
 type InsideBalancePageProps = {
   lang?: Lang;
@@ -65,6 +66,15 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
   const nextStepPreview = nextStepPreviewByLang[currentLang];
   const partnerLabel = t(currentLang).partner.navLabel;
   const homePath = platformHomePath(currentLang);
+  useSeo({
+    lang: currentLang,
+    title: `${copy.hero.title} | InsideBalance`,
+    description: copy.hero.body,
+    path: homePath,
+    alternates: buildAlternates((lang) => platformHomePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    schema: [buildOrganizationSchema()],
+    faq: copy.faq,
+  });
   const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname !== homePath) {
       return;

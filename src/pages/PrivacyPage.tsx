@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { getPortalPrivacySections } from "@/content/portal-legal-content";
 import { defaultLang, isSupportedLang, Lang } from "@/lib/i18n";
+import { buildAlternates, useSeo } from "@/lib/seo";
 
 const privacyCopyByLang: Record<Lang, { title: string; intro: string; backLabel: string }> = {
   sv: {
@@ -51,6 +52,14 @@ const PrivacyPage = () => {
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = privacyCopyByLang[currentLang];
   const sections = getPortalPrivacySections(currentLang);
+  const privacyPath = currentLang === "sv" ? "/integritet" : `/${currentLang}/integritet`;
+  useSeo({
+    lang: currentLang,
+    title: `${copy.title} | InsideBalance`,
+    description: copy.intro,
+    path: privacyPath,
+    alternates: buildAlternates((lang) => (lang === "sv" ? "/integritet" : `/${lang}/integritet`), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+  });
 
   return (
     <InfoPageLayout lang={currentLang} title={copy.title} intro={copy.intro} backLabel={copy.backLabel}>

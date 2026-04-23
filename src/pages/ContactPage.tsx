@@ -7,6 +7,7 @@ import { upsertLead } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { defaultLang, isSupportedLang, Lang } from "@/lib/i18n";
 import { getLeadAttributionContext } from "@/lib/referral";
+import { buildAlternates, useSeo } from "@/lib/seo";
 
 const contactCopyByLang: Record<Lang, {
   title: string;
@@ -177,6 +178,14 @@ const ContactPage = () => {
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = contactCopyByLang[currentLang];
   const location = useLocation();
+  const contactPath = currentLang === "sv" ? "/kontakt" : `/${currentLang}/kontakt`;
+  useSeo({
+    lang: currentLang,
+    title: `${copy.title} | InsideBalance`,
+    description: copy.intro,
+    path: contactPath,
+    alternates: buildAlternates((lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+  });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

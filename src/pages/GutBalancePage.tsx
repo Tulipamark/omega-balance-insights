@@ -10,6 +10,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/com
 import { gutBalanceV4Content } from "@/content/gut-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang, t } from "@/lib/i18n";
+import { buildAlternates, useSeo } from "@/lib/seo";
 import { getZinzinoGutTestUrl } from "@/lib/zinzino";
 
 type GutBalancePageProps = {
@@ -81,6 +82,14 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
   const translation = t(currentLang);
   const confirmCopy = confirmCopyByLang[currentLang];
   const currentPath = gutBalancePath(currentLang);
+  useSeo({
+    lang: currentLang,
+    title: `${copy.hero.title} | GutBalance`,
+    description: copy.hero.body,
+    path: currentPath,
+    alternates: buildAlternates((lang) => gutBalancePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    faq: copy.faq,
+  });
   const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname !== currentPath) {
       return;

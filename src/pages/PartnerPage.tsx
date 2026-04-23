@@ -12,6 +12,7 @@ import { upsertLead } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { Lang, t } from "@/lib/i18n";
 import { getLeadAttributionContext } from "@/lib/referral";
+import { buildAlternates, useSeo } from "@/lib/seo";
 
 interface PartnerPageProps {
   lang: Lang;
@@ -2890,6 +2891,13 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     };
   }, [lang]);
   const location = useLocation();
+  useSeo({
+    lang,
+    title: `${page.hero.title} | InsideBalance Partners`,
+    description: page.hero.body,
+    path: partnerPagePath(lang),
+    alternates: buildAlternates((lang) => partnerPagePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+  });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

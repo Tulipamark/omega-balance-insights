@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { getPortalTermsSections } from "@/content/portal-legal-content";
 import { defaultLang, isSupportedLang, Lang } from "@/lib/i18n";
+import { buildAlternates, useSeo } from "@/lib/seo";
 
 const termsCopyByLang: Record<Lang, { title: string; intro: string; backLabel: string }> = {
   sv: {
@@ -51,6 +52,14 @@ const TermsPage = () => {
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   const copy = termsCopyByLang[currentLang];
   const sections = getPortalTermsSections(currentLang);
+  const termsPath = currentLang === "sv" ? "/villkor" : `/${currentLang}/villkor`;
+  useSeo({
+    lang: currentLang,
+    title: `${copy.title} | InsideBalance`,
+    description: copy.intro,
+    path: termsPath,
+    alternates: buildAlternates((lang) => (lang === "sv" ? "/villkor" : `/${lang}/villkor`), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+  });
 
   return (
     <InfoPageLayout lang={currentLang} title={copy.title} intro={copy.intro} backLabel={copy.backLabel}>

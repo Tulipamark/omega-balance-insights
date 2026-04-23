@@ -1,3 +1,4 @@
+import { Facebook, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 
@@ -95,6 +96,11 @@ const brandIntroByLang = {
   it: "Un approccio pi\u00f9 calmo e credibile alla salute basata sui test.",
 } satisfies Record<Lang, string>;
 
+const socialLinks = {
+  instagram: "https://www.instagram.com/insidebalance.eu",
+  facebook: "https://www.facebook.com/profile.php?id=61574295346336&sk=about",
+} as const;
+
 const FooterSection = ({ lang, brandName = "OmegaBalance", taglineOverride }: FooterSectionProps) => {
   const copy = t(lang).footer;
   const localizedPath = (basePath: "/integritet" | "/villkor" | "/kontakt") =>
@@ -113,6 +119,26 @@ const FooterSection = ({ lang, brandName = "OmegaBalance", taglineOverride }: Fo
           <div className="max-w-xl">
             <p className="font-serif text-2xl font-semibold tracking-tight text-foreground">{brandName}</p>
             <p className="mt-4 text-sm leading-7 text-foreground/64">{brandIntroByLang[lang]}</p>
+            <div className="mt-5 flex items-center gap-3">
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="InsideBalance on Instagram"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 bg-white/35 text-foreground/52 transition hover:border-foreground/20 hover:bg-white/55 hover:text-foreground/72"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="InsideBalance on Facebook"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 bg-white/35 text-foreground/52 transition hover:border-foreground/20 hover:bg-white/55 hover:text-foreground/72"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+            </div>
             <p className="mt-6 text-xs leading-6 text-foreground/52">{footerLine}</p>
           </div>
 
