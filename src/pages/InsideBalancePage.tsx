@@ -5,7 +5,7 @@ import FaqDetails from "@/components/funnel/FaqDetails";
 import InsideBalanceLogo from "@/components/InsideBalanceLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import zinzinoLoveImage from "@/assets/zinzino-love-D01jEncW.png";
+import zinzinoLoveImage from "@/assets/zinzino-love-D01jEncW.jpg";
 import { insideBalanceV4Content } from "@/content/inside-balance-v4";
 import { resolveContent } from "@/content/v4-types";
 import { Lang, defaultLang, isSupportedLang, t } from "@/lib/i18n";
