@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { isBetaAccessGranted } from "@/lib/beta-access";
 import { defaultLang, isSupportedLang, Lang } from "./lib/i18n";
 import { getPortalAccessState, signOutPortalUser } from "./lib/portal-access";
 import { hasAcceptedPortalLegal } from "./lib/portal-legal";
@@ -41,7 +40,6 @@ const App = () => (
         <CookieConsentBoundary />
         <ScrollRestorationBoundary />
         <RecoveryRedirectBoundary />
-        <BetaAccessBoundary />
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
           <Routes>
@@ -115,33 +113,6 @@ function CookieConsentBoundary() {
       onDecline={declineOptionalTracking}
     />
   );
-}
-
-function BetaAccessBoundary() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    const publicPreviewBypassPaths = new Set([
-      "/beta-entry",
-      "/dashboard",
-      "/dashboard/login",
-      "/dashboard/admin-login",
-      "/auth/forgot-password",
-      "/auth/reset-password",
-    ]);
-
-    const isDashboardPath = location.pathname.startsWith("/dashboard/");
-    const isAllowedPath = publicPreviewBypassPaths.has(location.pathname) || isDashboardPath;
-
-    if (isAllowedPath || isBetaAccessGranted()) {
-      return;
-    }
-
-    navigate("/beta-entry", { replace: true, state: { from: location.pathname } });
-  }, [location.pathname, navigate]);
-
-  return null;
 }
 
 function ScrollRestorationBoundary() {
