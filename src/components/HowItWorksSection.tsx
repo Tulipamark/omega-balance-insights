@@ -22,6 +22,7 @@ const eyebrowByLang: Record<Lang, string> = {
   de: "So funktioniert es",
   fr: "Comment cela fonctionne",
   it: "Come funziona",
+  ar: "كيف يعمل",
 };
 
 const bodyByLang: Record<Lang, string> = {
@@ -33,6 +34,7 @@ const bodyByLang: Record<Lang, string> = {
   de: "Vier klare Schritte von der Probenahme zu Hause bis zum Bericht und Follow-up.",
   fr: "Quatre étapes claires, du prélèvement à domicile au rapport et au suivi.",
   it: "Quattro passaggi chiari dal prelievo a casa al report e al follow-up.",
+  ar: "أربع خطوات واضحة من أخذ العينة في المنزل إلى التقرير والمتابعة.",
 };
 
 const HowItWorksSection = ({ lang }: HowItWorksSectionProps) => {

@@ -78,6 +78,26 @@
     scroll-behavior: smooth;
   }
 
+  html[dir="rtl"] body {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .lg\:text-left {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .md\:text-left {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .text-left {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .origin-left {
+    transform-origin: right;
+  }
+
   .brand-omega {
     --background: 42 34% 97%;
     --foreground: 144 19% 15%;

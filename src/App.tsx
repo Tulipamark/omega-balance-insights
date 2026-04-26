@@ -68,7 +68,7 @@ const App = () => (
             <Route path="/dashboard/partner/legal" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerLegalAcceptancePage /></ProtectedDashboardRoute>} />
             <Route path="/dashboard/partner" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
             <Route path="/dashboard/partner/:section" element={<ProtectedDashboardRoute requiredRole="partner"><PartnerDashboardPage /></ProtectedDashboardRoute>} />
-            <Route path="/:lang" element={<InsideBalancePage />} />
+            <Route path="/:lang" element={<LocalizedHomePage />} />
             <Route path="/partners" element={<PartnerPage lang={defaultLang} />} />
             <Route path="/:lang/partners" element={<PartnerPageWrapper />} />
             <Route path="*" element={<NotFound />} />
@@ -89,6 +89,17 @@ function LocalizedInsideBalanceRedirect() {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
   return <Navigate to={currentLang === defaultLang ? "/" : `/${currentLang}`} replace />;
+}
+
+function LocalizedHomePage() {
+  const { lang } = useParams<{ lang: string }>();
+  const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
+
+  if (currentLang === "ar") {
+    return <Index lang={currentLang} />;
+  }
+
+  return <InsideBalancePage lang={currentLang} />;
 }
 
 function ReferralTrackingBoundary() {

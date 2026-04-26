@@ -22,11 +22,13 @@ const transcriptLabelByLang: Record<Lang, string> = {
   de: "Videotranskript",
   fr: "Transcription video",
   it: "Trascrizione video",
+  ar: "نص الفيديو",
 };
 
 const DEFAULT_VIDEO_SRC = "/avatar-video.mp4";
 const localizedVideoLanguages = new Set<Lang>(["da", "de", "en", "fi", "fr", "it", "no"]);
 const videoFallbackByLang: Partial<Record<Lang, string>> = {
+  ar: "/videos/avatar-video-en.mp4",
   de: "/videos/avatar-video-en.mp4",
   fi: "/videos/avatar-video-en.mp4",
   fr: "/videos/avatar-video-en.mp4",
@@ -34,6 +36,10 @@ const videoFallbackByLang: Partial<Record<Lang, string>> = {
 };
 
 function getLocalizedVideoSrc(lang: Lang) {
+  if (lang === "ar") {
+    return videoFallbackByLang.ar!;
+  }
+
   if (!localizedVideoLanguages.has(lang)) {
     return DEFAULT_VIDEO_SRC;
   }

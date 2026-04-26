@@ -82,6 +82,12 @@ const confirmCopyByLang: Record<Lang, { title: string; description: string; conf
     confirmLabel: "OK, continua",
     cancelLabel: "Resta qui",
   },
+  ar: {
+    title: "ستنتقل الآن إلى Zinzino",
+    description: "تتم الخطوة التالية لدى Zinzino، حيث يتم التعامل مع الطلب والتوصيل.",
+    confirmLabel: "حسنا، تابع",
+    cancelLabel: "البقاء هنا",
+  },
 };
 
 const reasonCopy: Record<string, string> = {

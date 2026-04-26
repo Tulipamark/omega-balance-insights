@@ -16,6 +16,7 @@ const ariaLabelByLang: Record<Lang, string> = {
   de: "Sprache wählen",
   fr: "Choisir la langue",
   it: "Seleziona lingua",
+  ar: "اختر اللغة",
 };
 
 const LanguageSwitcher = ({ lang }: LanguageSwitcherProps) => {

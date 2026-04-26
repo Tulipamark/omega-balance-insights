@@ -247,3 +247,81 @@ omegaBalanceV4Content.it = {
   faqTitle: "FAQ",
   faq: [{ question: "Che cos'è BalanceTest?", answer: "BalanceTest è un test domiciliare dried blood spot che misura 11 acidi grassi e fornisce sei marcatori di salute." }, { question: "Dove viene analizzato il campione?", answer: "Il campione viene analizzato in modo anonimo da Vitas a Oslo, laboratorio indipendente certificato GMP." }, { question: "Quanto tempo ci vuole per ricevere il risultato?", answer: "I risultati vengono comunicati entro un massimo di tre settimane." }, { question: "Perché 3:1 è mostrato come obiettivo?", answer: "3:1 è presentato qui come obiettivo ottimale nella scala. I confronti esatti con le medie di popolazione richiedono fonti approvate prima del go-live." }, { question: "Posso fare un follow-up più avanti?", answer: "Sì. Il modello si basa su un nuovo test dopo 120 giorni e sul confronto dei valori." }],
 };
+
+omegaBalanceV4Content.ar = {
+  hero: {
+    eyebrow: "OmegaBalance",
+    title: "اعرف توازن الأوميغا لديك وأنت مقيم في السويد",
+    body: "اختبار منزلي يعتمد على بقعة دم مجففة يوضح توازن أوميغا-6 إلى أوميغا-3 لديك بناء على قياس فعلي. مناسب لمن يريد فهما هادئا وواضحا، بلغة قريبة من الجالية العربية والخليجية في السويد.",
+    primaryCta: "المتابعة إلى الاختبار في السويد",
+    secondaryCta: "كيف يعمل الاختبار",
+    trustRow: [
+      { text: "تحليل لدى Vitas في أوسلو", verification: "verified" },
+      { text: "عدة اختبار بعلامة CE", verification: "verified" },
+      { text: "مناسب للمقيمين في السويد", verification: "verified" },
+    ],
+    ratioLabel: "مقياس مرجعي",
+    ratioBars: [
+      {
+        label: "متوسط الشمال الأوروبي",
+        value: "VERIFY_CLAIM",
+        widthClass: "w-full",
+        colorClass: "bg-[#c4714f]",
+        claim: { text: "يحتاج متوسط الشمال الأوروبي إلى مصدر معتمد قبل النشر.", verification: "required" },
+      },
+      {
+        label: "الهدف المثالي",
+        value: "3:1",
+        widthClass: "w-[38%]",
+        colorClass: "bg-[#4e9b6f]",
+      },
+    ],
+    ratioCta: "اكتشف قيمتك",
+  },
+  normalizing: {
+    body: {
+      text: "مع تغيّر نمط الحياة بعد الانتقال إلى السويد، من السهل الاعتماد على الإحساس أو العادات الغذائية القديمة أو النصائح العامة. القياس يعطيك نقطة بداية أوضح، من دون مبالغة أو تخويف.",
+      verification: "verified",
+    },
+  },
+  markers: {
+    eyebrow: "ما الذي يقيسه الاختبار",
+    title: "ستة مؤشرات تجعل النتيجة أكثر فائدة",
+    body: "لا يكتفي الاختبار بنسبة واحدة، بل يقدم أساسا أوسع يساعدك على فهم العلاقة بين القيم المختلفة.",
+    items: [
+      { title: "توازن أوميغا-6:3", body: { text: "يوضح العلاقة بين أوميغا-6 وأوميغا-3 في الدم.", verification: "verified" } },
+      { title: "مؤشر أوميغا-3", body: { text: "يعطي قياسا أوضح لحصة أوميغا-3 في الأغشية.", verification: "required" } },
+      { title: "قيمة الحماية", body: { text: "يعرض قيمة مركبة مستخدمة في تقرير BalanceTest.", verification: "required" } },
+      { title: "مرونة غشاء الخلية", body: { text: "يصف تركيب الأغشية ضمن نموذج التقرير.", verification: "required" } },
+      { title: "القوة الذهنية", body: { text: "يستخدم كتسمية في التقرير، ولا ينبغي ربطه بادعاءات إدراكية من دون مصدر معتمد.", verification: "required" } },
+      { title: "مؤشر AA", body: { text: "يعرض جزءا من ملف الأحماض الدهنية المرتبط بالتوازن في التقرير.", verification: "required" } },
+    ],
+  },
+  process: {
+    title: "كيف تسير العملية",
+    steps: [
+      { label: "01", title: "خذ العينة في المنزل", body: { text: "يتم الاختبار في منزلك في السويد عبر وضع بضع قطرات من الدم على بطاقة الاختبار.", verification: "verified" } },
+      { label: "02", title: "أرسل العينة", body: { text: "بعد أن تجف العينة، ترسلها باستخدام الظرف المرفق حسب التعليمات.", verification: "verified" } },
+      { label: "03", title: "تحليل لدى Vitas", body: { text: "تحلل عينة الدم دون إظهار الهوية لدى Vitas، وهو مختبر تعاقدي مستقل حاصل على اعتماد GMP في أوسلو، النرويج.", verification: "verified" } },
+      { label: "04", title: "استلم التقرير وتابع", body: { text: "تحصل على تقرير يتضمن ستة مؤشرات صحية، ويمكنك طلب شرح هادئ للنتيجة أو إعادة الاختبار بعد 120 يوما للمقارنة.", verification: "verified" } },
+    ],
+  },
+  trust: {
+    title: "لماذا يبدو هذا النهج موثوقا",
+    items: [
+      { title: "اختبار DBS منزلي", body: { text: "BalanceTest هو اختبار منزلي يعتمد على بقعة دم مجففة.", verification: "verified" } },
+      { title: "ستة مؤشرات صحية", body: { text: "يقدم التقرير ستة مؤشرات صحية تمنح الخطوة التالية سياقا أوضح.", verification: "verified" } },
+      { title: "حتى ثلاثة أسابيع", body: { text: "يتم إبلاغ النتائج خلال مدة تصل إلى ثلاثة أسابيع.", verification: "verified" } },
+      { title: "سياق مبني على قاعدة بيانات", body: { text: "تصف Zinzino قاعدة بياناتها بأنها من أكبر قواعد البيانات من نوعها.", verification: "verified" } },
+    ],
+  },
+  faqTitle: "أسئلة شائعة",
+  faq: [
+    { question: "ما هو BalanceTest؟", answer: "BalanceTest هو اختبار منزلي يعتمد على بقعة دم مجففة، ويقيس 11 حمضا دهنيا ويقدم ستة مؤشرات صحية. هذه الصفحة موجهة للعرب المقيمين في السويد، مع لغة واضحة وسياق محلي." },
+    { question: "أين يتم تحليل العينة؟", answer: "تحلل العينة دون إظهار الهوية لدى Vitas في أوسلو، وهو مختبر تعاقدي مستقل حاصل على اعتماد GMP." },
+    { question: "كم يستغرق الحصول على النتيجة؟", answer: "يتم إبلاغ النتائج خلال مدة تصل إلى ثلاثة أسابيع." },
+    { question: "لماذا يظهر 3:1 كهدف؟", answer: "يستخدم 3:1 هنا كهدف مثالي على المقياس. أي مقارنة دقيقة مع متوسطات السكان تحتاج إلى مصادر معتمدة قبل النشر." },
+    { question: "هل يمكنني فهم التقرير إذا كانت لغته غير مألوفة؟", answer: "نعم. يمكن شرح النتيجة بهدوء وبأسلوب عربي واضح، مع احترام أن بعض المصطلحات الطبية أو السويدية قد تحتاج إلى تبسيط." },
+    { question: "هل يمكنني المتابعة لاحقا؟", answer: "نعم. يعتمد النموذج على إمكانية إعادة الاختبار بعد 120 يوما ومقارنة القيم." },
+  ],
+};

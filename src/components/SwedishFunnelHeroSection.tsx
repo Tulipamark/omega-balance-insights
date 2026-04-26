@@ -24,6 +24,7 @@ const pendingLabelByLang: Record<Lang, string> = {
   de: "Wird geöffnet...",
   fr: "Ouverture...",
   it: "Apertura...",
+  ar: "جار الفتح...",
 };
 
 const genericErrorByLang: Record<Lang, string> = {
@@ -35,6 +36,7 @@ const genericErrorByLang: Record<Lang, string> = {
   de: "Der Link konnte gerade nicht geöffnet werden.",
   fr: "Le lien n'a pas pu être ouvert pour le moment.",
   it: "Il link non può essere aperto i detta moment.",
+  ar: "تعذر فتح الرابط حاليا.",
 };
 
 const fallbackPrimaryCtaByLang: Partial<Record<Lang, string>> = {
@@ -54,6 +56,7 @@ const insideBalanceLabelByLang: Partial<Record<Lang, string>> = {
   de: "InsideBalance",
   fr: "InsideBalance",
   it: "InsideBalance",
+  ar: "InsideBalance",
 };
 
 const referencePointByLang: Record<Lang, string> = {
@@ -65,6 +68,7 @@ const referencePointByLang: Record<Lang, string> = {
   de: "Referenzpunkt",
   fr: "Point de référence",
   it: "Punto di riferimento",
+  ar: "نقطة مرجعية",
 };
 
 const platformHomePath = (lang: Lang) => (lang === "sv" ? "/" : `/${lang}`);

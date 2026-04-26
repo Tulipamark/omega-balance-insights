@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { Lang } from "@/lib/i18n";
+import { isRtlLang, type Lang } from "@/lib/i18n";
 
 export const SITE_URL = "https://insidebalance.eu";
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-insidebalance.png`;
@@ -150,6 +150,7 @@ export function useSeo({
     }
 
     document.documentElement.lang = lang;
+    document.documentElement.dir = isRtlLang(lang) ? "rtl" : "ltr";
     document.title = title;
 
     upsertMeta('meta[name="description"]', { name: "description", content: description });

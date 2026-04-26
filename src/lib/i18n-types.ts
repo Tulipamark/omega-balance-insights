@@ -1,4 +1,4 @@
-export type Lang = "sv" | "no" | "da" | "fi" | "en" | "de" | "fr" | "it";
+export type Lang = "sv" | "no" | "da" | "fi" | "en" | "de" | "fr" | "it" | "ar";
 
 export type Copy = {
   hero: {

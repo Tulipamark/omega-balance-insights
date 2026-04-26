@@ -11,7 +11,7 @@ import OmegaMarkersSection from "@/components/omega/OmegaMarkersSection";
 import VideoSection from "@/components/VideoSection";
 import { omegaBalanceV4Content } from "@/content/omega-balance-v4";
 import { resolveContent } from "@/content/v4-types";
-import { Lang, defaultLang, isSupportedLang } from "@/lib/i18n";
+import { Lang, defaultLang, isSupportedLang, supportedLangs } from "@/lib/i18n";
 import { buildAlternates, useSeo } from "@/lib/seo";
 
 type IndexProps = {
@@ -31,7 +31,7 @@ const Index = ({ lang: explicitLang }: IndexProps) => {
     title: `${copy.hero.title} | OmegaBalance`,
     description: copy.hero.body,
     path: currentPath,
-    alternates: buildAlternates((lang) => omegaBalancePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    alternates: buildAlternates((lang) => omegaBalancePath(lang), supportedLangs),
     faq: copy.faq,
   });
 

@@ -17,6 +17,7 @@ const pendingLabelByLang: Record<Lang, string> = {
   de: "Wird geöffnet...",
   fr: "Ouverture...",
   it: "Apertura...",
+  ar: "جار الفتح...",
 };
 
 const genericErrorByLang: Record<Lang, string> = {
@@ -28,6 +29,7 @@ const genericErrorByLang: Record<Lang, string> = {
   de: "Der Link konnte gerade nicht geöffnet werden.",
   fr: "Le lien n'a pas pu être ouvert pour le moment.",
   it: "Il link non può essere aperto in questo momento.",
+  ar: "تعذر فتح الرابط حاليا.",
 };
 
 const primaryCtaByLang: Partial<Record<Lang, string>> = {

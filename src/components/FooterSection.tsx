@@ -21,6 +21,7 @@ const legalLabel = {
   de: "Rechtliches",
   fr: "Juridique",
   it: "Legale",
+  ar: "قانوني",
 } satisfies Record<Lang, string>;
 
 const accessLabel = {
@@ -32,6 +33,7 @@ const accessLabel = {
   de: "Login",
   fr: "Acces",
   it: "Accesso",
+  ar: "الدخول",
 } satisfies Record<Lang, string>;
 
 const backofficeLabel = {
@@ -43,6 +45,7 @@ const backofficeLabel = {
   de: "Partnerportal",
   fr: "Portail partenaire",
   it: "Portale partner",
+  ar: "بوابة الشركاء",
 } satisfies Record<Lang, string>;
 
 const adminLabel = {
@@ -54,6 +57,7 @@ const adminLabel = {
   de: "Admin",
   fr: "Admin",
   it: "Admin",
+  ar: "الإدارة",
 } satisfies Record<Lang, string>;
 
 const operatedByLabel = {
@@ -65,6 +69,7 @@ const operatedByLabel = {
   de: "Betrieben von Per Lundstr\u00f6m",
   fr: "Exploite par Per Lundstr\u00f6m",
   it: "Gestito da Per Lundstr\u00f6m",
+  ar: "يديرها Per Lundström",
 } satisfies Record<Lang, string>;
 
 const independentPartnerLabel = {
@@ -76,6 +81,7 @@ const independentPartnerLabel = {
   de: "Unabh\u00e4ngiger Partner von Zinzino",
   fr: "Partenaire independant de Zinzino",
   it: "Partner indipendente di Zinzino",
+  ar: "شريك مستقل مع Zinzino",
 } satisfies Record<Lang, string>;
 
 const swedishFooterLineByBrand: Partial<Record<string, string>> = {
@@ -94,6 +100,7 @@ const brandIntroByLang = {
   de: "Ein ruhigerer und vertrauensw\u00fcrdigerer Weg in testbasierte Gesundheit.",
   fr: "Une approche plus sereine et plus credible de la sante basee sur les tests.",
   it: "Un approccio pi\u00f9 calmo e credibile alla salute basata sui test.",
+  ar: "مدخل أكثر هدوءا ومصداقية إلى الصحة المبنية على الاختبار.",
 } satisfies Record<Lang, string>;
 
 const socialLinks = {
