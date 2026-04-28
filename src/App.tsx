@@ -96,10 +96,6 @@ function LocalizedHomePage() {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = (isSupportedLang(lang) ? lang : defaultLang) as Lang;
 
-  if (currentLang === "ar") {
-    return <Index lang={currentLang} />;
-  }
-
   return <InsideBalancePage lang={currentLang} />;
 }
 

@@ -35,6 +35,7 @@ const heroSupportByLang: Record<Lang, { eyebrow: string; omegaBody: string; gutB
   de: { eyebrow: "Zuerst messen", omegaBody: "ist der klarste Startpunkt.", gutBody: "funktioniert später als ergänzender Weg." },
   fr: { eyebrow: "Mesurez d'abord", omegaBody: "est le point de départ le plus clair.", gutBody: "fonctionne ensuite comme un parcours complémentaire." },
   it: { eyebrow: "Misura prima", omegaBody: "è il punto di partenza più chiaro.", gutBody: "funziona poi come percorso complementare." },
+  ar: { eyebrow: "ابدأ بالقياس", omegaBody: "هو أوضح نقطة بداية.", gutBody: "يمكن أن يكون مسارا مكملا لاحقا." },
 };
 
 const nextStepPreviewByLang: Record<Lang, { eyebrow: string; cards: { title: string; body: string }[] }> = {
@@ -46,6 +47,7 @@ const nextStepPreviewByLang: Record<Lang, { eyebrow: string; cards: { title: str
   de: { eyebrow: "Was der nächste Schritt umfasst", cards: [{ title: "Test", body: "Ein konkreter Ausgangswert statt Vermutungen." }, { title: "Bericht", body: "Mehr Klarheit über das, was du tatsächlich misst." }, { title: "Orientierung", body: "Ein ruhigerer nächster Schritt, wenn du die Ausgangslage besser kennst." }, { title: "Follow-up", body: "Die Möglichkeit, Veränderungen über Zahlen im Zeitverlauf zu verfolgen." }] },
   fr: { eyebrow: "Ce que comprend l'étape suivante", cards: [{ title: "Test", body: "Une valeur de départ concrète au lieu d'hypothèses." }, { title: "Rapport", body: "Un contexte plus clair autour de ce que vous mesurez réellement." }, { title: "Orientation", body: "Une suite plus sereine lorsque vous comprenez mieux votre point de départ." }, { title: "Suivi", body: "La possibilité de suivre l'évolution en chiffres dans le temps." }] },
   it: { eyebrow: "Cosa comprende il passo successivo", cards: [{ title: "Test", body: "Un valore iniziale concreto invece di supposizioni." }, { title: "Report", body: "Un contesto più chiaro su ciò che stai realmente misurando." }, { title: "Guida", body: "Un passo successivo più tranquillo quando capisci meglio il punto di partenza." }, { title: "Follow-up", body: "La possibilità di seguire il cambiamento in numeri nel tempo." }] },
+  ar: { eyebrow: "ماذا تحتوي الخطوة التالية", cards: [{ title: "اختبار", body: "قيمة واضحة تبدأ منها بدلا من التخمين." }, { title: "تقرير", body: "سياق أوضح حول ما تقيسه فعلا." }, { title: "شرح", body: "خطوة أهدأ عندما تفهم الصورة الحالية." }, { title: "متابعة", body: "إمكانية متابعة التغيير بالأرقام مع الوقت." }] },
 };
 
 const primaryCtaClass =
@@ -71,7 +73,7 @@ const InsideBalancePage = ({ lang: explicitLang }: InsideBalancePageProps) => {
     title: `${copy.hero.title} | InsideBalance`,
     description: copy.hero.body,
     path: homePath,
-    alternates: buildAlternates((lang) => platformHomePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    alternates: buildAlternates((lang) => platformHomePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it", "ar"]),
     schema: [buildOrganizationSchema()],
     faq: copy.faq,
   });

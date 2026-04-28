@@ -336,3 +336,72 @@ insideBalanceV4Content.it = {
   faqTitle: "FAQ",
   faq: [{ question: "InsideBalance vende il test direttamente?", answer: "No. InsideBalance guida e spiega. Quando passi all'ordine, l'acquisto avviene tramite Zinzino." }, { question: "Dove viene analizzato il campione di sangue?", answer: "Il campione di sangue viene analizzato in modo anonimo da Vitas, laboratorio indipendente certificato GMP a Oslo, in Norvegia." }, { question: "Cosa ricevo dopo il test?", answer: "Ricevi un report che ti offre una base più chiara per comprendere il risultato e quale potrebbe essere un passo successivo ragionevole." }, { question: "Devo iniziare con GutBalance?", answer: "Non necessariamente. All'interno di InsideBalance, OmegaBalance è al momento il punto di partenza più chiaro. GutBalance è un percorso complementare." }, { question: "Perché iniziare misurando?", answer: "Perché un valore concreto rende più facile capire il punto di partenza prima di provare a cambiare qualcosa." }],
 };
+
+insideBalanceV4Content.ar = {
+  nav: { home: "InsideBalance", omega: "OmegaBalance", gut: "GutBalance", process: "كيف يعمل", trust: "لماذا هذا الأسلوب", faq: "أسئلة شائعة", contact: "تواصل معنا" },
+  hero: {
+    eyebrow: "InsideBalance",
+    title: "مدخل أهدأ لفهم الصحة من خلال القياس",
+    body: "InsideBalance يساعدك على فهم من أين تبدأ. نشرح مسارات الاختبار، ونوضح ما تعنيه الخطوة التالية، ثم نرشدك بهدوء إلى OmegaBalance أو GutBalance بدون تعقيد زائد.",
+    primaryCta: "ابدأ مع OmegaBalance",
+    secondaryCta: "اقرأ كيف يعمل",
+    trustRow: [
+      { text: "تحليل لدى Vitas في أوسلو", verification: "verified" },
+      { text: "عدة اختبار بعلامة CE", verification: "verified" },
+      { text: "شرح أوضح قبل القرار", verification: "verified" },
+    ],
+  },
+  normalizingBand: {
+    text: "كثيرون يحاولون تحسين صحتهم قبل أن يعرفوا ماذا تظهر الأرقام فعلا. القياس يجعل البداية أوضح، ويساعدك على التمييز بين النصائح العامة وما قد يكون مناسبا لك.",
+    verification: "verified",
+  },
+  process: {
+    eyebrow: "كيف يعمل",
+    title: "ابدأ ببساطة. افهم الرقم. ثم قرر الخطوة التالية.",
+    body: "InsideBalance موجود ليجعل الطريق أوضح من البداية.",
+    steps: [
+      { title: "اختر المسار المناسب", body: { text: "ابدأ بالسؤال الأوضح الآن: توازن الأوميغا أولا، أو GutBalance كمسار مكمل لاحقا.", verification: "verified" } },
+      { title: "خذ العينة في البيت", body: { text: "BalanceTest يعتمد على بقعة دم مجففة ويمكن عمله في المنزل حسب التعليمات.", verification: "verified" } },
+      { title: "تحليل لدى Vitas", body: { text: "تحلل عينة الدم دون إظهار الهوية لدى Vitas، وهو مختبر مستقل حاصل على اعتماد GMP في أوسلو، النرويج.", verification: "verified" } },
+      { title: "افهم التقرير بهدوء", body: { text: "النتيجة تعطيك نقطة بداية أوضح، ويمكن شرح التقرير بطريقة أبسط إذا كانت المصطلحات غير مألوفة.", verification: "verified" } },
+    ],
+  },
+  trust: {
+    eyebrow: "لماذا هذا الأسلوب",
+    title: "واضح، جاد، ومبني على القياس",
+    body: "الثقة هنا تأتي من الوضوح والبنية، لا من الوعود الكبيرة.",
+    items: [
+      { title: "قيمة فعلية", body: { text: "الاختبار يعطيك قيمة مقاسة، وليس مجرد تخمين.", verification: "verified" } },
+      { title: "تحليل مستقل", body: { text: "يتم التحليل في مختبر Vitas المستقل في أوسلو.", verification: "verified" } },
+      { title: "سياق أوضح", body: { text: "التقرير يساعدك على فهم النتيجة ضمن سياق أوسع.", verification: "verified" } },
+      { title: "متابعة بالأرقام", body: { text: "بعد 120 يوما يمكن إعادة الاختبار ومقارنة التغيير بالأرقام.", verification: "verified" } },
+    ],
+  },
+  nextStep: {
+    eyebrow: "الخطوة التالية",
+    title: "اختر المسار الأنسب لك الآن",
+    body: "InsideBalance يشرح ويوجه. عند قرار الطلب، تتم عملية الشراء عبر Zinzino.",
+    cards: [
+      { title: "OmegaBalance", body: "لمن يريد البدء بتوازن أوميغا-6 إلى أوميغا-3 والحصول على قياس أول واضح.", cta: "اذهب إلى OmegaBalance", href: "/ar/omega-balance", label: "ابدأ هنا" },
+      { title: "GutBalance", body: "لمن يريد لاحقا إضافة مسار عن صحة الأمعاء والتمثيل الغذائي وبعض إشارات المناعة.", cta: "استكشف GutBalance", href: "/ar/gut-balance", label: "مسار مكمل" },
+    ],
+  },
+  transparency: {
+    text: "InsideBalance يشرح ويوجه. الشراء يتم عبر Zinzino. قد نحصل على عمولة عند إتمام الشراء، لكن هذا لا يغير طريقة شرحنا للمسار.",
+    verification: "verified",
+  },
+  closing: {
+    title: "ابدأ من أوضح خطوة أولى",
+    body: "إذا كنت تريد قيمة أولى واضحة، فإن OmegaBalance هو البداية الطبيعية داخل InsideBalance.",
+    cta: "افتح OmegaBalance",
+    href: "/ar/omega-balance",
+  },
+  faqTitle: "أسئلة شائعة",
+  faq: [
+    { question: "هل يبيع InsideBalance الاختبار مباشرة؟", answer: "لا. InsideBalance يشرح ويوجه. عند الانتقال إلى الطلب، تتم عملية الشراء عبر Zinzino." },
+    { question: "أين يتم تحليل عينة الدم؟", answer: "تحلل عينة الدم دون إظهار الهوية لدى Vitas، وهو مختبر مستقل حاصل على اعتماد GMP في أوسلو، النرويج." },
+    { question: "ماذا أحصل بعد الاختبار؟", answer: "تحصل على تقرير يساعدك على فهم النتيجة وما قد تكون الخطوة التالية المناسبة." },
+    { question: "هل يجب أن أبدأ مع GutBalance؟", answer: "لا. داخل InsideBalance نعرض OmegaBalance كنقطة بداية أوضح الآن، وGutBalance كمسار مكمل لاحقا." },
+    { question: "لماذا أبدأ بالقياس؟", answer: "لأن الرقم الواضح يساعدك على فهم وضعك الحالي قبل أن تحاول تغيير شيء." },
+  ],
+};
