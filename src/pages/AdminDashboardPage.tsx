@@ -1388,6 +1388,8 @@ const AdminDashboardPage = () => {
     const hasVisitEventBalance = visitsLastSevenDays === 0 || eventsLastSevenDays > 0;
     const hasCleanSubmits = funnelEventSummary.submitFailures === 0;
     const hasAttributionSignal = sessionJourneySummary.length === 0 || unattributedSessions < sessionJourneySummary.length;
+    const hasOnlyDirectRecentSessions = sessionJourneySummary.length > 0 && unattributedSessions === sessionJourneySummary.length;
+    const strongestLandingPath = trafficActionSummary.strongestLanding?.[0] || latestEvent?.page_path || "/omega-balance";
     const score = [
       hasRecentTracking,
       hasVisitEventBalance,
@@ -1402,6 +1404,14 @@ const AdminDashboardPage = () => {
           ? "Bevaka"
           : "Åtgärda";
     const statusVariant = status === "Stabil" ? "default" : status === "Bevaka" ? "secondary" : "destructive";
+    const statusMeaning =
+      status === "Stabil"
+        ? "Systemet tar emot signaler och inga tydliga blockerare syns just nu."
+        : status === "Bevaka"
+          ? hasOnlyDirectRecentSessions
+            ? "Mätningen fungerar, men senaste sessionsresorna är direkttrafik utan referral. Det är inte akut, men ni behöver testa partnerflödet eller driva mer partnerdelad trafik."
+            : "Mätningen fungerar, men en signal behöver följas upp innan ni kan kalla läget helt stabilt."
+          : "En eller flera grundsignaler saknas. Börja med åtgärden överst innan ni tolkar resten av dashboarden.";
     const checks = [
       {
         label: "Eventflöde",
@@ -1444,17 +1454,62 @@ const AdminDashboardPage = () => {
       },
     ];
     const nextActions = [
-      !hasRecentTracking ? "Gör ett livebesök med samtycke och kontrollera att page_viewed och landing_viewed dyker upp." : null,
-      !hasVisitEventBalance ? "Jämför Edge Function track-visit mot funnel-eventflödet så visits inte blir ensamma utan händelser." : null,
-      !hasCleanSubmits ? "Öppna senaste funnel-events och följ upp lead_form_submit_failed eller partner_form_submit_failed." : null,
-      sessionsWithoutAction >= 3 ? "Förtydliga första CTA på starkaste landningen; flera sessioner surfar utan att klicka vidare." : null,
-      missingLinkPartners.length ? "Ta partnerlänkarna först, annars kan partners dela trafik som inte leder rätt." : null,
-    ].filter((item): item is string => Boolean(item));
+      !hasRecentTracking
+        ? {
+            title: "Testa att tracking lever",
+            why: "Admin saknar färska funnel-events.",
+            action: "Öppna startsidan i ett nytt fönster, acceptera cookies och kontrollera att page_viewed eller landing_viewed dyker upp inom några minuter.",
+          }
+        : null,
+      !hasVisitEventBalance
+        ? {
+            title: "Synka visit och event",
+            why: "Visits finns, men eventflödet verkar inte följa med.",
+            action: "Jämför Edge Function track-visit mot track-funnel-event så visits inte blir ensamma utan händelser.",
+          }
+        : null,
+      !hasCleanSubmits
+        ? {
+            title: "Fixa formulärfel först",
+            why: "Det finns submit-fel i funnel-events.",
+            action: "Öppna trafikvyn, filtrera senaste lead_form_submit_failed eller partner_form_submit_failed och testa samma formulär manuellt.",
+          }
+        : null,
+      hasOnlyDirectRecentSessions
+        ? {
+            title: "Verifiera partner-attribution",
+            why: `${formatWholeNumber(unattributedSessions)} av ${formatWholeNumber(sessionJourneySummary.length)} senaste sessionsresor saknar referral.`,
+            action: "Skicka en partnerlänk med ?ref=ELIN2026 eller en riktig partnerkod, acceptera cookies och kontrollera att nästa session får referral i admin.",
+          }
+        : null,
+      sessionsWithoutAction >= 3
+        ? {
+            title: "Gör landningen mer handlingsdriven",
+            why: `${formatWholeNumber(sessionsWithoutAction)} senaste sessioner surfade utan CTA, formulär eller submit.`,
+            action: `Öppna ${strongestLandingPath}, gör primär CTA tydligare ovanför vikningen och se till att nästa steg inte kräver letande.`,
+          }
+        : null,
+      missingLinkPartners.length
+        ? {
+            title: "Komplettera partnerlänkar",
+            why: `${formatWholeNumber(missingLinkPartners.length)} partner saknar någon viktig ZZ-länk.`,
+            action: "Öppna partnerlistan och fyll i test-, shop- och partnerlänk innan de delar trafik externt.",
+          }
+        : null,
+    ].filter((item): item is { title: string; why: string; action: string } => Boolean(item));
+    const fallbackActions = [
+      {
+        title: "Kör ett liveflöde",
+        why: "Systemet ser stabilt ut i admin.",
+        action: "Testa ett riktigt besök från landning till CTA och formulär, och jämför sedan admin mot Supabase.",
+      },
+    ];
 
     return {
       score,
       status,
       statusVariant,
+      statusMeaning,
       latestEvent,
       minutesSinceEvent,
       visitsLastSevenDays,
@@ -1462,9 +1517,9 @@ const AdminDashboardPage = () => {
       missingLinkPartners,
       sessionsWithoutAction,
       checks,
-      nextActions: nextActions.length ? nextActions : ["Systemet ser stabilt ut. Nästa steg är att testa med riktiga liveflöden och jämföra admin mot Supabase."],
+      nextActions: nextActions.length ? nextActions : fallbackActions,
     };
-  }, [data?.kpis?.funnelDaily, funnelEventRows, funnelEventSummary.submitFailures, partnerRows, recentFunnelEvents, sessionJourneySummary]);
+  }, [data?.kpis?.funnelDaily, funnelEventRows, funnelEventSummary.submitFailures, partnerRows, recentFunnelEvents, sessionJourneySummary, trafficActionSummary.strongestLanding]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -2052,6 +2107,10 @@ const AdminDashboardPage = () => {
                         ? `Senaste signal: ${getFunnelEventLabel(trackingHealth.latestEvent.event_name)} på ${trackingHealth.latestEvent.page_path}.`
                         : "Inga funnel-events syns i adminpayloaden ännu."}
                     </p>
+                    <div className="mt-4 rounded-2xl border border-border/70 bg-white/85 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Vad betyder statusen?</p>
+                      <p className="mt-2 text-sm leading-6 text-foreground/85">{trackingHealth.statusMeaning}</p>
+                    </div>
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-xl border border-border/70 bg-white/85 p-3">
                         <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Visits 7 dagar</p>
@@ -2091,11 +2150,16 @@ const AdminDashboardPage = () => {
                     </div>
 
                     <div className="rounded-2xl border border-border/70 bg-white/95 p-4 shadow-card">
-                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa åtgärder</p>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
                       <div className="mt-3 grid gap-2">
                         {trackingHealth.nextActions.map((action) => (
-                          <div key={action} className="rounded-xl border border-border/70 bg-secondary/20 px-3.5 py-3 text-sm leading-6 text-foreground/85">
-                            {action}
+                          <div key={action.title} className="rounded-xl border border-border/70 bg-secondary/20 px-3.5 py-3">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <p className="text-sm font-semibold text-foreground">{action.title}</p>
+                              <Badge variant="outline" className="rounded-full px-3 py-1">Nästa steg</Badge>
+                            </div>
+                            <p className="mt-2 text-sm leading-6 text-subtle">{action.why}</p>
+                            <p className="mt-2 text-sm leading-6 text-foreground/90">{action.action}</p>
                           </div>
                         ))}
                       </div>
