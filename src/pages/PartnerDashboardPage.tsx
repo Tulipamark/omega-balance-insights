@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import { buildCampaignUrl, officialCampaignChannels } from "@/lib/campaign-links";
+import { formatStockholmDateTime } from "@/lib/dates";
 import { getPartnerDashboardData, getPortalAccessState, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
 import type { Lead, PartnerDashboardData } from "@/lib/omega-types";
 import { hasAcceptedPortalLegal } from "@/lib/portal-legal";
@@ -26,7 +27,7 @@ import { hasAcceptedPortalLegal } from "@/lib/portal-legal";
 type PartnerActionMode = "copy-link" | "links" | "leads" | "legal";
 
 function formatDate(value: string) {
-  return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  return formatStockholmDateTime(value);
 }
 
 function formatWholeNumber(value: number) {

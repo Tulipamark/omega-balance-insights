@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { buildCampaignUrl, getReadableTrafficSource, officialCampaignChannels } from "@/lib/campaign-links";
+import { formatStockholmDateTime } from "@/lib/dates";
 import { GROWTH_PROJECTION_SCENARIOS, runGrowthProjection } from "@/lib/growth-projection";
 import { getAdminDashboardData, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
 import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
@@ -48,7 +49,7 @@ const EMPTY_PARTNER_ROWS: AdminPartnerRow[] = [];
 const EMPTY_PARTNER_APPLICATIONS: Lead[] = [];
 
 function formatDate(value: string) {
-  return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  return formatStockholmDateTime(value);
 }
 
 function formatPercent(value: number) {
