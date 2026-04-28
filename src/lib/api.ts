@@ -91,6 +91,66 @@ async function getProtectedFunctionHeaders() {
   };
 }
 
+function getStringValue(value: unknown) {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+async function readFunctionErrorContext(error: unknown) {
+  const context = (error as { context?: unknown })?.context;
+
+  if (!context) {
+    return null;
+  }
+
+  if (context instanceof Response) {
+    return context.text().catch(() => null);
+  }
+
+  if (typeof context === "object") {
+    const candidate = context as {
+      text?: unknown;
+      json?: unknown;
+      error?: unknown;
+      message?: unknown;
+    };
+
+    if (typeof candidate.text === "function") {
+      return (candidate.text as () => Promise<string> | string)();
+    }
+
+    if (typeof candidate.json === "function") {
+      const parsed = await (candidate.json as () => Promise<unknown> | unknown)();
+      if (parsed && typeof parsed === "object") {
+        const payload = parsed as { error?: unknown; message?: unknown };
+        return getStringValue(payload.error) || getStringValue(payload.message);
+      }
+    }
+
+    return getStringValue(candidate.error) || getStringValue(candidate.message);
+  }
+
+  return getStringValue(context);
+}
+
+async function getFunctionErrorMessage(error: unknown, fallback: string) {
+  const raw = await readFunctionErrorContext(error).catch(() => null);
+
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as { error?: unknown; message?: unknown };
+      const detailedMessage = getStringValue(parsed.error) || getStringValue(parsed.message);
+
+      if (detailedMessage) {
+        return detailedMessage;
+      }
+    } catch {
+      return raw.trim();
+    }
+  }
+
+  return getStringValue((error as { message?: unknown })?.message) || fallback;
+}
+
 export async function trackClickAndGetRedirect(payload: TrackClickRequest): Promise<TrackClickResponse> {
   const { supabaseUrl, headers } = await getPublicFunctionHeaders();
 
@@ -224,26 +284,7 @@ export async function onboardPartnerFromLead(
   });
 
   if (error) {
-    const context = (error as { context?: Response | null }).context;
-
-    if (context) {
-      const raw = await context.text().catch(() => "");
-
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw) as { error?: string; message?: string };
-          const detailedMessage = parsed.error?.trim() || parsed.message?.trim();
-
-          if (detailedMessage) {
-            throw new Error(detailedMessage);
-          }
-        } catch {
-          throw new Error(raw.trim());
-        }
-      }
-    }
-
-    throw new Error(error.message || "Kunde inte skapa teammedlem just nu.");
+    throw new Error(await getFunctionErrorMessage(error, "Kunde inte skapa teammedlem just nu."));
   }
 
   if (!data?.ok) {
@@ -299,26 +340,7 @@ export async function updatePartnerLeadReview(
   });
 
   if (error) {
-    const context = (error as { context?: Response | null }).context;
-
-    if (context) {
-      const raw = await context.text().catch(() => "");
-
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw) as { error?: string; message?: string };
-          const detailedMessage = parsed.error?.trim() || parsed.message?.trim();
-
-          if (detailedMessage) {
-            throw new Error(detailedMessage);
-          }
-        } catch {
-          throw new Error(raw.trim());
-        }
-      }
-    }
-
-    throw new Error(error.message || "Kunde inte uppdatera granskningen just nu.");
+    throw new Error(await getFunctionErrorMessage(error, "Kunde inte uppdatera granskningen just nu."));
   }
 
   if (!data?.ok) {
