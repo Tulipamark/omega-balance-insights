@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
+import { buildCampaignUrl, officialCampaignChannels } from "@/lib/campaign-links";
 import { getPartnerDashboardData, getPortalAccessState, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
 import type { Lead, PartnerDashboardData } from "@/lib/omega-types";
 import { hasAcceptedPortalLegal } from "@/lib/portal-legal";
@@ -1085,6 +1086,12 @@ const PartnerDashboardPage = () => {
   const showNetwork = currentSection === "network";
   const showJourney = currentSection === "journey";
   const partnerLink = data ? `${window.location.origin}/?ref=${data.partner.referral_code}` : "";
+  const partnerCampaignLinks = data
+    ? officialCampaignChannels.map((channel) => ({
+        ...channel,
+        url: buildCampaignUrl(window.location.origin, channel, data.partner.referral_code),
+      }))
+    : [];
   const customerShareText = partnerLink
     ? `Hej! Jag testar just nu ett enkelt upplägg för mätbar hälsa. Om du vill kan du kika här när du har två minuter: ${partnerLink}`
     : "";
@@ -2107,6 +2114,32 @@ const PartnerDashboardPage = () => {
                 <Button type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm" onClick={openZzLinksDialog}>
                   Redigera mina länkar
                 </Button>
+              </div>
+
+              <div className="mb-4 rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Spårade sociala länkar</p>
+                <p className="mt-2 text-sm leading-6 text-subtle">
+                  Använd dessa när du delar i sociala kanaler. Då kan admin se om trafiken kom från Instagram eller Facebook.
+                </p>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  {partnerCampaignLinks.map((item) => (
+                    <div key={item.key} className="rounded-[1rem] border border-border/70 bg-secondary/20 p-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-medium text-foreground">{item.label}</p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-8 rounded-lg px-3 text-sm"
+                          onClick={() => navigator.clipboard.writeText(item.url)}
+                        >
+                          <Copy className="mr-2 h-3.5 w-3.5" />
+                          Kopiera
+                        </Button>
+                      </div>
+                      <p className="mt-2 break-all text-xs leading-5 text-subtle">{item.url}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">

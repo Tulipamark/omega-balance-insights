@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { buildCampaignUrl, getReadableTrafficSource, officialCampaignChannels } from "@/lib/campaign-links";
 import { GROWTH_PROJECTION_SCENARIOS, runGrowthProjection } from "@/lib/growth-projection";
 import { getAdminDashboardData, signOutPortalUser, updatePartnerZzLinks } from "@/lib/omega-data";
 import { buildFunnelStageTimingInsights, buildPartnerLifecycleTimingInsights } from "@/lib/funnel-stage-timing";
@@ -1430,11 +1431,19 @@ const AdminDashboardPage = () => {
     };
 
     return {
-      topSources: aggregate((row) => row.source || "Direkt"),
+      topSources: aggregate((row) => getReadableTrafficSource(row.source, row.medium, row.campaign)),
       topCampaigns: aggregate((row) => row.campaign || "Utan kampanj"),
       topLandingPages: aggregate((row) => row.landing_page || "/"),
     };
   }, [data?.kpis?.sourceMixDaily]);
+  const officialCampaignLinks = useMemo(
+    () =>
+      officialCampaignChannels.map((channel) => ({
+        ...channel,
+        url: buildCampaignUrl("https://insidebalance.eu/", channel),
+      })),
+    [],
+  );
   const sessionSourceSummary = useMemo(() => {
     const buckets = new Map<string, { sessions: number; surfOnly: number; ctaDriven: number; formDriven: number }>();
 
@@ -3189,6 +3198,31 @@ const AdminDashboardPage = () => {
                   description="Senaste attribuerade besök uppdelade på källa, medium och landningssida."
                 >
                   <DataTruthBadges isDemo={isDemo} />
+                  <div className="mb-4 rounded-2xl border border-border/70 bg-white/85 p-4">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Officiella delningslänkar</p>
+                    <p className="mt-2 text-sm leading-6 text-subtle">
+                      Använd dessa på InsideBalance egna kanaler. Då syns trafiken som Instagram/Facebook istället för Direkt / okänd.
+                    </p>
+                    <div className="mt-4 grid gap-3 md:grid-cols-2">
+                      {officialCampaignLinks.map((item) => (
+                        <div key={item.key} className="rounded-2xl border border-border/70 bg-secondary/20 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-sm font-medium text-foreground">{item.label}</p>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-8 rounded-lg px-3 text-sm"
+                              onClick={() => navigator.clipboard.writeText(item.url)}
+                            >
+                              <Copy className="mr-2 h-3.5 w-3.5" />
+                              Kopiera
+                            </Button>
+                          </div>
+                          <p className="mt-2 break-all text-xs leading-5 text-subtle">{item.url}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   <div className="mb-4 grid gap-4 md:grid-cols-3">
                     <div className="rounded-2xl border border-border/70 bg-secondary/20 p-4">
                       <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Toppkällor</p>
@@ -3234,7 +3268,7 @@ const AdminDashboardPage = () => {
                       key: `${row.day}-${row.source}-${row.medium}`,
                       title: formatDate(row.day),
                       rows: [
-                        { label: "Källa", value: row.source },
+                        { label: "Källa", value: getReadableTrafficSource(row.source, row.medium, row.campaign) },
                         { label: "Medium", value: row.medium },
                         { label: "Kampanj", value: row.campaign },
                         { label: "Landningssida", value: row.landing_page },
@@ -3248,7 +3282,7 @@ const AdminDashboardPage = () => {
                       columns={["Dag", "Källa", "Medium", "Kampanj", "Landningssida", "Besök"]}
                       rows={(data.kpis.sourceMixDaily || []).slice(0, 8).map((row) => [
                         <span key={`${row.day}-${row.source}-day`} className="font-medium text-foreground">{formatDate(row.day)}</span>,
-                        <span key={`${row.day}-${row.source}-source`}>{row.source}</span>,
+                        <span key={`${row.day}-${row.source}-source`}>{getReadableTrafficSource(row.source, row.medium, row.campaign)}</span>,
                         <span key={`${row.day}-${row.source}-medium`}>{row.medium}</span>,
                         <span key={`${row.day}-${row.source}-campaign`}>{row.campaign}</span>,
                         <span key={`${row.day}-${row.source}-landing`}>{row.landing_page}</span>,
