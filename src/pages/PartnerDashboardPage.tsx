@@ -22,6 +22,8 @@ import { getPartnerDashboardData, getPortalAccessState, signOutPortalUser, updat
 import type { Lead, PartnerDashboardData } from "@/lib/omega-types";
 import { hasAcceptedPortalLegal } from "@/lib/portal-legal";
 
+type PartnerActionMode = "copy-link" | "links" | "leads" | "legal";
+
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("sv-SE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
@@ -890,6 +892,108 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
   };
 }
 
+function buildPartnerRealityCheck(data: PartnerDashboardData, legalAccepted: boolean, actionMode?: PartnerActionMode) {
+  const linksReady = hasRequiredZzLinks(data);
+  const hasReferralCode = data.partner.referral_code.trim().length > 0;
+  const hasTraffic = data.metrics.clicks > 0;
+  const hasLeads = data.leads.length > 0 || data.partnerLeads.length > 0;
+  const hasResult = data.customers.length > 0 || data.metrics.directPartners > 0;
+  const hasFirstLine = data.metrics.directPartners > 0;
+  const readyChecks = [legalAccepted, linksReady, hasReferralCode, hasTraffic, hasLeads || hasResult].filter(Boolean).length;
+  const status =
+    !legalAccepted || !linksReady || !hasReferralCode
+      ? "Sätt grunden"
+      : hasResult || hasFirstLine
+        ? "Bygg vidare"
+        : hasTraffic || hasLeads
+          ? "Följ upp"
+          : "Skapa första signalen";
+  const statusVariant = status === "Sätt grunden" ? "destructive" : status === "Bygg vidare" ? "default" : "secondary";
+  const checks = [
+    {
+      label: "Legal",
+      ok: legalAccepted,
+      value: legalAccepted ? "Klar" : "Saknas",
+      note: legalAccepted ? "Portalvillkor är godkända." : "Partnern ska inte börja arbeta externt innan legal är klar.",
+    },
+    {
+      label: "ZZ-länkar",
+      ok: linksReady,
+      value: linksReady ? "Klara" : "Saknas",
+      note: linksReady ? "Test-, shop- och partnerlänk finns." : "Utan länkar kan trafiken se bra ut men inte leda rätt.",
+    },
+    {
+      label: "Delbar länk",
+      ok: hasReferralCode,
+      value: hasReferralCode ? "Aktiv" : "Saknas",
+      note: hasReferralCode ? "Partnerns Omega-länk kan attribuera trafik." : "Referral-kod saknas, så attribution blir svag.",
+    },
+    {
+      label: "Trafik",
+      ok: hasTraffic,
+      value: formatWholeNumber(data.metrics.clicks),
+      note: hasTraffic ? "Någon har använt länken." : "Ingen registrerad trafik ännu. Första jobb är att få en person att klicka.",
+    },
+    {
+      label: "Leads/resultat",
+      ok: hasLeads || hasResult,
+      value: formatWholeNumber(data.leads.length + data.partnerLeads.length + data.customers.length + data.metrics.directPartners),
+      note: hasLeads || hasResult ? "Det finns något att följa upp." : "Ännu inget lead, kundsignal eller partnerstart.",
+    },
+    {
+      label: "First line",
+      ok: hasFirstLine,
+      value: formatWholeNumber(data.metrics.directPartners),
+      note: hasFirstLine ? "Duplicering kan börja följas upp." : "Det här är senare. Först behövs egen rörelse.",
+    },
+  ];
+  const nextAction =
+    !legalAccepted
+      ? {
+          title: "Godkänn legal innan något annat",
+          body: "Detta är ett riktigt blockerande steg, inte bara en rekommendation.",
+          mode: "legal" as const,
+          label: "Öppna legal",
+        }
+      : !linksReady
+        ? {
+            title: "Lägg in ZZ-länkarna",
+            body: "Annars kan partnern dela en fin länk utan att flödet leder till rätt Zinzino-destinationer.",
+            mode: "links" as const,
+            label: "Öppna länkar",
+          }
+        : !hasTraffic
+          ? {
+              title: "Skicka länken till en person",
+              body: "Det första beviset är inte mer dashboard. Det är ett riktigt klick från en riktig person.",
+              mode: "copy-link" as const,
+              label: "Kopiera min länk",
+            }
+          : hasLeads
+            ? {
+                title: "Följ upp varmaste lead",
+                body: "När signal finns är nästa risk att den blir liggande utan kontakt.",
+                mode: "leads" as const,
+                label: "Öppna leads",
+              }
+            : {
+                title: "Fortsätt mot första lead",
+                body: "Trafik finns, men den har inte blivit lead ännu. Dela mer personligt och följ upp svar.",
+                mode: actionMode || ("copy-link" as const),
+                label: actionMode === "leads" ? "Öppna leads" : "Kopiera min länk",
+              };
+
+  return {
+    status,
+    statusVariant,
+    readyChecks,
+    totalChecks: checks.length,
+    checks,
+    nextAction,
+    truthNote: "Det här kortet blandar bara tre saker: faktisk data från systemet, tydliga blockerare och en rekommenderad nästa handling. Det visar inte officiell Zinzino-rank, payout eller kompplan.",
+  };
+}
+
 const PartnerDashboardPage = () => {
   const { section } = useParams<{ section?: string }>();
   const [searchParams] = useSearchParams();
@@ -905,14 +1009,18 @@ const PartnerDashboardPage = () => {
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [leadFilter, setLeadFilter] = useState<"all" | "urgent" | "active" | "new">("all");
   const [partnerLeadFilter, setPartnerLeadFilter] = useState<"all" | "urgent" | "active" | "new">("all");
-  const partnerQuery = useQuery({
-    queryKey: ["partner-dashboard", partnerId],
-    queryFn: () => getPartnerDashboardData(partnerId),
-  });
   const accessQuery = useQuery({
     queryKey: ["portal-access", "partner-view"],
     queryFn: getPortalAccessState,
     enabled: isSupabaseConfigured && !isDemo,
+  });
+  const viewingAsAdmin = accessQuery.data?.portalUser?.role === "admin";
+  const effectivePartnerId = viewingAsAdmin ? partnerId : undefined;
+  const shouldLoadPartnerDashboard = isDemo || !partnerId || accessQuery.isFetched;
+  const partnerQuery = useQuery({
+    queryKey: ["partner-dashboard", effectivePartnerId],
+    queryFn: () => getPartnerDashboardData(effectivePartnerId),
+    enabled: shouldLoadPartnerDashboard,
   });
   const zzLinksMutation = useMutation({
     mutationFn: () =>
@@ -966,7 +1074,7 @@ const PartnerDashboardPage = () => {
   const journey = data ? buildPartnerFirst30Days(data, legalAccepted) : null;
   const fastStartJourney = data ? buildFastStartJourney(data, legalAccepted) : null;
   const firstActionEngine = data ? buildFirstActionEngine(data, legalAccepted) : null;
-  const viewingAsAdmin = accessQuery.data?.portalUser?.role === "admin";
+  const realityCheck = data ? buildPartnerRealityCheck(data, legalAccepted, firstActionEngine?.actionMode) : null;
   const legalActionHref = viewingAsAdmin ? "/dashboard/admin/legal-preview" : "/dashboard/partner/legal";
   const showOverview = currentSection === "overview";
   const showLeads = currentSection === "leads";
@@ -1147,13 +1255,13 @@ const PartnerDashboardPage = () => {
     setActionFeedback(message);
   };
 
-  const renderActionButton = (mode: "copy-link" | "links" | "leads" | "legal", label: string) => {
+  const renderActionButton = (mode: PartnerActionMode, label: string, className = "h-8 rounded-lg px-3 text-sm") => {
     if (mode === "copy-link") {
       return (
         <Button
           type="button"
           variant="outline"
-          className="h-8 rounded-lg px-3 text-sm"
+          className={className}
           onClick={() => {
             void navigator.clipboard.writeText(partnerLink);
             markActionStarted();
@@ -1167,7 +1275,7 @@ const PartnerDashboardPage = () => {
 
     if (mode === "links") {
       return (
-        <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+        <Button asChild type="button" variant="outline" className={className}>
           <Link to="/dashboard/partner/links">{label}</Link>
         </Button>
       );
@@ -1175,14 +1283,14 @@ const PartnerDashboardPage = () => {
 
     if (mode === "leads") {
       return (
-        <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+        <Button asChild type="button" variant="outline" className={className}>
           <Link to="/dashboard/partner/leads">{label}</Link>
         </Button>
       );
     }
 
     return (
-      <Button asChild type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm">
+      <Button asChild type="button" variant="outline" className={className}>
         <Link to={legalActionHref}>{label}</Link>
       </Button>
     );
@@ -1267,6 +1375,59 @@ const PartnerDashboardPage = () => {
             </div>
           ) : null}
 
+          {showOverview && realityCheck ? (
+            <DashboardSection
+              title="Partner 2.0-koll"
+              description="Det här är verklighetskontrollen: vad som faktiskt är klart, vad som bara är signal, och vad partnern ska göra härnäst."
+            >
+              <div className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
+                <div className="rounded-[1.2rem] border border-border/70 bg-secondary/25 p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Arbetsläge</p>
+                      <p className="mt-3 text-3xl font-semibold text-foreground">{realityCheck.status}</p>
+                    </div>
+                    <Badge variant={realityCheck.statusVariant} className="rounded-full px-3 py-1">
+                      {realityCheck.readyChecks}/{realityCheck.totalChecks} klara
+                    </Badge>
+                  </div>
+                  <div className="mt-5 rounded-[1rem] border border-border/70 bg-white/90 p-4">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Gör detta nu</p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">{realityCheck.nextAction.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-subtle">{realityCheck.nextAction.body}</p>
+                    <div className="mt-4">
+                      {renderActionButton(
+                        realityCheck.nextAction.mode,
+                        realityCheck.nextAction.label,
+                        "h-10 rounded-xl px-4 text-sm",
+                      )}
+                    </div>
+                  </div>
+                  <p className="mt-4 rounded-[1rem] border border-border/70 bg-white/70 p-3.5 text-xs leading-5 text-subtle">
+                    {realityCheck.truthNote}
+                  </p>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {realityCheck.checks.map((check) => (
+                    <div key={check.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{check.label}</p>
+                          <p className="mt-2 text-lg font-semibold text-foreground">{check.value}</p>
+                        </div>
+                        <Badge variant={check.ok ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                          {check.ok ? "OK" : "Ej klar"}
+                        </Badge>
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-subtle">{check.note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </DashboardSection>
+          ) : null}
+
           {showOverview && journey ? (
             <DashboardSection
               title="Din Fast Start"
@@ -1286,6 +1447,23 @@ const PartnerDashboardPage = () => {
                       type="button"
                       className="h-11 w-full rounded-xl px-5 text-sm shadow-sm sm:w-auto"
                       onClick={() => {
+                        const actionMode = firstActionEngine?.actionMode ?? primaryActionCard?.mode ?? "copy-link";
+
+                        if (actionMode === "links") {
+                          openZzLinksDialog();
+                          return;
+                        }
+
+                        if (actionMode === "legal") {
+                          window.location.href = legalActionHref;
+                          return;
+                        }
+
+                        if (actionMode === "leads") {
+                          window.location.href = "/dashboard/partner/leads";
+                          return;
+                        }
+
                         void navigator.clipboard.writeText(partnerLink);
                         markActionStarted();
                       }}
