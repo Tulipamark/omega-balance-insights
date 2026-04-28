@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { t, type Lang } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
@@ -39,9 +39,12 @@ const primaryCtaByLang: Partial<Record<Lang, string>> = {
 };
 
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+const withCurrentSearch = (path: string, search: string) => `${path}${search}`;
 
 const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
   const copy = t(lang);
+  const location = useLocation();
+  const contactPathWithAttribution = withCurrentSearch(contactPath(lang), location.search);
 
   return (
     <section className="px-4 py-12 md:px-6 md:py-14">
@@ -62,7 +65,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
           <div className="relative mx-auto mt-8 max-w-sm">
             {lang === "ar" ? (
               <Link
-                to={contactPath(lang)}
+                to={contactPathWithAttribution}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"
                 onClick={() => {
                   void logFunnelEvent("closing_cta_clicked", {

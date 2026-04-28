@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
 import { logFunnelEvent } from "@/lib/funnel-events";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
@@ -39,9 +39,12 @@ const fallbackPrimaryCtaByLang: Partial<Record<Lang, string>> = {
 };
 
 const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+const withCurrentSearch = (path: string, search: string) => `${path}${search}`;
 
 const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
   const copy = t(lang);
+  const location = useLocation();
+  const contactPathWithAttribution = withCurrentSearch(contactPath(lang), location.search);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -64,7 +67,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{copy.sticky.text}</p>
             {lang === "ar" ? (
               <Link
-                to={contactPath(lang)}
+                to={contactPathWithAttribution}
                 className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
                 onClick={() => {
                   void logFunnelEvent("sticky_cta_clicked", {
