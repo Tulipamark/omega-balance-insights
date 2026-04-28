@@ -1368,6 +1368,103 @@ const AdminDashboardPage = () => {
       actionQueue,
     };
   }, [sessionSourceSummary, trafficSourceSummary.topLandingPages]);
+  const trackingHealth = useMemo(() => {
+    const latestEvent = recentFunnelEvents[0] || null;
+    const newestEventMs = latestEvent ? new Date(latestEvent.created_at).getTime() : null;
+    const minutesSinceEvent =
+      newestEventMs && Number.isFinite(newestEventMs)
+        ? Math.max(0, Math.round((Date.now() - newestEventMs) / (1000 * 60)))
+        : null;
+    const missingLinkPartners = partnerRows.filter((partner) => !partner.zzLinksReady);
+    const unattributedSessions = sessionJourneySummary.filter((session) => !session.referralCode).length;
+    const sessionsWithoutAction = sessionJourneySummary.filter(
+      (session) => !session.reachedForm && !session.submittedForm && session.ctaClicks === 0,
+    ).length;
+    const visitsLastSevenDays = (data?.kpis?.funnelDaily || [])
+      .slice(0, 7)
+      .reduce((sum, row) => sum + row.visits, 0);
+    const eventsLastSevenDays = funnelEventRows.reduce((sum, row) => sum + row.events, 0);
+    const hasRecentTracking = Boolean(latestEvent);
+    const hasVisitEventBalance = visitsLastSevenDays === 0 || eventsLastSevenDays > 0;
+    const hasCleanSubmits = funnelEventSummary.submitFailures === 0;
+    const hasAttributionSignal = sessionJourneySummary.length === 0 || unattributedSessions < sessionJourneySummary.length;
+    const score = [
+      hasRecentTracking,
+      hasVisitEventBalance,
+      hasCleanSubmits,
+      hasAttributionSignal,
+      missingLinkPartners.length === 0,
+    ].filter(Boolean).length;
+    const status =
+      score >= 5
+        ? "Stabil"
+        : score >= 3
+          ? "Bevaka"
+          : "Åtgärda";
+    const statusVariant = status === "Stabil" ? "default" : status === "Bevaka" ? "secondary" : "destructive";
+    const checks = [
+      {
+        label: "Eventflöde",
+        value: hasRecentTracking ? "Aktivt" : "Saknas",
+        ok: hasRecentTracking,
+        note: minutesSinceEvent === null ? "Inga funnel-events i senaste payloaden." : `Senaste event för ${formatWholeNumber(minutesSinceEvent)} min sedan.`,
+      },
+      {
+        label: "Visit/event-balans",
+        value: hasVisitEventBalance ? "Rimlig" : "Obalans",
+        ok: hasVisitEventBalance,
+        note:
+          visitsLastSevenDays === 0
+            ? "Inga visits senaste sju dagarna att jämföra."
+            : `${formatWholeNumber(visitsLastSevenDays)} visits och ${formatWholeNumber(eventsLastSevenDays)} events senaste sju dagarna.`,
+      },
+      {
+        label: "Formulärfel",
+        value: hasCleanSubmits ? "Rent" : formatWholeNumber(funnelEventSummary.submitFailures),
+        ok: hasCleanSubmits,
+        note: hasCleanSubmits
+          ? "Inga registrerade submit-fel i funnel-events."
+          : "Det finns formulärfel som bör följas upp i trafikvyn.",
+      },
+      {
+        label: "Attribution",
+        value: sessionJourneySummary.length ? `${formatWholeNumber(unattributedSessions)} direkta` : "Väntar",
+        ok: hasAttributionSignal,
+        note: sessionJourneySummary.length
+          ? `${formatWholeNumber(sessionJourneySummary.length - unattributedSessions)} av ${formatWholeNumber(sessionJourneySummary.length)} sessioner har referral.`
+          : "Inga sessionsresor att läsa ännu.",
+      },
+      {
+        label: "Partnerlänkar",
+        value: missingLinkPartners.length ? formatWholeNumber(missingLinkPartners.length) : "Klara",
+        ok: missingLinkPartners.length === 0,
+        note: missingLinkPartners.length
+          ? "Partner saknar test-, shop- eller partnerlänk."
+          : "Alla aktiva partnerkort har sina ZZ-länkar.",
+      },
+    ];
+    const nextActions = [
+      !hasRecentTracking ? "Gör ett livebesök med samtycke och kontrollera att page_viewed och landing_viewed dyker upp." : null,
+      !hasVisitEventBalance ? "Jämför Edge Function track-visit mot funnel-eventflödet så visits inte blir ensamma utan händelser." : null,
+      !hasCleanSubmits ? "Öppna senaste funnel-events och följ upp lead_form_submit_failed eller partner_form_submit_failed." : null,
+      sessionsWithoutAction >= 3 ? "Förtydliga första CTA på starkaste landningen; flera sessioner surfar utan att klicka vidare." : null,
+      missingLinkPartners.length ? "Ta partnerlänkarna först, annars kan partners dela trafik som inte leder rätt." : null,
+    ].filter((item): item is string => Boolean(item));
+
+    return {
+      score,
+      status,
+      statusVariant,
+      latestEvent,
+      minutesSinceEvent,
+      visitsLastSevenDays,
+      eventsLastSevenDays,
+      missingLinkPartners,
+      sessionsWithoutAction,
+      checks,
+      nextActions: nextActions.length ? nextActions : ["Systemet ser stabilt ut. Nästa steg är att testa med riktiga liveflöden och jämföra admin mot Supabase."],
+    };
+  }, [data?.kpis?.funnelDaily, funnelEventRows, funnelEventSummary.submitFailures, partnerRows, recentFunnelEvents, sessionJourneySummary]);
   const selectedGrowthCompassRow =
     growthCompassRows.find((row) => row.partnerId === selectedGrowthCompassPartnerId) || growthCompassRows[0] || null;
   const showOverview = currentSection === "overview";
@@ -1933,6 +2030,79 @@ const AdminDashboardPage = () => {
                   icon={<Users className="h-5 w-5" />}
                 />
               </div> : null}
+
+              {showOverview ? <DashboardSection
+                title="Systemhälsa och tracking"
+                description="En snabb kontroll av om admin går att lita på i dag: eventflöde, samtyckesstyrd mätning, attribution och partnerlänkar."
+              >
+                <DataTruthBadges isDemo={isDemo} interpretive />
+                <div className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
+                  <div className="rounded-2xl border border-border/70 bg-secondary/25 p-5">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">2.0-status</p>
+                        <p className="mt-3 text-3xl font-semibold text-foreground">{trackingHealth.status}</p>
+                      </div>
+                      <Badge variant={trackingHealth.statusVariant} className="rounded-full px-3 py-1">
+                        {trackingHealth.score}/5 kontroller
+                      </Badge>
+                    </div>
+                    <p className="mt-4 text-sm leading-6 text-subtle">
+                      {trackingHealth.latestEvent
+                        ? `Senaste signal: ${getFunnelEventLabel(trackingHealth.latestEvent.event_name)} på ${trackingHealth.latestEvent.page_path}.`
+                        : "Inga funnel-events syns i adminpayloaden ännu."}
+                    </p>
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-xl border border-border/70 bg-white/85 p-3">
+                        <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Visits 7 dagar</p>
+                        <p className="mt-2 text-2xl font-semibold text-foreground">{formatWholeNumber(trackingHealth.visitsLastSevenDays)}</p>
+                      </div>
+                      <div className="rounded-xl border border-border/70 bg-white/85 p-3">
+                        <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Events 7 dagar</p>
+                        <p className="mt-2 text-2xl font-semibold text-foreground">{formatWholeNumber(trackingHealth.eventsLastSevenDays)}</p>
+                      </div>
+                      <div className="rounded-xl border border-border/70 bg-white/85 p-3">
+                        <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Surf utan action</p>
+                        <p className="mt-2 text-2xl font-semibold text-foreground">{formatWholeNumber(trackingHealth.sessionsWithoutAction)}</p>
+                      </div>
+                      <div className="rounded-xl border border-border/70 bg-white/85 p-3">
+                        <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Saknade länkar</p>
+                        <p className="mt-2 text-2xl font-semibold text-foreground">{formatWholeNumber(trackingHealth.missingLinkPartners.length)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {trackingHealth.checks.map((check) => (
+                        <div key={check.label} className="rounded-2xl border border-border/70 bg-white/90 p-4 shadow-card">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{check.label}</p>
+                              <p className="mt-2 text-lg font-semibold text-foreground">{check.value}</p>
+                            </div>
+                            <Badge variant={check.ok ? "secondary" : "destructive"} className="rounded-full px-3 py-1">
+                              {check.ok ? "OK" : "Se över"}
+                            </Badge>
+                          </div>
+                          <p className="mt-3 text-sm leading-6 text-subtle">{check.note}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="rounded-2xl border border-border/70 bg-white/95 p-4 shadow-card">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Nästa åtgärder</p>
+                      <div className="mt-3 grid gap-2">
+                        {trackingHealth.nextActions.map((action) => (
+                          <div key={action} className="rounded-xl border border-border/70 bg-secondary/20 px-3.5 py-3 text-sm leading-6 text-foreground/85">
+                            {action}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </DashboardSection> : null}
 
               {showOverview && partnerFunnelInsights ? <DashboardSection
                 title="Partnerfunnel i nuläget"
@@ -4236,4 +4406,3 @@ const AdminDashboardPage = () => {
 };
 
 export default AdminDashboardPage;
-

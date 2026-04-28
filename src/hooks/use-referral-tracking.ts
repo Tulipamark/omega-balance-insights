@@ -8,7 +8,7 @@ const PAGE_VIEW_CACHE_KEY = "omega_page_view_cache";
 const PAGE_VIEW_DEDUP_WINDOW_MS = 1000 * 30;
 
 function shouldTrackPageView(pathname: string) {
-  return !pathname.startsWith("/dashboard") && !pathname.startsWith("/auth/");
+  return !pathname.startsWith("/dashboard") && !pathname.startsWith("/auth/") && pathname !== "/beta-entry";
 }
 
 function shouldLogPageView(pathname: string, search: string) {
@@ -43,7 +43,6 @@ export function useReferralTracking() {
   const { hasAcceptedOptionalTracking } = useCookieConsent();
 
   useEffect(() => {
-    void captureReferralVisit(location.pathname, location.search);
     updateStoredReferralTouch(location.pathname, location.search);
 
     if (
@@ -54,6 +53,7 @@ export function useReferralTracking() {
       return;
     }
 
+    void captureReferralVisit(location.pathname, location.search);
     void logFunnelEvent("page_viewed", {
       pathname: location.pathname,
       search: location.search,

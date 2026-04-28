@@ -40,6 +40,7 @@ const App = () => (
         <CookieConsentBoundary />
         <ScrollRestorationBoundary />
         <RecoveryRedirectBoundary />
+        <PrivateRouteMetaBoundary />
         <ReferralTrackingBoundary />
         <React.Suspense fallback={<RouteLoadingState />}>
           <Routes>
@@ -104,6 +105,59 @@ function LocalizedHomePage() {
 
 function ReferralTrackingBoundary() {
   useReferralTracking();
+  return null;
+}
+
+function upsertHeadMeta(selector: string, attributes: Record<string, string>) {
+  let element = document.head.querySelector<HTMLMetaElement>(selector);
+
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
+  }
+
+  Object.entries(attributes).forEach(([key, value]) => {
+    element!.setAttribute(key, value);
+  });
+}
+
+function upsertHeadLink(selector: string, attributes: Record<string, string>) {
+  let element = document.head.querySelector<HTMLLinkElement>(selector);
+
+  if (!element) {
+    element = document.createElement("link");
+    document.head.appendChild(element);
+  }
+
+  Object.entries(attributes).forEach(([key, value]) => {
+    element!.setAttribute(key, value);
+  });
+}
+
+function isPrivateRoute(pathname: string) {
+  return pathname.startsWith("/dashboard") || pathname.startsWith("/auth/") || pathname === "/beta-entry";
+}
+
+function PrivateRouteMetaBoundary() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (!isPrivateRoute(location.pathname)) {
+      return;
+    }
+
+    const canonicalPath = `${window.location.origin}${location.pathname}`;
+
+    document.title = "OmegaBalance Backoffice | InsideBalance";
+    upsertHeadMeta('meta[name="robots"]', { name: "robots", content: "noindex, nofollow" });
+    upsertHeadMeta('meta[name="description"]', {
+      name: "description",
+      content: "Privat inloggning och instrumentpanel för OmegaBalance.",
+    });
+    upsertHeadLink('link[rel="canonical"]', { rel: "canonical", href: canonicalPath });
+    document.head.querySelectorAll('link[data-seo-alt="true"]').forEach((node) => node.remove());
+  }, [location.pathname]);
+
   return null;
 }
 
