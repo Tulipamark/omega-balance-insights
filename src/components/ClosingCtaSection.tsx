@@ -45,6 +45,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
   const copy = t(lang);
   const location = useLocation();
   const contactPathWithAttribution = withCurrentSearch(contactPath(lang), location.search);
+  const routeArabicCtasToContact = false;
 
   return (
     <section className="px-4 py-12 md:px-6 md:py-14">
@@ -63,7 +64,7 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-primary-foreground/86 sm:text-lg sm:leading-8">{copy.cta.subtitle}</p>
           </div>
           <div className="relative mx-auto mt-8 max-w-sm">
-            {lang === "ar" ? (
+            {routeArabicCtasToContact ? (
               <Link
                 to={contactPathWithAttribution}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"

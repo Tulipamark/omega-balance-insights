@@ -45,6 +45,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
   const copy = t(lang);
   const location = useLocation();
   const contactPathWithAttribution = withCurrentSearch(contactPath(lang), location.search);
+  const routeArabicCtasToContact = false;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
         >
           <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{copy.sticky.text}</p>
-            {lang === "ar" ? (
+            {routeArabicCtasToContact ? (
               <Link
                 to={contactPathWithAttribution}
                 className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"

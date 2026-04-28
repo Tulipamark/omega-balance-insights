@@ -85,6 +85,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
   const content = resolveContent(omegaBalanceV4Content, lang);
   const currentPath = omegaHomePath(lang);
   const contactPathWithAttribution = withCurrentSearch(contactPath(lang), location.search);
+  const routeArabicCtasToContact = false;
 
   const renderRatioValue = (value: string, isClaimPending: boolean) => {
     if (!isClaimPending) {
@@ -193,7 +194,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               </p>
 
               <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 lg:mx-0 lg:items-start sm:mt-10">
-                {lang === "ar" ? (
+                {routeArabicCtasToContact ? (
                   <Link
                     to={contactPathWithAttribution}
                     className="btn-primary w-full text-center"
@@ -270,7 +271,7 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     </div>
                   ))}
                 </div>
-                {lang === "ar" ? (
+                {routeArabicCtasToContact ? (
                   <Link
                     to={contactPathWithAttribution}
                     className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-base font-medium text-white shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
