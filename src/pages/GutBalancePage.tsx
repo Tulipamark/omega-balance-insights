@@ -170,9 +170,8 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               <div className="mx-auto mt-8 max-w-sm lg:mx-0">
                 <TrackedOutboundButton
                   lang={currentLang}
-                  destinationType="test"
+                  destinationType="gut_test"
                   fallbackHref={getZinzinoGutTestUrl(currentLang)}
-                  preferFallbackHref
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
                   pendingLabel={pendingLabelByLang[currentLang]}
                   errorMessages={{ generic: genericErrorByLang[currentLang] }}
@@ -258,9 +257,8 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
               </Link>
               <TrackedOutboundButton
                 lang={currentLang}
-                destinationType="test"
+                destinationType="gut_test"
                 fallbackHref={getZinzinoGutTestUrl(currentLang)}
-                preferFallbackHref
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/30 bg-transparent px-6 py-3.5 text-base font-medium text-white transition hover:bg-white/10"
                 pendingLabel={pendingLabelByLang[currentLang]}
                 errorMessages={{ generic: genericErrorByLang[currentLang] }}

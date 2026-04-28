@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-type DestinationType = "test" | "shop" | "partner" | "consultation";
+type DestinationType = "test" | "gut_test" | "shop" | "partner" | "consultation";
 type ErrorCode = "missing_referral" | "partner_not_found" | "partner_not_verified" | "destination_missing" | "consultation_url_missing" | "invalid_type";
 
 type RequestBody = {
@@ -20,6 +20,7 @@ type PartnerRow = {
   referral_code: string;
   consultation_url?: string | null;
   zinzino_test_url?: string | null;
+  zinzino_gut_test_url?: string | null;
   zinzino_shop_url?: string | null;
   zinzino_partner_url?: string | null;
   zinzino_consultation_url?: string | null;
@@ -72,6 +73,10 @@ function getDestinationUrl(partner: PartnerRow, type: DestinationType) {
     return partner.zinzino_test_url;
   }
 
+  if (type === "gut_test") {
+    return partner.zinzino_gut_test_url || partner.zinzino_test_url;
+  }
+
   if (type === "shop") {
     return partner.zinzino_shop_url;
   }
@@ -101,12 +106,22 @@ function successResponse(destinationUrl: string) {
 async function fetchPartnerByReferralCode(supabase: ReturnType<typeof createClient>, referralCode: string) {
   const modernQuery = await supabase
     .from("partners")
-    .select("id, referral_code, consultation_url, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, zinzino_consultation_url, status")
+    .select("id, referral_code, consultation_url, zinzino_test_url, zinzino_gut_test_url, zinzino_shop_url, zinzino_partner_url, zinzino_consultation_url, status")
     .eq("referral_code", referralCode)
     .maybeSingle<PartnerRow>();
 
   if (!modernQuery.error || !isSchemaMismatchError(modernQuery.error)) {
     return modernQuery;
+  }
+
+  const legacyQuery = await supabase
+    .from("partners")
+    .select("id, referral_code, consultation_url, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, zinzino_consultation_url, status")
+    .eq("referral_code", referralCode)
+    .maybeSingle<PartnerRow>();
+
+  if (!legacyQuery.error || !isSchemaMismatchError(legacyQuery.error)) {
+    return legacyQuery;
   }
 
   return supabase
@@ -154,7 +169,7 @@ Deno.serve(async (request: Request) => {
 
   const { ref: referralCode, type: destinationType, sessionId } = await parseRequest(request);
 
-  if (!destinationType || !["test", "shop", "partner", "consultation"].includes(destinationType)) {
+  if (!destinationType || !["test", "gut_test", "shop", "partner", "consultation"].includes(destinationType)) {
     return errorResponse("invalid_type", "Unsupported destination type.", 400);
   }
 

@@ -25,6 +25,7 @@ describe("updatePartnerZzLinks", () => {
   it("saves valid https links and exposes them in the partner dashboard", async () => {
     await updatePartnerZzLinks(partner.id, {
       test: "https://example.com/test",
+      gutTest: "https://example.com/gut-test",
       shop: "https://example.com/shop",
       partner: "https://example.com/partner",
       consultation: "https://example.com/call",
@@ -34,15 +35,17 @@ describe("updatePartnerZzLinks", () => {
 
     expect(data.zzLinks).toEqual({
       test: "https://example.com/test",
+      gutTest: "https://example.com/gut-test",
       shop: "https://example.com/shop",
       partner: "https://example.com/partner",
       consultation: "https://example.com/call",
     });
   });
 
-  it("marks ZZ links as ready when test, shop and partner links are set", async () => {
+  it("marks ZZ links as ready when both test links, shop and partner links are set", async () => {
     await updatePartnerZzLinks(partner.id, {
       test: "https://example.com/test",
+      gutTest: "https://example.com/gut-test",
       shop: "https://example.com/shop",
       partner: "https://example.com/partner",
       consultation: null,
@@ -59,21 +62,23 @@ describe("updatePartnerZzLinks", () => {
     await expect(
       updatePartnerZzLinks(partner.id, {
         test: "http://example.com/test",
+        gutTest: null,
         shop: null,
         partner: null,
         consultation: null,
       }),
-    ).rejects.toThrow("Testlänk måste börja med https://");
+    ).rejects.toThrow("Omega/BalanceTest-länk måste börja med https://");
   });
 
   it("rejects malformed urls", async () => {
     await expect(
       updatePartnerZzLinks(partner.id, {
         test: "inte-en-url",
+        gutTest: null,
         shop: null,
         partner: null,
         consultation: null,
       }),
-    ).rejects.toThrow("Testlänk måste vara en giltig URL.");
+    ).rejects.toThrow("Omega/BalanceTest-länk måste vara en giltig URL.");
   });
 });

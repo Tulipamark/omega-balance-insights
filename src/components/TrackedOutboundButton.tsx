@@ -13,12 +13,12 @@ import {
 import type { Lang } from "@/lib/i18n";
 import { trackClickAndGetRedirect } from "@/lib/api";
 import { logFunnelEvent } from "@/lib/funnel-events";
-import type { FunnelEventName } from "@/lib/omega-types";
+import type { FunnelEventName, RedirectType } from "@/lib/omega-types";
 import { getActiveReferralCode, getOrCreateSessionId } from "@/lib/referral";
 
 type TrackedOutboundButtonProps = {
   lang?: Lang;
-  destinationType: "test" | "shop" | "partner" | "consultation";
+  destinationType: RedirectType;
   fallbackHref: string;
   preferFallbackHref?: boolean;
   className: string;
@@ -106,6 +106,10 @@ const fallbackEligibleErrors = new Set([
 
 const genericErrorCopy = "L\u00e4nken kunde inte \u00f6ppnas just nu.";
 
+function isTestDestination(destinationType: RedirectType) {
+  return destinationType === "test" || destinationType === "gut_test";
+}
+
 const TrackedOutboundButton = ({
   lang,
   destinationType,
@@ -127,8 +131,8 @@ const TrackedOutboundButton = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const localizedConfirmCopy = lang ? confirmCopyByLang[lang] : null;
-  const effectiveConfirmTitle = confirmTitle ?? (destinationType === "test" ? localizedConfirmCopy?.title : undefined);
-  const effectiveConfirmDescription = confirmDescription ?? (destinationType === "test" ? localizedConfirmCopy?.description : undefined);
+  const effectiveConfirmTitle = confirmTitle ?? (isTestDestination(destinationType) ? localizedConfirmCopy?.title : undefined);
+  const effectiveConfirmDescription = confirmDescription ?? (isTestDestination(destinationType) ? localizedConfirmCopy?.description : undefined);
   const effectiveConfirmLabel = confirmConfirmLabel === "OK" && localizedConfirmCopy ? localizedConfirmCopy.confirmLabel : confirmConfirmLabel;
   const effectiveCancelLabel = confirmCancelLabel === "Avbryt" && localizedConfirmCopy ? localizedConfirmCopy.cancelLabel : confirmCancelLabel;
 

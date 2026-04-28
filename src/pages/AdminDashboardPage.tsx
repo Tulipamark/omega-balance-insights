@@ -216,7 +216,9 @@ function getPlacementLabel(value: unknown) {
 function getDestinationTypeLabel(value: unknown) {
   switch (value) {
     case "test":
-      return "Testlänk";
+      return "Omega/BalanceTest";
+    case "gut_test":
+      return "GutBalance";
     case "shop":
       return "Shoplänk";
     case "partner":
@@ -1018,6 +1020,7 @@ const AdminDashboardPage = () => {
   const [projectionDialogOpen, setProjectionDialogOpen] = useState(false);
   const [selectedPartnerForLinks, setSelectedPartnerForLinks] = useState<AdminPartnerRow | null>(null);
   const [zzTestUrl, setZzTestUrl] = useState("");
+  const [zzGutTestUrl, setZzGutTestUrl] = useState("");
   const [zzShopUrl, setZzShopUrl] = useState("");
   const [zzPartnerUrl, setZzPartnerUrl] = useState("");
   const [zzConsultationUrl, setZzConsultationUrl] = useState("");
@@ -1070,6 +1073,7 @@ const AdminDashboardPage = () => {
       selectedPartnerForLinks
         ? updatePartnerZzLinks(selectedPartnerForLinks.partnerId, {
             test: zzTestUrl,
+            gutTest: zzGutTestUrl,
             shop: zzShopUrl,
             partner: zzPartnerUrl,
             consultation: zzConsultationUrl,
@@ -1116,6 +1120,7 @@ const AdminDashboardPage = () => {
     }
 
     setZzTestUrl(selectedPartnerForLinks.zzLinks.test || "");
+    setZzGutTestUrl(selectedPartnerForLinks.zzLinks.gutTest || "");
     setZzShopUrl(selectedPartnerForLinks.zzLinks.shop || "");
     setZzPartnerUrl(selectedPartnerForLinks.zzLinks.partner || "");
     setZzConsultationUrl(selectedPartnerForLinks.zzLinks.consultation || "");
@@ -1482,7 +1487,7 @@ const AdminDashboardPage = () => {
         value: missingLinkPartners.length ? formatWholeNumber(missingLinkPartners.length) : "Klara",
         ok: missingLinkPartners.length === 0,
         note: missingLinkPartners.length
-          ? "Partner saknar test-, shop- eller partnerlänk."
+          ? "Partner saknar Omega-, Gut-, shop- eller partnerlänk."
           : "Alla aktiva partnerkort har sina ZZ-länkar.",
       },
     ];
@@ -1526,7 +1531,7 @@ const AdminDashboardPage = () => {
         ? {
             title: "Komplettera partnerlänkar",
             why: `${formatWholeNumber(missingLinkPartners.length)} partner saknar någon viktig ZZ-länk.`,
-            action: "Öppna partnerlistan och fyll i test-, shop- och partnerlänk innan de delar trafik externt.",
+            action: "Öppna partnerlistan och fyll i Omega-, Gut-, shop- och partnerlänk innan de delar trafik externt.",
           }
         : null,
     ].filter((item): item is { title: string; why: string; action: string } => Boolean(item));
@@ -1638,7 +1643,7 @@ const AdminDashboardPage = () => {
         label: "Länkar saknas efter portalstart",
         count: awaitingSetup.length,
         oldest: awaitingSetup[0]?.partner?.createdAt || null,
-        nextStep: "Säkra test-, shop- och partnerlänk direkt så att personen kan börja dela något konkret.",
+        nextStep: "Säkra Omega-, Gut-, shop- och partnerlänk direkt så att personen kan börja dela något konkret.",
       },
       {
         key: "inactive",
@@ -1687,7 +1692,7 @@ const AdminDashboardPage = () => {
         urgency: getPartnerActivationUrgency(row.status, false),
         urgencyVariant: getPartnerActivationUrgencyVariant(row.status, false),
         reason: "Partnern har portalåtkomst men saknar länkar som gör att något konkret kan börja delas.",
-        nextStep: "Lägg in test-, shop- och partnerlänk direkt och säkra att första delningen verkligen blir av.",
+        nextStep: "Lägg in Omega-, Gut-, shop- och partnerlänk direkt och säkra att första delningen verkligen blir av.",
       }));
 
     const inactiveRows = activationDecisionSummary.readyButInactive
@@ -1987,6 +1992,7 @@ const AdminDashboardPage = () => {
   const closeZzLinksDialog = () => {
     setSelectedPartnerForLinks(null);
     setZzTestUrl("");
+    setZzGutTestUrl("");
     setZzShopUrl("");
     setZzPartnerUrl("");
     setZzConsultationUrl("");
@@ -3890,7 +3896,7 @@ const AdminDashboardPage = () => {
 
           {showPartners ? <DashboardSection
             title="Setup klar men ingen aktivitet"
-            description="Partners som har alla tre ZZ-länkar på plats men ännu saknar första aktiva signal i Tillväxtkompassen."
+            description="Partners som har alla fyra ZZ-länkar på plats men ännu saknar första aktiva signal i Tillväxtkompassen."
           >
             <div className="mb-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-border/70 bg-secondary/30 p-4">
@@ -4123,11 +4129,22 @@ const AdminDashboardPage = () => {
 
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="zz-test-url">Testlänk</Label>
+                  <Label htmlFor="zz-test-url">Omega/BalanceTest-länk</Label>
                   <Input
                     id="zz-test-url"
                     value={zzTestUrl}
                     onChange={(event) => setZzTestUrl(event.target.value)}
+                    placeholder="https://..."
+                    className="rounded-xl"
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="zz-gut-test-url">GutBalance-länk</Label>
+                  <Input
+                    id="zz-gut-test-url"
+                    value={zzGutTestUrl}
+                    onChange={(event) => setZzGutTestUrl(event.target.value)}
                     placeholder="https://..."
                     className="rounded-xl"
                   />

@@ -186,7 +186,7 @@ function countPersonalCustomers30d(data: PartnerDataBundle, now: Date, windowDay
     data.outboundClicks
       .filter((click) => click.partner_id && directPartnerRecordIds.includes(click.partner_id))
       .filter((click) => isWithinWindow(click.created_at, now, windowDays))
-      .filter((click) => click.destination_type === "shop" || click.destination_type === "test")
+      .filter((click) => click.destination_type === "shop" || click.destination_type === "test" || click.destination_type === "gut_test")
       .map((click) => click.session_id || click.id),
   );
 

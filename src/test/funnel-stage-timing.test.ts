@@ -53,7 +53,7 @@ function makePartnerRow(overrides: Partial<AdminPartnerRow>): AdminPartnerRow {
     leads: overrides.leads || 0,
     customers: overrides.customers || 0,
     zzLinksReady: overrides.zzLinksReady || false,
-    zzLinks: overrides.zzLinks || { test: null, shop: null, partner: null, consultation: null },
+    zzLinks: overrides.zzLinks || { test: null, gutTest: null, shop: null, partner: null, consultation: null },
     createdAt: overrides.createdAt || "2026-03-26T10:00:00.000Z",
     verifiedAt: overrides.verifiedAt || null,
   };

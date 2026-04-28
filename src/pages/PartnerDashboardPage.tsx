@@ -163,7 +163,7 @@ function getLeadUrgencyVariant(lead: Lead) {
 }
 
 function hasRequiredZzLinks(data: PartnerDashboardData) {
-  return Boolean(data.zzLinks.test && data.zzLinks.shop && data.zzLinks.partner);
+  return Boolean(data.zzLinks.test && data.zzLinks.gutTest && data.zzLinks.shop && data.zzLinks.partner);
 }
 
 function buildPartnerStartAction(data: PartnerDashboardData, legalAccepted: boolean) {
@@ -566,7 +566,7 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
 
   const checklist = [
     { label: "Godkänn portalvillkor och integritet", done: legalAccepted },
-    { label: "Lägg in dina tre ZZ-länkar", done: zzLinksReady },
+    { label: "Lägg in dina fyra ZZ-länkar", done: zzLinksReady },
     { label: "Dela din referral-länk", done: data.partner.referral_code.length > 0 },
     { label: "Skapa första kundsignal", done: customerLeads > 0 || customers > 0 },
     { label: "Skapa första partnerintresse", done: partnerLeads > 0 },
@@ -603,9 +603,9 @@ function buildPartnerFirst30Days(data: PartnerDashboardData, legalAccepted: bool
   if (!zzLinksReady) {
     return {
       stageLabel: "Lägg grunden",
-      summary: "Innan du driver trafik eller följer upp leads behöver test-, shop- och partnerlänken finnas på plats.",
+      summary: "Innan du driver trafik eller följer upp leads behöver Omega-, Gut-, shop- och partnerlänken finnas på plats.",
       nextMilestone: "Tre Zinzino-destinationer sparade",
-      nextBestAction: "Gå till Länkar och lägg in dina tre personliga ZZ-länkar innan du börjar arbeta externt.",
+      nextBestAction: "Gå till Länkar och lägg in dina fyra personliga ZZ-länkar innan du börjar arbeta externt.",
       encouragement,
       checklist,
     };
@@ -778,7 +778,7 @@ function buildFirstActionEngine(data: PartnerDashboardData, legalAccepted: boole
       actionMode: !legalAccepted ? ("legal" as const) : ("links" as const),
       helper: [
         "Gör klart legal först",
-        "Lägg in test-, shop- och partnerlänk",
+        "Lägg in Omega-, Gut-, shop- och partnerlänk",
         "Se till att du själv kan stå för det du delar",
       ],
       liveTitle: "Det här händer just nu",
@@ -1002,6 +1002,7 @@ const PartnerDashboardPage = () => {
   const isDemo = searchParams.get("demo") === "partner" || !isSupabaseConfigured;
   const [zzLinksOpen, setZzLinksOpen] = useState(false);
   const [zzTestUrl, setZzTestUrl] = useState("");
+  const [zzGutTestUrl, setZzGutTestUrl] = useState("");
   const [zzShopUrl, setZzShopUrl] = useState("");
   const [zzPartnerUrl, setZzPartnerUrl] = useState("");
   const [zzConsultationUrl, setZzConsultationUrl] = useState("");
@@ -1027,6 +1028,7 @@ const PartnerDashboardPage = () => {
       data
         ? updatePartnerZzLinks(data.partner.id, {
             test: zzTestUrl,
+            gutTest: zzGutTestUrl,
             shop: zzShopUrl,
             partner: zzPartnerUrl,
             consultation: zzConsultationUrl,
@@ -1242,6 +1244,7 @@ const PartnerDashboardPage = () => {
     }
 
     setZzTestUrl(data.zzLinks.test || "");
+    setZzGutTestUrl(data.zzLinks.gutTest || "");
     setZzShopUrl(data.zzLinks.shop || "");
     setZzPartnerUrl(data.zzLinks.partner || "");
     setZzConsultationUrl(data.zzLinks.consultation || "");
@@ -1309,17 +1312,28 @@ const PartnerDashboardPage = () => {
             <DialogHeader>
               <DialogTitle>Mina ZZ-länkar</DialogTitle>
               <DialogDescription>
-                Lägg in dina riktiga Zinzino-länkar här. Just nu använder vi test-, shop- och partnerlänken i flödet.
+                Lägg in dina riktiga Zinzino-länkar här. Omega och Gut har separata testdestinationer i flödet.
               </DialogDescription>
             </DialogHeader>
 
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="partner-zz-test">Testlänk</Label>
+                <Label htmlFor="partner-zz-test">Omega/BalanceTest-länk</Label>
               <Input
                 id="partner-zz-test"
                 value={zzTestUrl}
                 onChange={(event) => setZzTestUrl(event.target.value)}
+                placeholder="https://..."
+                className="rounded-xl"
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="partner-zz-gut-test">GutBalance-länk</Label>
+              <Input
+                id="partner-zz-gut-test"
+                value={zzGutTestUrl}
+                onChange={(event) => setZzGutTestUrl(event.target.value)}
                 placeholder="https://..."
                 className="rounded-xl"
               />
@@ -1934,7 +1948,7 @@ const PartnerDashboardPage = () => {
                 <div className="flex h-full flex-col justify-between rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Se ZZ-länkar</p>
                   <p className="mt-2 text-sm leading-6 text-subtle">
-                    Börja här om dina test-, shop- eller partnerlänkar saknas.
+                    Börja här om dina Omega-, Gut-, shop- eller partnerlänkar saknas.
                   </p>
                   <Button
                     type="button"
@@ -2088,7 +2102,7 @@ const PartnerDashboardPage = () => {
             >
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-border/70 bg-secondary/30 p-4">
                 <p className="text-sm leading-6 text-subtle">
-                  Lägg in och uppdatera dina egna test-, shop- och partnerlänkar här.
+                  Lägg in och uppdatera dina egna Omega-, Gut-, shop- och partnerlänkar här.
                 </p>
                 <Button type="button" variant="outline" className="h-8 rounded-lg px-3 text-sm" onClick={openZzLinksDialog}>
                   Redigera mina länkar
@@ -2097,7 +2111,8 @@ const PartnerDashboardPage = () => {
 
               <div className="grid gap-4 md:grid-cols-2">
                 {[
-                  { label: "Testlänk", value: data.zzLinks.test },
+                  { label: "Omega/BalanceTest-länk", value: data.zzLinks.test },
+                  { label: "GutBalance-länk", value: data.zzLinks.gutTest },
                   { label: "Shoplänk", value: data.zzLinks.shop },
                   { label: "Partnerlänk", value: data.zzLinks.partner },
                 ].map((linkItem) => (

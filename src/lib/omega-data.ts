@@ -279,6 +279,7 @@ const mockPartnerRecords = mockUsers
     user_id: user.id,
     referral_code: user.referral_code,
     zinzino_test_url: `https://www.zinzino.com/test/${user.referral_code.toLowerCase()}`,
+    zinzino_gut_test_url: `https://www.zinzino.com/gut-test/${user.referral_code.toLowerCase()}`,
     zinzino_shop_url: `https://www.zinzino.com/shop/${user.referral_code.toLowerCase()}`,
     zinzino_partner_url: `https://www.zinzino.com/partner/${user.referral_code.toLowerCase()}`,
     consultation_url: `https://www.zinzino.com/consultation/${user.referral_code.toLowerCase()}`,
@@ -679,6 +680,7 @@ function buildAdminPartnerRows(
     user_id: string;
     referral_code?: string | null;
     zinzino_test_url?: string | null;
+    zinzino_gut_test_url?: string | null;
     zinzino_shop_url?: string | null;
     zinzino_partner_url?: string | null;
       consultation_url?: string | null;
@@ -695,6 +697,7 @@ function buildAdminPartnerRows(
       const partnerRecord = partnerRecords.find((record) => record.user_id === partner.id);
       const zzLinksReady = Boolean(
         partnerRecord?.zinzino_test_url &&
+        partnerRecord?.zinzino_gut_test_url &&
         partnerRecord?.zinzino_shop_url &&
         partnerRecord?.zinzino_partner_url,
       );
@@ -711,6 +714,7 @@ function buildAdminPartnerRows(
         zzLinksReady,
           zzLinks: {
             test: partnerRecord?.zinzino_test_url || null,
+            gutTest: partnerRecord?.zinzino_gut_test_url || null,
             shop: partnerRecord?.zinzino_shop_url || null,
             partner: partnerRecord?.zinzino_partner_url || null,
             consultation: partnerRecord?.consultation_url || null,
@@ -1205,7 +1209,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("customers").select("*"),
     client.from("partner_relationships").select("*"),
     client.from("referral_visits").select("*"),
-      client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at, verified_at"),
+      client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_gut_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at, verified_at"),
     client.from("outbound_clicks").select("id, partner_id, referral_code, session_id, destination_type, created_at"),
     client.from("funnel_events").select("*").order("created_at", { ascending: false }).limit(500),
     client.from("kpi_funnel_events_daily").select("*").order("day", { ascending: false }).limit(50),
@@ -1237,6 +1241,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
         user_id: string;
         referral_code?: string | null;
         zinzino_test_url?: string | null;
+        zinzino_gut_test_url?: string | null;
         zinzino_shop_url?: string | null;
         zinzino_partner_url?: string | null;
           consultation_url?: string | null;
@@ -1293,6 +1298,7 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
         : null,
       zzLinks: {
         test: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_test_url || null,
+        gutTest: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_gut_test_url || null,
         shop: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_shop_url || null,
         partner: mockPartnerRecords.find((record) => record.user_id === partner.id)?.zinzino_partner_url || null,
         consultation: mockPartnerRecords.find((record) => record.user_id === partner.id)?.consultation_url || null,
@@ -1327,7 +1333,7 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
     client.from("referral_visits").select("*").eq("referral_code", profile.referral_code),
     client
       .from("partners")
-      .select("zinzino_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url")
+      .select("zinzino_test_url, zinzino_gut_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url")
       .eq("user_id", profile.id)
       .maybeSingle(),
   ]);
@@ -1364,6 +1370,7 @@ export async function getPartnerDashboardData(partnerId?: string): Promise<Partn
       : null,
     zzLinks: {
       test: partnerRecord?.zinzino_test_url || null,
+      gutTest: partnerRecord?.zinzino_gut_test_url || null,
       shop: partnerRecord?.zinzino_shop_url || null,
       partner: partnerRecord?.zinzino_partner_url || null,
       consultation: partnerRecord?.consultation_url || null,
@@ -1406,12 +1413,14 @@ function normalizeHttpsUrl(value: string | null | undefined, label: string) {
 
 function hasCompletePartnerZzLinks(links: {
   zinzino_test_url: string | null;
+  zinzino_gut_test_url: string | null;
   zinzino_shop_url: string | null;
   zinzino_partner_url: string | null;
   consultation_url: string | null;
 }) {
   return Boolean(
     links.zinzino_test_url &&
+    links.zinzino_gut_test_url &&
     links.zinzino_shop_url &&
     links.zinzino_partner_url,
   );
@@ -1474,6 +1483,7 @@ function buildPartnerMarketInsights(referralCode: string | null | undefined, vis
 function derivePartnerRecordState(
   links: {
     zinzino_test_url: string | null;
+    zinzino_gut_test_url: string | null;
     zinzino_shop_url: string | null;
     zinzino_partner_url: string | null;
     consultation_url: string | null;
@@ -1503,7 +1513,8 @@ function derivePartnerRecordState(
 
 export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZzLinks) {
   const normalizedLinks = {
-    zinzino_test_url: normalizeHttpsUrl(zzLinks.test, "Testlänk"),
+    zinzino_test_url: normalizeHttpsUrl(zzLinks.test, "Omega/BalanceTest-länk"),
+    zinzino_gut_test_url: normalizeHttpsUrl(zzLinks.gutTest, "GutBalance-länk"),
     zinzino_shop_url: normalizeHttpsUrl(zzLinks.shop, "Shoplänk"),
     zinzino_partner_url: normalizeHttpsUrl(zzLinks.partner, "Partnerlänk"),
     consultation_url: normalizeHttpsUrl(zzLinks.consultation, "Konsultationslänk"),
@@ -1516,6 +1527,7 @@ export async function updatePartnerZzLinks(partnerId: string, zzLinks: PartnerZz
       const nextState = derivePartnerRecordState(normalizedLinks, existingRecord.status, existingRecord.verified_at);
 
       existingRecord.zinzino_test_url = normalizedLinks.zinzino_test_url;
+      existingRecord.zinzino_gut_test_url = normalizedLinks.zinzino_gut_test_url;
       existingRecord.zinzino_shop_url = normalizedLinks.zinzino_shop_url;
       existingRecord.zinzino_partner_url = normalizedLinks.zinzino_partner_url;
       existingRecord.consultation_url = normalizedLinks.consultation_url;

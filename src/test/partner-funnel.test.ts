@@ -106,7 +106,7 @@ describe("buildPartnerFunnelInsights", () => {
             leads: 0,
             customers: 0,
             zzLinksReady: false,
-            zzLinks: { test: null, shop: null, partner: null, consultation: null },
+            zzLinks: { test: null, gutTest: null, shop: null, partner: null, consultation: null },
             createdAt: "2026-03-26T08:00:00.000Z",
           },
           {

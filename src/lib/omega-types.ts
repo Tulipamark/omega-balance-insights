@@ -5,7 +5,7 @@ export type LeadSource = "email_gate" | "customer_form" | "partner_form";
 export type EntityStatus = "new" | "qualified" | "active" | "inactive" | "won" | "lost";
 export type OrderStatus = "pending" | "paid" | "cancelled" | "refunded";
 export type LeadFailureReason = "invalid_email" | "partner_not_found" | "partner_not_verified";
-export type RedirectType = "test" | "shop" | "partner" | "consultation";
+export type RedirectType = "test" | "gut_test" | "shop" | "partner" | "consultation";
 export type LeadSubmitMode = "created" | "updated" | "ignored";
 export type PartnerLeadPriority = "hot" | "follow_up" | "not_now";
 export type FunnelEventName =
@@ -27,6 +27,7 @@ export type FunnelEventName =
 
 export interface PartnerZzLinks {
   test: string | null;
+  gutTest: string | null;
   shop: string | null;
   partner: string | null;
   consultation: string | null;
