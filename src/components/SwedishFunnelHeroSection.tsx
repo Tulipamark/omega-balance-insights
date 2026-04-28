@@ -191,29 +191,44 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
               </p>
 
               <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 lg:mx-0 lg:items-start sm:mt-10">
-                <TrackedOutboundButton
-                  lang={lang}
-                  destinationType="test"
-                  fallbackHref={getZinzinoTestUrl(lang)}
-                  className="btn-primary w-full text-center"
-                  pendingLabel={pendingLabelByLang[lang]}
-                  trackingEventName="hero_primary_cta_clicked"
-                  trackingDetails={{ placement: "hero" }}
-                  errorMessages={{ generic: genericErrorByLang[lang] }}
-                  {...(lang === "sv"
-                    ? {
-                        confirmTitle: "Du går nu vidare till Zinzino",
-                        confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
-                        confirmConfirmLabel: "OK, gå vidare",
-                        confirmCancelLabel: "Stanna kvar",
-                      }
-                    : {})}
-                >
-                  <>
-                    {fallbackPrimaryCtaByLang[lang] ?? content.hero.primaryCta}
+                {lang === "ar" ? (
+                  <Link
+                    to={contactPath(lang)}
+                    className="btn-primary w-full text-center"
+                    onClick={() => {
+                      void logFunnelEvent("hero_primary_cta_clicked", {
+                        details: { placement: "hero", destination: "contact" },
+                      });
+                    }}
+                  >
+                    {content.hero.primaryCta}
                     <ArrowRight className="h-4 w-4" />
-                  </>
-                </TrackedOutboundButton>
+                  </Link>
+                ) : (
+                  <TrackedOutboundButton
+                    lang={lang}
+                    destinationType="test"
+                    fallbackHref={getZinzinoTestUrl(lang)}
+                    className="btn-primary w-full text-center"
+                    pendingLabel={pendingLabelByLang[lang]}
+                    trackingEventName="hero_primary_cta_clicked"
+                    trackingDetails={{ placement: "hero" }}
+                    errorMessages={{ generic: genericErrorByLang[lang] }}
+                    {...(lang === "sv"
+                      ? {
+                          confirmTitle: "Du går nu vidare till Zinzino",
+                          confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                          confirmConfirmLabel: "OK, gå vidare",
+                          confirmCancelLabel: "Stanna kvar",
+                        }
+                      : {})}
+                  >
+                    <>
+                      {fallbackPrimaryCtaByLang[lang] ?? content.hero.primaryCta}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  </TrackedOutboundButton>
+                )}
                 <p className="text-center text-xs leading-6 text-subtle lg:text-left">
                   {content.hero.trustRow.map((item) => item.text).join(" • ")}
                 </p>

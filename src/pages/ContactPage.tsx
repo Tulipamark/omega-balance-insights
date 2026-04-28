@@ -171,6 +171,24 @@ const contactCopyByLang: Record<Lang, {
     submitting: "Invio...",
     error: "La richiesta di contatto non può essere inviata in questo momento.",
   },
+  ar: {
+    title: "تواصل معنا",
+    intro: "هل لديك سؤال عن اختبار الأوميغا أو تريد أن نشرح لك الخطوة التالية؟ اترك رسالة وسنعود إليك بهدوء.",
+    backLabel: "العودة إلى البداية",
+    detailsTitle: "بيانات التواصل",
+    emailPrefix: "البريد الإلكتروني",
+    responseTitle: "وقت الرد",
+    responseBody: "نرد عادة خلال 24-48 ساعة.",
+    formTitle: "أرسل لنا رسالة",
+    successBody: "شكرا لك، وصلت رسالتك. سنتواصل معك في أقرب وقت ممكن.",
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    phone: "رقم الهاتف",
+    message: "اكتب سؤالك أو ما تريد أن نفهمه",
+    submit: "إرسال الرسالة",
+    submitting: "جار الإرسال...",
+    error: "تعذر إرسال الرسالة الآن.",
+  },
 };
 
 const ContactPage = () => {
@@ -184,7 +202,7 @@ const ContactPage = () => {
     title: `${copy.title} | InsideBalance`,
     description: copy.intro,
     path: contactPath,
-    alternates: buildAlternates((lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    alternates: buildAlternates((lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`), ["sv", "no", "da", "fi", "en", "de", "fr", "it", "ar"]),
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);

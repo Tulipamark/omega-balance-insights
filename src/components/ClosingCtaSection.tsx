@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { t, type Lang } from "@/lib/i18n";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
@@ -36,6 +38,8 @@ const primaryCtaByLang: Partial<Record<Lang, string>> = {
   sv: "Gå vidare till testet",
 };
 
+const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+
 const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
   const copy = t(lang);
 
@@ -56,29 +60,44 @@ const ClosingCtaSection = ({ lang }: ClosingCtaSectionProps) => {
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-primary-foreground/86 sm:text-lg sm:leading-8">{copy.cta.subtitle}</p>
           </div>
           <div className="relative mx-auto mt-8 max-w-sm">
-            <TrackedOutboundButton
-              lang={lang}
-              destinationType="test"
-              fallbackHref={getZinzinoTestUrl(lang)}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"
-              pendingLabel={pendingLabelByLang[lang]}
-              trackingEventName="closing_cta_clicked"
-              trackingDetails={{ placement: "closing-section" }}
-              errorMessages={{ generic: genericErrorByLang[lang] }}
-              {...(lang === "sv"
-                ? {
-                    confirmTitle: "Du går nu vidare till Zinzino",
-                    confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
-                    confirmConfirmLabel: "OK, gå vidare",
-                    confirmCancelLabel: "Stanna kvar",
-                  }
-                : {})}
-            >
-              <>
+            {lang === "ar" ? (
+              <Link
+                to={contactPath(lang)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"
+                onClick={() => {
+                  void logFunnelEvent("closing_cta_clicked", {
+                    details: { placement: "closing-section", destination: "contact" },
+                  });
+                }}
+              >
                 {copy.cta.button}
                 <ArrowRight className="h-4 w-4" />
-              </>
-            </TrackedOutboundButton>
+              </Link>
+            ) : (
+              <TrackedOutboundButton
+                lang={lang}
+                destinationType="test"
+                fallbackHref={getZinzinoTestUrl(lang)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-medium text-primary shadow-[0_16px_35px_rgba(0,0,0,0.10)] transition hover:opacity-95"
+                pendingLabel={pendingLabelByLang[lang]}
+                trackingEventName="closing_cta_clicked"
+                trackingDetails={{ placement: "closing-section" }}
+                errorMessages={{ generic: genericErrorByLang[lang] }}
+                {...(lang === "sv"
+                  ? {
+                      confirmTitle: "Du går nu vidare till Zinzino",
+                      confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                      confirmConfirmLabel: "OK, gå vidare",
+                      confirmCancelLabel: "Stanna kvar",
+                    }
+                  : {})}
+              >
+                <>
+                  {copy.cta.button}
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              </TrackedOutboundButton>
+            )}
           </div>
         </motion.div>
       </div>

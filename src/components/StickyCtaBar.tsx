@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Lang, t } from "@/lib/i18n";
+import { logFunnelEvent } from "@/lib/funnel-events";
 import { getZinzinoTestUrl } from "@/lib/zinzino";
 import TrackedOutboundButton from "@/components/TrackedOutboundButton";
 
@@ -36,6 +38,8 @@ const fallbackPrimaryCtaByLang: Partial<Record<Lang, string>> = {
   sv: "G\u00e5 vidare till testet",
 };
 
+const contactPath = (lang: Lang) => (lang === "sv" ? "/kontakt" : `/${lang}/kontakt`);
+
 const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
   const copy = t(lang);
   const [visible, setVisible] = useState(false);
@@ -58,26 +62,40 @@ const StickyCtaBar = ({ lang }: StickyCtaBarProps) => {
         >
           <div className="container-wide flex items-center justify-between gap-2">
             <p className="hidden text-sm font-medium text-foreground/85 sm:block">{copy.sticky.text}</p>
-            <TrackedOutboundButton
-              lang={lang}
-              destinationType="test"
-              fallbackHref={getZinzinoTestUrl(lang)}
-              className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
-              pendingLabel={pendingLabelByLang[lang]}
-              trackingEventName="sticky_cta_clicked"
-              trackingDetails={{ placement: "sticky-bar" }}
-              errorMessages={{ generic: genericErrorByLang[lang] }}
-              {...(lang === "sv"
-                ? {
-                    confirmTitle: "Du g\u00e5r nu vidare till Zinzino",
-                    confirmDescription: "N\u00e4sta steg sker hos Zinzino, d\u00e4r best\u00e4llning och leverans hanteras.",
-                    confirmConfirmLabel: "OK, g\u00e5 vidare",
-                    confirmCancelLabel: "Stanna kvar",
-                  }
-                : {})}
-            >
-              {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
-            </TrackedOutboundButton>
+            {lang === "ar" ? (
+              <Link
+                to={contactPath(lang)}
+                className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
+                onClick={() => {
+                  void logFunnelEvent("sticky_cta_clicked", {
+                    details: { placement: "sticky-bar", destination: "contact" },
+                  });
+                }}
+              >
+                {copy.hero.primaryCta}
+              </Link>
+            ) : (
+              <TrackedOutboundButton
+                lang={lang}
+                destinationType="test"
+                fallbackHref={getZinzinoTestUrl(lang)}
+                className="btn-primary w-full whitespace-nowrap px-5 py-3 text-base sm:w-auto"
+                pendingLabel={pendingLabelByLang[lang]}
+                trackingEventName="sticky_cta_clicked"
+                trackingDetails={{ placement: "sticky-bar" }}
+                errorMessages={{ generic: genericErrorByLang[lang] }}
+                {...(lang === "sv"
+                  ? {
+                      confirmTitle: "Du g\u00e5r nu vidare till Zinzino",
+                      confirmDescription: "N\u00e4sta steg sker hos Zinzino, d\u00e4r best\u00e4llning och leverans hanteras.",
+                      confirmConfirmLabel: "OK, g\u00e5 vidare",
+                      confirmCancelLabel: "Stanna kvar",
+                    }
+                  : {})}
+              >
+                {fallbackPrimaryCtaByLang[lang] ?? copy.hero.primaryCta}
+              </TrackedOutboundButton>
+            )}
           </div>
         </motion.div>
       ) : null}
