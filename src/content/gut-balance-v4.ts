@@ -206,4 +206,54 @@ export const gutBalanceV4Content: LangRecord<GutBalanceV4Content> = {
     faqTitle: "FAQ",
     faq: [{ question: "GutBalance è salute alternativa?", answer: "No. La pagina descrive il test in modo moderno e fattuale, senza espressioni come \"guarire l'intestino\" o simili." }, { question: "Cosa misura GutBalance?", answer: "GutBalance si concentra su tre marcatori usati per offrire un quadro più chiaro di intestino, immunità e metabolismo." }, { question: "Devo iniziare da qui?", answer: "Non necessariamente. Per molte persone OmegaBalance è il punto di partenza più naturale, mentre GutBalance funziona come complemento." }, { question: "Dove avviene l'ordine?", answer: "L'ordine avviene tramite Zinzino quando prosegui da InsideBalance." }, { question: "Come viene descritto il prodotto qui?", answer: "Il prodotto viene presentato come una parte del percorso GutBalance insieme a test, report e follow-up nel tempo. L'attenzione è su come viene usato nella routine quotidiana, non sulla promessa di un risultato individuale specifico." }],
   },
+  ar: {
+    hero: {
+      eyebrow: "GutBalance",
+      title: "طريقة أوضح لفهم صحة الأمعاء",
+      body: "GutBalance يركز على مؤشرات يمكن قياسها وترتبط بالأمعاء، المناعة والتمثيل الغذائي. الهدف هو الوضوح والثقة، وليس لغة الصحة البديلة أو الوعود الكبيرة.",
+      primaryCta: "اطلب GutBalance",
+      trustRow: [
+        { text: "اختبار منزلي يعتمد على الدم", verification: "verified" },
+        { text: "تقرير رقمي", verification: "verified" },
+        { text: "بدون عينة براز", verification: "verified" },
+      ],
+    },
+    problem: {
+      title: "لماذا أصبحت صحة الأمعاء مهمة الآن؟",
+      body: { text: "نمط الطعام الحديث وقلة الألياف يظهران كثيرا في الحديث عن صحة الأمعاء. نستخدم هذا كسياق لفهم لماذا يريد الناس توجيها أوضح، وليس كوعد بأن اختبارا واحدا يحل كل شيء.", verification: "required" },
+    },
+    product: {
+      eyebrow: "ما دور ZinoBiotic+",
+      title: "جزء داعم من المسار، وليس الإجابة كلها",
+      body: { text: "نقدم ZinoBiotic+ كجزء من مسار GutBalance مع الاختبار، التقرير الرقمي والمتابعة. التركيز على طريقة الاستخدام اليومية، وليس على وعد بنتيجة فردية محددة.", verification: "verified" },
+      points: [
+        { text: "الشرح مرتبط بالاختبار، التقرير والمتابعة مع الوقت.", verification: "verified" },
+        { text: "أي ادعاء عن تأثيرات على الأمعاء أو المناعة أو التمثيل الغذائي يحتاج إلى تحقق قبل النشر.", verification: "required" },
+        { text: "يجب أن تبدو الصفحة حديثة وموثوقة، وليست صفحة صحة بديلة.", verification: "verified" },
+      ],
+    },
+    science: {
+      title: "ثلاثة مؤشرات تعطي اتجاها، لا وعودا",
+      body: { text: "GutBalance يقدم المؤشرات والتقرير كطريقة أوضح للفهم. النص يبقى قريبا من المعلومات المتاحة ولا يبالغ في النتائج.", verification: "verified" },
+      markers: [
+        { title: "IPA", body: { text: "يوصف حمض الإندول-3-بروبيونيك كمركب تنتجه بكتيريا الأمعاء ويرتبط بمقاومة الأمعاء.", verification: "required" } },
+        { title: "TRP", body: { text: "التريبتوفان حمض أميني أساسي من الغذاء ويستخدم كمؤشر محايد في التقرير.", verification: "verified" } },
+        { title: "KYN", body: { text: "يقدم الكينورينين كمركب يرتبط بتنشيط المناعة واستجابة الجسم للضغط.", verification: "required" } },
+      ],
+    },
+    omegaLink: {
+      title: "GutBalance و OmegaBalance يكملان بعضهما",
+      body: "GutBalance لا ينافس OmegaBalance. بالنسبة لكثيرين، توازن الأوميغا هو أوضح بداية، بينما GutBalance يمكن أن يكون خطوة مكملة لاحقا.",
+      primaryCta: "اذهب إلى OmegaBalance",
+      secondaryCta: "تابع إلى GutBalance لدى Zinzino",
+    },
+    faqTitle: "أسئلة شائعة",
+    faq: [
+      { question: "هل GutBalance من الصحة البديلة؟", answer: "لا. الصفحة تشرح الاختبار بطريقة حديثة وواقعية، بدون عبارات مثل شفاء الأمعاء أو وعود مشابهة." },
+      { question: "ماذا يقيس GutBalance؟", answer: "يركز GutBalance على ثلاثة مؤشرات تساعد على إعطاء صورة أوضح عن الأمعاء، المناعة والتمثيل الغذائي." },
+      { question: "هل يجب أن أبدأ من هنا؟", answer: "ليس بالضرورة. لكثير من الناس يكون OmegaBalance نقطة بداية أوضح، وGutBalance مسارا مكملا." },
+      { question: "أين يتم الطلب؟", answer: "يتم الطلب عبر Zinzino عندما تتابع من InsideBalance." },
+      { question: "كيف يتم وصف المنتج هنا؟", answer: "يقدم المنتج كجزء من مسار GutBalance مع الاختبار، التقرير والمتابعة مع الوقت. التركيز على الاستخدام العملي، وليس وعدا بنتيجة فردية محددة." },
+    ],
+  },
 };

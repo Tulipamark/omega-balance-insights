@@ -21,6 +21,10 @@ interface PartnerPageProps {
 const partnerPagePath = (lang: Lang) => (lang === "sv" ? "/partners" : `/${lang}/partners`);
 const partnerSectionPath = (lang: Lang, sectionId: string) => `${partnerPagePath(lang)}#${sectionId}`;
 
+function localizedValue<T>(record: Partial<Record<Lang, T>>, lang: Lang, fallback: Lang = "en"): T {
+  return (record[lang] ?? record[fallback] ?? record.sv)!;
+}
+
 const readMoreByLang: Record<Lang, { more: string; less: string }> = {
   sv: { more: "Läs mer", less: "Visa mindre" },
   no: { more: "Les mer", less: "Vis mindre" },
@@ -2837,6 +2841,7 @@ function ExpandableInfoCard({ lang, title, text }: { lang: Lang; title: string; 
   const [open, setOpen] = useState(false);
   const previewText = getPreviewText(text);
   const hasMore = previewText !== text;
+  const readMoreCopy = localizedValue(readMoreByLang, lang);
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="rounded-[1.5rem] border border-border/80 bg-card p-6 shadow-sm">
@@ -2854,7 +2859,7 @@ function ExpandableInfoCard({ lang, title, text }: { lang: Lang; title: string; 
             type="button"
             className="mt-4 text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
           >
-            {open ? readMoreByLang[lang].less : readMoreByLang[lang].more}
+            {open ? readMoreCopy.less : readMoreCopy.more}
           </button>
         </CollapsibleTrigger>
       ) : null}
@@ -2891,12 +2896,21 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
     };
   }, [lang]);
   const location = useLocation();
+  const submitError = localizedValue(submitErrorByLang, lang);
+  const submittingLabel = localizedValue(submittingLabelByLang, lang);
+  const sectionNav = localizedValue(sectionNavByLang, lang);
+  const formIntro = localizedValue(formIntroByLang, lang);
+  const afterApplication = localizedValue(afterApplicationByLang, lang);
+  const marketSignal = localizedValue(marketSignalByLang, lang);
+  const partnerSystemModel = localizedValue(partnerSystemModelByLang, lang);
+  const partnerSystemSummary = localizedValue(partnerSystemSummaryByLang, lang);
+  const partnerPayoff = localizedValue(partnerPayoffByLang, lang);
   useSeo({
     lang,
     title: `${page.hero.title} | InsideBalance Partners`,
     description: page.hero.body,
     path: partnerPagePath(lang),
-    alternates: buildAlternates((lang) => partnerPagePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    alternates: buildAlternates((lang) => partnerPagePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it", "ar"]),
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -3003,7 +3017,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
       });
 
       if (!response.ok) {
-        throw new Error(submitErrorByLang[lang]);
+        throw new Error(submitError);
       }
 
       setSubmitted(true);
@@ -3016,18 +3030,18 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           reason: error instanceof Error ? error.message : "submit_failed",
         },
       });
-      setErrorMessage(error instanceof Error ? error.message : submitErrorByLang[lang]);
+      setErrorMessage(error instanceof Error ? error.message : submitError);
     } finally {
       setSubmitting(false);
     }
   };
 
   const conversionAssist = {
-    ...conversionAssistByLang[lang],
+    ...localizedValue(conversionAssistByLang, lang),
     ...(finalConversionAssistOverridesByLang[lang] ?? {}),
   };
   const applicationDecision = {
-    ...applicationDecisionByLang[lang],
+    ...localizedValue(applicationDecisionByLang, lang),
     ...(commercialApplicationDecisionOverridesByLang[lang] ?? {}),
   };
   const heroShellClass = "container-wide !max-w-[68rem]";
@@ -3053,9 +3067,9 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
           </div>
 
           <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-6 text-left shadow-sm md:p-8">
-            <h3 className="text-lg font-semibold tracking-tight">{afterApplicationByLang[lang].title}</h3>
+            <h3 className="text-lg font-semibold tracking-tight">{afterApplication.title}</h3>
             <div className="mt-5 grid gap-4 md:grid-cols-3 xl:grid-cols-1">
-              {afterApplicationByLang[lang].items.map((item, index) => (
+              {afterApplication.items.map((item, index) => (
                 <div key={item} className="rounded-2xl border border-border/70 bg-card px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                     {index + 1}
@@ -3069,12 +3083,12 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
         <div className="mt-12 text-center md:mt-14">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-            {formIntroByLang[lang].eyebrow}
+            {formIntro.eyebrow}
           </p>
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{page.form.title}</h2>
           <p className="mt-4 text-base leading-7 text-subtle md:text-lg">{page.form.body}</p>
           <p className="mt-3 text-sm leading-7 text-subtle">
-            {formIntroByLang[lang].note}
+            {formIntro.note}
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {conversionAssist.items.map((item) => (
@@ -3122,7 +3136,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
 
             <div className="mt-8 flex justify-end">
               <button type="submit" disabled={submitting} className="btn-primary min-h-12 w-full text-center disabled:opacity-70 sm:min-w-[220px] sm:w-auto">
-                {submitting ? submittingLabelByLang[lang] : page.form.submit}
+                {submitting ? submittingLabel : page.form.submit}
               </button>
             </div>
             {errorMessage ? <p className="mt-4 text-sm text-destructive">{errorMessage}</p> : null}
@@ -3201,13 +3215,13 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                 </div>
                 <div className="rounded-[1.35rem] border border-border/80 bg-secondary/35 p-4 shadow-sm sm:rounded-[1.5rem] sm:p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                    {marketSignalByLang[lang].eyebrow}
+                    {marketSignal.eyebrow}
                   </p>
                   <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
-                    {marketSignalByLang[lang].title}
+                    {marketSignal.title}
                   </p>
                   <p className="mt-3 text-sm leading-7 text-subtle">
-                    {marketSignalByLang[lang].body}
+                    {marketSignal.body}
                   </p>
                   <div className="mt-4 flex flex-col items-start gap-2">
                     <a
@@ -3216,7 +3230,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                       rel="noreferrer"
                       className="inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
                     >
-                      {marketSignalByLang[lang].measurableCta}
+                      {marketSignal.measurableCta}
                     </a>
                     <a
                       href={marketTrendSignalUrl}
@@ -3224,7 +3238,7 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
                       rel="noreferrer"
                       className="inline-flex items-center text-sm font-medium text-foreground underline-offset-4 transition hover:underline"
                     >
-                      {marketSignalByLang[lang].marketCta}
+                      {marketSignal.marketCta}
                     </a>
                   </div>
                 </div>
@@ -3254,26 +3268,26 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
             <div className="grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:items-start">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                  {partnerSystemModelByLang[lang].eyebrow}
+                  {partnerSystemModel.eyebrow}
                 </p>
                 <h2 className="mt-2 max-w-2xl text-2xl font-semibold tracking-tight md:text-3xl">
-                  {partnerSystemModelByLang[lang].title}
+                  {partnerSystemModel.title}
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-subtle md:text-base">
-                  {partnerSystemModelByLang[lang].body}
+                  {partnerSystemModel.body}
                 </p>
               </div>
               <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-4 md:p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                  {partnerSystemSummaryByLang[lang].title}
+                  {partnerSystemSummary.title}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-subtle">
-                  {partnerSystemSummaryByLang[lang].body}
+                  {partnerSystemSummary.body}
                 </p>
               </div>
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {partnerSystemModelByLang[lang].items.map((item, index) => (
+              {partnerSystemModel.items.map((item, index) => (
                 <div key={item.title} className="rounded-2xl border border-border/70 bg-background px-5 py-5 shadow-sm">
                   <div className="flex items-center gap-3">
                     <div className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
@@ -3293,13 +3307,13 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         <motion.div {...sectionMotion} className={sectionShellClass}>
           <div className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {partnerPayoffByLang[lang].eyebrow}
+              {partnerPayoff.eyebrow}
             </p>
             <h2 className="mt-2 max-w-3xl text-2xl font-semibold tracking-tight md:text-3xl">
-              {partnerPayoffByLang[lang].title}
+              {partnerPayoff.title}
             </h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {partnerPayoffByLang[lang].items.map((item) => (
+              {partnerPayoff.items.map((item) => (
                 <div key={item} className="rounded-2xl border border-border/70 bg-background px-5 py-5">
                   <p className="text-sm leading-7 text-foreground/85">{item}</p>
                 </div>
@@ -3315,10 +3329,10 @@ const PartnerPage = ({ lang }: PartnerPageProps) => {
         <div className={sectionShellClass}>
           <div className="rounded-[1.5rem] border border-border/80 bg-card px-5 py-5 shadow-sm md:px-6">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              {sectionNavByLang[lang].title}
+              {sectionNav.title}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              {sectionNavByLang[lang].items.map((item) => (
+              {sectionNav.items.map((item) => (
               <Link
                 key={item.href}
                 to={partnerSectionPath(lang, item.href.replace(/^#/, ""))}

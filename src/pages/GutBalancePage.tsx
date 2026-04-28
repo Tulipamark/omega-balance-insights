@@ -26,6 +26,7 @@ const pendingLabelByLang: Record<Lang, string> = {
   de: "Wird geöffnet...",
   fr: "Ouverture...",
   it: "Apertura...",
+  ar: "جار الفتح...",
 };
 
 const genericErrorByLang: Record<Lang, string> = {
@@ -37,6 +38,7 @@ const genericErrorByLang: Record<Lang, string> = {
   de: "Der Link konnte gerade nicht geöffnet werden.",
   fr: "Le lien n'a pas pu être ouvert pour le moment.",
   it: "Il link non può essere aperto in questo momento.",
+  ar: "تعذر فتح الرابط حاليا.",
 };
 
 function resolveLang(param?: string): Lang {
@@ -59,6 +61,7 @@ const confirmCopyByLang: Record<Lang, { title: string; description: string; conf
   de: { title: "Du gehst jetzt zu Zinzino weiter", description: "Der nächste Schritt findet bei Zinzino statt, wo Bestellung und Lieferung abgewickelt werden.", confirm: "OK, weiter", cancel: "Hier bleiben" },
   fr: { title: "Vous allez maintenant continuer vers Zinzino", description: "L'étape suivante se déroule chez Zinzino, où la commande et la livraison sont gérées.", confirm: "OK, continuer", cancel: "Rester ici" },
   it: { title: "Stai per continuare su Zinzino", description: "Il passaggio successivo avviene su Zinzino, dove vengono gestiti ordine e consegna.", confirm: "OK, continua", cancel: "Resta qui" },
+  ar: { title: "ستنتقل الآن إلى Zinzino", description: "الخطوة التالية تتم لدى Zinzino، حيث يتم التعامل مع الطلب والتوصيل.", confirm: "حسنا، متابعة", cancel: "البقاء هنا" },
 };
 
 const gutTaglineByLang: Record<Lang, string> = {
@@ -70,6 +73,7 @@ const gutTaglineByLang: Record<Lang, string> = {
   de: "Forschungsbasierte Analyse der Darmgesundheit",
   fr: "Analyse de la santé intestinale fondée sur la recherche",
   it: "Analisi della salute intestinale basata sulla ricerca",
+  ar: "تحليل لصحة الأمعاء مبني على البحث",
 };
 
 const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
@@ -87,7 +91,7 @@ const GutBalancePage = ({ lang: explicitLang }: GutBalancePageProps) => {
     title: `${copy.hero.title} | GutBalance`,
     description: copy.hero.body,
     path: currentPath,
-    alternates: buildAlternates((lang) => gutBalancePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it"]),
+    alternates: buildAlternates((lang) => gutBalancePath(lang), ["sv", "no", "da", "fi", "en", "de", "fr", "it", "ar"]),
     faq: copy.faq,
   });
   const handleSectionClick = (sectionId: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
