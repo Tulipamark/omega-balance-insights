@@ -109,6 +109,92 @@ function getReferralCodeValidationMessage(value: string) {
   return null;
 }
 
+function describeUserAgent(userAgent: string | null | undefined) {
+  const ua = userAgent || "";
+  const browser =
+    /Edg\//.test(ua) ? "Edge" :
+    /OPR\//.test(ua) ? "Opera" :
+    /Chrome\//.test(ua) && !/Chromium\//.test(ua) ? "Chrome" :
+    /Safari\//.test(ua) && !/Chrome\//.test(ua) ? "Safari" :
+    /Firefox\//.test(ua) ? "Firefox" :
+    /SamsungBrowser\//.test(ua) ? "Samsung Internet" :
+    ua ? "Okänd browser" : "-";
+  const os =
+    /Windows NT/.test(ua) ? "Windows" :
+    /Android/.test(ua) ? "Android" :
+    /iPhone|iPad|iPod/.test(ua) ? "iOS" :
+    /Mac OS X|Macintosh/.test(ua) ? "macOS" :
+    /Linux/.test(ua) ? "Linux" :
+    ua ? "Okänt OS" : "-";
+  const device =
+    /iPad|Tablet/.test(ua) ? "Tablet" :
+    /Mobi|Android|iPhone|iPod/.test(ua) ? "Mobil" :
+    ua ? "Desktop" : "-";
+
+  return { browser, os, device };
+}
+
+function isBotUserAgent(userAgent: string | null | undefined) {
+  return /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|slackbot|discordbot|linkedinbot|google|bing|ahrefs|semrush/i.test(userAgent || "");
+}
+
+function getTrafficQualityLabel(session: {
+  referralCode: string | null;
+  source: string | null;
+  ctaClicks: number;
+  reachedForm: boolean;
+  submittedForm: boolean;
+  pageViews: number;
+  pageTrail: string[];
+  userAgent: string | null;
+}) {
+  if (isBotUserAgent(session.userAgent)) {
+    return {
+      label: "Bot/crawler",
+      tone: "Brus",
+      note: "User-agent ser teknisk ut. Räkna inte detta som affärssignal.",
+    };
+  }
+
+  if (session.referralCode) {
+    return {
+      label: "Referraltrafik",
+      tone: "Signal",
+      note: "Har partnerkod och är därför mer relevant för attribution.",
+    };
+  }
+
+  if (session.submittedForm || session.reachedForm) {
+    return {
+      label: "Affärssignal",
+      tone: "Signal",
+      note: "Direkttrafik men personen nådde formulär.",
+    };
+  }
+
+  if (session.ctaClicks > 0) {
+    return {
+      label: "Mänsklig aktivitet",
+      tone: "Bevaka",
+      note: "Klick finns, men ingen formulärstart ännu.",
+    };
+  }
+
+  if ((session.source || "").toLowerCase() === "direct" || !session.source) {
+    return {
+      label: "Direkt surf",
+      tone: "Brus",
+      note: "Ingen referral och ingen handling. Bra att mäta, men svag affärssignal.",
+    };
+  }
+
+  return {
+    label: "Okänd trafik",
+    tone: "Bevaka",
+    note: "Behöver fler händelser innan den går att tolka.",
+  };
+}
+
 function formatDuration(seconds: number | null) {
   if (seconds === null) {
     return "-";
@@ -1284,11 +1370,50 @@ const AdminDashboardPage = () => {
           reachedForm: Boolean(formStart),
           submittedForm: Boolean(formSubmit),
           pageTrail,
+          userAgent: firstEvent?.user_agent || null,
+        };
+      })
+      .map((session) => {
+        const client = describeUserAgent(session.userAgent);
+        const quality = getTrafficQualityLabel(session);
+
+        return {
+          ...session,
+          browser: client.browser,
+          os: client.os,
+          device: client.device,
+          qualityLabel: quality.label,
+          qualityTone: quality.tone,
+          qualityNote: quality.note,
         };
       })
       .sort((a, b) => new Date(b.firstSeenAt).getTime() - new Date(a.firstSeenAt).getTime())
       .slice(0, 10);
   }, [funnelEventTimeline]);
+  const trafficQualitySummary = useMemo(() => {
+    const signalSessions = sessionJourneySummary.filter((session) => session.qualityTone === "Signal").length;
+    const watchSessions = sessionJourneySummary.filter((session) => session.qualityTone === "Bevaka").length;
+    const noiseSessions = sessionJourneySummary.filter((session) => session.qualityTone === "Brus").length;
+    const botSessions = sessionJourneySummary.filter((session) => session.qualityLabel === "Bot/crawler").length;
+    const directSurfSessions = sessionJourneySummary.filter((session) => session.qualityLabel === "Direkt surf").length;
+    const topQuality = sessionJourneySummary[0]?.qualityLabel || "Väntar";
+    const recommendation =
+      signalSessions > 0
+        ? "Tolka främst sessioner med referral, CTA eller formulär. Direkt surf kan ligga kvar som bakgrundsdata."
+        : noiseSessions >= Math.max(3, watchSessions + signalSessions)
+          ? "Det mesta senaste är brus eller direkt surf. Filtrera mentalt bort detta när du bedömer traction."
+          : "Det finns rörelse, men kvaliteten är ännu blandad. Vänta på referral eller formulär innan du drar affärsslutsatser.";
+
+    return {
+      signalSessions,
+      watchSessions,
+      noiseSessions,
+      botSessions,
+      directSurfSessions,
+      topQuality,
+      recommendation,
+    };
+  }, [sessionJourneySummary]);
   const trafficSourceSummary = useMemo(() => {
     const sourceMixRows = data?.kpis?.sourceMixDaily || [];
     const aggregate = <TKey extends string>(getKey: (row: typeof sourceMixRows[number]) => TKey) => {
@@ -2832,6 +2957,33 @@ const AdminDashboardPage = () => {
                     </div>
                   </div>
 
+                  <div className="mt-4 grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-border/70 bg-white/85 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Trafikkvalitet</p>
+                      <p className="mt-3 text-xl font-semibold text-foreground">
+                        {formatWholeNumber(trafficQualitySummary.signalSessions)} signal
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        {formatWholeNumber(trafficQualitySummary.noiseSessions)} brus och {formatWholeNumber(trafficQualitySummary.watchSessions)} att bevaka i senaste sessionsresorna.
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-white/85 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Direkt surf</p>
+                      <p className="mt-3 text-xl font-semibold text-foreground">
+                        {formatWholeNumber(trafficQualitySummary.directSurfSessions)}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-subtle">
+                        Direkttrafik utan handling är bra som teknisk mätning, men svag som affärsindikator.
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-white/85 p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Läsning</p>
+                      <p className="mt-3 text-sm font-medium leading-6 text-foreground">
+                        {trafficQualitySummary.recommendation}
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="mt-6">
                     <MobileCardList
                       items={trafficActionSummary.actionQueue.map((item) => ({
@@ -2939,6 +3091,8 @@ const AdminDashboardPage = () => {
                       subtitle: session.referralCode || "Direkt",
                       rows: [
                         { label: "Källa", value: session.source || "Direkt" },
+                        { label: "Kvalitet", value: session.qualityLabel },
+                        { label: "Browser", value: `${session.browser} / ${session.device}` },
                         { label: "Landning", value: session.landingPage },
                         { label: "Sidor", value: formatWholeNumber(session.pageViews) },
                         {
@@ -2958,13 +3112,17 @@ const AdminDashboardPage = () => {
                   />
                   <div className="hidden md:block">
                     <DataTable
-                      columns={["Start", "Källa", "Landning", "Sidor", "Nästa steg", "Spår"]}
+                      columns={["Start", "Källa", "Kvalitet", "Landning", "Sidor", "Nästa steg", "Spår"]}
                       rows={sessionJourneySummary.map((session) => [
                         <div key={`${session.sessionId}-start`}>
                           <p className="font-medium text-foreground">{formatDate(session.firstSeenAt)}</p>
                           <p className="text-xs text-subtle">{session.referralCode || "Direkt"}</p>
                         </div>,
                         <span key={`${session.sessionId}-source`}>{session.source || "Direkt"}</span>,
+                        <div key={`${session.sessionId}-quality`}>
+                          <p className="font-medium text-foreground">{session.qualityLabel}</p>
+                          <p className="text-xs text-subtle">{session.browser} / {session.device}</p>
+                        </div>,
                         <span key={`${session.sessionId}-landing`} className="max-w-[180px] truncate">{session.landingPage}</span>,
                         <span key={`${session.sessionId}-pages`}>{formatWholeNumber(session.pageViews)}</span>,
                         <div key={`${session.sessionId}-next`} className="text-sm text-subtle">
