@@ -195,6 +195,16 @@ const sectionNavByLang: Record<Lang, { title: string; items: { href: string; lab
       { href: "#partner-application", label: "Candidatura" },
     ],
   },
+  ar: {
+    title: "نظرة عامة",
+    items: [
+      { href: "#partner-economics", label: "منطق العمل" },
+      { href: "#partner-reasons", label: "لماذا الآن" },
+      { href: "#partner-fit", label: "لمن يناسب" },
+      { href: "#partner-steps", label: "الخطوات التالية" },
+      { href: "#partner-application", label: "طلب الشراكة" },
+    ],
+  },
 };
 
 const flowSummaryByLang: Record<Lang, { title: string; items: string[] }> = {
@@ -1939,6 +1949,34 @@ const fitOverridesByLang: Partial<Record<Lang, PartnerPageContent["fit"]>> = {
       },
     ],
   },
+  ar: {
+    title: "لمن يناسب هذا النموذج؟",
+    body: "هذا النموذج ليس مناسبا للجميع. نحن نبحث بالدرجة الأولى عن أشخاص يريدون البناء بجدية، على المدى الطويل، وبطريقة يمكنهم الوقوف خلفها بثقة.",
+    columns: [
+      {
+        title: "يناسبك إذا كنت...",
+        items: [
+          "تؤمن بالصحة المبنية على الاختبار والحقائق الواضحة",
+          "تريد البناء خطوة بخطوة بدلا من البحث عن طرق مختصرة",
+          "تشعر بالراحة في بناء العلاقات والثقة",
+          "تريد العمل مع شيء حديث وذو صلة بالمستقبل",
+        ],
+      },
+      {
+        title: "قد لا يناسبك إذا كنت...",
+        items: [
+          "تبحث عن مال سريع أو لقب فقط",
+          "تفضل البيع الضاغط بدلا من بناء الثقة",
+          "تريد شيئا يبدو سهلا لكنه سطحي",
+          "لا تملك الصبر للبناء مع الوقت",
+        ],
+      },
+      {
+        title: "ما نعتبره مهما",
+        items: ["الجدية", "قيادة الذات", "التفكير طويل المدى", "أخلاقيات العمل", "القدرة على بناء الثقة"],
+      },
+    ],
+  },
 };
 
 const stepsOverridesByLang: Partial<Record<Lang, PartnerPageContent["steps"]>> = {
@@ -2065,6 +2103,24 @@ const stepsOverridesByLang: Partial<Record<Lang, PartnerPageContent["steps"]>> =
       {
         title: "Decidi con calma",
         text: "L'obiettivo non è spingerti a dire sì, ma permetterti di prendere una decisione ponderata.",
+      },
+    ],
+  },
+  ar: {
+    title: "ماذا يحدث بعد أن تسجل اهتمامك؟",
+    body: "العملية بسيطة وبدون ضغط. نريد أولا أن نفهم من أنت، ثم نشرح النموذج بوضوح، وبعد ذلك تقرر بهدوء إذا كان هذا الطريق مناسبا لك.",
+    items: [
+      {
+        title: "نراجع طلبك",
+        text: "نقرأ إجاباتك لفهم خلفيتك، طموحك، وما إذا كان هناك توافق منطقي.",
+      },
+      {
+        title: "تحصل على شرح واضح للنموذج",
+        text: "نوضح لك كيف يعمل المفهوم، رحلة العميل ونموذج الشراكة في الواقع العملي.",
+      },
+      {
+        title: "تقرر بهدوء",
+        text: "الهدف ليس الضغط عليك لتقول نعم، بل أن تتمكن من اتخاذ قرار هادئ ومدروس.",
       },
     ],
   },
