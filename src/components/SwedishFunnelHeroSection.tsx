@@ -270,29 +270,44 @@ const SwedishFunnelHeroSection = ({ lang }: SwedishFunnelHeroSectionProps) => {
                     </div>
                   ))}
                 </div>
-                <TrackedOutboundButton
-                  lang={lang}
-                  destinationType="test"
-                  fallbackHref={getZinzinoTestUrl(lang)}
-                  className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-base font-medium text-white shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
-                  pendingLabel={pendingLabelByLang[lang]}
-                  trackingEventName="hero_ratio_cta_clicked"
-                  trackingDetails={{ placement: "hero-ratio-card" }}
-                  errorMessages={{ generic: genericErrorByLang[lang] }}
-                  {...(lang === "sv"
-                    ? {
-                        confirmTitle: "Du går nu vidare till Zinzino",
-                        confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
-                        confirmConfirmLabel: "OK, gå vidare",
-                        confirmCancelLabel: "Stanna kvar",
-                      }
-                    : {})}
-                >
-                  <>
+                {lang === "ar" ? (
+                  <Link
+                    to={contactPathWithAttribution}
+                    className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-base font-medium text-white shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
+                    onClick={() => {
+                      void logFunnelEvent("hero_ratio_cta_clicked", {
+                        details: { placement: "hero-ratio-card", destination: "contact" },
+                      });
+                    }}
+                  >
                     {content.hero.ratioCta}
                     <ArrowRight className="h-4 w-4" />
-                  </>
-                </TrackedOutboundButton>
+                  </Link>
+                ) : (
+                  <TrackedOutboundButton
+                    lang={lang}
+                    destinationType="test"
+                    fallbackHref={getZinzinoTestUrl(lang)}
+                    className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-base font-medium text-white shadow-[0_18px_40px_hsl(var(--primary)/0.18)] transition hover:-translate-y-0.5 hover:opacity-95"
+                    pendingLabel={pendingLabelByLang[lang]}
+                    trackingEventName="hero_ratio_cta_clicked"
+                    trackingDetails={{ placement: "hero-ratio-card" }}
+                    errorMessages={{ generic: genericErrorByLang[lang] }}
+                    {...(lang === "sv"
+                      ? {
+                          confirmTitle: "Du går nu vidare till Zinzino",
+                          confirmDescription: "Nästa steg sker hos Zinzino, där beställning och leverans hanteras.",
+                          confirmConfirmLabel: "OK, gå vidare",
+                          confirmCancelLabel: "Stanna kvar",
+                        }
+                      : {})}
+                  >
+                    <>
+                      {content.hero.ratioCta}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  </TrackedOutboundButton>
+                )}
               </div>
             </div>
           </div>
