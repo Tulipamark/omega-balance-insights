@@ -1017,6 +1017,7 @@ const content: Record<Lang, PartnerPageContent> = {
   de: buildLocalizedPartnerContent("de"),
   fr: buildLocalizedPartnerContent("fr"),
   it: buildLocalizedPartnerContent("it"),
+  ar: buildLocalizedPartnerContent("ar"),
 };
 
 const economicsStepsByLang: Record<Lang, { label: string; value: string }[]> = {
@@ -1068,6 +1069,12 @@ const economicsStepsByLang: Record<Lang, { label: string; value: string }[]> = {
     { label: "Grossista", value: "EUR 92" },
     { label: "Negozio", value: "EUR 183" },
   ],
+  ar: [
+    { label: "المختبر / الإنتاج", value: "EUR 23" },
+    { label: "العلامة / الاستيراد", value: "EUR 46" },
+    { label: "الجملة", value: "EUR 92" },
+    { label: "التجزئة", value: "EUR 183" },
+  ],
 };
 
 const economicsModelLabelByLang: Record<Lang, string> = {
@@ -1079,6 +1086,7 @@ const economicsModelLabelByLang: Record<Lang, string> = {
   de: "Vereinfachtes Rechenbeispiel",
   fr: "Exemple simplifié",
   it: "Esempio semplificato",
+  ar: "مثال مبسط",
 };
 
 const economicsModelBodyByLang: Record<Lang, string> = {
@@ -1090,6 +1098,7 @@ const economicsModelBodyByLang: Record<Lang, string> = {
   de: "Das Beispiel zeigt, wie sich allgemeine Aufschläge in klassischen Vertriebsketten oft zwischen Produktion, Marke, Großhandel und Einzelhandel aufbauen.",
   fr: "Cet exemple montre comment des marges générales se construisent souvent entre la production, la marque, le grossiste et le magasin dans des chaînes de distribution classiques.",
   it: "Questo esempio mostra come i ricarichi generali si costruiscano spesso tra produzione, brand, grossista e negozio nelle catene distributive tradizionali.",
+  ar: "يوضح هذا المثال كيف تتراكم الهوامش عادة بين الإنتاج، العلامة، الجملة والتجزئة في سلاسل التوزيع التقليدية.",
 };
 
 const economicsCalloutTitleByLang: Record<Lang, string> = {
@@ -1101,6 +1110,7 @@ const economicsCalloutTitleByLang: Record<Lang, string> = {
   de: "Dies ist ein allgemeines Branchenbeispiel, keine konkrete Preisliste.",
   fr: "Il s'agit d'un exemple général du secteur, pas d'une liste de prix spécifique.",
   it: "Si tratta di un esempio generale di settore, non di un listino prezzi specifico.",
+  ar: "هذا مثال عام من القطاع، وليس قائمة أسعار محددة.",
 };
 
 const economicsCalloutBodyByLang: Record<Lang, string> = {
@@ -1112,6 +1122,7 @@ const economicsCalloutBodyByLang: Record<Lang, string> = {
   de: "Gemeint ist zu zeigen, wie sich Wert typischerweise verteilt, wenn mehrere externe Vertriebsstufen ihre Margen hinzufügen. Das beschreibt nicht die tatsächlichen Preise von Zinzino.",
   fr: "L'objectif est d'illustrer comment la valeur se répartit souvent lorsque plusieurs niveaux de distribution externes ajoutent leurs propres marges. Cela ne décrit pas les prix réels de Zinzino.",
   it: "L'obiettivo è illustrare come il valore venga spesso distribuito quando diversi livelli di distribuzione esterni aggiungono i propri margini. Questo non descrive i prezzi reali di Zinzino.",
+  ar: "الهدف هو توضيح كيف تتوزع القيمة عندما تضيف عدة طبقات خارجية هوامشها. هذا لا يصف أسعار Zinzino الفعلية.",
 };
 
 const economicsNoteByLang: Record<Lang, string> = {
@@ -1123,6 +1134,7 @@ const economicsNoteByLang: Record<Lang, string> = {
   de: "Illustratives Beispiel auf Basis allgemeiner Branchenaufschläge.",
   fr: "Exemple illustratif fondé sur des marges générales du secteur.",
   it: "Esempio illustrativo basato su ricarichi generali di settore.",
+  ar: "مثال توضيحي مبني على هوامش عامة في القطاع.",
 };
 
 const economicsIncreaseLabelByLang: Record<Lang, string> = {
@@ -1134,6 +1146,7 @@ const economicsIncreaseLabelByLang: Record<Lang, string> = {
   de: "+100 % pro Stufe",
   fr: "+100 % par niveau",
   it: "+100% per livello",
+  ar: "+100% لكل طبقة",
 };
 
 const commercialApplicationDecisionOverridesByLang: Partial<Record<Lang, { checks: string[] }>> = {
@@ -1193,6 +1206,13 @@ const commercialApplicationDecisionOverridesByLang: Partial<Record<Lang, { check
       "Non devi sapere tutto fin dall’inizio, ma vuoi capire abbastanza per andare avanti.",
     ],
   },
+  ar: {
+    checks: [
+      "تريد البناء خطوة بخطوة وعلى المدى الطويل، لا البحث عن طريق مختصر.",
+      "أنت منفتح على الحوار، المتابعة والخطوات الواضحة.",
+      "لا تحتاج إلى معرفة كل شيء من البداية، لكنك تريد أن تفهم بما يكفي لتقرر.",
+    ],
+  },
 };
 
 const economicsTraditionalLabelByLang: Record<Lang, string> = {
@@ -1204,6 +1224,7 @@ const economicsTraditionalLabelByLang: Record<Lang, string> = {
   de: "Traditionelle Kette",
   fr: "Chaîne traditionnelle",
   it: "Catena tradizionale",
+  ar: "السلسلة التقليدية",
 };
 
 const economicsTraditionalBodyByLang: Record<Lang, string> = {
@@ -1215,6 +1236,7 @@ const economicsTraditionalBodyByLang: Record<Lang, string> = {
   de: "Jede zusätzliche externe Stufe legt ihre eigene Marge oben drauf. So steigt der Endpreis Schritt für Schritt, bevor der Kunde überhaupt erreicht ist.",
   fr: "Chaque acteur externe supplémentaire ajoute sa propre marge. Le prix final monte donc étape par étape avant même d’arriver au client.",
   it: "Ogni attore esterno aggiuntivo inserisce il proprio margine. Così il prezzo finale sale passo dopo passo prima ancora di arrivare al cliente.",
+  ar: "كل جهة خارجية إضافية تضيف هامشها. لذلك يرتفع السعر النهائي خطوة بخطوة قبل أن يصل المنتج إلى العميل.",
 };
 
 const economicsDirectLabelByLang: Record<Lang, string> = {
@@ -1226,6 +1248,7 @@ const economicsDirectLabelByLang: Record<Lang, string> = {
   de: "Direktmodell",
   fr: "Modèle direct",
   it: "Modello diretto",
+  ar: "نموذج مباشر",
 };
 
 const economicsDirectBodyByLang: Record<Lang, string> = {
@@ -1237,6 +1260,7 @@ const economicsDirectBodyByLang: Record<Lang, string> = {
   de: "Wenn mehrere externe Stufen wegfallen, entsteht ein freier Spielraum, der nicht länger von Großhandels- und Einzelhandelsmargen aufgezehrt wird.",
   fr: "Lorsque plusieurs niveaux externes disparaissent, une réserve de valeur apparaît au lieu d’être absorbée par les marges du grossiste et du magasin.",
   it: "Quando diversi livelli esterni vengono eliminati, si libera uno spazio economico che non deve più essere assorbito dai margini di grossista e negozio.",
+  ar: "عندما تزال عدة طبقات خارجية، يظهر هامش لا يحتاج بعد ذلك إلى أن تستهلكه هوامش الجملة والتجزئة.",
 };
 
 const economicsSplitTitleByLang: Record<Lang, string> = {
@@ -1248,6 +1272,7 @@ const economicsSplitTitleByLang: Record<Lang, string> = {
   de: "So kann die frei gewordene Marge verteilt werden",
   fr: "Comment la marge libérée peut être répartie",
   it: "Come può essere condiviso il margine liberato",
+  ar: "كيف يمكن تقاسم الهامش المتحرر",
 };
 
 const economicsSplitBodyByLang: Record<Lang, string> = {
@@ -1259,6 +1284,7 @@ const economicsSplitBodyByLang: Record<Lang, string> = {
   de: "Wenn Geld nicht in unnötigen Stufen verschwindet, kann derselbe Spielraum stattdessen zwischen Unternehmen und Partner-/ZZ-Ebene geteilt werden.",
   fr: "Lorsque l’argent ne disparaît pas dans des niveaux inutiles, la même réserve peut alors être partagée entre l’entreprise et le niveau partenaire/ZZ.",
   it: "Quando il denaro non scompare in livelli inutili, lo stesso spazio economico può invece essere condiviso tra azienda e livello partner/ZZ.",
+  ar: "عندما لا تختفي الأموال في طبقات غير ضرورية، يمكن تقاسم نفس المساحة بين الشركة وطبقة الشريك/ZZ.",
 };
 
 const economicsSplitCompanyLabelByLang: Record<Lang, string> = {
@@ -1270,6 +1296,7 @@ const economicsSplitCompanyLabelByLang: Record<Lang, string> = {
   de: "Unternehmen",
   fr: "Entreprise",
   it: "Azienda",
+  ar: "الشركة",
 };
 
 const economicsSplitPartnerLabelByLang: Record<Lang, string> = {
@@ -1281,6 +1308,7 @@ const economicsSplitPartnerLabelByLang: Record<Lang, string> = {
   de: "Partner / ZZ",
   fr: "Partenaire / ZZ",
   it: "Partner / ZZ",
+  ar: "الشريك / ZZ",
 };
 
 const economicsSplitValueByLang: Record<Lang, string> = {
@@ -1292,6 +1320,7 @@ const economicsSplitValueByLang: Record<Lang, string> = {
   de: "50 %",
   fr: "50 %",
   it: "50%",
+  ar: "50%",
 };
 
 const economicsSplitNoteByLang: Record<Lang, string> = {
@@ -1303,6 +1332,7 @@ const economicsSplitNoteByLang: Record<Lang, string> = {
   de: "Vereinfachtes Schaubild dafür, wie ein eingesparter Spielraum verteilt werden kann, wenn externe Zwischenstufen entfallen. Dies ist keine offizielle Auszahlungstabelle.",
   fr: "Illustration pédagogique simplifiée de la manière dont une réserve économisée peut être répartie lorsque les intermédiaires externes sont supprimés. Ce n’est pas un tableau de rémunération officiel.",
   it: "Schema semplificato per mostrare come uno spazio economico risparmiato possa essere condiviso quando i livelli intermedi esterni vengono rimossi. Non è una tabella payout ufficiale.",
+  ar: "مثال تعليمي مبسط لكيف يمكن تقاسم هامش متحرر عندما تزال طبقات خارجية. هذا ليس جدول عمولات رسميا.",
 };
 
 const economicsConclusionByLang: Record<Lang, string> = {
@@ -1314,6 +1344,7 @@ const economicsConclusionByLang: Record<Lang, string> = {
   de: "Der Punkt ist nicht ein niedrigerer Endpreis. Der Punkt ist, dass derselbe Wert anders verteilt werden kann.",
   fr: "L'id\u00e9e n'est pas un prix final plus bas. L'id\u00e9e est que la m\u00eame valeur peut \u00eatre r\u00e9partie autrement.",
   it: "Il punto non \u00e8 un prezzo finale pi\u00f9 basso. Il punto \u00e8 che lo stesso valore pu\u00f2 essere distribuito in modo diverso.",
+  ar: "الفكرة ليست سعرا نهائيا أقل. الفكرة أن نفس القيمة يمكن توزيعها بطريقة مختلفة.",
 };
 
 const heroOverridesByLang: Partial<Record<Lang, PartnerPageContent["hero"]>> = {
@@ -2131,6 +2162,22 @@ const formOverridesByLang: Partial<Record<Lang, PartnerPageContent["form"]>> = {
     successTitle: "Grazie, il tuo interesse è stato ricevuto.",
     successBody: "Esamineremo le tue risposte e ti ricontatteremo se emergerà una corrispondenza ragionevole.",
   },
+  ar: {
+    title: "هل أنت مهتم بأن تصبح شريكا؟",
+    body: "اترك بياناتك وبعض الإجابات القصيرة، وسنعود إليك بالخطوة التالية إذا بدا أن هناك توافقا مناسبا.",
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    phone: "رقم الهاتف",
+    company: "الشركة أو الفريق (اختياري)",
+    interest: "ما الذي تبحث عنه بالدرجة الأولى؟",
+    readiness: "ما مدى جاهزيتك؟",
+    background: "لماذا يهمك هذا؟",
+    interestOptions: ["دخل إضافي", "بناء عمل", "فهم النموذج أكثر"],
+    readinessOptions: ["أستكشف فقط", "أريد محادثة أولى", "جاهز للخطوة التالية"],
+    submit: "إرسال طلب الشراكة",
+    successTitle: "شكرا لك، وصلنا اهتمامك.",
+    successBody: "سنراجع إجاباتك ونتواصل معك إذا بدا أن هناك توافقا مناسبا.",
+  },
 };
 
 const stickyOverridesByLang: Partial<Record<Lang, PartnerPageContent["sticky"]>> = {
@@ -2165,6 +2212,10 @@ const stickyOverridesByLang: Partial<Record<Lang, PartnerPageContent["sticky"]>>
   it: {
     text: "Scopri un modello partner serio nella salute basata sul test",
     cta: "Candidati come partner",
+  },
+  ar: {
+    text: "استكشف نموذجا جادا للشراكة في الصحة المبنية على الاختبار",
+    cta: "قدّم طلب شراكة",
   },
 };
 
@@ -2216,6 +2267,12 @@ const conversionAssistByLang: Record<Lang, { eyebrow: string; title: string; ite
     title: "Non devi sapere tutto prima di candidarti",
     items: ["Richiede circa 2 minuti", "Nessun vincolo o pressione", "Riscontro personale sui prossimi passi"],
     cta: "Vai direttamente alla candidatura",
+  },
+  ar: {
+    eyebrow: "طريق سريع",
+    title: "لا تحتاج إلى معرفة كل شيء قبل أن ترسل طلبك",
+    items: ["يستغرق حوالي دقيقتين", "بدون التزام أو ضغط", "متابعة شخصية للخطوة التالية"],
+    cta: "اذهب مباشرة إلى الطلب",
   },
 };
 
@@ -2394,6 +2451,17 @@ const partnerSystemModelByLang: Record<Lang, { eyebrow: string; title: string; b
       { title: "Entrata", text: "Più dialoghi partner rilevanti possono diventare business quando il modello viene usato con coerenza." },
     ],
   },
+  ar: {
+    eyebrow: "كيف يعمل",
+    title: "نموذج بسيط من الزيارات إلى حوار الشراكة",
+    body: "يجب ألا يكون الأمر غامضا. النموذج يجب أن يكون سهل الفهم وقابلا للاستخدام خطوة بخطوة.",
+    items: [
+      { title: "زيارات", text: "الأشخاص المناسبون يدخلون عبر مسار رقمي جاهز." },
+      { title: "اهتمام", text: "يتم التقاط الاهتمام بوضوح أكبر من الرسائل العشوائية والتواصل البارد." },
+      { title: "متابعة", text: "الأشخاص المناسبون يحصلون على الخطوة التالية عبر حوار أو مكالمة أو Zoom." },
+      { title: "عمل", text: "حوارات الشراكة المناسبة يمكن أن تتحول إلى عمل عندما يستخدم النموذج باستمرار." },
+    ],
+  },
 };
 
 const partnerSystemSummaryByLang: Record<Lang, { title: string; body: string }> = {
@@ -2428,6 +2496,10 @@ const partnerSystemSummaryByLang: Record<Lang, { title: string; body: string }> 
   it: {
     title: "Sistema",
     body: "Il traffico entra. L’interesse viene raccolto. Il follow-up avviene nel giusto ordine. L’attività può essere costruita passo dopo passo.",
+  },
+  ar: {
+    title: "النظام",
+    body: "تدخل الزيارات. يتم التقاط الاهتمام. تتم المتابعة بالترتيب الصحيح. ويمكن بناء العمل خطوة بخطوة.",
   },
 };
 
@@ -2512,6 +2584,16 @@ const partnerPayoffByLang: Record<Lang, { eyebrow: string; title: string; items:
       "Ti candidi a un metodo di lavoro, non solo a un link.",
     ],
   },
+  ar: {
+    eyebrow: "لماذا هذا مهم",
+    title: "ما الذي يحصل عليه الشريك المناسب من النموذج",
+    items: [
+      "لا تحتاج إلى بناء كل شيء من الصفر وحدك.",
+      "تحصل على طريق أوضح من الاهتمام إلى الحوار الحقيقي.",
+      "تعمل ضمن هيكل بدلا من العشوائية والجهد المتفرق.",
+      "أنت تتقدم لطريقة عمل، وليس فقط للحصول على رابط.",
+    ],
+  },
 };
 
 const measurableHealthSignalUrl = "https://www.futuremarketinsights.com/reports/self-testing-market";
@@ -2573,6 +2655,13 @@ const marketSignalByLang: Record<Lang, { eyebrow: string; title: string; body: s
     body: "Il mercato dei self-test cresce in modo costante e il mercato della diagnostica è già uno dei più grandi del settore salute. Questo rafforza l’idea che una salute basata sul test, più personale e più guidata dai dati, possa diventare nel tempo una categoria molto più grande rispetto a molti modelli più vecchi.",
     measurableCta: "Vedi fonte sui self-test (Future Market Insights)",
     marketCta: "Vedi fonte sul mercato della diagnostica (BioSpace)",
+  },
+  ar: {
+    eyebrow: "إشارة خارجية",
+    title: "الصحة المبنية على البيانات تنمو بسرعة",
+    body: "سوق الاختبارات الذاتية ينمو بثبات، وسوق التشخيصات الأوسع هو بالفعل من أكبر قطاعات الرعاية الصحية. هذا يدعم فكرة أن الصحة المبنية على الاختبار والبيانات الشخصية يمكن أن تصبح فئة أكبر مع الوقت.",
+    measurableCta: "اطلع على مصدر عن الاختبارات الذاتية",
+    marketCta: "اطلع على مصدر عن سوق التشخيص",
   },
 };
 
@@ -2765,6 +2854,27 @@ const finalCommercialHeroOverridesByLang: Partial<Record<Lang, Partial<PartnerPa
       {
         title: "Tydligt nästa steg",
         text: "Målet är inte att du ska förstå allt direkt, utan att du snabbt ska se om modellen är rätt för dig.",
+        icon: BarChart3,
+      },
+    ],
+  },
+  ar: {
+    title: "ابن عملا شريكا بنظام جاهز للزيارات والاهتمام والمتابعة",
+    body: "لمن يريد البناء بجدية وبنموذج واضح بدلا من البدء من الصفر. أنت تتقدم لطريقة عمل تجعل الطريق من الاهتمام إلى حوار الشراكة أوضح وأسهل وأكثر تنظيما.",
+    cards: [
+      {
+        title: "نظام جاهز",
+        text: "لا تحتاج إلى بناء الزيارات، مسار الاهتمام ومنطق المتابعة وحدك من البداية.",
+        icon: FlaskConical,
+      },
+      {
+        title: "نموذج جاد",
+        text: "تعمل مع هيكل، متابعة وخطوات حقيقية بدلا من العشوائية والجهد المتفرق.",
+        icon: CircleDollarSign,
+      },
+      {
+        title: "خطوة تالية واضحة",
+        text: "الهدف ليس أن تفهم كل شيء فورا، بل أن ترى بسرعة هل النموذج مناسب لك.",
         icon: BarChart3,
       },
     ],
