@@ -1446,6 +1446,31 @@ function buildMarketInsights(visits: ReferralVisit[]) {
   };
 
   const hasTrustedCity = (visit: ReferralVisit) => visit.geo_source === "headers" && Boolean(visit.geo_city);
+  const describeVisitClient = (userAgent: string | null | undefined) => {
+    const ua = userAgent || "";
+    const browser =
+      /Edg\//.test(ua) ? "Edge" :
+      /OPR\//.test(ua) ? "Opera" :
+      /Chrome\//.test(ua) && !/Chromium\//.test(ua) ? "Chrome" :
+      /Safari\//.test(ua) && !/Chrome\//.test(ua) ? "Safari" :
+      /Firefox\//.test(ua) ? "Firefox" :
+      /SamsungBrowser\//.test(ua) ? "Samsung Internet" :
+      ua ? "Okänd browser" : "-";
+    const os =
+      /Windows NT/.test(ua) ? "Windows" :
+      /Android/.test(ua) ? "Android" :
+      /iPhone|iPad|iPod/.test(ua) ? "iOS" :
+      /Mac OS X|Macintosh/.test(ua) ? "macOS" :
+      /Linux/.test(ua) ? "Linux" :
+      ua ? "Okänt OS" : "-";
+    const device =
+      /iPad|Tablet/.test(ua) ? "Tablet" :
+      /Mobi|Android|iPhone|iPod/.test(ua) ? "Mobil" :
+      ua ? "Desktop" : "-";
+
+    return { browser, os, device };
+  };
+  const shortHash = (value: string | null | undefined) => value ? value.slice(0, 10) : null;
 
   return {
     topCountries: topBucket((visit) => visit.geo_country || visit.geo_country_code || null),
@@ -1459,12 +1484,25 @@ function buildMarketInsights(visits: ReferralVisit[]) {
     recentLocations: sortNewest(visits)
       .filter((visit) => visit.geo_country || visit.geo_city)
       .slice(0, 12)
-      .map((visit) => ({
-        created_at: visit.created_at,
-        country: visit.geo_country || visit.geo_country_code || null,
-        city: hasTrustedCity(visit) ? visit.geo_city || null : null,
-        referral_code: visit.referral_code || null,
-      })),
+      .map((visit) => {
+        const client = describeVisitClient(visit.user_agent);
+
+        return {
+          created_at: visit.created_at,
+          country: visit.geo_country || visit.geo_country_code || null,
+          city: hasTrustedCity(visit) ? visit.geo_city || null : null,
+          region: visit.geo_region || null,
+          referral_code: visit.referral_code || null,
+          landing_page: visit.landing_page || null,
+          referrer: visit.referrer || null,
+          browser: client.browser,
+          os: client.os,
+          device: client.device,
+          session_id: visit.session_id || null,
+          visitor_hash: shortHash(visit.ip_hash),
+          geo_source: visit.geo_source || null,
+        };
+      }),
   };
 }
 

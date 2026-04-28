@@ -230,6 +230,22 @@ export interface ReferralVisit {
   created_at: string;
 }
 
+export interface MarketInsightVisit {
+  created_at: string;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  referral_code: string | null;
+  landing_page: string | null;
+  referrer: string | null;
+  browser: string;
+  os: string;
+  device: string;
+  session_id: string | null;
+  visitor_hash: string | null;
+  geo_source: string | null;
+}
+
 export interface FunnelEvent {
   id: string;
   partner_id?: string | null;
@@ -311,7 +327,7 @@ export interface AdminPartnerRow {
   marketInsights?: {
     topCountries: { label: string; visits: number }[];
     topCities: { label: string; visits: number }[];
-    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+    recentLocations: MarketInsightVisit[];
   };
 }
 
@@ -458,7 +474,7 @@ export interface AdminDashboardData {
   marketInsights?: {
     topCountries: { label: string; visits: number }[];
     topCities: { label: string; visits: number }[];
-    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+    recentLocations: MarketInsightVisit[];
   };
 }
 
@@ -502,6 +518,6 @@ export interface PartnerDashboardData {
   marketInsights?: {
     topCountries: { label: string; visits: number }[];
     topCities: { label: string; visits: number }[];
-    recentLocations: { created_at: string; country: string | null; city: string | null; referral_code: string | null }[];
+    recentLocations: MarketInsightVisit[];
   };
 }

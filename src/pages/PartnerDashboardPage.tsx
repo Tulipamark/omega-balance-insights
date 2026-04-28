@@ -2334,11 +2334,15 @@ const PartnerDashboardPage = () => {
                   <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
                   <div className="mt-4">
                     <DataTable
-                      columns={["Senast", "Land", "Stad"]}
+                      columns={["Senast", "Land", "Stad", "Browser", "OS", "Sida", "Träff"]}
                       rows={(data.marketInsights?.recentLocations || []).map((row) => [
                         <span key={`${row.created_at}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
                         <span key={`${row.created_at}-country`}>{row.country || "-"}</span>,
                         <span key={`${row.created_at}-city`}>{row.city || "-"}</span>,
+                        <span key={`${row.created_at}-browser`}>{row.browser} / {row.device}</span>,
+                        <span key={`${row.created_at}-os`}>{row.os}</span>,
+                        <span key={`${row.created_at}-landing`} className="max-w-[180px] truncate">{row.landing_page || "-"}</span>,
+                        <span key={`${row.created_at}-hash`}>{row.visitor_hash ? `#${row.visitor_hash}` : "-"}</span>,
                       ])}
                       emptyState="Ingen geodata registrerad för din trafik ännu."
                     />

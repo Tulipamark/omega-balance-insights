@@ -3149,19 +3149,27 @@ const AdminDashboardPage = () => {
                       rows: [
                         { label: "Land", value: row.country || "-" },
                         { label: "Stad", value: row.city || "-" },
+                        { label: "Browser", value: `${row.browser} / ${row.device}` },
+                        { label: "OS", value: row.os },
                         { label: "Referral", value: row.referral_code || "-" },
+                        { label: "Sida", value: row.landing_page || "-" },
+                        { label: "Teknisk träff", value: row.visitor_hash ? `#${row.visitor_hash}` : "-" },
                       ],
                     }))}
                     emptyState="Ingen geodata registrerad än."
                   />
                   <div className="hidden md:block">
                     <DataTable
-                      columns={["Senast", "Land", "Stad", "Referral"]} 
+                      columns={["Senast", "Land", "Stad", "Browser", "OS", "Sida", "Referral", "Träff"]} 
                       rows={(data.marketInsights?.recentLocations || []).map((row) => [
                         <span key={`${row.created_at}-${row.referral_code}-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
                         <span key={`${row.created_at}-${row.referral_code}-country`}>{row.country || "-"}</span>,
                         <span key={`${row.created_at}-${row.referral_code}-city`}>{row.city || "-"}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-browser`}>{row.browser} / {row.device}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-os`}>{row.os}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-landing`} className="max-w-[180px] truncate">{row.landing_page || "-"}</span>,
                         <span key={`${row.created_at}-${row.referral_code}-ref`}>{row.referral_code || "-"}</span>,
+                        <span key={`${row.created_at}-${row.referral_code}-hash`}>{row.visitor_hash ? `#${row.visitor_hash}` : "-"}</span>,
                       ])}
                       emptyState="Ingen geodata registrerad än."
                     />
@@ -4115,12 +4123,15 @@ const AdminDashboardPage = () => {
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Senaste geoträffar</p>
                 <div className="mt-4">
                   <DataTable
-                    columns={["Senast", "Land", "Stad", "Referral"]}
+                    columns={["Senast", "Land", "Stad", "Browser", "OS", "Sida", "Träff"]}
                     rows={(selectedPartnerForLinks.marketInsights?.recentLocations || []).map((row) => [
                       <span key={`${row.created_at}-${row.referral_code}-partner-time`} className="font-medium text-foreground">{formatDate(row.created_at)}</span>,
                       <span key={`${row.created_at}-${row.referral_code}-partner-country`}>{row.country || "-"}</span>,
                       <span key={`${row.created_at}-${row.referral_code}-partner-city`}>{row.city || "-"}</span>,
-                      <span key={`${row.created_at}-${row.referral_code}-partner-ref`}>{row.referral_code || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-browser`}>{row.browser} / {row.device}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-os`}>{row.os}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-landing`} className="max-w-[180px] truncate">{row.landing_page || "-"}</span>,
+                      <span key={`${row.created_at}-${row.referral_code}-partner-hash`}>{row.visitor_hash ? `#${row.visitor_hash}` : "-"}</span>,
                     ])}
                     emptyState="Ingen geodata registrerad för denna partner ännu."
                   />
