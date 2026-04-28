@@ -305,6 +305,10 @@ const formIntroByLang: Record<Lang, { eyebrow: string; note: string }> = {
     eyebrow: "Prossimo passo",
     note: "Si tratta solo di un primo interesse. Ti ricontatteremo personalmente e senza pressioni.",
   },
+  ar: {
+    eyebrow: "الخطوة التالية",
+    note: "هذا مجرد تعبير أولي عن الاهتمام. نتابع معك بشكل شخصي وبدون ضغط.",
+  },
 };
 
 const applicationDecisionByLang: Record<Lang, { title: string; body: string; checks: string[] }> = {
@@ -380,6 +384,15 @@ const applicationDecisionByLang: Record<Lang, { title: string; body: string; che
       "Puoi iniziare dal tuo network invece di cercare di fare tutto subito.",
     ],
   },
+  ar: {
+    title: "قبل أن تقدم طلبك",
+    body: "هذا يناسب أكثر من يريد أن يبني على المدى الطويل، يقبل المتابعة الشخصية، ويستطيع أن يتحرك عبر خطوات واضحة واحدة تلو الأخرى.",
+    checks: [
+      "تريد أن تفهم النموذج بشكل جيد قبل أن تقرر.",
+      "أنت منفتح على الحوار، المتابعة وخطوة تالية حقيقية.",
+      "يمكنك البدء من شبكتك القريبة بدلا من محاولة فعل كل شيء دفعة واحدة.",
+    ],
+  },
 };
 
 const afterApplicationByLang: Record<Lang, { title: string; items: string[] }> = {
@@ -445,6 +458,14 @@ const afterApplicationByLang: Record<Lang, { title: string; items: string[] }> =
       "Valutiamo il tuo interesse e ti ricontattiamo personalmente.",
       "Se sembra pertinente, facciamo il passo successivo tramite chiamata o Zoom.",
       "Se è adatto, prosegui nel giusto ordine senza dover capire tutto da solo fin da subito.",
+    ],
+  },
+  ar: {
+    title: "بعد تقديم الطلب",
+    items: [
+      "نراجع اهتمامك ونتابع معك بشكل شخصي.",
+      "إذا بدا أن هناك توافقا مناسبا، نأخذ الخطوة التالية عبر مكالمة أو Zoom.",
+      "إذا كان الأمر مناسبا، تمضي بالترتيب الصحيح دون أن تحتاج إلى فهم كل شيء وحدك من البداية.",
     ],
   },
 };
