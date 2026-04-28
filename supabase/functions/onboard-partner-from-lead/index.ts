@@ -8,6 +8,7 @@ const corsHeaders = {
 
 type RequestBody = {
   lead_id?: string;
+  desired_referral_code?: string | null;
 };
 
 type AuthUser = {
@@ -65,6 +66,23 @@ function generateTemporaryPassword() {
   return Array.from(bytes, (value) => chars[value % chars.length]).join("");
 }
 
+function normalizeReferralCode(value: string | null | undefined) {
+  const normalized = value?.trim().toUpperCase() || "";
+  return normalized || null;
+}
+
+function validateReferralCode(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  if (!/^[A-Z0-9_-]{4,32}$/.test(value)) {
+    return "Referral-koden behöver vara 4-32 tecken och får bara innehålla A-Z, 0-9, _ eller -.";
+  }
+
+  return null;
+}
+
 Deno.serve(async (request: Request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -89,9 +107,15 @@ Deno.serve(async (request: Request) => {
 
   const body = (await request.json().catch(() => null)) as RequestBody | null;
   const leadId = body?.lead_id?.trim();
+  const desiredReferralCode = normalizeReferralCode(body?.desired_referral_code);
+  const desiredReferralCodeError = validateReferralCode(desiredReferralCode);
 
   if (!leadId) {
     return jsonResponse({ ok: false, error: "Missing lead_id" }, 400);
+  }
+
+  if (desiredReferralCodeError) {
+    return jsonResponse({ ok: false, error: desiredReferralCodeError }, 400);
   }
 
   const authClient = createClient(supabaseUrl, supabaseAnonKey, {
@@ -165,6 +189,55 @@ Deno.serve(async (request: Request) => {
 
   portalUser = existingPortalUser;
 
+  if (portalUser && desiredReferralCode) {
+    const { data: existingPartnerForUser, error: existingPartnerForUserError } = await serviceClient
+      .from("partners")
+      .select("id, user_id, referral_code")
+      .eq("user_id", portalUser.id)
+      .maybeSingle<PartnerRow>();
+
+    if (existingPartnerForUserError) {
+      return jsonResponse({ ok: false, error: "Could not look up partner profile" }, 500);
+    }
+
+    if (existingPartnerForUser && existingPartnerForUser.referral_code !== desiredReferralCode) {
+      return jsonResponse({
+        ok: false,
+        error: `Partnern har redan referral-koden ${existingPartnerForUser.referral_code}. Den kan inte ändras efter att partnerprofilen har skapats.`,
+      }, 409);
+    }
+  }
+
+  if (desiredReferralCode) {
+    const { data: userCodeOwner, error: userCodeOwnerError } = await serviceClient
+      .from("users")
+      .select("id")
+      .eq("referral_code", desiredReferralCode)
+      .maybeSingle<{ id: string }>();
+
+    if (userCodeOwnerError) {
+      return jsonResponse({ ok: false, error: "Could not validate referral code" }, 500);
+    }
+
+    if (userCodeOwner && userCodeOwner.id !== portalUser?.id) {
+      return jsonResponse({ ok: false, error: "Referral-koden är redan upptagen. Välj en annan innan teammedlem skapas." }, 409);
+    }
+
+    const { data: partnerCodeOwner, error: partnerCodeOwnerError } = await serviceClient
+      .from("partners")
+      .select("user_id")
+      .eq("referral_code", desiredReferralCode)
+      .maybeSingle<{ user_id: string }>();
+
+    if (partnerCodeOwnerError) {
+      return jsonResponse({ ok: false, error: "Could not validate partner referral code" }, 500);
+    }
+
+    if (partnerCodeOwner && partnerCodeOwner.user_id !== portalUser?.id) {
+      return jsonResponse({ ok: false, error: "Referral-koden används redan av en partner. Välj en annan kod." }, 409);
+    }
+  }
+
   let authUserId = portalUser?.auth_user_id || null;
   let temporaryPassword: string | null = null;
 
@@ -195,6 +268,7 @@ Deno.serve(async (request: Request) => {
         name: lead.name,
         email: lead.email,
         role: "partner",
+        ...(desiredReferralCode ? { referral_code: desiredReferralCode } : {}),
         parent_partner_id: lead.referred_by_user_id || null,
       })
       .select("id, auth_user_id, email, name, role, referral_code, parent_partner_id")
@@ -212,6 +286,7 @@ Deno.serve(async (request: Request) => {
         auth_user_id: authUserId,
         role: "partner",
         name: lead.name,
+        ...(desiredReferralCode ? { referral_code: desiredReferralCode } : {}),
         parent_partner_id: lead.referred_by_user_id || null,
       })
       .eq("id", portalUser.id)

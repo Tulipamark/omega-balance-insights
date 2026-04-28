@@ -111,6 +111,7 @@ export interface UpsertLeadResponse {
 
 export interface OnboardPartnerFromLeadRequest {
   lead_id: string;
+  desired_referral_code?: string | null;
 }
 
 export interface OnboardPartnerFromLeadResponse {

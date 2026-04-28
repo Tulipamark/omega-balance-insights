@@ -82,6 +82,33 @@ function formatElapsedDays(from: string | null | undefined) {
   return `${formatWholeNumber(diffDays)} dagar`;
 }
 
+function normalizeReferralCodeInput(value: string) {
+  return value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+}
+
+function buildReferralCodeSuggestion(name: string) {
+  const compactName = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 24);
+
+  return compactName.length >= 4 ? compactName : "";
+}
+
+function getReferralCodeValidationMessage(value: string) {
+  if (!value.trim()) {
+    return null;
+  }
+
+  if (!/^[A-Z0-9_-]{4,32}$/.test(value.trim().toUpperCase())) {
+    return "Använd 4-32 tecken: A-Z, 0-9, _ eller -.";
+  }
+
+  return null;
+}
+
 function formatDuration(seconds: number | null) {
   if (seconds === null) {
     return "-";
@@ -983,6 +1010,7 @@ const AdminDashboardPage = () => {
   const [partnerPriority, setPartnerPriority] = useState<PartnerLeadPriority | "none">("none");
   const [adminNote, setAdminNote] = useState("");
   const [teamIntentConfirmed, setTeamIntentConfirmed] = useState(false);
+  const [desiredReferralCode, setDesiredReferralCode] = useState("");
   const [reviewStatus, setReviewStatus] = useState<string | null>(null);
   const [selectedGrowthCompassPartnerId, setSelectedGrowthCompassPartnerId] = useState<string | null>(null);
   const [growthCompassDialogOpen, setGrowthCompassDialogOpen] = useState(false);
@@ -1000,7 +1028,11 @@ const AdminDashboardPage = () => {
   });
 
   const onboardMutation = useMutation({
-    mutationFn: (leadId: string) => onboardPartnerFromLead({ lead_id: leadId }),
+    mutationFn: (leadId: string) =>
+      onboardPartnerFromLead({
+        lead_id: leadId,
+        desired_referral_code: desiredReferralCode.trim() || null,
+      }),
     onSuccess: async (result) => {
       setProvisionedPartner(result);
       setProvisionError(null);
@@ -1061,6 +1093,7 @@ const AdminDashboardPage = () => {
     setPartnerPriority(getLeadPartnerPriority(selectedLead) ?? "none");
     setAdminNote(getLeadAdminNote(selectedLead));
     setTeamIntentConfirmed(getLeadTeamIntentConfirmed(selectedLead));
+    setDesiredReferralCode(buildReferralCodeSuggestion(selectedLead.name));
     setReviewStatus(null);
   }, [selectedLead]);
 
@@ -1934,6 +1967,10 @@ const AdminDashboardPage = () => {
   const selectedLeadReadyForPortal =
     selectedLead?.status === "active" ||
     ((partnerPriority === "hot" || partnerPriority === "follow_up") && zinzinoVerified && teamIntentConfirmed);
+  const desiredReferralCodeError = getReferralCodeValidationMessage(desiredReferralCode);
+  const desiredReferralLinkPreview = desiredReferralCode.trim()
+    ? `https://insidebalance.eu/?ref=${desiredReferralCode.trim().toUpperCase()}`
+    : "Automatisk kod skapas vid onboarding";
   const closeDialog = () => {
     setSelectedLead(null);
     setProvisionedPartner(null);
@@ -1943,6 +1980,7 @@ const AdminDashboardPage = () => {
     setPartnerPriority("none");
     setAdminNote("");
     setTeamIntentConfirmed(false);
+    setDesiredReferralCode("");
     setReviewStatus(null);
   };
 
@@ -4398,15 +4436,55 @@ const AdminDashboardPage = () => {
               </div>
 
               {!provisionedPartner && selectedLead.status !== "active" ? (
-                <label className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/30 p-4 text-sm leading-6 text-foreground/85">
-                  <input
-                    type="checkbox"
-                    checked={zinzinoVerified}
-                    onChange={(event) => setZinzinoVerified(event.target.checked)}
-                    className="mt-1 h-4 w-4 rounded border-border"
-                  />
-                  <span>Jag har verifierat att personen aktivt har joinat Zinzino och är redo att räknas som teammedlem hos oss.</span>
-                </label>
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-border/70 bg-white p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Partnerlänk</p>
+                        <p className="mt-1 text-sm leading-6 text-subtle">
+                          Sätt en tydlig referral-kod innan kontot skapas. Lämna tomt om systemet ska välja automatiskt.
+                        </p>
+                      </div>
+                      <Badge variant={desiredReferralCodeError ? "destructive" : "outline"} className="rounded-full px-3 py-1">
+                        {desiredReferralCodeError ? "Kontrollera" : "Redo"}
+                      </Badge>
+                    </div>
+                    <div className="mt-4 grid gap-3 md:grid-cols-[260px_1fr]">
+                      <div>
+                        <Label htmlFor="desired-referral-code" className="text-sm font-medium text-foreground">
+                          Referral-kod
+                        </Label>
+                        <Input
+                          id="desired-referral-code"
+                          value={desiredReferralCode}
+                          onChange={(event) => setDesiredReferralCode(normalizeReferralCodeInput(event.target.value))}
+                          maxLength={32}
+                          className="mt-2 h-11 rounded-xl uppercase"
+                          placeholder="OMEGATEAM"
+                        />
+                        {desiredReferralCodeError ? (
+                          <p className="mt-2 text-xs text-destructive">{desiredReferralCodeError}</p>
+                        ) : null}
+                      </div>
+                      <div className="rounded-2xl border border-border/70 bg-secondary/25 p-4 text-sm leading-6">
+                        <p className="font-medium text-foreground">Förhandsvisning</p>
+                        <p className="mt-1 break-all text-subtle">{desiredReferralLinkPreview}</p>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          Koden låses när partnern skapas, så historik och tracking håller ihop.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <label className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/30 p-4 text-sm leading-6 text-foreground/85">
+                    <input
+                      type="checkbox"
+                      checked={zinzinoVerified}
+                      onChange={(event) => setZinzinoVerified(event.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-border"
+                    />
+                    <span>Jag har verifierat att personen aktivt har joinat Zinzino och är redo att räknas som teammedlem hos oss.</span>
+                  </label>
+                </div>
               ) : null}
 
               {provisionedPartner ? (
@@ -4450,7 +4528,8 @@ const AdminDashboardPage = () => {
                 Boolean(provisionedPartner) ||
                 selectedLead.status === "active" ||
                 !zinzinoVerified ||
-                !teamIntentConfirmed
+                !teamIntentConfirmed ||
+                Boolean(desiredReferralCodeError)
               }
               onClick={() => selectedLead && onboardMutation.mutate(selectedLead.id)}
             >
