@@ -26,13 +26,14 @@ const transcriptLabelByLang: Record<Lang, string> = {
 };
 
 const DEFAULT_VIDEO_SRC = "/avatar-video.mp4";
+const VIDEO_ASSET_VERSION = "20260429";
 const localizedVideoLanguages = new Set<Lang>(["da", "de", "en", "fi", "fr", "it", "no"]);
 const videoFallbackByLang: Partial<Record<Lang, string>> = {
-  ar: "/videos/avatar-video-en.mp4",
-  de: "/videos/avatar-video-en.mp4",
-  fi: "/videos/avatar-video-en.mp4",
-  fr: "/videos/avatar-video-en.mp4",
-  it: "/videos/avatar-video-en.mp4",
+  ar: `/videos/avatar-video-en.mp4?v=${VIDEO_ASSET_VERSION}`,
+  de: `/videos/avatar-video-en.mp4?v=${VIDEO_ASSET_VERSION}`,
+  fi: `/videos/avatar-video-en.mp4?v=${VIDEO_ASSET_VERSION}`,
+  fr: `/videos/avatar-video-en.mp4?v=${VIDEO_ASSET_VERSION}`,
+  it: `/videos/avatar-video-en.mp4?v=${VIDEO_ASSET_VERSION}`,
 };
 
 function getLocalizedVideoSrc(lang: Lang) {
@@ -44,7 +45,7 @@ function getLocalizedVideoSrc(lang: Lang) {
     return DEFAULT_VIDEO_SRC;
   }
 
-  return `/videos/avatar-video-${lang}.mp4`;
+  return `/videos/avatar-video-${lang}.mp4?v=${VIDEO_ASSET_VERSION}`;
 }
 
 const VideoSection = ({ lang, embedded = false, showTranscript = true, showHeader = true }: VideoSectionProps) => {
