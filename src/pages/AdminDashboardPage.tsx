@@ -245,6 +245,8 @@ function getFunnelEventLabel(eventName: string) {
       return "Kundform misslyckades";
     case "consultation_redirect_requested":
       return "Konsultationsredirect begärd";
+    case "outbound_click_logged":
+      return "Outbound-klick";
     case "partner_hero_primary_cta_clicked":
       return "Partner CTA klick";
     case "partner_sticky_cta_clicked":
@@ -1116,6 +1118,9 @@ const AdminDashboardPage = () => {
   const dashboardQuery = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: getAdminDashboardData,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000,
   });
 
   const onboardMutation = useMutation({
@@ -1308,6 +1313,7 @@ const AdminDashboardPage = () => {
         "closing_cta_clicked",
         "partner_hero_primary_cta_clicked",
         "partner_sticky_cta_clicked",
+        "outbound_click_logged",
       ]),
       formStarts: countFor(["lead_form_started", "partner_form_started"]),
       formSubmits: countFor(["lead_form_submitted", "partner_form_submitted"]),
@@ -1345,6 +1351,7 @@ const AdminDashboardPage = () => {
             "closing_cta_clicked",
             "partner_hero_primary_cta_clicked",
             "partner_sticky_cta_clicked",
+            "outbound_click_logged",
           ].includes(event.event_name),
         );
         const formStart = sortedEvents.find((event) =>

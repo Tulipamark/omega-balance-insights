@@ -461,8 +461,9 @@ function roundPercent(numerator: number, denominator: number) {
   return Math.round((numerator / denominator) * 10000) / 100;
 }
 
-function buildMockKpiFunnelDaily(
+function buildKpiFunnelDaily(
   visits: ReferralVisit[],
+  clicks: OutboundClickSignal[],
   leads: Lead[],
   customers: Customer[],
   orders: Order[],
@@ -474,9 +475,15 @@ function buildMockKpiFunnelDaily(
     visitDays.add(toDayKey(visit.created_at));
   });
 
+  clicks.forEach((click) => {
+    const day = toDayKey(click.created_at);
+    clicksByDay.set(day, (clicksByDay.get(day) || 0) + 1);
+  });
+
   const customerLeads = leads.filter((lead) => lead.lead_type === "customer" || lead.type === "customer_lead");
   const days = new Set<string>([
     ...visitDays,
+    ...clicks.map((click) => toDayKey(click.created_at)),
     ...customerLeads.map((lead) => toDayKey(lead.created_at)),
     ...customers.map((customer) => toDayKey(customer.created_at)),
     ...orders.filter((order) => order.status === "paid").map((order) => toDayKey(order.created_at)),
@@ -531,17 +538,19 @@ function buildMockKpiPartnerPipeline(leads: Lead[], users: AppUser[]): KpiPartne
   };
 }
 
-function buildMockKpiDuplication(
+function buildKpiDuplication(
   users: AppUser[],
   leads: Lead[],
   customers: Customer[],
   orders: Order[],
   visits: ReferralVisit[],
+  clicks: OutboundClickSignal[],
 ): KpiDuplicationRow[] {
   return users
     .filter((user) => user.role === "partner")
     .map((partner) => {
       const partnerVisits = visits.filter((visit) => visit.referral_code === partner.referral_code);
+      const partnerClicks = clicks.filter((click) => click.referral_code === partner.referral_code);
       const partnerLeads = leads.filter((lead) => lead.referred_by_user_id === partner.id);
       const partnerCustomers = customers.filter((customer) => customer.referred_by_user_id === partner.id);
       const partnerOrders = orders.filter((order) => order.referred_by_user_id === partner.id && order.status === "paid");
@@ -558,7 +567,7 @@ function buildMockKpiDuplication(
         created_at: partner.created_at,
         verified_at: null,
         visits: partnerVisits.length,
-        outbound_clicks: 0,
+        outbound_clicks: partnerClicks.length,
         total_leads: partnerLeads.length,
         customer_leads: partnerLeads.filter((lead) => lead.type === "customer_lead").length,
         partner_leads: partnerLeads.filter((lead) => lead.type === "partner_lead").length,
@@ -601,7 +610,86 @@ function buildMockKpiSourceMixDaily(visits: ReferralVisit[]): KpiSourceMixRow[] 
     });
   });
 
-  return [...buckets.values()].sort((a, b) => (a.day < b.day ? 1 : b.visits - a.visits));
+  return [...buckets.values()].sort((a, b) => {
+    if (a.day !== b.day) {
+      return a.day < b.day ? 1 : -1;
+    }
+
+    return b.visits - a.visits;
+  });
+}
+
+function addSourceMixBucket(
+  buckets: Map<string, KpiSourceMixRow>,
+  input: {
+    created_at: string;
+    utm_source?: string | null;
+    utm_medium?: string | null;
+    utm_campaign?: string | null;
+    landing_page?: string | null;
+  },
+) {
+  const day = `${toDayKey(input.created_at)}T00:00:00.000Z`;
+  const source = input.utm_source || "unknown";
+  const medium = input.utm_medium || "unknown";
+  const campaign = input.utm_campaign || "unknown";
+  const landingPage = input.landing_page || "unknown";
+  const key = [day, source, medium, campaign, landingPage].join("|");
+  const existing = buckets.get(key);
+
+  if (existing) {
+    existing.visits += 1;
+    return;
+  }
+
+  buckets.set(key, {
+    day,
+    source,
+    medium,
+    campaign,
+    landing_page: landingPage,
+    market_code: "unknown",
+    visits: 1,
+  });
+}
+
+function buildTrafficSourceMixDaily(visits: ReferralVisit[], events: FunnelEvent[]): KpiSourceMixRow[] {
+  const buckets = new Map<string, KpiSourceMixRow>();
+  const countedSessionDays = new Set<string>();
+
+  visits.forEach((visit) => {
+    const sessionId = visit.session_id || visit.visitor_id || visit.id;
+    countedSessionDays.add(`${sessionId}|${toDayKey(visit.created_at)}`);
+    addSourceMixBucket(buckets, visit);
+  });
+
+  events.forEach((event) => {
+    if (!["landing_viewed", "page_viewed", "outbound_click_logged"].includes(event.event_name)) {
+      return;
+    }
+
+    const sessionDay = `${event.session_id}|${toDayKey(event.created_at)}`;
+    if (countedSessionDays.has(sessionDay)) {
+      return;
+    }
+
+    countedSessionDays.add(sessionDay);
+    addSourceMixBucket(buckets, {
+      created_at: event.created_at,
+      utm_source: event.utm_source || (event.event_name === "outbound_click_logged" ? "outbound_click" : null),
+      utm_medium: event.utm_medium || null,
+      utm_campaign: event.utm_campaign || null,
+      landing_page: event.page_path,
+    });
+  });
+
+  return [...buckets.values()].sort((a, b) => {
+    if (a.day !== b.day) {
+      return a.day < b.day ? 1 : -1;
+    }
+
+    return b.visits - a.visits;
+  });
 }
 
 function buildMockKpiFunnelEventsDaily(events: FunnelEvent[]): KpiFunnelEventDay[] {
@@ -635,6 +723,59 @@ function buildMockKpiFunnelEventsDaily(events: FunnelEvent[]): KpiFunnelEventDay
 
     return a.event_name.localeCompare(b.event_name);
   });
+}
+
+function buildTrafficFunnelEvents(
+  visits: ReferralVisit[],
+  clicks: OutboundClickSignal[],
+  events: FunnelEvent[],
+): FunnelEvent[] {
+  const eventKeys = new Set(events.map((event) => `${event.session_id}|${event.event_name}`));
+  const syntheticVisitEvents = visits
+    .filter((visit) => {
+      const sessionId = visit.session_id || visit.visitor_id || visit.id;
+      return !eventKeys.has(`${sessionId}|landing_viewed`);
+    })
+    .map((visit): FunnelEvent => {
+      const sessionId = visit.session_id || visit.visitor_id || visit.id;
+
+      return {
+        id: `visit-${visit.id}`,
+        partner_id: visit.partner_id || null,
+        referral_code: visit.referral_code || null,
+        session_id: sessionId,
+        event_name: "landing_viewed",
+        page_path: visit.landing_page || "/",
+        referrer: visit.referrer || null,
+        utm_source: visit.utm_source || null,
+        utm_medium: visit.utm_medium || null,
+        utm_campaign: visit.utm_campaign || null,
+        user_agent: visit.user_agent || null,
+        details: { landingType: (visit.landing_page || "").includes("/partners") ? "partner" : "customer", source: "referral_visits" },
+        created_at: visit.created_at,
+      };
+    });
+  const syntheticClickEvents = clicks
+    .filter((click) => {
+      const sessionId = click.session_id || click.id;
+      return !eventKeys.has(`${sessionId}|outbound_click_logged`);
+    })
+    .map((click): FunnelEvent => {
+      const sessionId = click.session_id || click.id;
+
+      return {
+        id: `click-${click.id}`,
+        partner_id: click.partner_id || null,
+        referral_code: click.referral_code || null,
+        session_id: sessionId,
+        event_name: "outbound_click_logged",
+        page_path: "/outbound",
+        details: { destinationType: click.destination_type || null, source: "outbound_clicks" },
+        created_at: click.created_at,
+      };
+    });
+
+  return sortNewest([...events, ...syntheticVisitEvents, ...syntheticClickEvents]);
 }
 
 function buildTeamRows(users: AppUser[], relationships: PartnerRelationship[]): TeamRow[] {
@@ -1179,10 +1320,10 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       ),
       marketInsights: buildMarketInsights(mockVisits),
       kpis: {
-        funnelDaily: buildMockKpiFunnelDaily(mockVisits, mockLeads, mockCustomers, mockOrders),
+        funnelDaily: buildKpiFunnelDaily(mockVisits, mockOutboundClicks, mockLeads, mockCustomers, mockOrders),
         funnelEventsDaily: buildMockKpiFunnelEventsDaily(mockFunnelEvents),
         partnerPipeline: buildMockKpiPartnerPipeline(mockLeads, mockUsers),
-        duplication: buildMockKpiDuplication(mockUsers, mockLeads, mockCustomers, mockOrders, mockVisits),
+        duplication: buildKpiDuplication(mockUsers, mockLeads, mockCustomers, mockOrders, mockVisits, mockOutboundClicks),
         sourceMixDaily: buildMockKpiSourceMixDaily(mockVisits),
       },
     };
@@ -1193,6 +1334,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     { data: users },
     { data: leads },
     { data: customers },
+    { data: orders },
     { data: relationships },
     { data: visits },
     { data: partnerRecords },
@@ -1207,6 +1349,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("users").select("*"),
     client.from("leads").select("*"),
     client.from("customers").select("*"),
+    client.from("orders").select("*"),
     client.from("partner_relationships").select("*"),
     client.from("referral_visits").select("*"),
       client.from("partners").select("id, user_id, referral_code, zinzino_test_url, zinzino_gut_test_url, zinzino_shop_url, zinzino_partner_url, consultation_url, status, created_at, verified_at"),
@@ -1219,23 +1362,38 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     client.from("kpi_source_mix_daily").select("*").order("day", { ascending: false }).limit(20),
   ]);
 
-  const performance = buildPartnerPerformance(users || [], leads || [], customers || [], visits || []);
+  const liveUsers = (users || []) as AppUser[];
+  const liveLeads = (leads || []) as Lead[];
+  const liveCustomers = (customers || []) as Customer[];
+  const liveOrders = ((orders as Order[] | null) || []);
+  const liveVisits = ((visits as ReferralVisit[] | null) || []);
+  const liveOutboundClicks = ((outboundClicks as OutboundClickSignal[] | null) || []);
+  const liveFunnelEvents = buildTrafficFunnelEvents(
+    liveVisits,
+    liveOutboundClicks,
+    (funnelEventsResponse.data as FunnelEvent[] | null) || [],
+  );
+  const liveFunnelDaily = buildKpiFunnelDaily(liveVisits, liveOutboundClicks, liveLeads, liveCustomers, liveOrders);
+  const liveFunnelEventsDaily = buildMockKpiFunnelEventsDaily(liveFunnelEvents);
+  const liveSourceMixDaily = buildTrafficSourceMixDaily(liveVisits, liveFunnelEvents);
+  const liveDuplication = buildKpiDuplication(liveUsers, liveLeads, liveCustomers, liveOrders, liveVisits, liveOutboundClicks);
+  const performance = buildPartnerPerformance(liveUsers, liveLeads, liveCustomers, liveVisits);
 
   return {
     metrics: {
-      totalLeads: (leads || []).length,
-      totalCustomers: (customers || []).length,
-      totalPartnerLeads: (leads || []).filter((lead) => lead.type === "partner_lead").length,
-      totalActivePartners: (users || []).filter((user) => user.role === "partner").length,
+      totalLeads: liveLeads.length,
+      totalCustomers: liveCustomers.length,
+      totalPartnerLeads: liveLeads.filter((lead) => lead.type === "partner_lead").length,
+      totalActivePartners: liveUsers.filter((user) => user.role === "partner").length,
     },
     leadsPerPartner: performance,
     customersPerPartner: [...performance].sort((a, b) => b.customers - a.customers),
-    partnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")),
+    partnerApplications: sortNewest(liveLeads.filter((lead) => lead.type === "partner_lead")),
     partners: buildAdminPartnerRows(
-      users || [],
+      liveUsers,
       performance,
       relationships || [],
-      (visits as ReferralVisit[] | null) || [],
+      liveVisits,
       ((partnerRecords as Array<{
         id: string;
         user_id: string;
@@ -1250,27 +1408,27 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
           verified_at?: string | null;
         }> | null) || []),
     ),
-    networkOverview: buildTeamRows(users || [], relationships || []),
-    recentLeads: sortNewest(leads || []).slice(0, 6),
-    recentPartnerApplications: sortNewest((leads || []).filter((lead) => lead.type === "partner_lead")).slice(0, 6),
-    recentFunnelEvents: ((funnelEventsResponse.data as FunnelEvent[] | null) || []).slice(0, 12),
-    funnelEventTimeline: (funnelEventsResponse.data as FunnelEvent[] | null) || [],
+    networkOverview: buildTeamRows(liveUsers, relationships || []),
+    recentLeads: sortNewest(liveLeads).slice(0, 6),
+    recentPartnerApplications: sortNewest(liveLeads.filter((lead) => lead.type === "partner_lead")).slice(0, 6),
+    recentFunnelEvents: liveFunnelEvents.slice(0, 12),
+    funnelEventTimeline: liveFunnelEvents,
     growthCompass: buildGrowthCompassRows(
-      users || [],
-      leads || [],
-      customers || [],
+      liveUsers,
+      liveLeads,
+      liveCustomers,
       relationships || [],
       ((partnerRecords as Array<{ id: string; user_id: string; referral_code?: string | null; status?: string | null; created_at: string }> | null) || []),
-      visits || [],
-      ((outboundClicks as OutboundClickSignal[] | null) || []),
+      liveVisits,
+      liveOutboundClicks,
     ),
-    marketInsights: buildMarketInsights((visits as ReferralVisit[] | null) || []),
+    marketInsights: buildMarketInsights(liveVisits),
     kpis: {
-      funnelDaily: (funnelResponse.data as KpiFunnelDay[] | null) || [],
-      funnelEventsDaily: (funnelEventsDailyResponse.data as KpiFunnelEventDay[] | null) || [],
+      funnelDaily: liveFunnelDaily.length ? liveFunnelDaily.slice(0, 14) : ((funnelResponse.data as KpiFunnelDay[] | null) || []),
+      funnelEventsDaily: liveFunnelEventsDaily.length ? liveFunnelEventsDaily.slice(0, 50) : ((funnelEventsDailyResponse.data as KpiFunnelEventDay[] | null) || []),
       partnerPipeline: (pipelineResponse.data as KpiPartnerPipeline | null) || null,
-      duplication: (duplicationResponse.data as KpiDuplicationRow[] | null) || [],
-      sourceMixDaily: (sourceMixResponse.data as KpiSourceMixRow[] | null) || [],
+      duplication: liveDuplication.length ? liveDuplication.slice(0, 12) : ((duplicationResponse.data as KpiDuplicationRow[] | null) || []),
+      sourceMixDaily: liveSourceMixDaily.length ? liveSourceMixDaily.slice(0, 20) : ((sourceMixResponse.data as KpiSourceMixRow[] | null) || []),
     },
   };
 }
@@ -1427,6 +1585,22 @@ function hasCompletePartnerZzLinks(links: {
 }
 
 function buildMarketInsights(visits: ReferralVisit[]) {
+  const marketLabelByLang: Record<string, string> = {
+    sv: "Sverige",
+    no: "Norge",
+    da: "Danmark",
+    fi: "Finland",
+    en: "Engelskspråkig marknad",
+    de: "Tyskland",
+    fr: "Frankrike",
+    it: "Italien",
+    ar: "Arabiskspråkig marknad",
+  };
+  const inferMarketFromLandingPage = (landingPage: string | null | undefined) => {
+    const firstSegment = (landingPage || "/").split("/").filter(Boolean)[0] || "sv";
+
+    return marketLabelByLang[firstSegment] || marketLabelByLang.sv;
+  };
   const topBucket = (getLabel: (visit: ReferralVisit) => string | null) => {
     const buckets = new Map<string, number>();
 
@@ -1473,7 +1647,7 @@ function buildMarketInsights(visits: ReferralVisit[]) {
   const shortHash = (value: string | null | undefined) => value ? value.slice(0, 10) : null;
 
   return {
-    topCountries: topBucket((visit) => visit.geo_country || visit.geo_country_code || null),
+    topCountries: topBucket((visit) => visit.geo_country || visit.geo_country_code || inferMarketFromLandingPage(visit.landing_page)),
     topCities: topBucket((visit) => {
       if (!hasTrustedCity(visit) || !visit.geo_country_code) {
         return null;
@@ -1482,14 +1656,13 @@ function buildMarketInsights(visits: ReferralVisit[]) {
       return [visit.geo_city, visit.geo_country_code].filter(Boolean).join(", ");
     }),
     recentLocations: sortNewest(visits)
-      .filter((visit) => visit.geo_country || visit.geo_city)
       .slice(0, 12)
       .map((visit) => {
         const client = describeVisitClient(visit.user_agent);
 
         return {
           created_at: visit.created_at,
-          country: visit.geo_country || visit.geo_country_code || null,
+          country: visit.geo_country || visit.geo_country_code || inferMarketFromLandingPage(visit.landing_page),
           city: hasTrustedCity(visit) ? visit.geo_city || null : null,
           region: visit.geo_region || null,
           referral_code: visit.referral_code || null,

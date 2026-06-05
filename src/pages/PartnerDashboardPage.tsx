@@ -1212,6 +1212,36 @@ const PartnerDashboardPage = () => {
           ]
         : []
     : [];
+  const partnerWorkQueue = realityCheck
+    ? [
+        {
+          key: "primary-action",
+          label: "1",
+          title: realityCheck.nextAction.title,
+          body: realityCheck.nextAction.body,
+          mode: realityCheck.nextAction.mode,
+          cta: realityCheck.nextAction.label,
+        },
+        ...followUpTargets.slice(0, 2).map((target, index) => ({
+          key: `follow-up-${target.key}`,
+          label: String(index + 2),
+          title: target.name,
+          body: target.action,
+          mode: "leads" as const,
+          cta: "Öppna leads",
+        })),
+        ...(followUpTargets.length
+          ? []
+          : firstLineFocusQueue.slice(0, 1).map((target) => ({
+              key: `team-focus-${target.key}`,
+              label: "2",
+              title: target.title,
+              body: target.action,
+              mode: "network" as const,
+              cta: "Öppna kontakter",
+            }))),
+      ].slice(0, 3)
+    : [];
   const currentProgressStep = firstResultProgress.find((step) => step.current);
   const matchesLeadFilter = (lead: Lead, filter: "all" | "urgent" | "active" | "new") => {
     if (filter === "all") {
@@ -1266,7 +1296,7 @@ const PartnerDashboardPage = () => {
     setActionFeedback(message);
   };
 
-  const renderActionButton = (mode: PartnerActionMode, label: string, className = "h-8 rounded-lg px-3 text-sm") => {
+  const renderActionButton = (mode: PartnerActionMode | "network", label: string, className = "h-8 rounded-lg px-3 text-sm") => {
     if (mode === "copy-link") {
       return (
         <Button
@@ -1296,6 +1326,14 @@ const PartnerDashboardPage = () => {
       return (
         <Button asChild type="button" variant="outline" className={className}>
           <Link to="/dashboard/partner/leads">{label}</Link>
+        </Button>
+      );
+    }
+
+    if (mode === "network") {
+      return (
+        <Button asChild type="button" variant="outline" className={className}>
+          <Link to="/dashboard/partner/network">{label}</Link>
         </Button>
       );
     }
@@ -1430,21 +1468,53 @@ const PartnerDashboardPage = () => {
                   </p>
                 </div>
 
-                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                  {realityCheck.checks.map((check) => (
-                    <div key={check.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
-                      <div className="flex items-start justify-between gap-3">
+                <div className="space-y-4">
+                  {partnerWorkQueue.length ? (
+                    <div className="rounded-[1.2rem] border border-primary/15 bg-white/95 p-4 shadow-card">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
-                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{check.label}</p>
-                          <p className="mt-2 text-lg font-semibold text-foreground">{check.value}</p>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Arbetskö</p>
+                          <p className="mt-2 text-lg font-semibold text-foreground">Ta i den här ordningen</p>
                         </div>
-                        <Badge variant={check.ok ? "secondary" : "outline"} className="rounded-full px-3 py-1">
-                          {check.ok ? "OK" : "Ej klar"}
-                        </Badge>
                       </div>
-                      <p className="mt-3 text-sm leading-6 text-subtle">{check.note}</p>
+                      <div className="mt-4 grid gap-3">
+                        {partnerWorkQueue.map((item) => (
+                          <div key={item.key} className="flex flex-col gap-3 rounded-[1rem] border border-border/70 bg-secondary/15 p-3.5 sm:flex-row sm:items-start sm:justify-between">
+                            <div className="flex gap-3">
+                              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                                {item.label}
+                              </span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{item.title}</p>
+                                <p className="mt-1 text-sm leading-6 text-subtle">{item.body}</p>
+                              </div>
+                            </div>
+                            <div className="shrink-0">
+                              {renderActionButton(item.mode, item.cta)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+
+                  ) : null}
+
+                  <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                    {realityCheck.checks.map((check) => (
+                      <div key={check.label} className="rounded-[1.1rem] border border-border/70 bg-white/95 p-4 shadow-card">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{check.label}</p>
+                            <p className="mt-2 text-lg font-semibold text-foreground">{check.value}</p>
+                          </div>
+                          <Badge variant={check.ok ? "secondary" : "outline"} className="rounded-full px-3 py-1">
+                            {check.ok ? "OK" : "Ej klar"}
+                          </Badge>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-subtle">{check.note}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </DashboardSection>
